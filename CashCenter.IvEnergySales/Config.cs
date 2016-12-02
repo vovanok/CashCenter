@@ -4,9 +4,9 @@ namespace CashCenter.IvEnergySales
 {
 	public static class Config
 	{
-		private const string DBCODE_MAPPING_XML_PATH = "DbCodeMappingXmlPath";
+		public const string DBCODE_MAPPING_XML_PATH = "DbCodeMappingXmlPath";
 
-        private const string CURRENT_DEPARTMENT_CODE = "CurrentDepartmentCode";
+        public const string CURRENT_DEPARTMENT_CODE = "CurrentDepartmentCode";
         
         public static string DbCodeMappingXmlPath => GetAppSettingByKey(DBCODE_MAPPING_XML_PATH, "DbCodeMapping.xml");
 

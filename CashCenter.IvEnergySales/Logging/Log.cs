@@ -1,4 +1,4 @@
-namespace CashCenter.IvEnergySales.Log
+namespace CashCenter.IvEnergySales.Logging
 {
 	public abstract class Log
 	{

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace CashCenter.IvEnergySales.Log
+namespace CashCenter.IvEnergySales.Logging
 {
 	public class MessageBoxLog : Log
 	{
