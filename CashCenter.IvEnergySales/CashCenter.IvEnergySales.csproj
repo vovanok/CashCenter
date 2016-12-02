@@ -80,7 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\DbQualifier.xaml">
+    <Page Include="Controls\DbQualifierControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -93,13 +93,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Config.cs" />
-    <Compile Include="Controls\DbQualifier.xaml.cs">
-      <DependentUpon>DbQualifier.xaml</DependentUpon>
+    <Compile Include="Controls\DbQualifierControl.xaml.cs">
+      <DependentUpon>DbQualifierControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DbCodeMapping\DbCodeMapper.cs" />
-    <Compile Include="DbCodeMapping\DbCodeMappingModel.cs" />
-    <Compile Include="DbCodeMapping\DbModel.cs" />
-    <Compile Include="DbCodeMapping\DepartamentModel.cs" />
+    <Compile Include="DAL\DbController.cs" />
+    <Compile Include="DbQualification\DbQualifier.cs" />
+    <Compile Include="DbQualification\DbQualifierModel.cs" />
+    <Compile Include="DbQualification\DbModel.cs" />
+    <Compile Include="DbQualification\DepartamentModel.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">

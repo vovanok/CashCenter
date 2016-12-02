@@ -2,16 +2,16 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Collections.Generic;
-using CashCenter.IvEnergySales.DbCodeMapping;
 using System.ComponentModel;
+using CashCenter.IvEnergySales.DbQualification;
 
 namespace CashCenter.IvEnergySales.Controls
 {
-    public partial class DbQualifier : UserControl
+    public partial class DbQualifierControl : UserControl
     {
         private DepartmentModel currentDepartment; 
 
-        public DbQualifier()
+        public DbQualifierControl()
         {
             InitializeComponent();
         }
@@ -22,7 +22,7 @@ namespace CashCenter.IvEnergySales.Controls
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 return;
 #endif
-            currentDepartment = DbCodeMapper.GetCurrentDepartment();
+            currentDepartment = DbQualifier.GetCurrentDepartment();
 
             if (!string.IsNullOrEmpty(currentDepartment.Name))
             {

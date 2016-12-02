@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace CashCenter.IvEnergySales.DbCodeMapping
+namespace CashCenter.IvEnergySales.DbQualification
 {
 	public class DepartmentModel
 	{

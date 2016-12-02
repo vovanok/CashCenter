@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace CashCenter.IvEnergySales.DbCodeMapping
+namespace CashCenter.IvEnergySales.DbQualification
 {
-	[XmlRoot("DbCodeMapping")]
-	public class DbCodeMappingModel
+	[XmlRoot("DbQualifier")]
+	public class DbQualifierModel
 	{
 		[XmlArray("Departments")]
 		[XmlArrayItem("Department")]
 		public List<DepartmentModel> Departments { get; set; }
 
-		public DbCodeMappingModel()
+		public DbQualifierModel()
 		{
 			Departments = new List<DepartmentModel>();
 		}

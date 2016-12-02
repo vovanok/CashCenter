@@ -5,13 +5,13 @@ using System.Xml;
 using System.Xml.Serialization;
 using CashCenter.IvEnergySales.Logging;
 
-namespace CashCenter.IvEnergySales.DbCodeMapping
+namespace CashCenter.IvEnergySales.DbQualification
 {
-	class DbCodeMapper
+	public class DbQualifier
 	{
-		private static DbCodeMappingModel mappingModel;
+		private static DbQualifierModel mappingModel;
 
-		private static DbCodeMappingModel MappingModel
+		private static DbQualifierModel MappingModel
 		{
 			get
 			{
@@ -33,13 +33,13 @@ namespace CashCenter.IvEnergySales.DbCodeMapping
             return new DepartmentModel();
         }
 
-		private static DbCodeMappingModel LoadDbCodeMappingModel()
+		private static DbQualifierModel LoadDbCodeMappingModel()
 		{
 			var xmlFilePath = Config.DbCodeMappingXmlPath;
 			if (!File.Exists(xmlFilePath))
 			{
 				Log.Error($"XML с базами данных по отделениям не найдены. Путь к файлу: {xmlFilePath}. Создайте файл или отредатируйте ключ {Config.DBCODE_MAPPING_XML_PATH} раздела appSettings в App.config.");
-				return new DbCodeMappingModel();
+				return new DbQualifierModel();
 			}
 
 			try
@@ -48,15 +48,15 @@ namespace CashCenter.IvEnergySales.DbCodeMapping
 				{
 					using (var reader = XmlReader.Create(fs))
 					{
-						var serializer = new XmlSerializer(typeof(DbCodeMappingModel));
-						return (DbCodeMappingModel)serializer.Deserialize(reader);
+						var serializer = new XmlSerializer(typeof(DbQualifierModel));
+						return (DbQualifierModel)serializer.Deserialize(reader);
 					}
 				}
 			}
 			catch (Exception e)
 			{
 				Log.Error($"Ошибка загрузки XML с базами данных по отделениям:\n{e.Message}\nStack trace:\n{e.StackTrace}");
-				return new DbCodeMappingModel();
+				return new DbQualifierModel();
 			}
 		}
 	}
