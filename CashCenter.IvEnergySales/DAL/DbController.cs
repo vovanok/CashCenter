@@ -14,8 +14,11 @@ namespace CashCenter.IvEnergySales.DAL
 
         private DbConnection dbConnection;
 
+        public DbModel Model { get; private set; }
+
         public DbController(DbModel dbModel)
         {
+            this.Model = dbModel;
             this.dbConnection = new FbConnection(string.Format(DB_CONNECTION_STRING_FORMAT, dbModel.Path));
         }
 
@@ -47,6 +50,36 @@ namespace CashCenter.IvEnergySales.DAL
             {
                 Log.Error($"Ошибка получения оснований для оплаты.\n{e.Message}\nStack trace:\n{e.StackTrace}");
                 return new List<PaymentReason>();
+            }
+        }
+
+        public Customer GetCustomer(int customerId)
+        {
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery($"select ID, NAME from customer where id={customerId} and AGGR$STATE_ID <> 4");
+                var dataReader = command.ExecuteReader();
+
+                Customer result = null;
+                while (dataReader.Read())
+                {
+                    int id = GetFieldFromReader<int>(dataReader, "ID");
+                    string name = GetFieldFromReader<string>(dataReader, "NAME");
+
+                    result = new Customer(id, name);
+                }
+
+                dataReader.Close();
+                dbConnection.Close();
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Ошибка получения лицевого счета с номером {customerId}.\n{e.Message}\nStack trace:\n{e.StackTrace}");
+                return null;
             }
         }
 

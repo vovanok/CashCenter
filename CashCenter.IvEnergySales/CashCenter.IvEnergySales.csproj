@@ -80,10 +80,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\DbQualifierControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -92,11 +88,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BusinessLogic\EnergySalesManager.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Controls\DbQualifierControl.xaml.cs">
-      <DependentUpon>DbQualifierControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DAL\DbController.cs" />
+    <Compile Include="DataModel\Customer.cs" />
     <Compile Include="DataModel\PaymentReason.cs" />
     <Compile Include="DbQualification\DbQualifier.cs" />
     <Compile Include="DbQualification\DbQualifierModel.cs" />
