@@ -97,6 +97,7 @@
       <DependentUpon>DbQualifierControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DAL\DbController.cs" />
+    <Compile Include="DataModel\PaymentReason.cs" />
     <Compile Include="DbQualification\DbQualifier.cs" />
     <Compile Include="DbQualification\DbQualifierModel.cs" />
     <Compile Include="DbQualification\DbModel.cs" />
