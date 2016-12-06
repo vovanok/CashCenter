@@ -8,16 +8,22 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class EnergySalesManager
     {
-        private List<DbController> dbControllers;
+        private DepartmentModel department;
+        private List<DbController> dbControllers = new List<DbController>();
 
         public EnergySalesManager(DepartmentModel department)
         {
-            dbControllers = department.Dbs.Select(dbModel => new DbController(dbModel)).ToList();
+            this.department = department;
         }
 
-        public List<PaymentReason> GetPaymentReasons(string dbCode)
+        public void SetDbCode(string dbCode)
         {
-            foreach (var dbController in GetDbControllersByDbCode(dbCode))
+            dbControllers = GetDbControllersByDbCode(dbCode);
+        }
+
+        public List<PaymentReason> GetPaymentReasons()
+        {
+            foreach (var dbController in dbControllers)
             {
                 var paymentReasons = dbController.GetPaymentReasons();
                 if (paymentReasons != null && paymentReasons.Count > 0)
@@ -27,9 +33,9 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             return new List<PaymentReason>();
         }
 
-        public Customer GetCustomer(string dbCode, int customerId)
+        public Customer GetCustomer(int customerId)
         {
-            foreach(var dbController in GetDbControllersByDbCode(dbCode))
+            foreach(var dbController in dbControllers)
             {
                 var customer = dbController.GetCustomer(customerId);
                 if (customer != null)
@@ -41,7 +47,8 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         private List<DbController> GetDbControllersByDbCode(string dbCode)
         {
-            return dbControllers.Where(dbController => dbController.Model.DbCode == dbCode).ToList();
+            return department.Dbs.Select(dbModel => new DbController(dbModel))
+                .Where(dbController => dbController.Model.DbCode == dbCode).ToList();
         }
     }
 }

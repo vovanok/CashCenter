@@ -30,7 +30,7 @@ namespace CashCenter.IvEnergySales.DbQualification
                 return targetDepartment;
 
             Log.Error($"Отделение с кодом {departmentCode} не найдено. Отредактируйте ключ {Config.CURRENT_DEPARTMENT_CODE} раздела appSettings в App.config");
-            return new DepartmentModel();
+            return null;
         }
 
 		private static DbQualifierModel LoadDbCodeMappingModel()

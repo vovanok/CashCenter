@@ -59,16 +59,20 @@ namespace CashCenter.IvEnergySales.DAL
             {
                 dbConnection.Open();
 
-                var command = GetDbCommandByQuery($"select ID, NAME from customer where id={customerId} and AGGR$STATE_ID <> 4");
+                var command = GetDbCommandByQuery(string.Format(SqlConsts.SQL_GET_CUSTOMER_FORMAT, customerId));
                 var dataReader = command.ExecuteReader();
 
                 Customer result = null;
                 while (dataReader.Read())
                 {
-                    int id = GetFieldFromReader<int>(dataReader, "ID");
-                    string name = GetFieldFromReader<string>(dataReader, "NAME");
+                    int id = GetFieldFromReader<int>(dataReader, SqlConsts.CUSTOMER_ID);
+                    string name = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_NAME) ?? string.Empty;
+                    string flat = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_FLAT, true) ?? string.Empty;
+                    string buildingNumber = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
+                    string streetName = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_STREET_NAME) ?? string.Empty;
+                    string localityName = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    result = new Customer(id, name);
+                    result = new Customer(id, name, flat, buildingNumber, streetName, localityName);
                 }
 
                 dataReader.Close();
@@ -91,7 +95,7 @@ namespace CashCenter.IvEnergySales.DAL
             return command;
         }
 
-        private T GetFieldFromReader<T>(DbDataReader dataReader, string columnName)
+        private T GetFieldFromReader<T>(DbDataReader dataReader, string columnName, bool isMayBeNull = false)
         {
             var result = default(T);
 
@@ -100,7 +104,9 @@ namespace CashCenter.IvEnergySales.DAL
                 int ordinal = dataReader.GetOrdinal(columnName);
                 if (dataReader.IsDBNull(ordinal))
                 {
-                    Log.Warning($"Не найдено поле в колонке {columnName}.");
+                    if (!isMayBeNull)
+                        Log.Warning($"Не найдено поле в колонке {columnName}.");
+
                     return result;
                 }
 

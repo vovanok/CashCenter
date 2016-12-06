@@ -91,6 +91,7 @@
     <Compile Include="BusinessLogic\EnergySalesManager.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DAL\DbController.cs" />
+    <Compile Include="DAL\SqlConsts.cs" />
     <Compile Include="DataModel\Customer.cs" />
     <Compile Include="DataModel\PaymentReason.cs" />
     <Compile Include="DbQualification\DbQualifier.cs" />
