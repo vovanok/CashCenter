@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Input;
 using CashCenter.IvEnergySales.DbQualification;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.DataModel;
@@ -48,28 +49,21 @@ namespace CashCenter.IvEnergySales
 
             // Load reasons
             cbPaymentReasons.ItemsSource = energySalesManager?.GetPaymentReasons() ?? new List<PaymentReason>();
+            if (cbPaymentReasons.Items.Count > 0)
+                cbPaymentReasons.SelectedIndex = 0;
         }
-
 
         private void btnFindCustomer_Click(object sender, RoutedEventArgs e)
         {
-            int targetCustomerId;
-            if (!int.TryParse(tbCustomerId.Text, out targetCustomerId))
-            {
-                Log.Error($"Номер лицевого счета должен быть числом ({tbCustomerId.Text}).");
-                return;
-            }
+            FindCustomerInfo();
+        }
 
-            var targetCustomer = energySalesManager?.GetCustomer(targetCustomerId);
-            if (targetCustomer == null)
-            {
-                Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
+        private void tbCustomerId_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
                 return;
-            }
 
-            lblCustomerName.Content = targetCustomer.Name;
-            lblCustomerAddress.Content = GetSeparatedString(
-                new[] { targetCustomer.LocalityName, targetCustomer.StreetName, targetCustomer.BuildingNumber, targetCustomer.Flat }, ", ");
+            FindCustomerInfo();
         }
 
         private string GetSeparatedString(IEnumerable<string> values, string separator)
@@ -97,6 +91,27 @@ namespace CashCenter.IvEnergySales
         private void UpdateDbCodeFromSelector()
         {
             energySalesManager?.SetDbCode(cbDbSelector.SelectedValue.ToString());
+        }
+
+        private void FindCustomerInfo()
+        {
+            int targetCustomerId;
+            if (!int.TryParse(tbCustomerId.Text, out targetCustomerId))
+            {
+                Log.Error($"Номер лицевого счета должен быть числом ({tbCustomerId.Text}).");
+                return;
+            }
+
+            var targetCustomer = energySalesManager?.GetCustomer(targetCustomerId);
+            if (targetCustomer == null)
+            {
+                Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
+                return;
+            }
+
+            lblCustomerName.Content = targetCustomer.Name;
+            lblCustomerAddress.Content = GetSeparatedString(
+                new[] { targetCustomer.LocalityName, targetCustomer.StreetName, targetCustomer.BuildingNumber, targetCustomer.Flat }, ", ");
         }
     }
 }
