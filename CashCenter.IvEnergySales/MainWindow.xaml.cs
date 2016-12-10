@@ -7,7 +7,7 @@ using CashCenter.IvEnergySales.DbQualification;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.DataModel;
 using CashCenter.IvEnergySales.Logging;
-using System.Text;
+using System.Linq;
 
 namespace CashCenter.IvEnergySales
 {
@@ -66,23 +66,6 @@ namespace CashCenter.IvEnergySales
             FindCustomerInfo();
         }
 
-        private string GetSeparatedString(IEnumerable<string> values, string separator)
-        {
-            var sb = new StringBuilder();
-            foreach(var value in values)
-            {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    if (sb.Length > 0)
-                        sb.Append(separator);
-
-                    sb.Append(value);
-                }
-            }
-
-            return sb.ToString();
-        }
-
         private void cbDbSelector_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             UpdateDbCodeFromSelector();
@@ -110,8 +93,13 @@ namespace CashCenter.IvEnergySales
             }
 
             lblCustomerName.Content = targetCustomer.Name;
-            lblCustomerAddress.Content = GetSeparatedString(
-                new[] { targetCustomer.LocalityName, targetCustomer.StreetName, targetCustomer.BuildingNumber, targetCustomer.Flat }, ", ");
+
+            var addressComponents = new[] { targetCustomer.LocalityName, targetCustomer.StreetName, targetCustomer.BuildingNumber, targetCustomer.Flat }
+                .Where(item => !string.IsNullOrEmpty(item));
+            lblCustomerAddress.Content = string.Join(", ", addressComponents);
+
+            lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = targetCustomer.Counters.EndDayValue.ToString();
+            lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = targetCustomer.Counters.EndNightValue.ToString();
         }
     }
 }
