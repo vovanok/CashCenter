@@ -93,6 +93,7 @@
     <Compile Include="DAL\DbController.cs" />
     <Compile Include="DAL\SqlConsts.cs" />
     <Compile Include="DataModel\Customer.cs" />
+    <Compile Include="DataModel\CustomerCounters.cs" />
     <Compile Include="DataModel\PaymentReason.cs" />
     <Compile Include="DbQualification\DbQualifier.cs" />
     <Compile Include="DbQualification\DbQualifierModel.cs" />

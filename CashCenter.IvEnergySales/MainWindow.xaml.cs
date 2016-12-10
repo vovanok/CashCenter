@@ -58,7 +58,7 @@ namespace CashCenter.IvEnergySales
             FindCustomerInfo();
         }
 
-        private void tbCustomerId_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        private void tbCustomerId_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
                 return;

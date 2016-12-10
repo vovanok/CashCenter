@@ -5,6 +5,7 @@ using CashCenter.IvEnergySales.DataModel;
 using CashCenter.IvEnergySales.DbQualification;
 using CashCenter.IvEnergySales.Logging;
 using System.Data.Common;
+using System.Data;
 
 namespace CashCenter.IvEnergySales.DAL
 {
@@ -60,19 +61,19 @@ namespace CashCenter.IvEnergySales.DAL
                 dbConnection.Open();
 
                 var command = GetDbCommandByQuery(string.Format(SqlConsts.SQL_GET_CUSTOMER_FORMAT, customerId));
-                var dataReader = command.ExecuteReader();
+                var dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
                 Customer result = null;
-                while (dataReader.Read())
+                if (dataReader.Read())
                 {
-                    int id = GetFieldFromReader<int>(dataReader, SqlConsts.CUSTOMER_ID);
                     string name = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_NAME) ?? string.Empty;
                     string flat = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_FLAT, true) ?? string.Empty;
                     string buildingNumber = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
                     string streetName = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = GetFieldFromReader<string>(dataReader, SqlConsts.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
+                    CustomerCounters customerCounters = GetCustomerCountersForCurrentConnection(customerId);
 
-                    result = new Customer(id, name, flat, buildingNumber, streetName, localityName);
+                    result = new Customer(this, customerId, name, flat, buildingNumber, streetName, localityName);
                 }
 
                 dataReader.Close();
@@ -82,13 +83,52 @@ namespace CashCenter.IvEnergySales.DAL
             }
             catch (Exception e)
             {
-                Log.Error($"Ошибка получения лицевого счета с номером {customerId}.\n{e.Message}\nStack trace:\n{e.StackTrace}");
+                Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerId}.", e);
+                return null;
+            }
+        }
+
+        private CustomerCounters GetCustomerCountersForCurrentConnection(int customerId)
+        {
+            try
+            {
+                var now = DateTime.Now;
+                var beginOfMonth = new DateTime(now.Year, now.Month, 1);
+                var endOfCurrentDay = new DateTime(now.Year, now.Month, now.Day + 1);
+
+                var command = GetDbCommandByQuery(string.Format(SqlConsts.SQL_GET_COUNTERS_FORMAT, customerId, beginOfMonth, endOfCurrentDay));
+                var dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+
+                CustomerCounters result = null;
+
+                if (dataReader.Read())
+                {
+                    int endDayValue = GetFieldFromReader<int>(dataReader, SqlConsts.COUNTERS_END_DAY_VALUE);
+                    int endNightValue = GetFieldFromReader<int>(dataReader, SqlConsts.COUNTERS_END_NIGHT_VALUE);
+                    bool isTwoTariff = GetFieldFromReader<int>(dataReader, SqlConsts.COUNTERS_IS_TWO_TARIFF) == 1;
+
+                    result = new CustomerCounters(this, endDayValue, endNightValue, isTwoTariff);
+                }
+
+                dataReader.Close();
+
+                return result;
+            }
+            catch(Exception e)
+            {
+                Log.ErrorWithException($"Ошибка получения последний показаний счетчиков для плательщика с номером лицевого счета {customerId}.", e);
                 return null;
             }
         }
 
         private DbCommand GetDbCommandByQuery(string query)
         {
+            if (dbConnection.State != ConnectionState.Open)
+            {
+                Log.Error("Ошибка получения комманды для текущего подключения к БД. Подключение не открыто.");
+                return null;
+            }
+
             var command = dbConnection.CreateCommand();
             command.Transaction = dbConnection.BeginTransaction();
             command.CommandText = query;
@@ -120,7 +160,7 @@ namespace CashCenter.IvEnergySales.DAL
             }
             catch(Exception e)
             {
-                Log.Error($"Ошибка получения поля в колонке {columnName}.\n{e.Message}\nStack trace:\n{e.StackTrace}");
+                Log.ErrorWithException($"Ошибка получения поля в колонке {columnName}.", e);
                 return result;
             }
         }

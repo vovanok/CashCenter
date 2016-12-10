@@ -1,3 +1,5 @@
+using System;
+
 namespace CashCenter.IvEnergySales.Logging
 {
 	public abstract class Log
@@ -36,6 +38,11 @@ namespace CashCenter.IvEnergySales.Logging
 		{
 			Instance.ErrorLog(message);
 		}
+
+        public static void ErrorWithException(string headerMessage, Exception exception)
+        {
+            Instance.ErrorLog($"{headerMessage}\n\nИсключение: {exception.Message}\n\nТрассировка стека:\n{exception.StackTrace}");
+        }
 
 		protected abstract void InfoLog(string message);
 		protected abstract void WarningLog(string message);
