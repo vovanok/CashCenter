@@ -1,5 +1,6 @@
 ﻿using CashCenter.IvEnergySales.Logging;
 using System;
+using System.Data;
 using System.Data.Common;
 
 namespace CashCenter.IvEnergySales.DAL
@@ -34,6 +35,25 @@ namespace CashCenter.IvEnergySales.DAL
                 Log.ErrorWithException($"Ошибка получения поля в колонке {columnName}.", e);
                 return result;
             }
+        }
+
+        public static void AddParameter<T>(this DbCommand command, string paramName, T paramValue)
+        {
+            var commandParameter = command.CreateParameter();
+            commandParameter.ParameterName = paramName;
+            commandParameter.Value = paramValue;
+
+            if (typeof(T) == typeof(int))
+            {
+                commandParameter.DbType = DbType.Int32;
+            } else if (typeof(T) == typeof(string))
+            {
+                commandParameter.DbType = DbType.String;
+            } else if (typeof(T) == typeof(decimal))
+            {
+                commandParameter.DbType = DbType.Decimal;
+            }
+            command.Parameters.Add(commandParameter);
         }
     }
 }

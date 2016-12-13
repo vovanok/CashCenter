@@ -6,6 +6,7 @@ using CashCenter.IvEnergySales.DbQualification;
 using CashCenter.IvEnergySales.Logging;
 using System.Data.Common;
 using System.Data;
+using System.Text;
 
 namespace CashCenter.IvEnergySales.DAL
 {
@@ -25,25 +26,24 @@ namespace CashCenter.IvEnergySales.DAL
 
         public List<PaymentReason> GetPaymentReasons()
         {
+            DbDataReader dataReader = null;
+
             try
             {
                 dbConnection.Open();
 
-                var command = GetDbCommandByQuery(SqlHelper.GetSqlForGetReasons());
-                var dataReader = command.ExecuteReader();
+                var command = GetDbCommandByQuery(Sql.GET_REASONS);
+                dataReader = command.ExecuteReader();
 
                 var result = new List<PaymentReason>();
                 while (dataReader.Read())
                 {
-                    int id = dataReader.GetFieldFromReader<int>(SqlHelper.REASON_ID);
-                    string name = dataReader.GetFieldFromReader<string>(SqlHelper.REASON_NAME);
-                    bool isCanPay = dataReader.GetFieldFromReader<int>(SqlHelper.REASON_CANPAY) == 1;
+                    int id = dataReader.GetFieldFromReader<int>(Sql.REASON_ID);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.REASON_NAME);
+                    bool isCanPay = dataReader.GetFieldFromReader<int>(Sql.REASON_CANPAY) == 1;
 
                     result.Add(new PaymentReason(id, name, isCanPay));
                 }
-
-                dataReader.Close();
-                dbConnection.Close();
 
                 return result;
             }
@@ -52,10 +52,17 @@ namespace CashCenter.IvEnergySales.DAL
                 Log.ErrorWithException("Ошибка получения оснований для оплаты.", e);
                 return new List<PaymentReason>();
             }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
         }
 
         public Customer GetCustomer(int customerId)
         {
+            DbDataReader dataReader = null;
+
             try
             {
                 dbConnection.Open();
@@ -64,28 +71,29 @@ namespace CashCenter.IvEnergySales.DAL
                 var beginOfMonth = new DateTime(now.Year, now.Month, 1);
                 var endOfCurrentDay = new DateTime(now.Year, now.Month, now.Day + 1);
 
-                var command = GetDbCommandByQuery(string.Format(SqlHelper.GetSqlForGetCustomer(customerId, beginOfMonth, endOfCurrentDay), customerId));
-                var dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+                var command = GetDbCommandByQuery(Sql.GET_CUSTOMER);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+                command.AddParameter(Sql.PARAM_START_DATE, beginOfMonth.ToShortDateString());
+                command.AddParameter(Sql.PARAM_END_DATE, endOfCurrentDay.ToShortDateString());
+
+                dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
                 Customer result = null;
                 if (dataReader.Read())
                 {
-                    string name = dataReader.GetFieldFromReader< string>(SqlHelper.CUSTOMER_NAME) ?? string.Empty;
-                    string flat = dataReader.GetFieldFromReader<string>(SqlHelper.CUSTOMER_FLAT, true) ?? string.Empty;
-                    string buildingNumber = dataReader.GetFieldFromReader<string>(SqlHelper.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
-                    string streetName = dataReader.GetFieldFromReader<string>(SqlHelper.CUSTOMER_STREET_NAME) ?? string.Empty;
-                    string localityName = dataReader.GetFieldFromReader<string>(SqlHelper.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
+                    string name = dataReader.GetFieldFromReader< string>(Sql.CUSTOMER_NAME) ?? string.Empty;
+                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT, true) ?? string.Empty;
+                    string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
+                    string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
+                    string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    int endDayValue = dataReader.GetFieldFromReader<int>(SqlHelper.CUSTOMER_COUNTERS_END_DAY_VALUE);
-                    int endNightValue = dataReader.GetFieldFromReader<int>(SqlHelper.CUSTOMER_COUNTERS_END_NIGHT_VALUE, true);
-                    bool isTwoTariff = dataReader.GetFieldFromReader<int>(SqlHelper.CUSTOMER_COUNTERS_IS_TWO_TARIFF) == 1;
+                    int endDayValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
+                    int endNightValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE, true);
+                    bool isTwoTariff = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_IS_TWO_TARIFF) == 1;
 
                     var customerCounters = new CustomerCounters(this, endDayValue, endNightValue, isTwoTariff);
                     result = new Customer(this, customerId, name, flat, buildingNumber, streetName, localityName, customerCounters);
                 }
-
-                dataReader.Close();
-                dbConnection.Close();
 
                 return result;
             }
@@ -93,6 +101,51 @@ namespace CashCenter.IvEnergySales.DAL
             {
                 Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerId}.", e);
                 return null;
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
+        public void Pay(Pay pay, int value1, int value2)
+        {
+            try
+            {
+                dbConnection.Open();
+
+                var sbQuery = new StringBuilder();
+
+                sbQuery.AppendLine("execute block as begin");
+                sbQuery.AppendLine(Sql.ADD_PAYMENT_KIND_IF_NOTEXIST);
+                sbQuery.AppendLine(Sql.ADD_OR_UPDATE_PAYJOURNAL);
+                sbQuery.AppendLine(Sql.INSERT_PAY);
+                sbQuery.AppendLine(Sql.ADD_COUNTERVALUES);
+                sbQuery.AppendLine(Sql.ADD_METERS);
+                sbQuery.AppendLine("end");
+
+                var command = GetDbCommandByQuery(sbQuery.ToString());
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, pay.Customer.Id);
+                command.AddParameter(Sql.PARAM_PAYMENT_KIND_ID, pay.Journal.PaymentKind.Id);
+                command.AddParameter(Sql.PARAM_PAYMENT_KIND_NAME, pay.Journal.PaymentKind.Name);
+                command.AddParameter(Sql.PARAM_CREATE_DATE, pay.Journal.CreateDate.ToShortDateString());
+                command.AddParameter(Sql.PARAM_PAYMENT_COST, pay.Cost);
+                command.AddParameter(Sql.PARAM_PAY_JOURNAL_NAME, pay.Journal.Name);
+                command.AddParameter(Sql.PARAM_REASON_ID, pay.ReasonId);
+                command.AddParameter(Sql.PARAM_DESCRIPTION, pay.Description);
+                command.AddParameter(Sql.PARAM_VALUE1, value1);
+                command.AddParameter(Sql.PARAM_VALUE2, value2);
+
+                command.ExecuteNonQuery();
+            }
+            catch(Exception e)
+            {
+                Log.ErrorWithException($"Ошибка записи информации о платеже.", e);
+            }
+            finally
+            {
+                dbConnection?.Close();
             }
         }
 

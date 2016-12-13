@@ -55,11 +55,24 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Firebird, Version=5.6.0.0, Culture=neutral, PublicKeyToken=42d22d092898e5f8, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Firebird.5.6.0\lib\net45\EntityFramework.Firebird.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.6.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.5.6.0\lib\net45\FirebirdSql.Data.FirebirdClient.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -91,10 +104,13 @@
     <Compile Include="BusinessLogic\EnergySalesManager.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DAL\DbController.cs" />
-    <Compile Include="DAL\SqlHelper.cs" />
+    <Compile Include="DAL\Sql.cs" />
     <Compile Include="DAL\Utils.cs" />
     <Compile Include="DataModel\Customer.cs" />
     <Compile Include="DataModel\CustomerCounters.cs" />
+    <Compile Include="DataModel\Pay.cs" />
+    <Compile Include="DataModel\PayJournal.cs" />
+    <Compile Include="DataModel\PaymentKind.cs" />
     <Compile Include="DataModel\PaymentReason.cs" />
     <Compile Include="DbQualification\DbQualifier.cs" />
     <Compile Include="DbQualification\DbQualifierModel.cs" />

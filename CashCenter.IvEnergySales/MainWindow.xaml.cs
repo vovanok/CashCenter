@@ -14,8 +14,9 @@ namespace CashCenter.IvEnergySales
     public partial class MainWindow : Window
 	{
         private EnergySalesManager energySalesManager;
+        private Customer targetCustomer;
 
-		public MainWindow()
+        public MainWindow()
 		{
 			InitializeComponent();
 		}
@@ -85,7 +86,7 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            var targetCustomer = energySalesManager?.GetCustomer(targetCustomerId);
+            targetCustomer = energySalesManager?.GetCustomer(targetCustomerId);
             if (targetCustomer == null)
             {
                 Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
@@ -100,6 +101,41 @@ namespace CashCenter.IvEnergySales
 
             lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = targetCustomer.Counters.EndDayValue.ToString();
             lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = targetCustomer.Counters.EndNightValue.ToString();
+        }
+
+        private void btnPay_Click(object sender, RoutedEventArgs e)
+        {
+            decimal paymentCost;
+            if (!decimal.TryParse(tbCost.Text, out paymentCost))
+            {
+                Log.Error($"Некорректное значение суммы платежа. Оно должно быть числом ({paymentCost}).");
+                return;
+            }
+
+            if (!(cbPaymentReasons.SelectedValue is int))
+            {
+                Log.Error($"Некорректное значение овнования платежа.");
+                return;
+            }
+            int reasonId = (int)cbPaymentReasons.SelectedValue;
+
+            string description = tbDescription.Text ?? string.Empty;
+
+            int value1;
+            if (!int.TryParse(tbDayCurrentCounterValue.Text, out value1))
+            {
+                Log.Error($"Некорректное показание дневного счетчика. Оно должно быть числом.");
+                return;
+            }
+
+            int value2;
+            if (!int.TryParse(tbNightCurrentCounterValue.Text, out value2))
+            {
+                Log.Error($"Некорректное показание ночного счетчика. Оно должно быть числом.");
+                return;
+            }
+
+            energySalesManager?.Pay(targetCustomer, reasonId, paymentCost, description, value1, value2);
         }
     }
 }
