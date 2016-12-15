@@ -1,23 +1,26 @@
-﻿namespace CashCenter.IvEnergySales.DataModel
+namespace CashCenter.IvEnergySales.DataModel
 {
     public class Pay
     {
-        public Customer Customer { get; private set; }
+		public int Id { get; private set; }
+
+		public int CustomerId { get; private set; }
 
         public int ReasonId { get; private set; }
 
-        public PayJournal Journal { get; private set; }
+        public int JournalId { get; private set; }
 
         public decimal Cost { get; private set; }
 
         public string Description { get; private set; }
 
-        public Pay(Customer customer, int reasonId, PayJournal journal,
-            decimal cost, string description)
+        public Pay(int id, int customerId, int reasonId,
+			int journalId, decimal cost, string description)
         {
-            Customer = customer;
+	        Id = id;
+			CustomerId = customerId;
             ReasonId = reasonId;
-            Journal = journal;
+			JournalId = journalId;
             Cost = cost;
             Description = description;
         }

@@ -71,11 +71,32 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 return;
             }
 
-            var paymentKing = new PaymentKind(5000, "CashCenter_ParmentKind");
-            var payJournal = new PayJournal(PAY_JOURNAL_NAME, DateTime.Now, paymentKing);
-            var pay = new Pay(customer, reasonId, payJournal, cost, description);
+	        const string PAYMENT_KIND_NAME = "CashCenter_ParmentKind";
+	        var paymentKind = customer.Db.GetPaymentKind(PAYMENT_KIND_NAME);
+			if (paymentKind == null)
+				paymentKind = customer.Db.AddPaymentKind(new PaymentKind(-1, PAYMENT_KIND_NAME));
 
-            pay.Customer.Db.Pay(pay, value1, value2);
+	        var createDate = DateTime.Now;
+			var payJournal = customer.Db.GetPayJournal(DateTime.Now, paymentKind.Id);
+	        if (payJournal != null)
+	        {
+		        customer.Db.UpdatePayJournal(cost, payJournal.Id);
+	        }
+	        else
+	        {
+		        payJournal = customer.Db.AddPayJournal(
+			        new PayJournal(-1, PAY_JOURNAL_NAME, createDate, paymentKind.Id), cost);
+	        }
+
+	        customer.Db.AddPay(
+		        new Pay(-1, customer.Id, reasonId, payJournal.Id, cost, description));
+
+	        var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
+
+	        var counterValues = customer.Db.AddCounterValues(
+				new CounterValues(-1, customer.Id, customerCounterId, value1, value2), createDate);
+
+	        customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, value2, counterValues.Id));
         }
 
         private List<DbController> GetDbControllersByDbCode(string dbCode)

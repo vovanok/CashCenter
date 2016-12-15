@@ -1,4 +1,4 @@
-﻿using CashCenter.IvEnergySales.Logging;
+using CashCenter.IvEnergySales.Logging;
 using System;
 using System.Data;
 using System.Data.Common;
@@ -39,21 +39,37 @@ namespace CashCenter.IvEnergySales.DAL
 
         public static void AddParameter<T>(this DbCommand command, string paramName, T paramValue)
         {
-            var commandParameter = command.CreateParameter();
-            commandParameter.ParameterName = paramName;
+	        var commandParameter = GetCommandParameter<T>(command, paramName);
             commandParameter.Value = paramValue;
-
-            if (typeof(T) == typeof(int))
-            {
-                commandParameter.DbType = DbType.Int32;
-            } else if (typeof(T) == typeof(string))
-            {
-                commandParameter.DbType = DbType.String;
-            } else if (typeof(T) == typeof(decimal))
-            {
-                commandParameter.DbType = DbType.Decimal;
-            }
             command.Parameters.Add(commandParameter);
         }
-    }
+
+		public static void AddParameter<T>(this DbCommand command, string paramName)
+		{
+			var commandParameter = GetCommandParameter<T>(command, paramName);
+			commandParameter.Direction = ParameterDirection.Output;
+			command.Parameters.Add(commandParameter);
+		}
+
+	    private static DbParameter GetCommandParameter<T>(DbCommand command, string paramName)
+	    {
+			var commandParameter = command.CreateParameter();
+			commandParameter.ParameterName = paramName;
+
+			if (typeof(T) == typeof(int))
+			{
+				commandParameter.DbType = DbType.Int32;
+			}
+			else if (typeof(T) == typeof(string))
+			{
+				commandParameter.DbType = DbType.String;
+			}
+			else if (typeof(T) == typeof(decimal))
+			{
+				commandParameter.DbType = DbType.Decimal;
+			}
+
+		    return commandParameter;
+	    }
+	}
 }

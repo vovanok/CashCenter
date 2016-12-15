@@ -17,11 +17,15 @@
         public const string REASON_NAME = "NAME";
         public const string REASON_CANPAY = "CANPAY";
 
-        private const string PAYJOURNAL_ID = "existing_payment_journal_id";
-        private const string CUSTOMER_COUNTER_ID = "customer_counter_id";
-        private const string NEW_COUNTER_VALUES_ID = "new_countervalues_id";
+	    public const string CUSTOMER_COUNTER_ID = "CUSTOMER_COUNTER_ID";
 
-        public const string PARAM_CUSTOMER_ID = "@CUSTOMER_ID";
+	    public const string PAY_JOURNAL_ID = "PAY_JOURNAL_ID";
+	    public const string PAY_JOURNAL_NAME = "PAY_JOURNAL_NAME";
+
+		public const string PAYMENT_KIND_ID = "PAYMENT_KIND_ID";
+		public const string PAYMENT_KIND_NAME = "PAYMENT_KIND_NAME";
+
+		public const string PARAM_CUSTOMER_ID = "@CUSTOMER_ID";
         public const string PARAM_START_DATE = "@START_DATE";
         public const string PARAM_END_DATE = "@END_DATE";
         public const string PARAM_PAYMENT_KIND_ID = "@PAYMENT_KIND_ID";
@@ -33,8 +37,12 @@
         public const string PARAM_DESCRIPTION = "@DESCRIPTION";
         public const string PARAM_VALUE1 = "@VALUE1";
         public const string PARAM_VALUE2 = "@VALUE2";
+	    public const string PARAM_PAY_JOURNAL_ID = "@PAY_JOURNAL_ID";
+	    public const string PARAM_CUSTOMER_COUNTER_ID = "@CUSTOMER_COUNTER_ID";
+	    public const string PARAM_COUNTER_VALUES_ID = "@COUNTER_VALUES_ID";
+	    public const string PARAM_PAY_ID = "@PAY_ID";
 
-        public static readonly string GET_CUSTOMER =
+		public static readonly string GET_CUSTOMER =
             $@"select * from
                    (select first 1
                           customer.id {CUSTOMER_ID}, 
@@ -64,33 +72,45 @@
         public static readonly string GET_REASONS =
             $"select {REASON_ID}, {REASON_NAME}, {REASON_CANPAY} from reason";
 
-        public static readonly string ADD_PAYMENT_KIND_IF_NOTEXIST =
-            $@"
-            if (not exists (select first 1 ID from paymentkind where paymentkind.ID = {PARAM_PAYMENT_KIND_ID})) then
-                insert into paymentkind values({PARAM_PAYMENT_KIND_ID}, '{PARAM_PAYMENT_KIND_NAME}', 1);";
-        
-        public static readonly string ADD_OR_UPDATE_PAYJOURNAL =
-            $@"
-            if (exists (select first 1 ID from payjournal
-                where (payjournal.createdate = '{PARAM_CREATE_DATE}') and (payjournal.paymentkind_id = {PARAM_PAYMENT_KIND_ID}))) then
-            begin
-                update payjournal
-                set payjournal.requiresum += {PARAM_PAYMENT_COST},
-                    payjournal.requirecount += 1
-                where (payjournal.id = existing_payment_journal_id);
-            end else begin
-                insert into payjournal values(
-                    null,
-                    '{PARAM_PAY_JOURNAL_NAME}',
-                    '{PARAM_CREATE_DATE}',
-                    '{PARAM_CREATE_DATE}',
-                    {PARAM_PAYMENT_KIND_ID},
-                    {PARAM_PAYMENT_COST},
-                    1,
-                    NULL,
-                    1)
-                returning :{PAYJOURNAL_ID};
-            end;";
+	    public static readonly string GET_PAYMENT_KIND =
+		    $@"
+			select first 1 id {PAYMENT_KIND_ID}, name {PAYMENT_KIND_NAME}
+			from paymentkind
+			where paymentkind.name = {PARAM_PAYMENT_KIND_NAME}";
+
+	    public static readonly string INSERT_PAYMENT_KIND =
+		    $@"
+			insert into paymentkind
+			values(null, {PARAM_PAYMENT_KIND_NAME}, 1)
+			returning id";
+
+	    public static readonly string GET_PAYJOURNAL =
+		    $@"
+			select first 1 id {PAY_JOURNAL_ID}, name {PAY_JOURNAL_NAME}
+			from payjournal
+			where (payjournal.createdate = {PARAM_CREATE_DATE}) and
+				  (payjournal.paymentkind_id = {PARAM_PAYMENT_KIND_ID})";
+
+		public static readonly string UPDATE_PAYJOURNAL =
+			$@"
+			update payjournal
+			set payjournal.requiresum += {PARAM_PAYMENT_COST},
+                payjournal.requirecount += 1
+			where (payjournal.id = {PARAM_PAY_JOURNAL_ID})";
+
+	    public static readonly string INSERT_PAY_JOUNAL =
+		    $@"
+			insert into payjournal values(
+				null,
+				{PARAM_PAY_JOURNAL_NAME},
+				{PARAM_CREATE_DATE},
+				{PARAM_CREATE_DATE},
+				{PARAM_PAYMENT_KIND_ID},
+				{PARAM_PAYMENT_COST},
+				1,
+				NULL,
+				1)
+			returning id";
 
         public static readonly string INSERT_PAY =
             $@"
@@ -98,44 +118,47 @@
                 values (
                     null,
                     {PARAM_CUSTOMER_ID},
-                    {PAYJOURNAL_ID},
+                    {PARAM_PAY_JOURNAL_ID},
                     {PARAM_REASON_ID},
                     null,
                     {PARAM_PAYMENT_COST},
                     0,
-                    {PARAM_DESCRIPTION})";
+                    {PARAM_DESCRIPTION})
+			returning id";
 
-        public static readonly string ADD_COUNTERVALUES =
+	    public static readonly string SELECT_CUSTOMER_COUNTER =
+		    $@"
+			select customercounter.id {CUSTOMER_COUNTER_ID}
+            from customercounter
+            where customercounter.customer_id = {PARAM_CUSTOMER_ID} and
+				  customercounter.unmountdate is null";
+
+        public static readonly string INSERT_COUNTERVALUES =
             $@"
-            select customercounter.id, counter.twotariff
-                from customercounter left join counter
-                    on customercounter.counterid = counter.id
-                where customer_id = {{0}} and customercounter.unmountdate is null
-                into :{CUSTOMER_COUNTER_ID}
-
             insert into countervalues values (
                 null,
-                {PARAM_CUSTOMER_ID},
-                {CUSTOMER_COUNTER_ID},
-                null,
-                '{PARAM_CREATE_DATE}',
+				{PARAM_CUSTOMER_ID},
+				{PARAM_CUSTOMER_COUNTER_ID},
+				null,
+				{PARAM_CREATE_DATE}, 
                 {PARAM_VALUE1},
-                {PARAM_VALUE2},
-                0,
-                1)
-            returning :{NEW_COUNTER_VALUES_ID}";
+				{PARAM_VALUE2},
+				0,
+				1)
+			returning id";
 
-        public static readonly string ADD_METERS =
+        public static readonly string INSERT_METERS =
             $@"
             insert into meters values(
                 null,
                 {PARAM_CUSTOMER_ID},
-                {CUSTOMER_COUNTER_ID},
+                {PARAM_CUSTOMER_COUNTER_ID},
                 {PARAM_VALUE1},
                 0,
                 {PARAM_VALUE2},
                 0,
                 1,
-                {NEW_COUNTER_VALUES_ID})";
+                {PARAM_COUNTER_VALUES_ID})
+			returning id";
     }
 }

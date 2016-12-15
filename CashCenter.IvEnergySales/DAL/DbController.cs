@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FirebirdSql.Data.FirebirdClient;
 using CashCenter.IvEnergySales.DataModel;
@@ -6,7 +6,6 @@ using CashCenter.IvEnergySales.DbQualification;
 using CashCenter.IvEnergySales.Logging;
 using System.Data.Common;
 using System.Data;
-using System.Text;
 
 namespace CashCenter.IvEnergySales.DAL
 {
@@ -81,7 +80,7 @@ namespace CashCenter.IvEnergySales.DAL
                 Customer result = null;
                 if (dataReader.Read())
                 {
-                    string name = dataReader.GetFieldFromReader< string>(Sql.CUSTOMER_NAME) ?? string.Empty;
+                    string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
                     string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT, true) ?? string.Empty;
                     string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
@@ -109,47 +108,291 @@ namespace CashCenter.IvEnergySales.DAL
             }
         }
 
-        public void Pay(Pay pay, int value1, int value2)
-        {
-            try
-            {
-                dbConnection.Open();
+	    public PaymentKind GetPaymentKind(string paymentKindName)
+	    {
+			DbDataReader dataReader = null;
 
-                var sbQuery = new StringBuilder();
+			try
+		    {
+				dbConnection.Open();
 
-                sbQuery.AppendLine("execute block as begin");
-                sbQuery.AppendLine(Sql.ADD_PAYMENT_KIND_IF_NOTEXIST);
-                sbQuery.AppendLine(Sql.ADD_OR_UPDATE_PAYJOURNAL);
-                sbQuery.AppendLine(Sql.INSERT_PAY);
-                sbQuery.AppendLine(Sql.ADD_COUNTERVALUES);
-                sbQuery.AppendLine(Sql.ADD_METERS);
-                sbQuery.AppendLine("end");
+			    var command = GetDbCommandByQuery(Sql.GET_PAYMENT_KIND);
+				command.AddParameter(Sql.PARAM_PAYMENT_KIND_NAME, paymentKindName);
 
-                var command = GetDbCommandByQuery(sbQuery.ToString());
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, pay.Customer.Id);
-                command.AddParameter(Sql.PARAM_PAYMENT_KIND_ID, pay.Journal.PaymentKind.Id);
-                command.AddParameter(Sql.PARAM_PAYMENT_KIND_NAME, pay.Journal.PaymentKind.Name);
-                command.AddParameter(Sql.PARAM_CREATE_DATE, pay.Journal.CreateDate.ToShortDateString());
-                command.AddParameter(Sql.PARAM_PAYMENT_COST, pay.Cost);
-                command.AddParameter(Sql.PARAM_PAY_JOURNAL_NAME, pay.Journal.Name);
-                command.AddParameter(Sql.PARAM_REASON_ID, pay.ReasonId);
-                command.AddParameter(Sql.PARAM_DESCRIPTION, pay.Description);
-                command.AddParameter(Sql.PARAM_VALUE1, value1);
-                command.AddParameter(Sql.PARAM_VALUE2, value2);
+			    dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
-                command.ExecuteNonQuery();
-            }
-            catch(Exception e)
-            {
-                Log.ErrorWithException($"Ошибка записи информации о платеже.", e);
-            }
-            finally
-            {
-                dbConnection?.Close();
-            }
-        }
+			    PaymentKind resultPaymentKind = null;
+			    if (dataReader.Read())
+			    {
+				    var id = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_ID);
+				    var name = dataReader.GetFieldFromReader<string>(Sql.PAYMENT_KIND_NAME);
 
-        private DbCommand GetDbCommandByQuery(string query)
+					resultPaymentKind = new PaymentKind(id, name);
+				}
+
+			    return resultPaymentKind;
+		    }
+		    catch (Exception e)
+		    {
+				Log.ErrorWithException("Ошибка получения типа платежа.", e);
+			    return null;
+		    }
+		    finally
+		    {
+				dataReader?.Close();
+				dbConnection?.Close();
+		    }
+	    }
+
+	    public PaymentKind AddPaymentKind(PaymentKind paymentKind)
+	    {
+		    try
+		    {
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.INSERT_PAYMENT_KIND);
+			    command.AddParameter(Sql.PARAM_PAYMENT_KIND_NAME, paymentKind.Name);
+
+				int id = (int)command.ExecuteScalar();
+
+				command.Transaction.Commit();
+				command.Dispose();
+
+				return new PaymentKind(id, paymentKind.Name);
+			}
+			catch (Exception e)
+		    {
+				Log.ErrorWithException($"Ошибка добавления типа платежа.", e);
+			    return null;
+		    }
+		    finally
+		    {
+			    dbConnection?.Close();
+		    }
+	    }
+
+	    public PayJournal GetPayJournal(DateTime createDate, int paymentKindId)
+	    {
+			DbDataReader dataReader = null;
+
+			try
+			{
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.GET_PAYJOURNAL);
+				command.AddParameter(Sql.PARAM_CREATE_DATE, createDate.ToShortDateString());
+				command.AddParameter(Sql.PARAM_PAYMENT_KIND_ID, paymentKindId);
+
+				dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+
+				PayJournal resultPayJournal = null;
+				if (dataReader.Read())
+				{
+					var id = dataReader.GetFieldFromReader<int>(Sql.PAY_JOURNAL_ID);
+					var name = dataReader.GetFieldFromReader<string>(Sql.PAY_JOURNAL_NAME);
+
+					resultPayJournal = new PayJournal(id, name, createDate, paymentKindId);
+				}
+
+				return resultPayJournal;
+			}
+			catch (Exception e)
+			{
+				Log.ErrorWithException("Ошибка получения журнала платежа.", e);
+				return null;
+			}
+			finally
+			{
+				dataReader?.Close();
+				dbConnection?.Close();
+			}
+		}
+
+	    public void UpdatePayJournal(decimal cost, int payJournalId)
+	    {
+			try
+			{
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.UPDATE_PAYJOURNAL);
+				command.AddParameter(Sql.PARAM_PAYMENT_COST, cost);
+				command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, payJournalId);
+
+				command.ExecuteNonQuery();
+				command.Transaction.Commit();
+				command.Dispose();
+			}
+			catch (Exception e)
+			{
+				Log.ErrorWithException($"Ошибка обновления журнала платежа.", e);
+			}
+			finally
+			{
+				dbConnection?.Close();
+			}
+		}
+
+	    public PayJournal AddPayJournal(PayJournal payJournal, decimal cost)
+	    {
+			try
+			{
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.INSERT_PAY_JOUNAL);
+				command.AddParameter(Sql.PARAM_PAY_JOURNAL_NAME, payJournal.Name);
+				command.AddParameter(Sql.PARAM_CREATE_DATE, payJournal.CreateDate.ToShortDateString());
+				command.AddParameter(Sql.PARAM_PAYMENT_KIND_ID, payJournal.PaymentKindId);
+				command.AddParameter(Sql.PARAM_PAYMENT_COST, cost);
+
+				int id = (int)command.ExecuteScalar();
+
+				command.Transaction.Commit();
+				command.Dispose();
+
+				return new PayJournal(id, payJournal.Name, payJournal.CreateDate, payJournal.PaymentKindId);
+			}
+			catch (Exception e)
+			{
+				Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+				return null;
+			}
+			finally
+			{
+				dbConnection?.Close();
+			}
+		}
+
+	    public Pay AddPay(Pay pay)
+	    {
+		    try
+		    {
+			    dbConnection.Open();
+
+			    var command = GetDbCommandByQuery(Sql.INSERT_PAY);
+			    command.AddParameter(Sql.PARAM_CUSTOMER_ID, pay.CustomerId);
+			    command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, pay.JournalId);
+			    command.AddParameter(Sql.PARAM_REASON_ID, pay.ReasonId);
+			    command.AddParameter(Sql.PARAM_PAYMENT_COST, pay.Cost);
+			    command.AddParameter(Sql.PARAM_DESCRIPTION, pay.Description);
+
+				int id = (int)command.ExecuteScalar();
+
+				command.Transaction.Commit();
+				command.Dispose();
+
+				return new Pay(id, pay.CustomerId, pay.ReasonId, pay.JournalId,
+					pay.Cost, pay.Description);
+		    }
+		    catch (Exception e)
+		    {
+			    Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+			    return null;
+		    }
+		    finally
+		    {
+			    dbConnection?.Close();
+		    }
+	    }
+
+	    public int GetCustomerCounterId(int customerId)
+	    {
+			DbDataReader dataReader = null;
+
+			try
+			{
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.SELECT_CUSTOMER_COUNTER);
+				command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+
+				dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+
+				int id = -1;
+				if (dataReader.Read())
+				{
+					id = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTER_ID);
+				}
+
+				return id;
+			}
+			catch (Exception e)
+			{
+				Log.ErrorWithException("Ошибка получения счетчика плательщика.", e);
+				return -1;
+			}
+			finally
+			{
+				dataReader?.Close();
+				dbConnection?.Close();
+			}
+		}
+
+	    public CounterValues AddCounterValues(CounterValues counterValues, DateTime createDate)
+	    {
+			try
+			{
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.INSERT_COUNTERVALUES);
+				command.AddParameter(Sql.PARAM_CUSTOMER_ID, counterValues.CustomerId);
+				command.AddParameter(Sql.PARAM_CUSTOMER_COUNTER_ID, counterValues.CustomerCounterId);
+				command.AddParameter(Sql.PARAM_CREATE_DATE, createDate);
+				command.AddParameter(Sql.PARAM_VALUE1, counterValues.Value1);
+				command.AddParameter(Sql.PARAM_VALUE2, counterValues.Value2);
+
+				int id = (int)command.ExecuteScalar();
+
+				command.Transaction.Commit();
+				command.Dispose();
+
+				return new CounterValues(id, counterValues.CustomerId,
+					counterValues.CustomerCounterId, counterValues.Value1,
+					counterValues.Value2);
+			}
+			catch (Exception e)
+			{
+				Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+				return null;
+			}
+			finally
+			{
+				dbConnection?.Close();
+			}
+		}
+
+	    public Meter AddMeters(Meter meter)
+	    {
+			try
+			{
+				dbConnection.Open();
+
+				var command = GetDbCommandByQuery(Sql.INSERT_METERS);
+				command.AddParameter(Sql.PARAM_CUSTOMER_ID, meter.CustomerId);
+				command.AddParameter(Sql.PARAM_CUSTOMER_COUNTER_ID, meter.CustomerCounterId);
+				command.AddParameter(Sql.PARAM_VALUE1, meter.Value1);
+				command.AddParameter(Sql.PARAM_VALUE2, meter.Value2);
+				command.AddParameter(Sql.PARAM_COUNTER_VALUES_ID, meter.CounterValuesId);
+
+				int id = (int)command.ExecuteScalar();
+
+				command.Transaction.Commit();
+				command.Dispose();
+
+				return new Meter(id, meter.CustomerId, meter.CustomerCounterId,
+					meter.Value1, meter.Value2, meter.CounterValuesId);
+			}
+			catch (Exception e)
+			{
+				Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+				return null;
+			}
+			finally
+			{
+				dbConnection?.Close();
+			}
+		}
+
+		private DbCommand GetDbCommandByQuery(string query)
         {
             if (dbConnection.State != ConnectionState.Open)
             {
