@@ -95,6 +95,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\StringUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,6 +105,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\EnergySalesManager.cs" />
+    <Compile Include="Check\BaseCheck.cs" />
+    <Compile Include="Check\CheckPrinter.cs" />
+    <Compile Include="Check\MainCheck.cs" />
+    <Compile Include="Check\PreCheck.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DAL\DbController.cs" />
     <Compile Include="DAL\Sql.cs" />
@@ -165,6 +170,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="DrvFRLib">
+      <Guid>{332C8050-469C-4B4D-A192-68CD3CB252BA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

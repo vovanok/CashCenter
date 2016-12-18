@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
@@ -8,6 +9,7 @@ using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.DataModel;
 using CashCenter.IvEnergySales.Logging;
 using System.Linq;
+using CashCenter.IvEnergySales.Check;
 
 namespace CashCenter.IvEnergySales
 {
@@ -15,8 +17,9 @@ namespace CashCenter.IvEnergySales
 	{
         private EnergySalesManager energySalesManager;
         private Customer targetCustomer;
+	    CheckPrinter checkPrinter;
 
-        public MainWindow()
+		public MainWindow()
 		{
 			InitializeComponent();
 		}
@@ -52,6 +55,15 @@ namespace CashCenter.IvEnergySales
             cbPaymentReasons.ItemsSource = energySalesManager?.GetPaymentReasons() ?? new List<PaymentReason>();
             if (cbPaymentReasons.Items.Count > 0)
                 cbPaymentReasons.SelectedIndex = 0;
+
+            try
+            {
+                checkPrinter = new CheckPrinter();
+            }
+            catch
+            {
+                Log.Error("Ошибка создания драйвера. Запустите приложение от имени администратора.");
+            }
         }
 
         private void btnFindCustomer_Click(object sender, RoutedEventArgs e)
@@ -136,6 +148,20 @@ namespace CashCenter.IvEnergySales
             }
 
             energySalesManager?.Pay(targetCustomer, reasonId, paymentCost, description, value1, value2);
+        }
+
+		private void btnClear_Click(object sender, RoutedEventArgs e)
+		{
+        }
+
+		private void miCashPrinterSettings_Click(object sender, RoutedEventArgs e)
+		{
+			checkPrinter.ShowProperties();
+		}
+
+        private void miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
+        {
+            checkPrinter.CancelCheck();
         }
     }
 }
