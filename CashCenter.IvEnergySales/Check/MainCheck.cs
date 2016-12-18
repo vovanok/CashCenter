@@ -16,10 +16,9 @@ namespace CashCenter.IvEnergySales.Check
 
 		public string CashierName { get; set; }
 
-		public string PaymentName { get; set; }
-		public decimal PaymentCost { get; set; }
+		public decimal Cost { get; set; }
 
-		public string RecipientNameShort { get; set; } //Наволоцкий РЦ
+		public string RecipientNameShort { get; set; }
 
 		public MainCheck(CheckPrinter checkPrinter) : base(checkPrinter)
 		{
@@ -59,10 +58,10 @@ namespace CashCenter.IvEnergySales.Check
 
             printer.CheckType = 0;
             printer.Quantity = 1;
-            printer.Price = PaymentCost;
+            printer.Price = Cost;
             printer.Sale();
 
-            printer.Summ1 = PaymentCost;
+            printer.Summ1 = Cost;
             printer.CloseCheck();
 		}
 	}

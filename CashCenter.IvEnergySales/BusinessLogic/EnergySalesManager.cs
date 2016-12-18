@@ -15,6 +15,9 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         private DepartmentModel department;
         private List<DbController> dbControllers = new List<DbController>();
 
+        public DateTime LastCreateDate { get; private set; }
+        public decimal LastCost { get; private set; }
+
         public EnergySalesManager(DepartmentModel department)
         {
             this.department = department;
@@ -76,25 +79,26 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 			if (paymentKind == null)
 				paymentKind = customer.Db.AddPaymentKind(new PaymentKind(-1, PAYMENT_KIND_NAME));
 
-	        var createDate = DateTime.Now;
-			var payJournal = customer.Db.GetPayJournal(DateTime.Now, paymentKind.Id);
+	        LastCreateDate = DateTime.Now;
+            LastCost = cost;
+			var payJournal = customer.Db.GetPayJournal(LastCreateDate, paymentKind.Id);
 	        if (payJournal != null)
 	        {
-		        customer.Db.UpdatePayJournal(cost, payJournal.Id);
+		        customer.Db.UpdatePayJournal(LastCost, payJournal.Id);
 	        }
 	        else
 	        {
 		        payJournal = customer.Db.AddPayJournal(
-			        new PayJournal(-1, PAY_JOURNAL_NAME, createDate, paymentKind.Id), cost);
+			        new PayJournal(-1, PAY_JOURNAL_NAME, LastCreateDate, paymentKind.Id), LastCost);
 	        }
 
 	        customer.Db.AddPay(
-		        new Pay(-1, customer.Id, reasonId, payJournal.Id, cost, description));
+		        new Pay(-1, customer.Id, reasonId, payJournal.Id, LastCost, description));
 
 	        var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
 
 	        var counterValues = customer.Db.AddCounterValues(
-				new CounterValues(-1, customer.Id, customerCounterId, value1, value2), createDate);
+				new CounterValues(-1, customer.Id, customerCounterId, value1, value2), LastCreateDate);
 
 	        customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, value2, counterValues.Id));
         }

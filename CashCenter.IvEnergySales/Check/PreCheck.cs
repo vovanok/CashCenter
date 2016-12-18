@@ -6,9 +6,8 @@ namespace CashCenter.IvEnergySales.Check
 	public class PreCheck : BaseCheck
 	{
 		public DateTime Date { get; set; }
-		public string RecipientName { get; set; }
+		public string RecipientNameShort { get; set; }
 		public decimal Cost { get; set; }
-		public decimal CommissionCost { get; set; }
 
 		public PreCheck(CheckPrinter checkPrinter)
 			: base(checkPrinter)
@@ -22,10 +21,8 @@ namespace CashCenter.IvEnergySales.Check
 			printer.PrintLine($"Дата: {Date.ToString("dd.MM.yyyy HH:mm:ss")}");
 			printer.PrintLine("Заявка на платеж");
 			printer.PrintLine("Оплата:");
-			printer.PrintLine(RecipientName ?? string.Empty);
+			printer.PrintLine(RecipientNameShort ?? string.Empty);
 			printer.PrintLine(StringUtils.FilledLeftFromContentString(Cost.ToString("0.00"), '.', maxLineLength));
-			printer.PrintLine("КОММИСИЯ");
-			printer.PrintLine(StringUtils.FilledLeftFromContentString(CommissionCost.ToString("0.00"), '.', maxLineLength));
 			printer.PrintEmptyLine();
 			printer.PrintLine("Данные указаны верно");
 			printer.PrintEmptyLine();

@@ -148,6 +148,60 @@ namespace CashCenter.IvEnergySales
             }
 
             energySalesManager?.Pay(targetCustomer, reasonId, paymentCost, description, value1, value2);
+
+            PrintPreCheck();
+
+            if (MessageBox.Show("Печатать ли основной чек?", "Требуется подтверждение печати", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                PrintMainCheck();
+        }
+
+        private void PrintPreCheck()
+        {
+            if (energySalesManager == null)
+            {
+                Log.Error($"Ошибка печати чека.");
+                return;
+            }
+
+            var preCheck = new PreCheck(checkPrinter)
+            {
+                Date = energySalesManager.LastCreateDate,
+                Cost = energySalesManager.LastCost,
+                RecipientNameShort = Config.RecipientNameShort
+            };
+
+            if (!preCheck.Print())
+                Log.Error($"Ошибка печати чека.");
+        }
+
+        private void PrintMainCheck()
+        {
+            if (energySalesManager == null)
+            {
+                Log.Error($"Ошибка печати чека.");
+                return;
+            }
+
+            var mainCheck = new MainCheck(checkPrinter)
+            {
+                RecipientName = Config.RecipientName,
+                RecipientNameShort = Config.RecipientNameShort,
+                RecipientInn = Config.RecipientInn,
+                RecipientAddressLine1 = Config.RecipientAddressLine1,
+                RecipientAddressLine2 = Config.RecipientAddressLine2,
+
+                SellerName = Config.SellerName,
+                SellerInn = Config.SellerInn,
+                SellerAddressLine1 = Config.SellerAddressLine1,
+                SellerAddressLine2 = Config.SellerAddressLine2,
+
+                CashierName = Config.CashierName,
+
+                Cost = energySalesManager.LastCost
+            };
+
+            if (!mainCheck.Print())
+                Log.Error($"Ошибка печати чека.");
         }
 
 		private void btnClear_Click(object sender, RoutedEventArgs e)
