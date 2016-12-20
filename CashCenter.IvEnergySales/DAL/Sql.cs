@@ -94,8 +94,8 @@
 		public static readonly string UPDATE_PAYJOURNAL =
 			$@"
 			update payjournal
-			set payjournal.requiresum += {PARAM_PAYMENT_COST},
-                payjournal.requirecount += 1
+			set payjournal.requiresum = payjournal.requiresum + {PARAM_PAYMENT_COST},
+                payjournal.requirecount = payjournal.requirecount + 1
 			where (payjournal.id = {PARAM_PAY_JOURNAL_ID})";
 
 	    public static readonly string INSERT_PAY_JOUNAL =
@@ -108,14 +108,14 @@
 				{PARAM_PAYMENT_KIND_ID},
 				{PARAM_PAYMENT_COST},
 				1,
-				NULL,
+				null,
 				1)
 			returning id";
 
         public static readonly string INSERT_PAY =
             $@"
             insert into pay (ID, CUSTOMER_ID, PAYJOURNAL_ID, REASON_ID, METERS_ID, TOTAL, PENALTYTOTAL, DESCRIPTION)
-                values (
+                values(
                     null,
                     {PARAM_CUSTOMER_ID},
                     {PARAM_PAY_JOURNAL_ID},
@@ -140,12 +140,13 @@
 				{PARAM_CUSTOMER_ID},
 				{PARAM_CUSTOMER_COUNTER_ID},
 				null,
-				{PARAM_CREATE_DATE}, 
+				'21.12.2016',
                 {PARAM_VALUE1},
 				{PARAM_VALUE2},
 				0,
 				1)
 			returning id";
+        //{PARAM_CREATE_DATE}, 
 
         public static readonly string INSERT_METERS =
             $@"

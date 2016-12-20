@@ -336,7 +336,7 @@ namespace CashCenter.IvEnergySales.DAL
 				var command = GetDbCommandByQuery(Sql.INSERT_COUNTERVALUES);
 				command.AddParameter(Sql.PARAM_CUSTOMER_ID, counterValues.CustomerId);
 				command.AddParameter(Sql.PARAM_CUSTOMER_COUNTER_ID, counterValues.CustomerCounterId);
-				command.AddParameter(Sql.PARAM_CREATE_DATE, createDate);
+				command.AddParameter(Sql.PARAM_CREATE_DATE, createDate.ToShortDateString());
 				command.AddParameter(Sql.PARAM_VALUE1, counterValues.Value1);
 				command.AddParameter(Sql.PARAM_VALUE2, counterValues.Value2);
 
