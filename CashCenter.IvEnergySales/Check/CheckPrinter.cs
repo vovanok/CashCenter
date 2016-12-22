@@ -35,7 +35,7 @@ namespace CashCenter.IvEnergySales.Check
             {
                 cashHardwareDriver = new DrvFR();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка создания драйвера кассаового аппарата.", e);
                 throw;
@@ -57,27 +57,56 @@ namespace CashCenter.IvEnergySales.Check
 		}
 
 		public decimal Price
-		{
-			get { return cashHardwareDriver.Price; }
-			set { cashHardwareDriver.Price = value; }
-		}
+        {
+            get { return cashHardwareDriver != null ? cashHardwareDriver.Price : 0; }
+            set
+            {
+                if (cashHardwareDriver == null)
+                    return;
+
+                cashHardwareDriver.Price = value;
+            }
+        }
 
         public double Quantity
         {
-            get { return cashHardwareDriver.Quantity; }
-            set { cashHardwareDriver.Quantity = value; }
+            get { return cashHardwareDriver != null ? cashHardwareDriver.Quantity : 0; }
+            set
+            {
+                if (cashHardwareDriver == null)
+                    return; cashHardwareDriver.Quantity = value;
+            }
         }
 
         public decimal Summ1
         {
-            get { return cashHardwareDriver.Summ1; }
-            set { cashHardwareDriver.Summ1 = value; }
+            get { return cashHardwareDriver != null ? cashHardwareDriver.Summ1 : 0; }
+            set
+            {
+                if (cashHardwareDriver == null)
+                    return; cashHardwareDriver.Summ1 = value;
+            }
         }
 
         public int CheckType
         {
-            get { return cashHardwareDriver.CheckType; }
-            set { cashHardwareDriver.CheckType = value; }
+            get { return cashHardwareDriver != null ? cashHardwareDriver.CheckType : 0; }
+            set
+            {
+                if (cashHardwareDriver == null)
+                    return; cashHardwareDriver.CheckType = value;
+            }
+        }
+
+        public bool IsReady
+        {
+            get
+            {
+                int countErrorsBeforeTest = ErrorsOperationsResults.Count;
+                PrintLine(string.Empty);
+                int countErrorsAfterTest = ErrorsOperationsResults.Count;
+                return countErrorsAfterTest <= countErrorsBeforeTest;
+            }
         }
 
 		public void PrintEmptyLine()

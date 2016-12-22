@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
@@ -10,6 +9,7 @@ using CashCenter.IvEnergySales.DataModel;
 using CashCenter.IvEnergySales.Logging;
 using System.Linq;
 using CashCenter.IvEnergySales.Check;
+using System.Windows.Controls;
 
 namespace CashCenter.IvEnergySales
 {
@@ -117,37 +117,66 @@ namespace CashCenter.IvEnergySales
 
         private void btnPay_Click(object sender, RoutedEventArgs e)
         {
-            decimal paymentCost;
-            if (!decimal.TryParse(tbCost.Text, out paymentCost))
+            if (targetCustomer == null || targetCustomer.Counters == null)
             {
-                Log.Error($"Некорректное значение суммы платежа. Оно должно быть числом ({paymentCost}).");
+                MessageBox.Show("Не задан плательщик. Произведите поиск по номеру лицевого счета");
                 return;
+            }
+
+            if (checkPrinter == null || !checkPrinter.IsReady)
+            {
+                if (MessageBox.Show("Кассовый аппарат не подключен. Продолжить без печати чека?", "Требуется подтверждение продолжения", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                    return;
+            }
+
+            var errorList = new List<string>();
+            int dayValue;
+            if (!int.TryParse(tbDayCurrentCounterValue.Text, out dayValue) || dayValue < targetCustomer.Counters.EndDayValue)
+            {
+                errorList.Add($"Некорректное показание дневного счетчика. Оно должно быть числом, не меньшим предыдущего показания (введенное значение: {dayValue}; предыдущее показание {targetCustomer.Counters.EndDayValue})");
+            }
+
+            int nightValue;
+            if (!int.TryParse(tbNightCurrentCounterValue.Text, out nightValue) || nightValue < targetCustomer.Counters.EndNightValue)
+            {
+                errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом, не меньшим предыдущего показания (введенное значение: {nightValue}; предыдущее показание {targetCustomer.Counters.EndNightValue})");
+            }
+
+            decimal paymentCost;
+            if (!decimal.TryParse(tbCost.Text, out paymentCost) || paymentCost < 0)
+            {
+                errorList.Add($"Некорректное значение суммы платежа. Оно должно быть положительным числом ({paymentCost}).");
             }
 
             if (!(cbPaymentReasons.SelectedValue is int))
             {
-                Log.Error($"Некорректное значение овнования платежа.");
-                return;
+                errorList.Add($"Некорректное значение основания платежа.");
             }
             int reasonId = (int)cbPaymentReasons.SelectedValue;
 
             string description = tbDescription.Text ?? string.Empty;
 
-            int value1;
-            if (!int.TryParse(tbDayCurrentCounterValue.Text, out value1))
+            if (errorList.Count > 0)
             {
-                Log.Error($"Некорректное показание дневного счетчика. Оно должно быть числом.");
+                var errorMessage = $"Ошибки заполнения данных\n{string.Join("\n", errorList.Select(item => $"- {item}"))}";
+                Log.Error(errorMessage);
                 return;
             }
 
-            int value2;
-            if (!int.TryParse(tbNightCurrentCounterValue.Text, out value2))
+            using (var waiter = new OperationWaiter())
             {
-                Log.Error($"Некорректное показание ночного счетчика. Оно должно быть числом.");
-                return;
+                energySalesManager?.Pay(targetCustomer, reasonId, paymentCost, description, dayValue, nightValue);
             }
 
-            energySalesManager?.Pay(targetCustomer, reasonId, paymentCost, description, value1, value2);
+            PrintChecks();
+        }
+
+        private void PrintChecks()
+        {
+            if (checkPrinter == null || !checkPrinter.IsReady)
+            {
+                return;
+            }
 
             PrintPreCheck();
 
@@ -158,49 +187,55 @@ namespace CashCenter.IvEnergySales
         private void PrintPreCheck()
         {
             if (energySalesManager == null)
-            {
-                Log.Error($"Ошибка печати чека.");
                 return;
+
+            bool isPrintSuccess = false;
+            using (var waiter = new OperationWaiter())
+            {
+                var preCheck = new PreCheck(checkPrinter)
+                {
+                    Date = energySalesManager.LastCreateDate,
+                    Cost = energySalesManager.LastCost,
+                    RecipientNameShort = Config.RecipientNameShort
+                };
+
+                isPrintSuccess = preCheck.Print();
             }
 
-            var preCheck = new PreCheck(checkPrinter)
-            {
-                Date = energySalesManager.LastCreateDate,
-                Cost = energySalesManager.LastCost,
-                RecipientNameShort = Config.RecipientNameShort
-            };
-
-            if (!preCheck.Print())
+            if (!isPrintSuccess)
                 Log.Error($"Ошибка печати чека.");
         }
 
         private void PrintMainCheck()
         {
             if (energySalesManager == null)
-            {
-                Log.Error($"Ошибка печати чека.");
                 return;
+
+            bool isPrintSuccess = false;
+            using (var waiter = new OperationWaiter())
+            {
+                var mainCheck = new MainCheck(checkPrinter)
+                {
+                    RecipientName = Config.RecipientName,
+                    RecipientNameShort = Config.RecipientNameShort,
+                    RecipientInn = Config.RecipientInn,
+                    RecipientAddressLine1 = Config.RecipientAddressLine1,
+                    RecipientAddressLine2 = Config.RecipientAddressLine2,
+
+                    SellerName = Config.SellerName,
+                    SellerInn = Config.SellerInn,
+                    SellerAddressLine1 = Config.SellerAddressLine1,
+                    SellerAddressLine2 = Config.SellerAddressLine2,
+
+                    CashierName = Config.CashierName,
+
+                    Cost = energySalesManager.LastCost
+                };
+
+                isPrintSuccess = mainCheck.Print();
             }
 
-            var mainCheck = new MainCheck(checkPrinter)
-            {
-                RecipientName = Config.RecipientName,
-                RecipientNameShort = Config.RecipientNameShort,
-                RecipientInn = Config.RecipientInn,
-                RecipientAddressLine1 = Config.RecipientAddressLine1,
-                RecipientAddressLine2 = Config.RecipientAddressLine2,
-
-                SellerName = Config.SellerName,
-                SellerInn = Config.SellerInn,
-                SellerAddressLine1 = Config.SellerAddressLine1,
-                SellerAddressLine2 = Config.SellerAddressLine2,
-
-                CashierName = Config.CashierName,
-
-                Cost = energySalesManager.LastCost
-            };
-
-            if (!mainCheck.Print())
+            if (!isPrintSuccess)
                 Log.Error($"Ошибка печати чека.");
         }
 
@@ -216,6 +251,36 @@ namespace CashCenter.IvEnergySales
         private void miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
         {
             checkPrinter.CancelCheck();
+        }
+
+        private void tbDayCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (targetCustomer == null || targetCustomer.Counters == null)
+                return;
+
+            UpdateDeltaValueLbl(lblDayDeltaCounterValue, tbDayCurrentCounterValue, targetCustomer.Counters.EndDayValue);
+        }
+
+        private void tbNightCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (targetCustomer == null || targetCustomer.Counters == null)
+                return;
+
+            UpdateDeltaValueLbl(lblNightDeltaCounterValue, tbNightCurrentCounterValue, targetCustomer.Counters.EndNightValue);
+        }
+
+        private void UpdateDeltaValueLbl(Label lblDeltaCounterValue, TextBox tbCurrentCounterValue, int previousValue)
+        {
+            int currentValue;
+            if (!int.TryParse(tbCurrentCounterValue.Text, out currentValue))
+            {
+                lblDeltaCounterValue.Content = 0;
+                return;
+            }
+
+            int deltaValue = currentValue - previousValue;
+            lblDeltaCounterValue.Content = deltaValue;
+            lblDeltaCounterValue.Foreground = deltaValue >= 0 ? Brushes.Black : Brushes.Red;
         }
     }
 }
