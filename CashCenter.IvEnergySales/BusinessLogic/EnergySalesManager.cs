@@ -74,14 +74,16 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 return;
             }
 
-	        const string PAYMENT_KIND_NAME = "CashCenter_ParmentKind";
-	        var paymentKind = customer.Db.GetPaymentKind(PAYMENT_KIND_NAME);
-			if (paymentKind == null)
-				paymentKind = customer.Db.AddPaymentKind(new PaymentKind(-1, PAYMENT_KIND_NAME));
+            //      const string PAYMENT_KIND_NAME = "CashCenter_ParmentKind";
+            //      var paymentKind = customer.Db.GetPaymentKind(PAYMENT_KIND_NAME);
+            //if (paymentKind == null)
+            //	paymentKind = customer.Db.AddPaymentKind(new PaymentKind(-1, PAYMENT_KIND_NAME));
+
+            int paymentKindId = 1;
 
 	        LastCreateDate = DateTime.Now;
             LastCost = cost;
-			var payJournal = customer.Db.GetPayJournal(LastCreateDate, paymentKind.Id);
+			var payJournal = customer.Db.GetPayJournal(LastCreateDate, paymentKindId);
 	        if (payJournal != null)
 	        {
 		        customer.Db.UpdatePayJournal(LastCost, payJournal.Id);
@@ -89,7 +91,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 	        else
 	        {
 		        payJournal = customer.Db.AddPayJournal(
-			        new PayJournal(-1, PAY_JOURNAL_NAME, LastCreateDate, paymentKind.Id), LastCost);
+			        new PayJournal(-1, PAY_JOURNAL_NAME, LastCreateDate, paymentKindId), LastCost);
 	        }
 
 	        customer.Db.AddPay(
