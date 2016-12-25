@@ -56,15 +56,16 @@ namespace CashCenter.IvEnergySales.DAL
 			var commandParameter = command.CreateParameter();
 			commandParameter.ParameterName = paramName;
 
-			if (typeof(T) == typeof(int))
+            var parameterType = typeof(T);
+            if (parameterType == typeof(int) || parameterType == typeof(int?))
 			{
 				commandParameter.DbType = DbType.Int32;
 			}
-			else if (typeof(T) == typeof(string))
+			else if (parameterType == typeof(string))
 			{
 				commandParameter.DbType = DbType.String;
 			}
-			else if (typeof(T) == typeof(decimal))
+			else if (parameterType == typeof(decimal) || parameterType == typeof(decimal?))
 			{
 				commandParameter.DbType = DbType.Decimal;
 			}

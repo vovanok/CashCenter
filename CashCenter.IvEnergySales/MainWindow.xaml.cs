@@ -192,10 +192,17 @@ namespace CashCenter.IvEnergySales
             if (checkPrinter == null || !checkPrinter.IsReady)
                 return;
 
-            PrintPreCheck();
+            if (Config.IsPreCheckPrint)
+            {
+                PrintPreCheck();
 
-            if (MessageBox.Show("Печатать ли основной чек?", "Требуется подтверждение печати", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Печатать ли основной чек?", "Требуется подтверждение печати", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    PrintMainCheck();
+            }
+            else
+            {
                 PrintMainCheck();
+            }
         }
 
         private void PrintPreCheck()
@@ -318,8 +325,17 @@ namespace CashCenter.IvEnergySales
 
         private void SetDefaultPayValues()
         {
-            tbDayCurrentCounterValue.Text = string.Empty;
-            tbNightCurrentCounterValue.Text = string.Empty;
+            var zeroText = 0.ToString();
+
+            lblDayPreviousCounterValue.Content = zeroText;
+            lblNightPreviousCounterValue.Content = zeroText;
+
+            tbDayCurrentCounterValue.Text = zeroText;
+            tbNightCurrentCounterValue.Text = zeroText;
+
+            lblDayDeltaCounterValue.Content = zeroText;
+            lblNightDeltaCounterValue.Content = zeroText;
+
             tbCost.Text = string.Empty;
             tbDescription.Text = string.Empty;
         }

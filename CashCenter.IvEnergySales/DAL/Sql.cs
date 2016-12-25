@@ -146,7 +146,6 @@
 				0,
 				1)
 			returning id";
-        //{PARAM_CREATE_DATE}, 
 
         public static readonly string INSERT_METERS =
             $@"

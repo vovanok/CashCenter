@@ -99,10 +99,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
 	        var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
 
-	        var counterValues = customer.Db.AddCounterValues(
-				new CounterValues(-1, customer.Id, customerCounterId, value1, value2), LastCreateDate);
+            int? correctedValue2 = customer.Counters.IsTwoTariff ? (int?)value2 : null;
 
-	        customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, value2, counterValues.Id));
+            var counterValues = customer.Db.AddCounterValues(
+				new CounterValues(-1, customer.Id, customerCounterId, value1, correctedValue2), LastCreateDate);
+
+	        customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, correctedValue2, counterValues.Id));
         }
 
         private List<DbController> GetDbControllersByDbCode(string dbCode)
