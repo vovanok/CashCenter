@@ -140,7 +140,7 @@
 				{PARAM_CUSTOMER_ID},
 				{PARAM_CUSTOMER_COUNTER_ID},
 				null,
-				'21.12.2016',
+				{PARAM_CREATE_DATE},
                 {PARAM_VALUE1},
 				{PARAM_VALUE2},
 				0,

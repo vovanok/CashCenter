@@ -4,7 +4,8 @@ namespace CashCenter.IvEnergySales
 {
 	public static class Config
 	{
-		public const string DBCODE_MAPPING_XML_PATH = "DbCodeMappingXmlPath";
+        public const string DB_CONNECTION_STRING_FORMAT = "DbConnectionStringFormat";
+        public const string DBCODE_MAPPING_XML_PATH = "DbCodeMappingXmlPath";
 		public const string CURRENT_DEPARTMENT_CODE = "CurrentDepartmentCode";
 		public const string CHECK_PRINTER_PASSWORD = "CheckPrinterPassword";
 		public const string CHECK_PRINTER_MAX_LINE_LENGTH = "CheckPrinterMaxLineLength";
@@ -21,6 +22,7 @@ namespace CashCenter.IvEnergySales
         public const string SELLER_ADDRESS_LINE2 = "SellerAddressLine2";
         public const string CASHIER_NAME = "CashierName";
 
+        public static string DbConnectionStringFormat => GetAppSettingByKey(DB_CONNECTION_STRING_FORMAT, string.Empty);
         public static string DbCodeMappingXmlPath => GetAppSettingByKey(DBCODE_MAPPING_XML_PATH, "DbCodeMapping.xml");
         public static string CurrentDepartmentCode => GetAppSettingByKey(CURRENT_DEPARTMENT_CODE, "0000");
 		public static int CheckPrinterPassword => GetAppSettingByKeyAsInt(CHECK_PRINTER_PASSWORD, 0);

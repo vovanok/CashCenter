@@ -11,8 +11,6 @@ namespace CashCenter.IvEnergySales.DAL
 {
     public class DbController
     {
-        private const string DB_CONNECTION_STRING_FORMAT = "Server=localhost;User=SYSDBA;Password=masterkey;Database={0}";
-
         private DbConnection dbConnection;
 
         public DbModel Model { get; private set; }
@@ -20,7 +18,7 @@ namespace CashCenter.IvEnergySales.DAL
         public DbController(DbModel dbModel)
         {
             this.Model = dbModel;
-            this.dbConnection = new FbConnection(string.Format(DB_CONNECTION_STRING_FORMAT, dbModel.Path));
+            this.dbConnection = new FbConnection(string.Format(Config.DbConnectionStringFormat, dbModel.Url, dbModel.Path));
         }
 
         public List<PaymentReason> GetPaymentReasons()

@@ -10,13 +10,25 @@ using CashCenter.IvEnergySales.Logging;
 using System.Linq;
 using CashCenter.IvEnergySales.Check;
 using System.Windows.Controls;
+using System;
 
 namespace CashCenter.IvEnergySales
 {
     public partial class MainWindow : Window
 	{
         private EnergySalesManager energySalesManager;
+
         private Customer targetCustomer;
+        private Customer TargetCustomer
+        {
+            get { return targetCustomer; }
+            set
+            {
+                targetCustomer = value;
+                ChangeTargetCustomer();
+            }
+        }
+
 	    CheckPrinter checkPrinter;
 
 		public MainWindow()
@@ -64,6 +76,8 @@ namespace CashCenter.IvEnergySales
             {
                 Log.Error("Ошибка создания драйвера. Запустите приложение от имени администратора.");
             }
+
+            TargetCustomer = null;
         }
 
         private void btnFindCustomer_Click(object sender, RoutedEventArgs e)
@@ -98,7 +112,7 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            targetCustomer = energySalesManager?.GetCustomer(targetCustomerId);
+            TargetCustomer = energySalesManager?.GetCustomer(targetCustomerId);
             if (targetCustomer == null)
             {
                 Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
@@ -169,14 +183,14 @@ namespace CashCenter.IvEnergySales
             }
 
             PrintChecks();
+
+            TargetCustomer = null;
         }
 
         private void PrintChecks()
         {
             if (checkPrinter == null || !checkPrinter.IsReady)
-            {
                 return;
-            }
 
             PrintPreCheck();
 
@@ -241,6 +255,9 @@ namespace CashCenter.IvEnergySales
 
 		private void btnClear_Click(object sender, RoutedEventArgs e)
 		{
+            TargetCustomer = null;
+            SetDefaultCustomerValues();
+            SetDefaultPayValues();
         }
 
 		private void miCashPrinterSettings_Click(object sender, RoutedEventArgs e)
@@ -281,6 +298,30 @@ namespace CashCenter.IvEnergySales
             int deltaValue = currentValue - previousValue;
             lblDeltaCounterValue.Content = deltaValue;
             lblDeltaCounterValue.Foreground = deltaValue >= 0 ? Brushes.Black : Brushes.Red;
+        }
+
+        private void ChangeTargetCustomer()
+        {
+            if (targetCustomer == null)
+                SetDefaultCustomerValues();
+
+            SetDefaultPayValues();
+            gbPaymentInfo.IsEnabled = targetCustomer != null;
+        }
+
+        private void SetDefaultCustomerValues()
+        {
+            tbCustomerId.Text = string.Empty;
+            lblCustomerName.Content = "-";
+            lblCustomerAddress.Content = "-";
+        }
+
+        private void SetDefaultPayValues()
+        {
+            tbDayCurrentCounterValue.Text = string.Empty;
+            tbNightCurrentCounterValue.Text = string.Empty;
+            tbCost.Text = string.Empty;
+            tbDescription.Text = string.Empty;
         }
     }
 }

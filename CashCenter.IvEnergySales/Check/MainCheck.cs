@@ -26,7 +26,10 @@ namespace CashCenter.IvEnergySales.Check
 
 		protected override void CustomPrint()
 		{
-			printer.OpenCheck();
+            printer.PrintLine(StringUtils.StringInCenter("ООО \"Ивановоэнергосбыт\"", maxLineLength));
+            printer.PrintLine(StringUtils.StringInCenter("ДОБРО ПОЖАЛОВАТЬ !", maxLineLength));
+
+            printer.OpenCheck();
 
 			printer.PrintLine("www.nalog.ru");
 			printer.PrintLine($"Смена#{printer.SessionNumber}");
