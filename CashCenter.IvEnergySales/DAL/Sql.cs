@@ -25,7 +25,10 @@
 		public const string PAYMENT_KIND_ID = "PAYMENT_KIND_ID";
 		public const string PAYMENT_KIND_NAME = "PAYMENT_KIND_NAME";
 
-		public const string PARAM_CUSTOMER_ID = "@CUSTOMER_ID";
+        public const string END_BALANCE = "END_BALANCE";
+        public const string PENALTY_BALANCE = "PENALTY_BALANCE";
+
+        public const string PARAM_CUSTOMER_ID = "@CUSTOMER_ID";
         public const string PARAM_START_DATE = "@START_DATE";
         public const string PARAM_END_DATE = "@END_DATE";
         public const string PARAM_PAYMENT_KIND_ID = "@PAYMENT_KIND_ID";
@@ -34,6 +37,7 @@
         public const string PARAM_PAYMENT_COST = "@PAYMENT_COST";
         public const string PARAM_PAY_JOURNAL_NAME = "@PAY_JOURNAL_NAME";
         public const string PARAM_REASON_ID = "@REASON_ID";
+        public const string PARAM_PENALTY_TOTAL = "@PENALTY_TOTAL";
         public const string PARAM_DESCRIPTION = "@DESCRIPTION";
         public const string PARAM_VALUE1 = "@VALUE1";
         public const string PARAM_VALUE2 = "@VALUE2";
@@ -41,8 +45,10 @@
 	    public const string PARAM_CUSTOMER_COUNTER_ID = "@CUSTOMER_COUNTER_ID";
 	    public const string PARAM_COUNTER_VALUES_ID = "@COUNTER_VALUES_ID";
 	    public const string PARAM_PAY_ID = "@PAY_ID";
+        public const string PARAM_DAY_ENCODING = "@DAY_ENCODING";
+        public const string PARAM_PENALTY_VALUE = "@PENALTY_VALUE";
 
-		public static readonly string GET_CUSTOMER =
+        public static readonly string GET_CUSTOMER =
             $@"select * from
                    (select first 1
                           customer.id {CUSTOMER_ID}, 
@@ -122,7 +128,7 @@
                     {PARAM_REASON_ID},
                     null,
                     {PARAM_PAYMENT_COST},
-                    0,
+                    {PARAM_PENALTY_TOTAL},
                     {PARAM_DESCRIPTION})
 			returning id";
 
@@ -160,5 +166,27 @@
                 1,
                 {PARAM_COUNTER_VALUES_ID})
 			returning id";
+
+        public static readonly string SELECT_DEBT =
+            $@"
+            select first 1 {END_BALANCE}, {PENALTY_BALANCE}
+            from r090$print({PARAM_CUSTOMER_ID}, {PARAM_DAY_ENCODING})";
+
+        public static readonly string INSERT_PENALTYFEE =
+            $@"
+            insert into penaltyfee (ID, CUSTOMER_ID, ENTRY_DATE, PERIOD_AS_INTEGER, STARTDATE, ENDDATE, DAYCOUNT, REFINANCE_RATE, DIVIDER_VALUE, PENALTY_VALUE, SOURCEVALUE, PAY_ID)
+                values(
+                    null,
+                    {PARAM_CUSTOMER_ID},
+                    {PARAM_CREATE_DATE},
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    {PARAM_PENALTY_VALUE},
+                    null,
+                    {PARAM_PAY_ID})";
     }
 }

@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataModel\Debt.cs" />
     <Compile Include="OperationWaiter.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Page Include="MainWindow.xaml">

@@ -94,10 +94,14 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 			        new PayJournal(-1, PAY_JOURNAL_NAME, LastCreateDate, paymentKindId), LastCost);
 	        }
 
-	        customer.Db.AddPay(
-		        new Pay(-1, customer.Id, reasonId, payJournal.Id, LastCost, description));
+            var penaltyTotal = GetPenaltyTotal(customer);
+	        var pay = customer.Db.AddPay(
+		        new Pay(-1, customer.Id, reasonId, payJournal.Id, LastCost, penaltyTotal, description));
 
-	        var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
+            if (penaltyTotal > 0)
+                customer.Db.AddPenaltyFee(customer.Id, LastCreateDate, penaltyTotal, pay.Id);
+
+            var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
 
             int? correctedValue2 = customer.Counters.IsTwoTariff ? (int?)value2 : null;
 
@@ -105,6 +109,15 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 				new CounterValues(-1, customer.Id, customerCounterId, value1, correctedValue2), LastCreateDate);
 
 	        customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, correctedValue2, counterValues.Id));
+        }
+
+        private decimal GetPenaltyTotal(Customer customer)
+        {
+            var debt = customer.Db.GetDebt(customer.Id, LastCreateDate.Year * 12 + LastCreateDate.Month);
+            if (LastCost > debt.Balance && debt.Penalty > 0)
+                return Math.Min(LastCost - debt.Balance, debt.Penalty);
+
+            return 0;
         }
 
         private List<DbController> GetDbControllersByDbCode(string dbCode)

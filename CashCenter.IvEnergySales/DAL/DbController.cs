@@ -271,6 +271,7 @@ namespace CashCenter.IvEnergySales.DAL
 			    command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, pay.JournalId);
 			    command.AddParameter(Sql.PARAM_REASON_ID, pay.ReasonId);
 			    command.AddParameter(Sql.PARAM_PAYMENT_COST, pay.Cost);
+                command.AddParameter(Sql.PARAM_PENALTY_TOTAL, pay.PenaltyTotal);
 			    command.AddParameter(Sql.PARAM_DESCRIPTION, pay.Description);
 
 				int id = (int)command.ExecuteScalar();
@@ -279,7 +280,7 @@ namespace CashCenter.IvEnergySales.DAL
 				command.Dispose();
 
 				return new Pay(id, pay.CustomerId, pay.ReasonId, pay.JournalId,
-					pay.Cost, pay.Description);
+					pay.Cost, pay.PenaltyTotal, pay.Description);
 		    }
 		    catch (Exception e)
 		    {
@@ -389,6 +390,71 @@ namespace CashCenter.IvEnergySales.DAL
 				dbConnection?.Close();
 			}
 		}
+
+        public Debt GetDebt(int customerId, int dayEncoding)
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.SELECT_DEBT);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+                command.AddParameter(Sql.PARAM_DAY_ENCODING, dayEncoding);
+
+                dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+
+                Debt debt = null;
+                if (dataReader.Read())
+                {
+                    var balance = dataReader.GetFieldFromReader<decimal>(Sql.END_BALANCE);
+                    var penalty = dataReader.GetFieldFromReader<decimal>(Sql.PENALTY_BALANCE);
+
+                    debt = new Debt(balance, penalty);
+                }
+
+                return debt;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка получения задолжности для плательщика {customerId}.", e);
+                return null;
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
+        public void AddPenaltyFee(int customerId, DateTime createDate, decimal penaltyValue, int payId)
+        {
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.INSERT_PENALTYFEE);
+
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+                command.AddParameter(Sql.PARAM_CREATE_DATE, createDate.ToShortDateString());
+                command.AddParameter(Sql.PARAM_PENALTY_VALUE, penaltyValue);
+                command.AddParameter(Sql.PARAM_PAY_ID, payId);
+
+                command.ExecuteScalar();
+
+                command.Transaction.Commit();
+                command.Dispose();
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка добавления пени.", e);
+            }
+            finally
+            {
+                dbConnection?.Close();
+            }
+        }
 
 		private DbCommand GetDbCommandByQuery(string query)
         {
