@@ -29,7 +29,9 @@ namespace CashCenter.IvEnergySales
             }
         }
 
-	    CheckPrinter checkPrinter;
+        private CustomerCounters TargetCustomerCountersValues { get; set; }
+
+        CheckPrinter checkPrinter;
 
 		public MainWindow()
 		{
@@ -119,19 +121,24 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
+            TargetCustomerCountersValues = energySalesManager?.GetCustomerCounters(TargetCustomer);
+
             lblCustomerName.Content = targetCustomer.Name;
 
             var addressComponents = new[] { targetCustomer.LocalityName, targetCustomer.StreetName, targetCustomer.BuildingNumber, targetCustomer.Flat }
                 .Where(item => !string.IsNullOrEmpty(item));
             lblCustomerAddress.Content = string.Join(", ", addressComponents);
 
-            lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = targetCustomer.Counters.EndDayValue.ToString();
-            lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = targetCustomer.Counters.EndNightValue.ToString();
+            lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = TargetCustomerCountersValues?.EndDayValue.ToString() ?? 0.ToString();
+            lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = TargetCustomerCountersValues?.EndNightValue.ToString() ?? 0.ToString();
+
+            UpdateDeltaValueLbl(lblDayDeltaCounterValue, tbDayCurrentCounterValue, lblDayPreviousCounterValue);
+            UpdateDeltaValueLbl(lblNightDeltaCounterValue, tbNightCurrentCounterValue, lblNightPreviousCounterValue);
         }
 
         private void btnPay_Click(object sender, RoutedEventArgs e)
         {
-            if (targetCustomer == null || targetCustomer.Counters == null)
+            if (targetCustomer == null)
             {
                 MessageBox.Show("Не задан плательщик. Произведите поиск по номеру лицевого счета");
                 return;
@@ -144,16 +151,17 @@ namespace CashCenter.IvEnergySales
             }
 
             var errorList = new List<string>();
+
             int dayValue;
-            if (!int.TryParse(tbDayCurrentCounterValue.Text, out dayValue) || dayValue < targetCustomer.Counters.EndDayValue)
+            if (!int.TryParse(tbDayCurrentCounterValue.Text, out dayValue) || dayValue < 0 || (TargetCustomerCountersValues != null && dayValue < TargetCustomerCountersValues.EndDayValue))
             {
-                errorList.Add($"Некорректное показание дневного счетчика. Оно должно быть числом, не меньшим предыдущего показания (введенное значение: {dayValue}; предыдущее показание {targetCustomer.Counters.EndDayValue})");
+                errorList.Add($"Некорректное показание дневного счетчика. Оно должно быть числом, не меньшим предыдущего показания (введенное значение: {dayValue}; предыдущее показание {TargetCustomerCountersValues.EndDayValue})");
             }
 
             int nightValue;
-            if (!int.TryParse(tbNightCurrentCounterValue.Text, out nightValue) || nightValue < targetCustomer.Counters.EndNightValue)
+            if (!int.TryParse(tbNightCurrentCounterValue.Text, out nightValue) || nightValue < 0 || (TargetCustomerCountersValues != null && nightValue < TargetCustomerCountersValues.EndNightValue))
             {
-                errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом, не меньшим предыдущего показания (введенное значение: {nightValue}; предыдущее показание {targetCustomer.Counters.EndNightValue})");
+                errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом, не меньшим предыдущего показания (введенное значение: {nightValue}; предыдущее показание {TargetCustomerCountersValues.EndNightValue})");
             }
 
             decimal paymentCost;
@@ -179,7 +187,7 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                energySalesManager?.Pay(targetCustomer, reasonId, paymentCost, description, dayValue, nightValue);
+                energySalesManager?.Pay(TargetCustomer, TargetCustomerCountersValues, reasonId, paymentCost, description, dayValue, nightValue);
             }
 
             PrintChecks();
@@ -207,7 +215,7 @@ namespace CashCenter.IvEnergySales
 
         private void PrintPreCheck()
         {
-            if (energySalesManager == null)
+            if (energySalesManager == null || energySalesManager.InfoForCheck == null)
                 return;
 
             bool isPrintSuccess = false;
@@ -215,8 +223,8 @@ namespace CashCenter.IvEnergySales
             {
                 var preCheck = new PreCheck(checkPrinter)
                 {
-                    Date = energySalesManager.LastCreateDate,
-                    Cost = energySalesManager.LastCost,
+                    Date = energySalesManager.InfoForCheck.Date,
+                    Cost = energySalesManager.InfoForCheck.Cost,
                     RecipientNameShort = Config.RecipientNameShort
                 };
 
@@ -229,7 +237,7 @@ namespace CashCenter.IvEnergySales
 
         private void PrintMainCheck()
         {
-            if (energySalesManager == null)
+            if (energySalesManager == null || energySalesManager.InfoForCheck == null)
                 return;
 
             bool isPrintSuccess = false;
@@ -250,7 +258,7 @@ namespace CashCenter.IvEnergySales
 
                     CashierName = Config.CashierName,
 
-                    Cost = energySalesManager.LastCost
+                    Cost = energySalesManager.InfoForCheck.Cost
                 };
 
                 isPrintSuccess = mainCheck.Print();
@@ -279,21 +287,21 @@ namespace CashCenter.IvEnergySales
 
         private void tbDayCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (targetCustomer == null || targetCustomer.Counters == null)
+            if (targetCustomer == null)
                 return;
 
-            UpdateDeltaValueLbl(lblDayDeltaCounterValue, tbDayCurrentCounterValue, targetCustomer.Counters.EndDayValue);
+            UpdateDeltaValueLbl(lblDayDeltaCounterValue, tbDayCurrentCounterValue, lblDayPreviousCounterValue);
         }
 
         private void tbNightCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (targetCustomer == null || targetCustomer.Counters == null)
+            if (targetCustomer == null)
                 return;
 
-            UpdateDeltaValueLbl(lblNightDeltaCounterValue, tbNightCurrentCounterValue, targetCustomer.Counters.EndNightValue);
+            UpdateDeltaValueLbl(lblNightDeltaCounterValue, tbNightCurrentCounterValue, lblNightPreviousCounterValue);
         }
 
-        private void UpdateDeltaValueLbl(Label lblDeltaCounterValue, TextBox tbCurrentCounterValue, int previousValue)
+        private void UpdateDeltaValueLbl(Label lblDeltaCounterValue, TextBox tbCurrentCounterValue, Label lblPreviousCounterValue)
         {
             int currentValue;
             if (!int.TryParse(tbCurrentCounterValue.Text, out currentValue))
@@ -301,6 +309,11 @@ namespace CashCenter.IvEnergySales
                 lblDeltaCounterValue.Content = 0;
                 return;
             }
+
+            var prevValueContent = lblPreviousCounterValue.Content as string;
+            int previousValue;
+            if (prevValueContent == null || !int.TryParse(prevValueContent, out previousValue))
+                previousValue = 0;
 
             int deltaValue = currentValue - previousValue;
             lblDeltaCounterValue.Content = deltaValue;

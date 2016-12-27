@@ -15,8 +15,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         private DepartmentModel department;
         private List<DbController> dbControllers = new List<DbController>();
 
-        public DateTime LastCreateDate { get; private set; }
-        public decimal LastCost { get; private set; }
+        public InfoForCheck InfoForCheck { get; private set; }
 
         public EnergySalesManager(DepartmentModel department)
         {
@@ -52,7 +51,16 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             return null;
         }
 
-        public void Pay(Customer customer, int reasonId, decimal cost, string description, int value1, int value2)
+        public CustomerCounters GetCustomerCounters(Customer customer)
+        {
+            if (customer == null)
+                return null;
+
+            return customer.Db.GetCustomerCounterValues(customer.Id);
+        }
+
+        public void Pay(Customer customer, CustomerCounters customerCounters,
+            int reasonId, decimal cost, string description, int value1, int value2)
         {
             var errorPrefix = "Ошибка совершения платежа.";
 
@@ -74,48 +82,62 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 return;
             }
 
-            //      const string PAYMENT_KIND_NAME = "CashCenter_ParmentKind";
-            //      var paymentKind = customer.Db.GetPaymentKind(PAYMENT_KIND_NAME);
-            //if (paymentKind == null)
-            //	paymentKind = customer.Db.AddPaymentKind(new PaymentKind(-1, PAYMENT_KIND_NAME));
+            //var paymentKind = GetOrAddPaymentKind(customer.Db);
+            //int paymentKindId = paymentKind.Id;
 
             int paymentKindId = 1;
+	        var createDate = DateTime.Now;
+            var payJournal = AddOrUpdatePayJournal(customer.Db, paymentKindId, createDate, cost);
+            var penaltyTotal = GetPenaltyTotal(customer, createDate, cost);
 
-	        LastCreateDate = DateTime.Now;
-            LastCost = cost;
-			var payJournal = customer.Db.GetPayJournal(LastCreateDate, paymentKindId);
-	        if (payJournal != null)
-	        {
-		        customer.Db.UpdatePayJournal(LastCost, payJournal.Id);
-	        }
-	        else
-	        {
-		        payJournal = customer.Db.AddPayJournal(
-			        new PayJournal(-1, PAY_JOURNAL_NAME, LastCreateDate, paymentKindId), LastCost);
-	        }
-
-            var penaltyTotal = GetPenaltyTotal(customer);
-	        var pay = customer.Db.AddPay(
-		        new Pay(-1, customer.Id, reasonId, payJournal.Id, LastCost, penaltyTotal, description));
+            var pay = customer.Db.AddPay(
+		        new Pay(-1, customer.Id, reasonId, payJournal.Id, cost, penaltyTotal, description));
 
             if (penaltyTotal > 0)
-                customer.Db.AddPenaltyFee(customer.Id, LastCreateDate, penaltyTotal, pay.Id);
+                customer.Db.AddPenaltyFee(customer.Id, createDate, penaltyTotal, pay.Id);
 
             var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
 
-            int? correctedValue2 = customer.Counters.IsTwoTariff ? (int?)value2 : null;
+            if (customerCounters != null)
+            {
+                int? correctedValue2 = customerCounters.IsTwoTariff ? (int?)value2 : null;
+                var counterValues = customer.Db.AddCounterValues(
+                    new CounterValues(-1, customer.Id, customerCounterId, value1, correctedValue2), createDate);
 
-            var counterValues = customer.Db.AddCounterValues(
-				new CounterValues(-1, customer.Id, customerCounterId, value1, correctedValue2), LastCreateDate);
+                customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, correctedValue2, counterValues.Id));
+            }
 
-	        customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, correctedValue2, counterValues.Id));
+            InfoForCheck = new InfoForCheck(cost, createDate);
         }
 
-        private decimal GetPenaltyTotal(Customer customer)
+        private PaymentKind GetOrAddPaymentKind(DbController db)
         {
-            var debt = customer.Db.GetDebt(customer.Id, LastCreateDate.Year * 12 + LastCreateDate.Month);
-            if (LastCost > debt.Balance && debt.Penalty > 0)
-                return Math.Min(LastCost - debt.Balance, debt.Penalty);
+            const string PAYMENT_KIND_NAME = "CashCenter_ParmentKind";
+            var paymentKind = db.GetPaymentKind(PAYMENT_KIND_NAME);
+            if (paymentKind == null)
+                paymentKind = db.AddPaymentKind(new PaymentKind(-1, PAYMENT_KIND_NAME));
+
+            return paymentKind;
+        }
+
+        private PayJournal AddOrUpdatePayJournal(DbController db, int paymentKindId, DateTime createDate, decimal cost)
+        {
+            var payJournal = db.GetPayJournal(createDate, paymentKindId);
+            if (payJournal != null)
+                db.UpdatePayJournal(cost, payJournal.Id);
+            else
+                payJournal = db.AddPayJournal(
+                    new PayJournal(-1, PAY_JOURNAL_NAME, createDate, paymentKindId), cost);
+
+            return payJournal;
+        }
+
+        private decimal GetPenaltyTotal(Customer customer, DateTime date, decimal cost)
+        {
+            var debt = customer.Db.GetDebt(customer.Id, date.Year * 12 + date.Month);
+
+            if (debt != null && cost > debt.Balance && debt.Penalty > 0)
+                return Math.Min(cost - debt.Balance, debt.Penalty);
 
             return 0;
         }

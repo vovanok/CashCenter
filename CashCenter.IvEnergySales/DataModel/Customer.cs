@@ -18,10 +18,8 @@ namespace CashCenter.IvEnergySales.DataModel
 
         public string LocalityName { get; private set; }
 
-        public CustomerCounters Counters { get; private set; }
-
         public Customer(DbController sourceDb, int id, string name, string flat,
-            string buildingNumber, string streetName, string localityName, CustomerCounters counters)
+            string buildingNumber, string streetName, string localityName)
         {
             Db = sourceDb;
             Id = id;
@@ -30,7 +28,6 @@ namespace CashCenter.IvEnergySales.DataModel
             BuildingNumber = buildingNumber;
             StreetName = streetName;
             LocalityName = localityName;
-            Counters = counters;
         }
     }
 }

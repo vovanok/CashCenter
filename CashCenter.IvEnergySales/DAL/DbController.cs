@@ -64,14 +64,8 @@ namespace CashCenter.IvEnergySales.DAL
             {
                 dbConnection.Open();
 
-                var now = DateTime.Now;
-                var beginOfMonth = new DateTime(now.Year, now.Month, 1);
-                var endOfCurrentDay = new DateTime(now.Year, now.Month, now.Day + 1);
-
                 var command = GetDbCommandByQuery(Sql.GET_CUSTOMER);
                 command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
-                command.AddParameter(Sql.PARAM_START_DATE, beginOfMonth.ToShortDateString());
-                command.AddParameter(Sql.PARAM_END_DATE, endOfCurrentDay.ToShortDateString());
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
@@ -84,12 +78,7 @@ namespace CashCenter.IvEnergySales.DAL
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    int endDayValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
-                    int endNightValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE, true);
-                    bool isTwoTariff = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_IS_TWO_TARIFF) == 1;
-
-                    var customerCounters = new CustomerCounters(this, endDayValue, endNightValue, isTwoTariff);
-                    result = new Customer(this, customerId, name, flat, buildingNumber, streetName, localityName, customerCounters);
+                    result = new Customer(this, customerId, name, flat, buildingNumber, streetName, localityName);
                 }
 
                 return result;
@@ -106,7 +95,54 @@ namespace CashCenter.IvEnergySales.DAL
             }
         }
 
-	    public PaymentKind GetPaymentKind(string paymentKindName)
+        public CustomerCounters GetCustomerCounterValues(int customerId)
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var now = DateTime.Now;
+                var beginOfMonth = new DateTime(now.Year, now.Month, 1);
+                var endOfCurrentDay = new DateTime(now.Year, now.Month, now.Day + 1);
+
+                var command = GetDbCommandByQuery(Sql.GET_CUSTOMER_COUNTER_VALUES);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+                command.AddParameter(Sql.PARAM_START_DATE, beginOfMonth.ToShortDateString());
+                command.AddParameter(Sql.PARAM_END_DATE, endOfCurrentDay.ToShortDateString());
+
+                dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+
+                CustomerCounters result = null;
+                if (dataReader.Read())
+                {
+                    string counterName = dataReader.GetFieldFromReader<string>(Sql.COUNTER_NAME, true);
+                    int endDayValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
+                    int endNightValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE, true);
+                    bool isTwoTariff = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_IS_TWO_TARIFF) == 1;
+
+                    if (counterName == null)
+                        return null;
+
+                    result = new CustomerCounters(customerId, endDayValue, endNightValue, isTwoTariff);
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerId}.", e);
+                return null;
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
+        public PaymentKind GetPaymentKind(string paymentKindName)
 	    {
 			DbDataReader dataReader = null;
 
