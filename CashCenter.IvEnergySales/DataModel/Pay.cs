@@ -8,6 +8,8 @@ namespace CashCenter.IvEnergySales.DataModel
 
         public int ReasonId { get; private set; }
 
+        public int? MetersId { get; private set; }
+
         public int JournalId { get; private set; }
 
         public decimal Cost { get; private set; }
@@ -16,13 +18,14 @@ namespace CashCenter.IvEnergySales.DataModel
 
         public string Description { get; private set; }
 
-        public Pay(int id, int customerId, int reasonId, int journalId,
+        public Pay(int id, int customerId, int reasonId, int? metersId, int journalId,
             decimal cost, decimal penaltyTotal, string description)
         {
 	        Id = id;
 			CustomerId = customerId;
             ReasonId = reasonId;
-			JournalId = journalId;
+            MetersId = metersId;
+            JournalId = journalId;
             Cost = cost;
             PenaltyTotal = penaltyTotal;
             Description = description;

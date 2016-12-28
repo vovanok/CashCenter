@@ -306,6 +306,7 @@ namespace CashCenter.IvEnergySales.DAL
 			    command.AddParameter(Sql.PARAM_CUSTOMER_ID, pay.CustomerId);
 			    command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, pay.JournalId);
 			    command.AddParameter(Sql.PARAM_REASON_ID, pay.ReasonId);
+                command.AddParameter(Sql.PARAM_METERS_ID, pay.MetersId);
 			    command.AddParameter(Sql.PARAM_PAYMENT_COST, pay.Cost);
                 command.AddParameter(Sql.PARAM_PENALTY_TOTAL, pay.PenaltyTotal);
 			    command.AddParameter(Sql.PARAM_DESCRIPTION, pay.Description);
@@ -315,12 +316,12 @@ namespace CashCenter.IvEnergySales.DAL
 				command.Transaction.Commit();
 				command.Dispose();
 
-				return new Pay(id, pay.CustomerId, pay.ReasonId, pay.JournalId,
+				return new Pay(id, pay.CustomerId, pay.ReasonId, pay.MetersId, pay.JournalId,
 					pay.Cost, pay.PenaltyTotal, pay.Description);
 		    }
 		    catch (Exception e)
 		    {
-			    Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+			    Log.ErrorWithException($"Ошибка добавления платежа.", e);
 			    return null;
 		    }
 		    finally
@@ -386,7 +387,7 @@ namespace CashCenter.IvEnergySales.DAL
 			}
 			catch (Exception e)
 			{
-				Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+				Log.ErrorWithException($"Ошибка добавления показаний счетчиков.", e);
 				return null;
 			}
 			finally
@@ -418,7 +419,7 @@ namespace CashCenter.IvEnergySales.DAL
 			}
 			catch (Exception e)
 			{
-				Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
+				Log.ErrorWithException($"Ошибка добавления показаний.", e);
 				return null;
 			}
 			finally

@@ -48,6 +48,7 @@
 	    public const string PARAM_PAY_ID = "@PAY_ID";
         public const string PARAM_DAY_ENCODING = "@DAY_ENCODING";
         public const string PARAM_PENALTY_VALUE = "@PENALTY_VALUE";
+        public const string PARAM_METERS_ID = "@METERS_ID";
 
         public static readonly string GET_CUSTOMER =
             $@"
@@ -131,7 +132,7 @@
                     {PARAM_CUSTOMER_ID},
                     {PARAM_PAY_JOURNAL_ID},
                     {PARAM_REASON_ID},
-                    null,
+                    {PARAM_METERS_ID},
                     {PARAM_PAYMENT_COST},
                     {PARAM_PENALTY_TOTAL},
                     {PARAM_DESCRIPTION})

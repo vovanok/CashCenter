@@ -90,22 +90,24 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             var payJournal = AddOrUpdatePayJournal(customer.Db, paymentKindId, createDate, cost);
             var penaltyTotal = GetPenaltyTotal(customer, createDate, cost);
 
-            var pay = customer.Db.AddPay(
-		        new Pay(-1, customer.Id, reasonId, payJournal.Id, cost, penaltyTotal, description));
-
-            if (penaltyTotal > 0)
-                customer.Db.AddPenaltyFee(customer.Id, createDate, penaltyTotal, pay.Id);
-
             var customerCounterId = customer.Db.GetCustomerCounterId(customer.Id);
 
+            int? metersId = null;
             if (customerCounters != null)
             {
                 int? correctedValue2 = customerCounters.IsTwoTariff ? (int?)value2 : null;
                 var counterValues = customer.Db.AddCounterValues(
                     new CounterValues(-1, customer.Id, customerCounterId, value1, correctedValue2), createDate);
 
-                customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, correctedValue2, counterValues.Id));
+                var meters = customer.Db.AddMeters(new Meter(-1, customer.Id, customerCounterId, value1, correctedValue2, counterValues.Id));
+                metersId = meters.Id;
             }
+
+            var pay = customer.Db.AddPay(
+		        new Pay(-1, customer.Id, reasonId, metersId, payJournal.Id, cost, penaltyTotal, description));
+
+            if (penaltyTotal > 0)
+                customer.Db.AddPenaltyFee(customer.Id, createDate, penaltyTotal, pay.Id);
 
             InfoForCheck = new InfoForCheck(cost, createDate);
         }

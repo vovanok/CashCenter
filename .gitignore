@@ -2,3 +2,6 @@ bin/
 obj/
 Data/
 *.tmp_proj
+packages/
+.vs/
+*.user
