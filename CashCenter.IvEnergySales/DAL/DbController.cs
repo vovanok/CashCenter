@@ -78,7 +78,7 @@ namespace CashCenter.IvEnergySales.DAL
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    result = new Customer(this, customerId, name, flat, buildingNumber, streetName, localityName);
+                    result = new Customer(customerId, name, flat, buildingNumber, streetName, localityName);
                 }
 
                 return result;
@@ -242,20 +242,20 @@ namespace CashCenter.IvEnergySales.DAL
 			}
 		}
 
-	    public void UpdatePayJournal(decimal cost, int payJournalId)
+	    public void AddRequireToPayJournal(PayJournal payJournal, decimal additionCost)
 	    {
 			try
 			{
 				dbConnection.Open();
 
 				var command = GetDbCommandByQuery(Sql.UPDATE_PAYJOURNAL);
-				command.AddParameter(Sql.PARAM_PAYMENT_COST, cost);
-				command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, payJournalId);
+				command.AddParameter(Sql.PARAM_PAYMENT_COST, additionCost);
+				command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, payJournal.Id);
 
 				command.ExecuteNonQuery();
 				command.Transaction.Commit();
 				command.Dispose();
-			}
+            }
 			catch (Exception e)
 			{
 				Log.ErrorWithException($"Ошибка обновления журнала платежа.", e);
@@ -396,7 +396,31 @@ namespace CashCenter.IvEnergySales.DAL
 			}
 		}
 
-	    public Meter AddMeters(Meter meter)
+        public void UpdateCounterValuesPayId(int counterValuesId, int payId)
+        {
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.UPDATE_COUNTERVALUES_PAY_ID);
+                command.AddParameter(Sql.PARAM_COUNTER_VALUES_ID, counterValuesId);
+                command.AddParameter(Sql.PARAM_PAY_ID, payId);
+
+                command.ExecuteNonQuery();
+                command.Transaction.Commit();
+                command.Dispose();
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка обновления контрольных значений.", e);
+            }
+            finally
+            {
+                dbConnection?.Close();
+            }
+        }
+
+        public Meter AddMeters(Meter meter)
 	    {
 			try
 			{

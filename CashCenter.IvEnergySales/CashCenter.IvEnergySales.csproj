@@ -98,9 +98,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BusinessLogic\EnergySalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
     <Compile Include="DataModel\Debt.cs" />
     <Compile Include="OperationWaiter.cs" />
+    <Compile Include="Utils\Observed.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -110,7 +112,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BusinessLogic\EnergySalesManager.cs" />
     <Compile Include="Check\BaseCheck.cs" />
     <Compile Include="Check\CheckPrinter.cs" />
     <Compile Include="Check\MainCheck.cs" />

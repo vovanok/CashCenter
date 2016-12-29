@@ -147,17 +147,24 @@
 
         public static readonly string INSERT_COUNTERVALUES =
             $@"
-            insert into countervalues values (
-                null,
-				{PARAM_CUSTOMER_ID},
-				{PARAM_CUSTOMER_COUNTER_ID},
-				null,
-				{PARAM_CREATE_DATE},
-                {PARAM_VALUE1},
-				{PARAM_VALUE2},
-				0,
-				1)
-			returning id";
+            insert into countervalues (ID, CUSTOMERID, CUSTOMERCOUNTERID, PAY_ID, RECEIVEDDATE, DAYVALUE, NIGHTVALUE, ISUSED, VOLUME_TYPE_ID)
+                values (
+                    null,
+				    {PARAM_CUSTOMER_ID},
+				    {PARAM_CUSTOMER_COUNTER_ID},
+				    null,
+				    {PARAM_CREATE_DATE},
+                    {PARAM_VALUE1},
+				    {PARAM_VALUE2},
+				    0,
+				    1)
+			    returning id";
+
+        public static readonly string UPDATE_COUNTERVALUES_PAY_ID =
+            $@"
+            update countervalues
+			    set countervalues.PAY_ID = {PARAM_PAY_ID}
+            where (countervalues.ID = {PARAM_COUNTER_VALUES_ID})";
 
         public static readonly string INSERT_METERS =
             $@"

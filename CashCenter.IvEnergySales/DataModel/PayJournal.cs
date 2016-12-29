@@ -19,5 +19,10 @@ namespace CashCenter.IvEnergySales.DataModel
             CreateDate = createDate;
             PaymentKindId = paymentKindId;
         }
+
+        public PayJournal(string name, DateTime createDate, int paymentKindId)
+            : this(-1, name, createDate, paymentKindId)
+        {
+        }
     }
 }

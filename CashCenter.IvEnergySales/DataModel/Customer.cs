@@ -1,11 +1,7 @@
-﻿using CashCenter.IvEnergySales.DAL;
-
-namespace CashCenter.IvEnergySales.DataModel
+﻿namespace CashCenter.IvEnergySales.DataModel
 {
     public class Customer
     {
-        public DbController Db { get; private set; }
-
         public int Id { get; private set; }
 
         public string Name { get; private set; }
@@ -18,10 +14,9 @@ namespace CashCenter.IvEnergySales.DataModel
 
         public string LocalityName { get; private set; }
 
-        public Customer(DbController sourceDb, int id, string name, string flat,
+        public Customer(int id, string name, string flat,
             string buildingNumber, string streetName, string localityName)
         {
-            Db = sourceDb;
             Id = id;
             Name = name;
             Flat = flat;
