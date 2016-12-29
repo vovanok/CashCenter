@@ -25,7 +25,7 @@ namespace CashCenter.IvEnergySales.Check
 			}
 		}
 
-		private DrvFR cashHardwareDriver;
+		private DrvFR driver;
 
 		public List<OperationResult> ErrorsOperationsResults { get; private set; } 
 
@@ -33,7 +33,7 @@ namespace CashCenter.IvEnergySales.Check
 		{
             try
             {
-                cashHardwareDriver = new DrvFR();
+                driver = new DrvFR();
             }
             catch (Exception e)
             {
@@ -41,7 +41,8 @@ namespace CashCenter.IvEnergySales.Check
                 throw;
             }
 			
-			cashHardwareDriver.Password = Config.CheckPrinterPassword;
+			driver.Password = Config.CheckPrinterPassword;
+            driver.OpenSession();
 			ErrorsOperationsResults = new List<OperationResult>();
 		}
 
@@ -49,52 +50,52 @@ namespace CashCenter.IvEnergySales.Check
 		{
 			get
 			{
-				if (cashHardwareDriver == null)
+				if (driver == null)
 					return 0;
 
-				return cashHardwareDriver.SessionNumber;
+				return driver.SessionNumber;
 			}
 		}
 
 		public decimal Price
         {
-            get { return cashHardwareDriver != null ? cashHardwareDriver.Price : 0; }
+            get { return driver != null ? driver.Price : 0; }
             set
             {
-                if (cashHardwareDriver == null)
+                if (driver == null)
                     return;
 
-                cashHardwareDriver.Price = value;
+                driver.Price = value;
             }
         }
 
         public double Quantity
         {
-            get { return cashHardwareDriver != null ? cashHardwareDriver.Quantity : 0; }
+            get { return driver != null ? driver.Quantity : 0; }
             set
             {
-                if (cashHardwareDriver == null)
-                    return; cashHardwareDriver.Quantity = value;
+                if (driver == null)
+                    return; driver.Quantity = value;
             }
         }
 
         public decimal Summ1
         {
-            get { return cashHardwareDriver != null ? cashHardwareDriver.Summ1 : 0; }
+            get { return driver != null ? driver.Summ1 : 0; }
             set
             {
-                if (cashHardwareDriver == null)
-                    return; cashHardwareDriver.Summ1 = value;
+                if (driver == null)
+                    return; driver.Summ1 = value;
             }
         }
 
         public int CheckType
         {
-            get { return cashHardwareDriver != null ? cashHardwareDriver.CheckType : 0; }
+            get { return driver != null ? driver.CheckType : 0; }
             set
             {
-                if (cashHardwareDriver == null)
-                    return; cashHardwareDriver.CheckType = value;
+                if (driver == null)
+                    return; driver.CheckType = value;
             }
         }
 
@@ -109,6 +110,63 @@ namespace CashCenter.IvEnergySales.Check
             }
         }
 
+        public int Department
+        {
+            get { return driver != null ? driver.Department : 0; }
+            set
+            {
+                if (driver != null)
+                    driver.Department = value;
+            }
+        }
+
+        public void Connect()
+        {
+            driver?.Connect();
+
+            CheckError();
+        }
+
+        public void Disconnect()
+        {
+            driver?.Disconnect();
+
+            CheckError();
+        }
+
+        private void OpenSession()
+        {
+            if (driver == null)
+                return;
+
+            driver.GetECRStatus();
+            if (driver.ECRMode == 4) //Смена закрыта, открываем новую
+            {
+                // синхронизируем  время
+                driver.Time = DateTime.Now;
+                driver.SetTime();
+
+                // синхронизируем дату
+                driver.Date = DateTime.Now.Date;
+                driver.SetDate();
+                driver.ConfirmDate();
+
+                driver.OpenSession();
+            }
+
+            CheckError();
+        }
+
+        private void CloseSession()
+        {
+            if (driver == null)
+                return;
+
+            driver.Disconnect();
+
+            CheckError();
+        }
+
 		public void PrintEmptyLine()
 		{
 			PrintLine(" ");
@@ -116,51 +174,49 @@ namespace CashCenter.IvEnergySales.Check
 
 		public void PrintLine(string line)
 		{
-			if (cashHardwareDriver == null)
+			if (driver == null)
 				return;
 
-			cashHardwareDriver.StringForPrinting = line;
-			cashHardwareDriver.PrintString();
+			driver.StringForPrinting = line;
+			driver.PrintString();
 
 			CheckError();
 		}
 
 		public void OpenCheck()
 		{
-			if (cashHardwareDriver == null)
+			if (driver == null)
 				return;
 
-			cashHardwareDriver.OpenCheck();
+			driver.OpenCheck();
 
 			CheckError();
 		}
 
 		public void CloseCheck()
 		{
-			if (cashHardwareDriver == null)
+			if (driver == null)
 				return;
 
-			cashHardwareDriver.CloseCheck();
+			driver.CloseCheck();
 
 			CheckError();
 		}
 
 		public void Cut()
 		{
-			if (cashHardwareDriver == null)
+			if (driver == null)
 				return;
 
-			cashHardwareDriver.CutType = true;
-			cashHardwareDriver.FeedAfterCut = true;
-			cashHardwareDriver.FeedLineCount = 1;
-			cashHardwareDriver.CutCheck();
+			driver.CutType = true;
+			driver.CutCheck();
 
 			CheckError();
 		}
 
 		public void ShowProperties()
 		{
-			cashHardwareDriver?.ShowProperties();
+			driver?.ShowProperties();
 		}
 
 		public void ResetErrors()
@@ -170,20 +226,20 @@ namespace CashCenter.IvEnergySales.Check
 
         public void Sale()
         {
-            if (cashHardwareDriver == null)
+            if (driver == null)
                 return;
 
-            cashHardwareDriver.Sale();
+            driver.Sale();
 
             CheckError();
         }
 
         public void CancelCheck()
         {
-            if (cashHardwareDriver == null)
+            if (driver == null)
                 return;
 
-            cashHardwareDriver.CancelCheck();
+            driver.CancelCheck();
 
             CheckError();
         }
@@ -193,8 +249,13 @@ namespace CashCenter.IvEnergySales.Check
 			if (ErrorsOperationsResults == null)
 				ErrorsOperationsResults = new List<OperationResult>();
 
-			if (cashHardwareDriver.ResultCode != 0)
-				ErrorsOperationsResults.Add(new OperationResult(cashHardwareDriver.ResultCode, cashHardwareDriver.ResultCodeDescription));
+			if (driver.ResultCode != 0)
+				ErrorsOperationsResults.Add(new OperationResult(driver.ResultCode, driver.ResultCodeDescription));
 		}
+
+        ~CheckPrinter()
+        {
+            CloseSession();
+        }
 	}
 }

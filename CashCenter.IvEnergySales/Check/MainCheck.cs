@@ -26,9 +26,6 @@ namespace CashCenter.IvEnergySales.Check
 
 		protected override void CustomPrint()
 		{
-            printer.PrintLine(StringUtils.StringInCenter("ООО \"Ивановоэнергосбыт\"", maxLineLength));
-            printer.PrintLine(StringUtils.StringInCenter("ДОБРО ПОЖАЛОВАТЬ !", maxLineLength));
-
             printer.OpenCheck();
 
 			printer.PrintLine("www.nalog.ru");
@@ -62,6 +59,8 @@ namespace CashCenter.IvEnergySales.Check
             printer.CheckType = 0;
             printer.Quantity = 1;
             printer.Price = Cost;
+            printer.Department = 1;
+
             printer.Sale();
 
             printer.Summ1 = Cost;
