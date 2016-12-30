@@ -356,7 +356,7 @@ namespace CashCenter.IvEnergySales
             lblDeltaCounterValue.Foreground = deltaValue >= 0 ? Brushes.Black : Brushes.Red;
         }
 
-        #region Counter values text boxes focus manipulation
+        #region Text boxes focus manipulation
 
         private void tbDayCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -383,6 +383,20 @@ namespace CashCenter.IvEnergySales
             {
                 e.Handled = true;
                 tbNightCurrentCounterValue.Focus();
+            }
+        }
+
+        private void tbCost_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbCost.SelectAll();
+        }
+
+        private void tbCost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!tbCost.IsKeyboardFocusWithin)
+            {
+                e.Handled = true;
+                tbCost.Focus();
             }
         }
 
