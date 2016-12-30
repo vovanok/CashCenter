@@ -51,7 +51,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
                     var now = DateTime.Now;
                     var beginDate = new DateTime(now.Year, now.Month, 1);
-                    var endDate = new DateTime(now.Year, now.Month + 1, 1).AddDays(-1);
+                    var endDate = beginDate.AddMonths(1).AddDays(-1);
 
                     CustomerCountersValues = Db.GetCustomerCounterValues(customerId, beginDate, endDate);
                     break;
