@@ -63,6 +63,18 @@ namespace CashCenter.IvEnergySales
             }
         }
 
+        private decimal DebtBalance
+        {
+            get
+            {
+                var debt = salesContext?.Value?.Debt;
+                if (debt == null)
+                    return 0;
+
+                return debt.Balance;
+            }
+        }
+
         public MainWindow()
 		{
 			InitializeComponent();
@@ -72,41 +84,45 @@ namespace CashCenter.IvEnergySales
 
         private void SalesContext_OnChange(EnergySalesContext newSalesContext)
         {
-            if (newSalesContext == null)
+            using (var waiter = new OperationWaiter())
             {
-                tbCustomerId.Text = string.Empty;
-                var zeroText = 0.ToString();
+                if (newSalesContext == null)
+                {
+                    tbCustomerId.Text = string.Empty;
+                    var zeroText = 0.ToString();
 
-                lblDayPreviousCounterValue.Content = zeroText;
-                lblNightPreviousCounterValue.Content = zeroText;
+                    lblDayPreviousCounterValue.Content = zeroText;
+                    lblNightPreviousCounterValue.Content = zeroText;
 
-                tbDayCurrentCounterValue.Text = zeroText;
-                tbNightCurrentCounterValue.Text = zeroText;
+                    tbDayCurrentCounterValue.Text = zeroText;
+                    tbNightCurrentCounterValue.Text = zeroText;
 
-                lblDayDeltaCounterValue.Content = zeroText;
-                lblNightDeltaCounterValue.Content = zeroText;
+                    lblDayDeltaCounterValue.Content = zeroText;
+                    lblNightDeltaCounterValue.Content = zeroText;
 
-                tbCost.Text = string.Empty;
-                tbDescription.Text = string.Empty;
+                    tbCost.Text = string.Empty;
+                    tbDescription.Text = string.Empty;
+                }
+
+                gbPaymentInfo.IsEnabled = newSalesContext != null && newSalesContext.IsCustomerFinded;
+
+                // Payment reasons
+                cbPaymentReasons.ItemsSource = newSalesContext?.GetPaymentReasons() ?? new List<PaymentReason>();
+                if (cbPaymentReasons.Items.Count > 0)
+                    cbPaymentReasons.SelectedIndex = 0;
+
+                lblCustomerName.Content = CustomerName;
+                lblCustomerAddress.Content = GetCustomerAddress();
+                lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = PreviousDayCounterValue.ToString();
+                lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = PreviousNightCounterValue.ToString();
+                tbCost.Text = DebtBalance.ToString("0.00");
+
+                lblIsNormative.Visibility = newSalesContext != null && newSalesContext.IsNormative ? Visibility.Visible : Visibility.Hidden;
+                tbNightCurrentCounterValue.IsEnabled = newSalesContext != null && newSalesContext.IsTwoTariff;
+
+                UpdateDayDeltaValueLbl();
+                UpdateNightDeltaValueLbl();
             }
-
-            gbPaymentInfo.IsEnabled = newSalesContext != null && newSalesContext.IsCustomerFinded;
-
-            // Payment reasons
-            cbPaymentReasons.ItemsSource = newSalesContext?.GetPaymentReasons() ?? new List<PaymentReason>();
-            if (cbPaymentReasons.Items.Count > 0)
-                cbPaymentReasons.SelectedIndex = 0;
-
-            lblCustomerName.Content = CustomerName;
-            lblCustomerAddress.Content = GetCustomerAddress();
-            lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = PreviousDayCounterValue.ToString();
-            lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = PreviousNightCounterValue.ToString();
-
-            lblIsNormative.Visibility = newSalesContext != null && newSalesContext.IsNormative ? Visibility.Visible : Visibility.Hidden;
-            tbNightCurrentCounterValue.IsEnabled = newSalesContext != null && newSalesContext.IsTwoTariff;
-
-            UpdateDayDeltaValueLbl();
-            UpdateNightDeltaValueLbl();
         }
 
         private void Main_Loaded(object sender, RoutedEventArgs e)
@@ -218,7 +234,8 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                salesContext.Value.Pay(reasonId, dayValue, nightValue, paymentCost, description);
+                if (!salesContext.Value.Pay(reasonId, dayValue, nightValue, paymentCost, description))
+                    return;
             }
 
             PrintChecks();

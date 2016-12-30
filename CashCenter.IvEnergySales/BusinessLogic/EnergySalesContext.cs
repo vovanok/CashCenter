@@ -16,6 +16,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public DepartmentModel Departament { get; private set; }
         public Customer Customer { get; private set; }
         public CustomerCounters CustomerCountersValues { get; private set; }
+        public Debt Debt { get; private set; }
         public DbController Db { get; private set; }
         public InfoForCheck InfoForCheck { get; private set; }
 
@@ -47,13 +48,15 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 {
                     Db = dbController;
 
-                    // Получение показаний счетчиков плательщика
-
                     var now = DateTime.Now;
                     var beginDate = new DateTime(now.Year, now.Month, 1);
                     var endDate = beginDate.AddMonths(1).AddDays(-1);
 
+                    // Получение показаний счетчиков плательщика
                     CustomerCountersValues = Db.GetCustomerCounterValues(customerId, beginDate, endDate);
+
+                    // Получение задолженности плательщика
+                    Debt = Db.GetDebt(Customer.Id, now.Year * 12 + now.Month);
                     break;
                 }
             }
@@ -162,13 +165,11 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         private decimal GetPenaltyTotal(DateTime date, decimal cost)
         {
-            if (!ValidateCost(cost))
+            if (!ValidateCost(cost) || Debt == null)
                 return 0;
-
-            var debt = Db.GetDebt(Customer.Id, date.Year * 12 + date.Month);
-
-            if (debt != null && cost > debt.Balance && debt.Penalty > 0)
-                return Math.Min(cost - debt.Balance, debt.Penalty);
+            
+            if (Debt != null && cost > Debt.Balance && Debt.Penalty > 0)
+                return Math.Min(cost - Debt.Balance, Debt.Penalty);
 
             return 0;
         }

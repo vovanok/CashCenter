@@ -28,6 +28,9 @@ namespace CashCenter.IvEnergySales.DAL
                 if (typeof(T) == typeof(string))
                     return (T)Convert.ChangeType(dataReader.GetString(ordinal), typeof(T));
 
+                if (typeof(T) == typeof(decimal))
+                    return (T)Convert.ChangeType(dataReader.GetDecimal(ordinal), typeof(T));
+
                 return result;
             }
             catch (Exception e)
