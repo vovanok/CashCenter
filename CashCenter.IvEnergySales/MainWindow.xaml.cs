@@ -355,5 +355,37 @@ namespace CashCenter.IvEnergySales
             lblDeltaCounterValue.Content = deltaValue;
             lblDeltaCounterValue.Foreground = deltaValue >= 0 ? Brushes.Black : Brushes.Red;
         }
+
+        #region Counter values text boxes focus manipulation
+
+        private void tbDayCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbDayCurrentCounterValue.SelectAll();
+        }
+
+        private void tbDayCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!tbDayCurrentCounterValue.IsKeyboardFocusWithin)
+            {
+                e.Handled = true;
+                tbDayCurrentCounterValue.Focus();
+            }
+        }
+
+        private void tbNightCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbNightCurrentCounterValue.SelectAll();
+        }
+
+        private void tbNightCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!tbNightCurrentCounterValue.IsKeyboardFocusWithin)
+            {
+                e.Handled = true;
+                tbNightCurrentCounterValue.Focus();
+            }
+        }
+
+        #endregion
     }
 }
