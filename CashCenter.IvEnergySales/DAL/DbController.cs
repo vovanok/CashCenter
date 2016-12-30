@@ -95,7 +95,7 @@ namespace CashCenter.IvEnergySales.DAL
             }
         }
 
-        public CustomerCounters GetCustomerCounterValues(int customerId)
+        public CustomerCounters GetCustomerCounterValues(int customerId, DateTime beginDate, DateTime endDate)
         {
             DbDataReader dataReader = null;
 
@@ -103,14 +103,10 @@ namespace CashCenter.IvEnergySales.DAL
             {
                 dbConnection.Open();
 
-                var now = DateTime.Now;
-                var beginOfMonth = new DateTime(now.Year, now.Month, 1);
-                var endOfCurrentDay = new DateTime(now.Year, now.Month, now.Day + 1);
-
                 var command = GetDbCommandByQuery(Sql.GET_CUSTOMER_COUNTER_VALUES);
                 command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
-                command.AddParameter(Sql.PARAM_START_DATE, beginOfMonth.ToShortDateString());
-                command.AddParameter(Sql.PARAM_END_DATE, endOfCurrentDay.ToShortDateString());
+                command.AddParameter(Sql.PARAM_START_DATE, beginDate.ToShortDateString());
+                command.AddParameter(Sql.PARAM_END_DATE, endDate.ToShortDateString());
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 

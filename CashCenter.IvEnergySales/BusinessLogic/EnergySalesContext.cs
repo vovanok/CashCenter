@@ -48,7 +48,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     Db = dbController;
 
                     // Получение показаний счетчиков плательщика
-                    CustomerCountersValues = Db.GetCustomerCounterValues(customerId);
+
+                    var now = DateTime.Now;
+                    var beginDate = new DateTime(now.Year, now.Month, 1);
+                    var endDate = new DateTime(now.Year, now.Month + 1, 1).AddDays(-1);
+
+                    CustomerCountersValues = Db.GetCustomerCounterValues(customerId, beginDate, endDate);
                     break;
                 }
             }
