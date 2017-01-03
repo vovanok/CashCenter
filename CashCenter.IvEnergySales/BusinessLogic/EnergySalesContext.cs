@@ -93,7 +93,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             // TODO: tempolary solution
             //var paymentKind = GetOrAddPaymentKind(customer.Db);
             //int paymentKindId = paymentKind.Id;
-            int paymentKindId = 1;
+            int paymentKindId = 19;
 
             var createDate = DateTime.Now;
             var payJournal = AddOrUpdatePayJournal(paymentKindId, createDate, cost);
@@ -123,8 +123,8 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             if (counterValues != null)
                 Db.UpdateCounterValuesPayId(counterValues.Id, pay.Id);
 
-            if (penaltyTotal > 0)
-                Db.AddPenaltyFee(Customer.Id, createDate, penaltyTotal, pay.Id);
+            //if (penaltyTotal > 0)
+            //    Db.AddPenaltyFee(Customer.Id, createDate, penaltyTotal, pay.Id);
 
             InfoForCheck = new InfoForCheck(cost, createDate);
 

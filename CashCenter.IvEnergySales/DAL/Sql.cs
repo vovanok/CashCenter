@@ -187,7 +187,8 @@
 
         public static readonly string INSERT_PENALTYFEE =
             $@"
-            insert into penaltyfee (ID, CUSTOMER_ID, ENTRY_DATE, PERIOD_AS_INTEGER, STARTDATE, ENDDATE, DAYCOUNT, REFINANCE_RATE, DIVIDER_VALUE, PENALTY_VALUE, SOURCEVALUE, PAY_ID)
+            insert into penaltyfee (ID, CUSTOMER_ID, ENTRY_DATE, PERIOD_AS_INTEGER, STARTDATE,
+                    ENDDATE, DAYCOUNT, REFINANCE_RATE, DIVIDER_VALUE, PENALTY_VALUE, SOURCEVALUE, PAY_ID)
                 values(
                     null,
                     {PARAM_CUSTOMER_ID},

@@ -25,7 +25,6 @@ namespace CashCenter.IvEnergySales.Check
 
 			CustomPrint();
 
-            printer.Disconnect();
 
 			if (printer.ErrorsOperationsResults.Count > 0)
 			{
