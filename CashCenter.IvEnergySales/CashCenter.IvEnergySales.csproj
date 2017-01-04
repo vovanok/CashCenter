@@ -98,7 +98,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BusinessLogic\EnergySalesContext.cs" />
+    <Compile Include="BusinessLogic\BaseEnergySalesContext.cs" />
+    <Compile Include="BusinessLogic\EnergySalesRemoteContext.cs" />
+    <Compile Include="BusinessLogic\EnergySalesOfflineContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
     <Compile Include="DataModel\Debt.cs" />
     <Compile Include="OperationWaiter.cs" />

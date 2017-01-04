@@ -11,6 +11,7 @@ using System.Linq;
 using CashCenter.IvEnergySales.Check;
 using System.Windows.Controls;
 using CashCenter.IvEnergySales.Utils;
+using System;
 
 namespace CashCenter.IvEnergySales
 {
@@ -18,7 +19,7 @@ namespace CashCenter.IvEnergySales
 	{
         private DepartmentModel currentDepartment;
         private CheckPrinter checkPrinter;
-        private Observed<EnergySalesDbContext> salesContext = new Observed<EnergySalesDbContext>();
+        private Observed<BaseEnergySalesContext> salesContext = new Observed<BaseEnergySalesContext>();
 
         private string CustomerName
         {
@@ -90,7 +91,7 @@ namespace CashCenter.IvEnergySales
             salesContext.OnChange += SalesContext_OnChange;
         }
 
-        private void SalesContext_OnChange(EnergySalesDbContext newSalesContext)
+        private void SalesContext_OnChange(BaseEnergySalesContext newSalesContext)
         {
             using (var waiter = new OperationWaiter())
             {
@@ -165,7 +166,10 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                salesContext.Value = new EnergySalesDbContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString());
+                salesContext.Value =
+                    !Config.IsUseOfflineMode
+                        ? (BaseEnergySalesContext)new EnergySalesRemoteContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString())
+                        : (BaseEnergySalesContext)new EnergySalesOfflineContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString());
             }
 
             if (!salesContext.Value.IsCustomerFinded)
@@ -216,7 +220,7 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                if (!salesContext.Value.Pay(reasonId, dayValue, nightValue, paymentCost, description))
+                if (!salesContext.Value.Pay(reasonId, 19, dayValue, nightValue, paymentCost, description, DateTime.Now)) // TODO: Make combobox for paymentKind
                     return;
             }
 

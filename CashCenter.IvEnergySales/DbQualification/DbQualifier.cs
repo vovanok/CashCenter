@@ -29,7 +29,7 @@ namespace CashCenter.IvEnergySales.DbQualification
             if (targetDepartment != null)
                 return targetDepartment;
 
-            Log.Error($"Отделение с кодом {departmentCode} не найдено. Отредактируйте ключ {Config.CURRENT_DEPARTMENT_CODE} раздела appSettings в App.config");
+            Log.Error($"Отделение с кодом {departmentCode} не найдено");
             return null;
         }
 
@@ -38,7 +38,7 @@ namespace CashCenter.IvEnergySales.DbQualification
 			var xmlFilePath = Config.DbCodeMappingXmlPath;
 			if (!File.Exists(xmlFilePath))
 			{
-				Log.Error($"XML с базами данных по отделениям не найдены. Путь к файлу: {xmlFilePath}. Создайте файл или отредатируйте ключ {Config.DBCODE_MAPPING_XML_PATH} раздела appSettings в App.config.");
+				Log.Error($"XML с базами данных по отделениям не найдены. Путь к файлу: {xmlFilePath}");
 				return new DbQualifierModel();
 			}
 

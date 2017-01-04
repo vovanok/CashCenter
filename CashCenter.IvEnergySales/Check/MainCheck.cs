@@ -1,5 +1,3 @@
-using CashCenter.IvEnergySales.Utils;
-
 namespace CashCenter.IvEnergySales.Check
 {
 	public class MainCheck : BaseCheck
