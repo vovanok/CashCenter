@@ -7,7 +7,10 @@ namespace CashCenter.IvEnergySales.DbQualification
 		[XmlAttribute("dbCode")]
 		public string DbCode { get; set; }
 
-		[XmlAttribute("url")]
+        [XmlAttribute("name")]
+        public string Name { get; set; }
+
+        [XmlAttribute("url")]
 		public string Url { get; set; }
 
         [XmlAttribute("path")]

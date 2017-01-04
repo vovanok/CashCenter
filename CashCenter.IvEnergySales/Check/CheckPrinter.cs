@@ -2,6 +2,7 @@
 using DrvFRLib;
 using System;
 using CashCenter.IvEnergySales.Logging;
+using CashCenter.IvEnergySales.Utils;
 
 namespace CashCenter.IvEnergySales.Check
 {
@@ -171,6 +172,13 @@ namespace CashCenter.IvEnergySales.Check
 		{
 			PrintLine(" ");
 		}
+
+        public void PrintText(string text)
+        {
+            var textLines = StringUtils.SplitStringByLines(text, Config.CheckPrinterMaxLineLength);
+            foreach (string line in textLines)
+                PrintLine(line);
+        }
 
 		public void PrintLine(string line)
 		{

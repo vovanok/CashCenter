@@ -18,16 +18,21 @@ namespace CashCenter.IvEnergySales
 	{
         private DepartmentModel currentDepartment;
         private CheckPrinter checkPrinter;
-        private Observed<EnergySalesContext> salesContext = new Observed<EnergySalesContext>();
+        private Observed<EnergySalesDbContext> salesContext = new Observed<EnergySalesDbContext>();
 
         private string CustomerName
         {
             get { return salesContext?.Value?.Customer?.Name ?? string.Empty; }
         }
 
+        private bool IsSalesContextReady
+        {
+            get { return salesContext?.Value != null && salesContext.Value.IsCustomerFinded; }
+        }
+
         private string GetCustomerAddress()
         {
-            if (salesContext?.Value == null || !salesContext.Value.IsCustomerFinded)
+            if (!IsSalesContextReady)
                 return string.Empty;
 
             var addressComponents = new[]
@@ -45,7 +50,7 @@ namespace CashCenter.IvEnergySales
         {
             get
             {
-                if (salesContext?.Value == null || salesContext.Value.IsNormative)
+                if (!IsSalesContextReady || salesContext.Value.IsNormative)
                     return 0;
 
                 return salesContext.Value.CustomerCountersValues.EndDayValue;
@@ -56,7 +61,7 @@ namespace CashCenter.IvEnergySales
         {
             get
             {
-                if (salesContext?.Value == null || salesContext.Value.IsNormative || !salesContext.Value.IsTwoTariff)
+                if (!IsSalesContextReady || salesContext.Value.IsNormative || !salesContext.Value.IsTwoTariff)
                     return 0;
 
                 return salesContext.Value.CustomerCountersValues.EndNightValue;
@@ -67,6 +72,9 @@ namespace CashCenter.IvEnergySales
         {
             get
             {
+                if (!IsSalesContextReady)
+                    return 0;
+
                 var debt = salesContext?.Value?.Debt;
                 if (debt == null)
                     return 0;
@@ -82,40 +90,26 @@ namespace CashCenter.IvEnergySales
             salesContext.OnChange += SalesContext_OnChange;
         }
 
-        private void SalesContext_OnChange(EnergySalesContext newSalesContext)
+        private void SalesContext_OnChange(EnergySalesDbContext newSalesContext)
         {
             using (var waiter = new OperationWaiter())
             {
                 if (newSalesContext == null)
-                {
                     tbCustomerId.Text = string.Empty;
-                    var zeroText = 0.ToString();
-
-                    lblDayPreviousCounterValue.Content = zeroText;
-                    lblNightPreviousCounterValue.Content = zeroText;
-
-                    tbDayCurrentCounterValue.Text = zeroText;
-                    tbNightCurrentCounterValue.Text = zeroText;
-
-                    lblDayDeltaCounterValue.Content = zeroText;
-                    lblNightDeltaCounterValue.Content = zeroText;
-
-                    tbCost.Text = string.Empty;
-                    tbDescription.Text = string.Empty;
-                }
 
                 gbPaymentInfo.IsEnabled = newSalesContext != null && newSalesContext.IsCustomerFinded;
 
                 // Payment reasons
-                cbPaymentReasons.ItemsSource = newSalesContext?.GetPaymentReasons() ?? new List<PaymentReason>();
+                cbPaymentReasons.ItemsSource = newSalesContext?.PaymentReasons ?? new List<PaymentReason>();
                 if (cbPaymentReasons.Items.Count > 0)
                     cbPaymentReasons.SelectedIndex = 0;
 
                 lblCustomerName.Content = CustomerName;
                 lblCustomerAddress.Content = GetCustomerAddress();
-                lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = PreviousDayCounterValue.ToString();
-                lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = PreviousNightCounterValue.ToString();
-                tbCost.Text = DebtBalance.ToString("0.00");
+                lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = (IsSalesContextReady ? PreviousDayCounterValue : 0).ToString();
+                lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = (IsSalesContextReady ? PreviousNightCounterValue : 0).ToString();
+                tbCost.Text = IsSalesContextReady ? DebtBalance.ToString("0.00") : string.Empty;
+                tbDescription.Text = string.Empty;
 
                 lblIsNormative.Visibility = newSalesContext != null && newSalesContext.IsNormative ? Visibility.Visible : Visibility.Hidden;
                 tbNightCurrentCounterValue.IsEnabled = newSalesContext != null && newSalesContext.IsTwoTariff;
@@ -136,7 +130,8 @@ namespace CashCenter.IvEnergySales
             if (currentDepartment != null)
             {
                 lblDepartmentName.Content = currentDepartment.Name;
-                cbDbSelector.ItemsSource = currentDepartment.Dbs ?? new List<DbModel>();
+                cbDbSelector.ItemsSource = (currentDepartment.Dbs ?? new List<DbModel>())
+                    .Select(dbModel => new { DbCode = dbModel.DbCode, DbFullName = $"{dbModel.DbCode} {dbModel.Name}" });
                 if (cbDbSelector.Items.Count > 0)
                     cbDbSelector.SelectedIndex = 0;
             }
@@ -159,19 +154,6 @@ namespace CashCenter.IvEnergySales
             salesContext.Value = null;
         }
 
-        private void btnFindCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            FindCustomerInfo();
-        }
-
-        private void tbCustomerId_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter)
-                return;
-
-            FindCustomerInfo();
-        }
-
         private void FindCustomerInfo()
         {
             int targetCustomerId;
@@ -183,7 +165,7 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                salesContext.Value = new EnergySalesContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString());
+                salesContext.Value = new EnergySalesDbContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString());
             }
 
             if (!salesContext.Value.IsCustomerFinded)
@@ -243,49 +225,14 @@ namespace CashCenter.IvEnergySales
             salesContext.Value = null;
         }
 
+        #region Print checks
+
         private void PrintChecks()
         {
             if (checkPrinter == null || !checkPrinter.IsReady)
                 return;
 
-            if (Config.IsPreCheckPrint)
-            {
-                PrintPreCheck();
-
-                if (MessageBox.Show("Печатать ли основной чек?", "Требуется подтверждение печати", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                    PrintMainCheck();
-            }
-            else
-            {
-                PrintMainCheck();
-            }
-        }
-
-        private void PrintPreCheck()
-        {
-            if (salesContext?.Value == null || salesContext.Value.InfoForCheck == null)
-                return;
-
-            bool isPrintSuccess = false;
-            using (var waiter = new OperationWaiter())
-            {
-                var preCheck = new PreCheck(checkPrinter)
-                {
-                    Date = salesContext.Value.InfoForCheck.Date,
-                    Cost = salesContext.Value.InfoForCheck.Cost,
-                    RecipientNameShort = Config.RecipientNameShort
-                };
-
-                isPrintSuccess = preCheck.Print();
-            }
-
-            if (!isPrintSuccess)
-                Log.Error($"Ошибка печати чека.");
-        }
-
-        private void PrintMainCheck()
-        {
-            if (salesContext?.Value == null || salesContext.Value.InfoForCheck == null)
+            if (!IsSalesContextReady || salesContext.Value.InfoForCheck == null)
                 return;
 
             bool isPrintSuccess = false;
@@ -293,19 +240,12 @@ namespace CashCenter.IvEnergySales
             {
                 var mainCheck = new MainCheck(checkPrinter)
                 {
-                    RecipientName = Config.RecipientName,
-                    RecipientNameShort = Config.RecipientNameShort,
-                    RecipientInn = Config.RecipientInn,
-                    RecipientAddressLine1 = Config.RecipientAddressLine1,
-                    RecipientAddressLine2 = Config.RecipientAddressLine2,
-
-                    SellerName = Config.SellerName,
-                    SellerInn = Config.SellerInn,
-                    SellerAddressLine1 = Config.SellerAddressLine1,
-                    SellerAddressLine2 = Config.SellerAddressLine2,
-
+                    SalesDepartmentInfo = Config.SalesDepartmentInfo,
+                    DepartmentCode = salesContext.Value.InfoForCheck.DbCode,
+                    CustomerId = salesContext.Value.InfoForCheck.CustomerId,
+                    CustomerName = salesContext.Value.InfoForCheck.CustomerName,
+                    PaymentReason = salesContext.Value.InfoForCheck.PaymentReasonName,
                     CashierName = Config.CashierName,
-
                     Cost = salesContext.Value.InfoForCheck.Cost
                 };
 
@@ -316,7 +256,24 @@ namespace CashCenter.IvEnergySales
                 Log.Error($"Ошибка печати чека.");
         }
 
-		private void btnClear_Click(object sender, RoutedEventArgs e)
+        #endregion
+
+        #region Simple events handlers
+
+        private void btnFindCustomer_Click(object sender, RoutedEventArgs e)
+        {
+            FindCustomerInfo();
+        }
+
+        private void tbCustomerId_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            FindCustomerInfo();
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
 		{
             salesContext.Value = null;
         }
@@ -341,26 +298,34 @@ namespace CashCenter.IvEnergySales
             UpdateNightDeltaValueLbl();
         }
 
+        #endregion
+
+        #region Update counters labels
+
         private void UpdateDayDeltaValueLbl()
         {
-            if (salesContext.Value == null || salesContext.Value.IsNormative)
-                return;
+            int dayPreviousCounterValue = (salesContext.Value != null && !salesContext.Value.IsNormative)
+                ? salesContext.Value.CustomerCountersValues.EndDayValue
+                : 0;
 
-            int dayPreviousCounterValue = salesContext.Value.CustomerCountersValues.EndDayValue;
             UpdateDeltaValueLbl(lblDayDeltaCounterValue, tbDayCurrentCounterValue, dayPreviousCounterValue);
         }
 
         private void UpdateNightDeltaValueLbl()
         {
-            if (salesContext.Value == null || salesContext.Value.IsNormative || !salesContext.Value.IsTwoTariff)
-                return;
+            int nightPreviousCounterValue =
+                (salesContext.Value != null && !salesContext.Value.IsNormative && salesContext.Value.IsTwoTariff)
+                    ? salesContext.Value.CustomerCountersValues.EndNightValue
+                    : 0;
 
-            int nightPreviousCounterValue = salesContext.Value.CustomerCountersValues.EndNightValue;
             UpdateDeltaValueLbl(lblNightDeltaCounterValue, tbNightCurrentCounterValue, nightPreviousCounterValue);
         }
 
         private void UpdateDeltaValueLbl(Label lblDeltaCounterValue, TextBox tbCurrentCounterValue, int previousCounterValue)
         {
+            if (lblDeltaCounterValue == null || tbCurrentCounterValue == null)
+                return;
+
             int currentValue;
             if (!int.TryParse(tbCurrentCounterValue.Text, out currentValue))
             {
@@ -372,6 +337,8 @@ namespace CashCenter.IvEnergySales
             lblDeltaCounterValue.Content = deltaValue;
             lblDeltaCounterValue.Foreground = deltaValue >= 0 ? Brushes.Black : Brushes.Red;
         }
+
+        #endregion
 
         #region Text boxes focus manipulation
 

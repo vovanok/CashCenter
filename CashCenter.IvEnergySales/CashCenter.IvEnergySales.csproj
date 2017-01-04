@@ -115,7 +115,6 @@
     <Compile Include="Check\BaseCheck.cs" />
     <Compile Include="Check\CheckPrinter.cs" />
     <Compile Include="Check\MainCheck.cs" />
-    <Compile Include="Check\PreCheck.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DAL\DbController.cs" />
     <Compile Include="DAL\Sql.cs" />

@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace CashCenter.IvEnergySales.Utils
 {
 	public static class StringUtils
@@ -60,5 +63,24 @@ namespace CashCenter.IvEnergySales.Utils
 
 			return resContent1 + new string(symbol, lineLength - resContent1.Length - resContent2.Length) + resContent2;
 		}
+
+        public static List<string> SplitStringByLines(string stringValue, int lineLength)
+        {
+            if (string.IsNullOrEmpty(stringValue))
+                return new List<string>();
+
+            if (lineLength <= 0)
+                return new List<string>();
+
+            var result = new List<string>();
+            int curLineStart = 0;
+            while (curLineStart < stringValue.Length)
+            {
+                result.Add(stringValue.Substring(curLineStart, Math.Min(lineLength, stringValue.Length - curLineStart)));
+                curLineStart += lineLength;
+            }
+
+            return result;
+        }
 	}
 }

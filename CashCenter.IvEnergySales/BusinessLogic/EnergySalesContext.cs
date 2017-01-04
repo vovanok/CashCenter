@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
-    public class EnergySalesContext
+    public class EnergySalesDbContext
     {
         private const string PAY_JOURNAL_NAME = "Пачка квитанций 50 ЭСК";
         private const string PAYMENT_KIND_NAME = "CashCenter_ParmentKind";
@@ -17,6 +17,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public Customer Customer { get; private set; }
         public CustomerCounters CustomerCountersValues { get; private set; }
         public Debt Debt { get; private set; }
+        public List<PaymentReason> PaymentReasons { get; private set; }
         public DbController Db { get; private set; }
         public InfoForCheck InfoForCheck { get; private set; }
 
@@ -27,7 +28,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public bool IsNormative
         {
-            get { return CustomerCountersValues == null; }
+            get { return IsCustomerFinded && CustomerCountersValues == null; }
         }
 
         public bool IsTwoTariff
@@ -35,7 +36,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             get { return CustomerCountersValues != null && CustomerCountersValues.IsTwoTariff; }
         }
 
-        public EnergySalesContext(int customerId, DepartmentModel department, string dbCode)
+        public EnergySalesDbContext(int customerId, DepartmentModel department, string dbCode)
         {
             Departament = department;
 
@@ -57,17 +58,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
                     // Получение задолженности плательщика
                     Debt = Db.GetDebt(Customer.Id, now.Year * 12 + now.Month);
+                    PaymentReasons = Db.GetPaymentReasons() ?? new List<PaymentReason>();
                     break;
                 }
             }
-        }
-
-        public List<PaymentReason> GetPaymentReasons()
-        {
-            if (!ValidateDb())
-                return new List<PaymentReason>();
-
-            return Db.GetPaymentReasons() ?? new List<PaymentReason>();
         }
 
         public bool Pay(int reasonId, int value1, int value2, decimal cost, string description)
@@ -126,7 +120,8 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             //if (penaltyTotal > 0)
             //    Db.AddPenaltyFee(Customer.Id, createDate, penaltyTotal, pay.Id);
 
-            InfoForCheck = new InfoForCheck(cost, createDate);
+            var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == reasonId)?.Name ?? string.Empty;
+            InfoForCheck = new InfoForCheck(cost, createDate, Db.Model.DbCode, Customer.Id, Customer.Name, paymentReasonName);
 
             return true;
         }
