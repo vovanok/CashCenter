@@ -2,15 +2,14 @@
 using CashCenter.IvEnergySales.DbQualification;
 using System.IO;
 using CashCenter.IvEnergySales.Logging;
+using System.Linq;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class EnergySalesOfflineContext : BaseEnergySalesContext
     {
-        private const string OFF_FILE_NAME = "Payments.off";
-
-        public EnergySalesOfflineContext(int customerId, DepartmentModel department, string dbCode)
-            : base(customerId, department, dbCode)
+        public EnergySalesOfflineContext(int customerId, RegionDef regionDef, string dbCode)
+            : base(customerId, regionDef, dbCode)
         {
         }
 
@@ -37,15 +36,29 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
 
                 var lineForWrite = $"CustID = {Customer.Id}; Day = {value1}; Night = {value2};; ReasonID = {reasonId}; Total = {cost}; id = {Guid.NewGuid()}; date = {createDate.ToString("dd.MM.yyyy")}";
-                File.AppendAllLines(OFF_FILE_NAME, new[] { lineForWrite });
+
+                var offFileName = GetOffFileName(Db.DepartamentDef.Code, createDate);
+                var directoryName = Path.GetDirectoryName(offFileName);
+                if (!Directory.Exists(directoryName))
+                    Directory.CreateDirectory(directoryName);
+                
+                File.AppendAllLines(offFileName, new[] { lineForWrite });
+
+                var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == reasonId)?.Name ?? string.Empty;
+                InfoForCheck = new InfoForCheck(cost, createDate, Db.DepartamentDef.Code, Customer.Id, Customer.Name, paymentReasonName);
+                return true;
             }
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка записи off файла", e);
                 return false;
             }
+        }
 
-            return true;
+        private string GetOffFileName(string departamentCode, DateTime date)
+        {
+            string fileName = string.Format(Config.CustomerOutputFileFormat, departamentCode, date);
+            return Path.Combine(Config.OutputPath, fileName);
         }
     }
 }

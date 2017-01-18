@@ -7,11 +7,11 @@ using CashCenter.IvEnergySales.Logging;
 
 namespace CashCenter.IvEnergySales.DbQualification
 {
-	public class DbQualifier
+	public class QualifierManager
 	{
-		private static DbQualifierModel mappingModel;
+		private static QualifierDef mappingModel;
 
-		private static DbQualifierModel MappingModel
+		private static QualifierDef MappingModel
 		{
 			get
 			{
@@ -22,10 +22,10 @@ namespace CashCenter.IvEnergySales.DbQualification
 			}
 		}
 
-		public static DepartmentModel GetCurrentDepartment()
+		public static RegionDef GetCurrentDepartment()
         {
             var departmentCode = Config.CurrentDepartmentCode;
-            var targetDepartment = MappingModel.Departments.FirstOrDefault(item => item.DepartmentCode == departmentCode);
+            var targetDepartment = MappingModel.Regions.FirstOrDefault(item => item.Code == departmentCode);
             if (targetDepartment != null)
                 return targetDepartment;
 
@@ -33,13 +33,13 @@ namespace CashCenter.IvEnergySales.DbQualification
             return null;
         }
 
-		private static DbQualifierModel LoadDbCodeMappingModel()
+		private static QualifierDef LoadDbCodeMappingModel()
 		{
 			var xmlFilePath = Config.DbCodeMappingXmlPath;
 			if (!File.Exists(xmlFilePath))
 			{
 				Log.Error($"XML с базами данных по отделениям не найдены. Путь к файлу: {xmlFilePath}");
-				return new DbQualifierModel();
+				return new QualifierDef();
 			}
 
 			try
@@ -48,15 +48,15 @@ namespace CashCenter.IvEnergySales.DbQualification
 				{
 					using (var reader = XmlReader.Create(fs))
 					{
-						var serializer = new XmlSerializer(typeof(DbQualifierModel));
-						return (DbQualifierModel)serializer.Deserialize(reader);
+						var serializer = new XmlSerializer(typeof(QualifierDef));
+						return (QualifierDef)serializer.Deserialize(reader);
 					}
 				}
 			}
 			catch (Exception e)
 			{
 				Log.Error($"Ошибка загрузки XML с базами данных по отделениям:\n{e.Message}\nStack trace:\n{e.StackTrace}");
-				return new DbQualifierModel();
+				return new QualifierDef();
 			}
 		}
 	}

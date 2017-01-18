@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Input;
@@ -12,12 +11,13 @@ using CashCenter.IvEnergySales.Check;
 using System.Windows.Controls;
 using CashCenter.IvEnergySales.Utils;
 using System;
+using System.ComponentModel;
 
 namespace CashCenter.IvEnergySales
 {
     public partial class MainWindow : Window
 	{
-        private DepartmentModel currentDepartment;
+        private RegionDef currentDepartment;
         private CheckPrinter checkPrinter;
         private Observed<BaseEnergySalesContext> salesContext = new Observed<BaseEnergySalesContext>();
 
@@ -127,20 +127,20 @@ namespace CashCenter.IvEnergySales
                 return;
 #endif
             // Load department info
-            currentDepartment = DbQualifier.GetCurrentDepartment();
+            currentDepartment = QualifierManager.GetCurrentDepartment();
             if (currentDepartment != null)
             {
                 lblDepartmentName.Content = currentDepartment.Name;
-                cbDbSelector.ItemsSource = (currentDepartment.Dbs ?? new List<DbModel>())
-                    .Select(dbModel => new { DbCode = dbModel.DbCode, DbFullName = $"{dbModel.DbCode} {dbModel.Name}" });
-                if (cbDbSelector.Items.Count > 0)
-                    cbDbSelector.SelectedIndex = 0;
+                cbDepartmentSelector.ItemsSource = (currentDepartment.Departments ?? new List<DepartmentDef>())
+                    .Select(departmentDef => new { DepartmentCode = departmentDef.Code, DepartmentFullName = $"{departmentDef.Code} {departmentDef.Name}" });
+                if (cbDepartmentSelector.Items.Count > 0)
+                    cbDepartmentSelector.SelectedIndex = 0;
             }
             else
             {
                 lblDepartmentName.Content = "Отделение не задано";
                 lblDepartmentName.Foreground = Brushes.Red;
-                cbDbSelector.IsEnabled = false;
+                cbDepartmentSelector.IsEnabled = false;
             }
 
             try
@@ -157,8 +157,7 @@ namespace CashCenter.IvEnergySales
 
         private void FindCustomerInfo()
         {
-            int targetCustomerId;
-            if (!int.TryParse(tbCustomerId.Text, out targetCustomerId))
+            if (!int.TryParse(tbCustomerId.Text, out int targetCustomerId))
             {
                 Log.Error($"Номер лицевого счета должен быть числом ({tbCustomerId.Text}).");
                 return;
@@ -168,15 +167,15 @@ namespace CashCenter.IvEnergySales
             {
                 salesContext.Value =
                     !Config.IsUseOfflineMode
-                        ? (BaseEnergySalesContext)new EnergySalesRemoteContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString())
-                        : (BaseEnergySalesContext)new EnergySalesOfflineContext(targetCustomerId, currentDepartment, cbDbSelector.SelectedValue.ToString());
+                        ? (BaseEnergySalesContext)new EnergySalesRemoteContext(targetCustomerId, currentDepartment, cbDepartmentSelector.SelectedValue.ToString())
+                        : (BaseEnergySalesContext)new EnergySalesOfflineContext(targetCustomerId, currentDepartment, cbDepartmentSelector.SelectedValue.ToString());
             }
 
             if (!salesContext.Value.IsCustomerFinded)
                 Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
         }
 
-        private void btnPay_Click(object sender, RoutedEventArgs e)
+        private void On_btnPay_Click(object sender, RoutedEventArgs e)
         {
             if (salesContext.Value == null || !salesContext.Value.IsCustomerFinded)
             {
@@ -192,16 +191,13 @@ namespace CashCenter.IvEnergySales
 
             var errorList = new List<string>();
 
-            int dayValue;
-            if (!int.TryParse(tbDayCurrentCounterValue.Text, out dayValue))
+            if (!int.TryParse(tbDayCurrentCounterValue.Text, out int dayValue))
                 errorList.Add($"Некорректное показание дневного счетчика. Оно должно быть числом ({dayValue}).");
 
-            int nightValue;
-            if (!int.TryParse(tbNightCurrentCounterValue.Text, out nightValue))
+            if (!int.TryParse(tbNightCurrentCounterValue.Text, out int nightValue))
                 errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом ({nightValue}).");
 
-            decimal paymentCost;
-            if (!decimal.TryParse(tbCost.Text, out paymentCost))
+            if (!decimal.TryParse(tbCost.Text, out decimal paymentCost))
                 errorList.Add($"Некорректное значение суммы платежа. Оно должно быть числом ({paymentCost}).");
 
             if (!(cbPaymentReasons.SelectedValue is int))
@@ -264,12 +260,12 @@ namespace CashCenter.IvEnergySales
 
         #region Simple events handlers
 
-        private void btnFindCustomer_Click(object sender, RoutedEventArgs e)
+        private void On_btnFindCustomer_Click(object sender, RoutedEventArgs e)
         {
             FindCustomerInfo();
         }
 
-        private void tbCustomerId_KeyUp(object sender, KeyEventArgs e)
+        private void On_tbCustomerId_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
                 return;
@@ -277,27 +273,27 @@ namespace CashCenter.IvEnergySales
             FindCustomerInfo();
         }
 
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+        private void On_btnClear_Click(object sender, RoutedEventArgs e)
 		{
             salesContext.Value = null;
         }
 
-		private void miCashPrinterSettings_Click(object sender, RoutedEventArgs e)
+		private void On_miCashPrinterSettings_Click(object sender, RoutedEventArgs e)
 		{
 			checkPrinter.ShowProperties();
 		}
 
-        private void miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
+        private void On_miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
         {
             checkPrinter.CancelCheck();
         }
 
-        private void tbDayCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
+        private void On_tbDayCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateDayDeltaValueLbl();
         }
 
-        private void tbNightCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
+        private void On_tbNightCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateNightDeltaValueLbl();
         }
@@ -330,8 +326,7 @@ namespace CashCenter.IvEnergySales
             if (lblDeltaCounterValue == null || tbCurrentCounterValue == null)
                 return;
 
-            int currentValue;
-            if (!int.TryParse(tbCurrentCounterValue.Text, out currentValue))
+            if (!int.TryParse(tbCurrentCounterValue.Text, out int currentValue))
             {
                 lblDeltaCounterValue.Content = 0;
                 return;
@@ -346,12 +341,12 @@ namespace CashCenter.IvEnergySales
 
         #region Text boxes focus manipulation
 
-        private void tbDayCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
+        private void On_tbDayCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
         {
             tbDayCurrentCounterValue.SelectAll();
         }
 
-        private void tbDayCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void On_tbDayCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!tbDayCurrentCounterValue.IsKeyboardFocusWithin)
             {
@@ -360,12 +355,12 @@ namespace CashCenter.IvEnergySales
             }
         }
 
-        private void tbNightCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
+        private void On_tbNightCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
         {
             tbNightCurrentCounterValue.SelectAll();
         }
 
-        private void tbNightCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void On_tbNightCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!tbNightCurrentCounterValue.IsKeyboardFocusWithin)
             {
@@ -374,12 +369,12 @@ namespace CashCenter.IvEnergySales
             }
         }
 
-        private void tbCost_GotFocus(object sender, RoutedEventArgs e)
+        private void On_tbCost_GotFocus(object sender, RoutedEventArgs e)
         {
             tbCost.SelectAll();
         }
 
-        private void tbCost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void On_tbCost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!tbCost.IsKeyboardFocusWithin)
             {

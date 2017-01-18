@@ -8,8 +8,8 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class EnergySalesRemoteContext : BaseEnergySalesContext
     {
-        public EnergySalesRemoteContext(int customerId, DepartmentModel department, string dbCode)
-            : base(customerId, department, dbCode)
+        public EnergySalesRemoteContext(int customerId, RegionDef regionDef, string dbCode)
+            : base(customerId, regionDef, dbCode)
         {
         }
 
@@ -64,7 +64,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             //    Db.AddPenaltyFee(Customer.Id, createDate, penaltyTotal, pay.Id);
 
             var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == reasonId)?.Name ?? string.Empty;
-            InfoForCheck = new InfoForCheck(cost, createDate, Db.Model.DbCode, Customer.Id, Customer.Name, paymentReasonName);
+            InfoForCheck = new InfoForCheck(cost, createDate, Db.DepartamentDef.Code, Customer.Id, Customer.Name, paymentReasonName);
 
             return true;
         }

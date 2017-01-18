@@ -12,7 +12,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
     {
         protected const string PAY_JOURNAL_NAME = "Пачка квитанций 50 ЭСК";
         
-        public DepartmentModel Departament { get; private set; }
+        public RegionDef RegionDef { get; private set; }
         public Customer Customer { get; private set; }
         public CustomerCounters CustomerCountersValues { get; private set; }
         public Debt Debt { get; private set; }
@@ -35,11 +35,11 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             get { return CustomerCountersValues != null && CustomerCountersValues.IsTwoTariff; }
         }
 
-        public BaseEnergySalesContext(int customerId, DepartmentModel department, string dbCode)
+        public BaseEnergySalesContext(int customerId, RegionDef regionDef, string departamentCode)
         {
-            Departament = department;
+            RegionDef = regionDef;
 
-            var dbControllers = GetDbControllersByDbCode(dbCode);
+            var dbControllers = GetDbControllersByDepartamentCode(departamentCode);
             foreach (var dbController in dbControllers)
             {
                 // Получение плательщика
@@ -76,10 +76,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             return 0;
         }
 
-        private List<DbController> GetDbControllersByDbCode(string dbCode)
+        private List<DbController> GetDbControllersByDepartamentCode(string departamentCode)
         {
-            return Departament.Dbs.Select(dbModel => new DbController(dbModel))
-                .Where(dbController => dbController.Model.DbCode == dbCode).ToList();
+            return RegionDef.Departments.Select(departmentDef => new DbController(departmentDef))
+                .Where(dbController => dbController.DepartamentDef.Code == departamentCode).ToList();
         }
 
         #region Validators

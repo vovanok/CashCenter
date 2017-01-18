@@ -129,10 +129,10 @@
     <Compile Include="DataModel\PayJournal.cs" />
     <Compile Include="DataModel\PaymentKind.cs" />
     <Compile Include="DataModel\PaymentReason.cs" />
-    <Compile Include="DbQualification\DbQualifier.cs" />
-    <Compile Include="DbQualification\DbQualifierModel.cs" />
-    <Compile Include="DbQualification\DbModel.cs" />
-    <Compile Include="DbQualification\DepartamentModel.cs" />
+    <Compile Include="DbQualification\QualifierManager.cs" />
+    <Compile Include="DbQualification\QualifierDef.cs" />
+    <Compile Include="DbQualification\DepartmentDef.cs" />
+    <Compile Include="DbQualification\RegionDef.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">

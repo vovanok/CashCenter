@@ -13,12 +13,12 @@ namespace CashCenter.IvEnergySales.DAL
     {
         private DbConnection dbConnection;
 
-        public DbModel Model { get; private set; }
+        public DepartmentDef DepartamentDef { get; private set; }
 
-        public DbController(DbModel dbModel)
+        public DbController(DepartmentDef departamentDef)
         {
-            this.Model = dbModel;
-            this.dbConnection = new FbConnection(string.Format(Config.DbConnectionStringFormat, dbModel.Url, dbModel.Path));
+            this.DepartamentDef = departamentDef;
+            this.dbConnection = new FbConnection(string.Format(Config.DbConnectionStringFormat, departamentDef.Url, departamentDef.Path));
         }
 
         public List<PaymentReason> GetPaymentReasons()

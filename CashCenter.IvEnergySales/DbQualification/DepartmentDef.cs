@@ -2,10 +2,10 @@ using System.Xml.Serialization;
 
 namespace CashCenter.IvEnergySales.DbQualification
 {
-	public class DbModel
+	public class DepartmentDef
 	{
-		[XmlAttribute("dbCode")]
-		public string DbCode { get; set; }
+		[XmlAttribute("code")]
+		public string Code { get; set; }
 
         [XmlAttribute("name")]
         public string Name { get; set; }
@@ -16,9 +16,9 @@ namespace CashCenter.IvEnergySales.DbQualification
         [XmlAttribute("path")]
         public string Path { get; set; }
 
-        public DbModel()
+        public DepartmentDef()
 		{
-			DbCode = string.Empty;
+			Code = string.Empty;
 			Url = string.Empty;
             Path = string.Empty;
 		}
