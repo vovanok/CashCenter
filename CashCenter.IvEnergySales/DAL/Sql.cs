@@ -70,7 +70,9 @@
                         inner join street on building.street_id = street.id
                         inner join locality on building.locality_id = locality.id) customer_building
                 on customer.building_id = customer_building.ID
-            where customer.id = {PARAM_CUSTOMER_ID} and customer.aggr$state_id <> 4";
+            where customer.id = {PARAM_CUSTOMER_ID} and
+                  customer.aggr$state_id <> 4 and
+                  is_payment_locked <> 1";
 
         public static readonly string GET_CUSTOMER_COUNTER_VALUES =
             $@"
