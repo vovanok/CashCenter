@@ -2,99 +2,62 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Input;
-using CashCenter.IvEnergySales.DbQualification;
 using CashCenter.IvEnergySales.BusinessLogic;
-using CashCenter.IvEnergySales.DataModel;
 using CashCenter.IvEnergySales.Logging;
 using System.Linq;
 using CashCenter.IvEnergySales.Check;
 using System.Windows.Controls;
-using CashCenter.IvEnergySales.Utils;
 using System;
 using System.ComponentModel;
+using CashCenter.Common;
+using CashCenter.Common.DbQualification;
+using CashCenter.Common.DataEntities;
 
 namespace CashCenter.IvEnergySales
 {
     public partial class MainWindow : Window
 	{
-        private RegionDef currentDepartment;
+        private RegionDef currentRegion;
         private CheckPrinter checkPrinter;
-        private Observed<BaseEnergySalesContext> salesContext = new Observed<BaseEnergySalesContext>();
-
-        private string CustomerName
-        {
-            get { return salesContext?.Value?.Customer?.Name ?? string.Empty; }
-        }
+        private Observed<BaseCustomerSalesContext> customerSalesContext = new Observed<BaseCustomerSalesContext>();
 
         private bool IsSalesContextReady
         {
-            get { return salesContext?.Value != null && salesContext.Value.IsCustomerFinded; }
-        }
-
-        private string GetCustomerAddress()
-        {
-            if (!IsSalesContextReady)
-                return string.Empty;
-
-            var addressComponents = new[]
-            {
-                salesContext.Value.Customer.LocalityName,
-                salesContext.Value.Customer.StreetName,
-                salesContext.Value.Customer.BuildingNumber,
-                salesContext.Value.Customer.Flat
-            };
-
-            return string.Join(", ", addressComponents.Where(item => !string.IsNullOrEmpty(item)));
+            get { return customerSalesContext?.Value != null && customerSalesContext.Value.IsCustomerFinded; }
         }
 
         private int PreviousDayCounterValue
         {
-            get
-            {
-                if (!IsSalesContextReady || salesContext.Value.IsNormative)
-                    return 0;
-
-                return salesContext.Value.CustomerCountersValues.EndDayValue;
-            }
+            get { return IsSalesContextReady ? customerSalesContext.Value.Customer.DayValue : 0; }
         }
 
         private int PreviousNightCounterValue
         {
-            get
-            {
-                if (!IsSalesContextReady || salesContext.Value.IsNormative || !salesContext.Value.IsTwoTariff)
-                    return 0;
-
-                return salesContext.Value.CustomerCountersValues.EndNightValue;
-            }
+            get { return IsSalesContextReady ? customerSalesContext.Value.Customer.NightValue : 0;}
         }
 
         private decimal DebtBalance
         {
-            get
-            {
-                if (!IsSalesContextReady)
-                    return 0;
-
-                var debt = salesContext?.Value?.Debt;
-                if (debt == null)
-                    return 0;
-
-                return debt.Balance;
-            }
+            get { return IsSalesContextReady ? customerSalesContext.Value.Customer.Balance : 0; }
         }
 
         public MainWindow()
 		{
 			InitializeComponent();
 
-            salesContext.OnChange += SalesContext_OnChange;
+            Log.SetLogger(new MessageBoxLog());
+            customerSalesContext.OnChange += SalesContext_OnChange;
         }
 
-        private void SalesContext_OnChange(BaseEnergySalesContext newSalesContext)
+        private void SalesContext_OnChange(BaseCustomerSalesContext newSalesContext)
         {
             using (var waiter = new OperationWaiter())
             {
+                gridOfflineDataSrcView.Visibility = Properties.Settings.Default.IsCustomerOfflineMode ? Visibility.Visible : Visibility.Collapsed;
+                gridOnlineDataSrcView.Visibility = !Properties.Settings.Default.IsCustomerOfflineMode ? Visibility.Visible : Visibility.Collapsed;
+                
+                lblDbfFileName.Text = Properties.Settings.Default.CustomerInputDbfPath;
+
                 if (newSalesContext == null)
                     tbCustomerId.Text = string.Empty;
 
@@ -105,15 +68,18 @@ namespace CashCenter.IvEnergySales
                 if (cbPaymentReasons.Items.Count > 0)
                     cbPaymentReasons.SelectedIndex = 0;
 
-                lblCustomerName.Content = CustomerName;
-                lblCustomerAddress.Content = GetCustomerAddress();
+                lblCustomerName.Content = customerSalesContext?.Value?.Customer?.Name ?? string.Empty;
+                lblCustomerAddress.Content = customerSalesContext?.Value?.Customer?.Address ?? string.Empty;
                 lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = (IsSalesContextReady ? PreviousDayCounterValue : 0).ToString();
                 lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = (IsSalesContextReady ? PreviousNightCounterValue : 0).ToString();
                 tbCost.Text = IsSalesContextReady ? DebtBalance.ToString("0.00") : string.Empty;
                 tbDescription.Text = string.Empty;
 
-                lblIsNormative.Visibility = newSalesContext != null && newSalesContext.IsNormative ? Visibility.Visible : Visibility.Hidden;
-                tbNightCurrentCounterValue.IsEnabled = newSalesContext != null && newSalesContext.IsTwoTariff;
+                lblIsNormative.Visibility =
+                    newSalesContext != null && newSalesContext.Customer != null && newSalesContext.Customer.IsNormative
+                        ? Visibility.Visible : Visibility.Hidden;
+                tbNightCurrentCounterValue.IsEnabled =
+                    newSalesContext != null && newSalesContext.Customer != null && newSalesContext.Customer.IsTwoTariff;
 
                 UpdateDayDeltaValueLbl();
                 UpdateNightDeltaValueLbl();
@@ -126,20 +92,21 @@ namespace CashCenter.IvEnergySales
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 return;
 #endif
+
             // Load department info
-            currentDepartment = QualifierManager.GetCurrentDepartment();
-            if (currentDepartment != null)
+            currentRegion = QualifierManager.GetCurrentRegion();
+            if (currentRegion != null)
             {
-                lblDepartmentName.Content = currentDepartment.Name;
-                cbDepartmentSelector.ItemsSource = (currentDepartment.Departments ?? new List<DepartmentDef>())
+                lblRegionName.Content = currentRegion.Name;
+                cbDepartmentSelector.ItemsSource = (currentRegion.Departments ?? new List<DepartmentDef>())
                     .Select(departmentDef => new { DepartmentCode = departmentDef.Code, DepartmentFullName = $"{departmentDef.Code} {departmentDef.Name}" });
                 if (cbDepartmentSelector.Items.Count > 0)
                     cbDepartmentSelector.SelectedIndex = 0;
             }
             else
             {
-                lblDepartmentName.Content = "Отделение не задано";
-                lblDepartmentName.Foreground = Brushes.Red;
+                lblRegionName.Content = "Район не задан";
+                lblRegionName.Foreground = Brushes.Red;
                 cbDepartmentSelector.IsEnabled = false;
             }
 
@@ -152,7 +119,7 @@ namespace CashCenter.IvEnergySales
                 Log.Error("Ошибка создания драйвера. Запустите приложение от имени администратора.");
             }
 
-            salesContext.Value = null;
+            customerSalesContext.Value = null;
         }
 
         private void FindCustomerInfo()
@@ -165,19 +132,19 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                salesContext.Value =
-                    !Config.IsUseOfflineMode
-                        ? (BaseEnergySalesContext)new EnergySalesRemoteContext(targetCustomerId, currentDepartment, cbDepartmentSelector.SelectedValue.ToString())
-                        : (BaseEnergySalesContext)new EnergySalesOfflineContext(targetCustomerId, currentDepartment, cbDepartmentSelector.SelectedValue.ToString());
+                customerSalesContext.Value =
+                    !Properties.Settings.Default.IsCustomerOfflineMode
+                        ? (BaseCustomerSalesContext)new OnlineCustomerSalesContext(targetCustomerId, currentRegion, cbDepartmentSelector.SelectedValue.ToString())
+                        : (BaseCustomerSalesContext)new OfflineCustomerSalesContext(targetCustomerId, Properties.Settings.Default.CustomerInputDbfPath);
             }
 
-            if (!salesContext.Value.IsCustomerFinded)
+            if (!customerSalesContext.Value.IsCustomerFinded)
                 Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
         }
 
         private void On_btnPay_Click(object sender, RoutedEventArgs e)
         {
-            if (salesContext.Value == null || !salesContext.Value.IsCustomerFinded)
+            if (customerSalesContext.Value == null || !customerSalesContext.Value.IsCustomerFinded)
             {
                 MessageBox.Show("Не задан плательщик. Произведите поиск по номеру лицевого счета");
                 return;
@@ -204,7 +171,6 @@ namespace CashCenter.IvEnergySales
                 errorList.Add($"Некорректное значение основания платежа.");
 
             int reasonId = (int)cbPaymentReasons.SelectedValue;
-
             string description = tbDescription.Text ?? string.Empty;
 
             if (errorList.Count > 0)
@@ -216,13 +182,15 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                if (!salesContext.Value.Pay(reasonId, 19, dayValue, nightValue, paymentCost, description, DateTime.Now)) // TODO: Make combobox for paymentKind
+                var customerPayment = new Common.DataEntities.CustomerPayment(customerSalesContext.Value.Customer,
+                    dayValue, nightValue, paymentCost, 19, reasonId, DateTime.Now); // TODO: Make combobox for paymentKind
+
+                if (!customerSalesContext.Value.Pay(customerPayment)) 
                     return;
             }
 
             PrintChecks();
-
-            salesContext.Value = null;
+            customerSalesContext.Value = null;
         }
 
         #region Print checks
@@ -232,7 +200,7 @@ namespace CashCenter.IvEnergySales
             if (checkPrinter == null || !checkPrinter.IsReady)
                 return;
 
-            if (!IsSalesContextReady || salesContext.Value.InfoForCheck == null)
+            if (!IsSalesContextReady || customerSalesContext.Value.InfoForCheck == null)
                 return;
 
             bool isPrintSuccess = false;
@@ -241,12 +209,12 @@ namespace CashCenter.IvEnergySales
                 var mainCheck = new MainCheck(checkPrinter)
                 {
                     SalesDepartmentInfo = Config.SalesDepartmentInfo,
-                    DepartmentCode = salesContext.Value.InfoForCheck.DbCode,
-                    CustomerId = salesContext.Value.InfoForCheck.CustomerId,
-                    CustomerName = salesContext.Value.InfoForCheck.CustomerName,
-                    PaymentReason = salesContext.Value.InfoForCheck.PaymentReasonName,
-                    CashierName = Config.CashierName,
-                    Cost = salesContext.Value.InfoForCheck.Cost
+                    DepartmentCode = customerSalesContext.Value.InfoForCheck.DbCode,
+                    CustomerId = customerSalesContext.Value.InfoForCheck.CustomerId,
+                    CustomerName = customerSalesContext.Value.InfoForCheck.CustomerName,
+                    PaymentReason = customerSalesContext.Value.InfoForCheck.PaymentReasonName,
+                    CashierName = Properties.Settings.Default.CasherName,
+                    Cost = customerSalesContext.Value.InfoForCheck.Cost
                 };
 
                 isPrintSuccess = mainCheck.Print();
@@ -275,7 +243,7 @@ namespace CashCenter.IvEnergySales
 
         private void On_btnClear_Click(object sender, RoutedEventArgs e)
 		{
-            salesContext.Value = null;
+            customerSalesContext.Value = null;
         }
 
 		private void On_miCashPrinterSettings_Click(object sender, RoutedEventArgs e)
@@ -298,26 +266,28 @@ namespace CashCenter.IvEnergySales
             UpdateNightDeltaValueLbl();
         }
 
+        private void On_miSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = new SettingsDialog();
+            var settingsDialogResult = settings.ShowDialog();
+
+            if (settingsDialogResult != null && settingsDialogResult.Value)
+                customerSalesContext.Value = null;
+        }
+
         #endregion
 
         #region Update counters labels
 
         private void UpdateDayDeltaValueLbl()
         {
-            int dayPreviousCounterValue = (salesContext.Value != null && !salesContext.Value.IsNormative)
-                ? salesContext.Value.CustomerCountersValues.EndDayValue
-                : 0;
-
+            int dayPreviousCounterValue = IsSalesContextReady ? customerSalesContext.Value.Customer.DayValue : 0;
             UpdateDeltaValueLbl(lblDayDeltaCounterValue, tbDayCurrentCounterValue, dayPreviousCounterValue);
         }
 
         private void UpdateNightDeltaValueLbl()
         {
-            int nightPreviousCounterValue =
-                (salesContext.Value != null && !salesContext.Value.IsNormative && salesContext.Value.IsTwoTariff)
-                    ? salesContext.Value.CustomerCountersValues.EndNightValue
-                    : 0;
-
+            int nightPreviousCounterValue = IsSalesContextReady ? customerSalesContext.Value.Customer.NightValue : 0;
             UpdateDeltaValueLbl(lblNightDeltaCounterValue, tbNightCurrentCounterValue, nightPreviousCounterValue);
         }
 

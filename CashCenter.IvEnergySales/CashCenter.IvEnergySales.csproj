@@ -15,6 +15,21 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,7 +64,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -81,6 +97,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -98,14 +115,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BusinessLogic\BaseEnergySalesContext.cs" />
-    <Compile Include="BusinessLogic\EnergySalesRemoteContext.cs" />
-    <Compile Include="BusinessLogic\EnergySalesOfflineContext.cs" />
+    <Compile Include="BusinessLogic\BaseCustomerSalesContext.cs" />
+    <Compile Include="BusinessLogic\BaseOrganizationSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
-    <Compile Include="DataModel\Debt.cs" />
+    <Compile Include="BusinessLogic\OfflineCustomerSalesContext.cs" />
+    <Compile Include="BusinessLogic\OfflineOrganizationSalesContext.cs" />
+    <Compile Include="BusinessLogic\OnlineCustomerSalesContext.cs" />
     <Compile Include="OperationWaiter.cs" />
-    <Compile Include="Utils\Observed.cs" />
-    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsDialog.xaml.cs">
+      <DependentUpon>SettingsDialog.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,28 +147,15 @@
     <Compile Include="Check\BaseCheck.cs" />
     <Compile Include="Check\CheckPrinter.cs" />
     <Compile Include="Check\MainCheck.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="DAL\DbController.cs" />
-    <Compile Include="DAL\Sql.cs" />
-    <Compile Include="DAL\Utils.cs" />
-    <Compile Include="DataModel\CounterValues.cs" />
-    <Compile Include="DataModel\Customer.cs" />
-    <Compile Include="DataModel\CustomerCounters.cs" />
-    <Compile Include="DataModel\Meter.cs" />
-    <Compile Include="DataModel\Pay.cs" />
-    <Compile Include="DataModel\PayJournal.cs" />
-    <Compile Include="DataModel\PaymentKind.cs" />
-    <Compile Include="DataModel\PaymentReason.cs" />
-    <Compile Include="DbQualification\QualifierManager.cs" />
-    <Compile Include="DbQualification\QualifierDef.cs" />
-    <Compile Include="DbQualification\DepartmentDef.cs" />
-    <Compile Include="DbQualification\RegionDef.cs" />
-    <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SettingsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -149,11 +166,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -162,11 +174,16 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <AppDesigner Include="Properties\" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <AppDesigner Include="Properties\" />
+    <None Include="Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -190,6 +207,38 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
+      <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
+      <Name>CashCenter.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.CsvRegistry\CashCenter.CsvRegistry.csproj">
+      <Project>{4a31c820-34cd-4d75-8b47-7ed6115f36ab}</Project>
+      <Name>CashCenter.CsvRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
+      <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
+      <Name>CashCenter.DbfRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.OffRegistry\CashCenter.OffRegistry.csproj">
+      <Project>{376d1352-4182-4c9a-a71a-d15609b5f096}</Project>
+      <Name>CashCenter.OffRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.ZeusDb\CashCenter.ZeusDb.csproj">
+      <Project>{42193820-cd62-41d5-af50-cb7be873ddfd}</Project>
+      <Name>CashCenter.ZeusDb</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

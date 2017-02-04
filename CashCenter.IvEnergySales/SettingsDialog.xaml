@@ -1,0 +1,71 @@
+﻿<Window x:Class="CashCenter.IvEnergySales.SettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+        mc:Ignorable="d"
+        Title="Настройки" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="Height" ResizeMode="NoResize">
+    <StackPanel Margin="5,5,5,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="6*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Content="Имя кассира" Grid.Column="0" Grid.Row="0" />
+            <TextBox x:Name="tbCasherName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Padding="0,5,0,5" />
+        </Grid>
+        <GroupBox Header="Настройки оплаты физическим лицом">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <Label Grid.Column="0" Grid.Row="0">
+                    <TextBlock TextWrapping="Wrap" Text="Работать в режиме оффлайн" />
+                </Label>
+                <CheckBox x:Name="cbIsCustomerOfflineMode" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+
+                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
+                    <TextBlock TextWrapping="Wrap" Text="Путь в входному dbf файлу" />
+                </Label>
+                <StackPanel Grid.Column="1" Grid.Row="1">
+                    <TextBox x:Name="tbCustomerInputDbfPath" Padding="0,5,0,5" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="btnImportAndSelectCustomerInputDbfPath" Content="Импортировать и выбрать" Grid.Column="0" Grid.Row="0" Click="On_btnImportAndSelectCustomerInputDbfPath_Click"/>
+                        <Button x:Name="btnSelectCustomerInputDbfPath" Content="Выбрать" Grid.Column="1" Grid.Row="0" Click="On_btnSelectCustomerInputDbfPath_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="btnSave" Content="Сохранить" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Click="On_btnSave_Click" Margin="0,5,0,5" Padding="15,5,15,5"/>
+            <Button x:Name="btnCancel" Content="Отменить" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Click="On_btnCancel_Click" Margin="0,5,0,5" Padding="15,5,15,5"/>
+        </Grid>
+    </StackPanel>
+</Window>

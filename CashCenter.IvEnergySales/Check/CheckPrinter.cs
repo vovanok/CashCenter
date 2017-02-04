@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using DrvFRLib;
 using System;
-using CashCenter.IvEnergySales.Logging;
-using CashCenter.IvEnergySales.Utils;
+using CashCenter.Common;
 
 namespace CashCenter.IvEnergySales.Check
 {

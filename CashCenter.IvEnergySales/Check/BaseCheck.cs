@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using CashCenter.IvEnergySales.Logging;
+using CashCenter.Common;
 
 namespace CashCenter.IvEnergySales.Check
 {

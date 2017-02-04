@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CashCenter.IvEnergySales.Properties {
+namespace CashCenter.IvEnergySales {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,37 +25,13 @@ namespace CashCenter.IvEnergySales.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CasherName {
+        [global::System.Configuration.DefaultSettingValueAttribute("12345")]
+        public string Test {
             get {
-                return ((string)(this["CasherName"]));
+                return ((string)(this["Test"]));
             }
             set {
-                this["CasherName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsCustomerOfflineMode {
-            get {
-                return ((bool)(this["IsCustomerOfflineMode"]));
-            }
-            set {
-                this["IsCustomerOfflineMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CustomerInputDbfPath {
-            get {
-                return ((string)(this["CustomerInputDbfPath"]));
-            }
-            set {
-                this["CustomerInputDbfPath"] = value;
+                this["Test"] = value;
             }
         }
     }
