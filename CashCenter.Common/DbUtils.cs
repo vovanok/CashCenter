@@ -33,6 +33,9 @@ namespace CashCenter.Common
                 if (typeof(T) == typeof(double))
                     return (T)Convert.ChangeType(dataReader.GetDouble(ordinal), typeof(T));
 
+                if (typeof(T) == typeof(DateTime))
+                    return (T)Convert.ChangeType(dataReader.GetDateTime(ordinal), typeof(T));
+
                 return result;
             }
             catch (Exception e)

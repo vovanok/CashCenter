@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbfRegistryController.cs" />
+    <Compile Include="Entities\Article.cs" />
+    <Compile Include="Entities\ArticlesSet.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Organization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

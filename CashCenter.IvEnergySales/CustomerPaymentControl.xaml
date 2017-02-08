@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="CashCenter.IvEnergySales.CustomerPaymentControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
+    <StackPanel>
+        <GroupBox Header="Источник данных">
+            <StackPanel>
+                <Grid x:Name="gridOnlineDataSrcView">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="Название района" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Label x:Name="lblRegionName" FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+
+                    <Label Content="Код отделения" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <ComboBox x:Name="cbDepartmentSelector" Grid.Column="1" Grid.Row="1" IsReadOnly="True" DisplayMemberPath="DepartmentFullName" SelectedValuePath="DepartmentCode" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                </Grid>
+                <Grid x:Name="gridOfflineDataSrcView">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="DBF файл" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Label FontWeight="Bold" Grid.Column="1" Grid.Row="0">
+                        <TextBlock x:Name="lblDbfFileName" TextWrapping="Wrap"/>
+                    </Label>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="gbPrivateInfo" Header="Лицевой счет" Height="128">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Номер лицевого счета" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Имя плательщика" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Адрес плательщика" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+
+                <Grid Grid.Column="1" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="tbCustomerId" KeyUp="On_tbCustomerId_KeyUp" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Button x:Name="btnFindCustomer" Content="Поиск" Click="On_btnFindCustomer_Click" Grid.Column="1"/>
+                </Grid>
+
+                <Viewbox Grid.Column="1" Grid.Row="1">
+                    <Label x:Name="lblCustomerName" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Column="1" Grid.Row="2" >
+                    <Label x:Name="lblCustomerAddress" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                </Viewbox>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="gbPaymentInfo" Header="Оплата" >
+            <StackPanel>
+                <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="День" Grid.Column="0" Grid.Row="1" FontWeight="Bold" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Label Content="Ночь" Grid.Column="0" Grid.Row="2" FontWeight="Bold" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+
+                    <Label FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBlock TextWrapping="Wrap" Text="Предыдущие показания"/>
+                    </Label>
+                    <Label x:Name="lblDayPreviousCounterValue" Content="0" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label x:Name="lblNightPreviousCounterValue" Content="0" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+                    <Label FontWeight="Bold" Grid.Column="2" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBlock TextWrapping="Wrap" Text="Текущие показания"/>
+                    </Label>
+                    <TextBox x:Name="tbDayCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbDayCurrentCounterValue_TextChanged" GotFocus="On_tbDayCurrentCounterValue_GotFocus" PreviewMouseLeftButtonDown="On_tbDayCurrentCounterValue_PreviewMouseLeftButtonDown"/>
+                    <TextBox x:Name="tbNightCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbNightCurrentCounterValue_TextChanged" PreviewMouseLeftButtonDown="On_tbNightCurrentCounterValue_PreviewMouseLeftButtonDown" GotFocus="On_tbNightCurrentCounterValue_GotFocus"/>
+
+                    <Label FontWeight="Bold" Grid.Column="3" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                        <TextBlock TextWrapping="Wrap" Text="Разница"/>
+                    </Label>
+                    <Label x:Name="lblDayDeltaCounterValue" Content="0" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Label x:Name="lblNightDeltaCounterValue" Content="0" Grid.Column="3" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+                    <Label x:Name="lblIsNormative" Visibility="Hidden" Content="По нормативу" Grid.ColumnSpan="4" Grid.RowSpan="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30"/>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Основание для оплаты" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Label Content="Сумма" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Label Content="Примечание" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Button x:Name="btnPay" Content="Оплатить" Grid.Column="0" Grid.Row="3" Margin="15,5,15,0" Click="On_btnPay_Click"/>
+
+                    <ComboBox x:Name="cbPaymentReasons" DisplayMemberPath="Name" SelectedValuePath="Id" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="tbCost" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="On_tbCost_GotFocus" PreviewMouseLeftButtonDown="On_tbCost_PreviewMouseLeftButtonDown"/>
+                    <TextBox x:Name="tbDescription" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <Button x:Name="btnClear" Content="Очистить" Grid.Column="1" Grid.Row="3" Margin="15,5,15,0" Click="On_btnClear_Click"/>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

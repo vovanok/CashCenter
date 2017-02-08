@@ -115,12 +115,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ArticlesControl.xaml.cs">
+      <DependentUpon>ArticlesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BusinessLogic\BaseCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\BaseOrganizationSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
     <Compile Include="BusinessLogic\OfflineCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\OfflineOrganizationSalesContext.cs" />
     <Compile Include="BusinessLogic\OnlineCustomerSalesContext.cs" />
+    <Compile Include="CustomerPaymentControl.xaml.cs">
+      <DependentUpon>CustomerPaymentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrationDialog.xaml.cs">
+      <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileSelectorControl.xaml.cs">
+      <DependentUpon>FileSelectorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OperationWaiter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -136,6 +148,22 @@
     <Compile Include="SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="ArticlesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomerPaymentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataMigrationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileSelectorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -216,6 +244,10 @@
     <ProjectReference Include="..\CashCenter.CsvRegistry\CashCenter.CsvRegistry.csproj">
       <Project>{4a31c820-34cd-4d75-8b47-7ed6115f36ab}</Project>
       <Name>CashCenter.CsvRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Dal\CashCenter.Dal.csproj">
+      <Project>{cad4a97e-4f23-41d9-bc76-0f7633c0e1f6}</Project>
+      <Name>CashCenter.Dal</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
       <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
