@@ -16,8 +16,6 @@ namespace CashCenter.IvEnergySales
 {
     public partial class CustomerPaymentControl : UserControl
     {
-        private RegionDef currentRegion;
-        
         private Observed<BaseCustomerSalesContext> customerSalesContext = new Observed<BaseCustomerSalesContext>();
 
         private bool IsSalesContextReady
@@ -60,22 +58,15 @@ namespace CashCenter.IvEnergySales
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 return;
 #endif
-
-            // Load department info
-            currentRegion = QualifierManager.GetCurrentRegion();
-            if (currentRegion != null)
+            
+            if (controlDeparmentSelector.Region != null)
             {
-                lblRegionName.Content = currentRegion.Name;
-                cbDepartmentSelector.ItemsSource = (currentRegion.Departments ?? new List<DepartmentDef>())
-                    .Select(departmentDef => new { DepartmentCode = departmentDef.Code, DepartmentFullName = $"{departmentDef.Code} {departmentDef.Name}" });
-                if (cbDepartmentSelector.Items.Count > 0)
-                    cbDepartmentSelector.SelectedIndex = 0;
+                lblRegionName.Content = controlDeparmentSelector.Region.Name;
             }
             else
             {
                 lblRegionName.Content = "Район не задан";
                 lblRegionName.Foreground = Brushes.Red;
-                cbDepartmentSelector.IsEnabled = false;
             }
 
             customerSalesContext.Value = null;
@@ -126,12 +117,26 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
+            if (controlDeparmentSelector.Region == null)
+            {
+                Log.Error("Район не выбран.");
+                return;
+            }
+
+            if (controlDeparmentSelector.SelectedDepartment == null)
+            {
+                Log.Error("Отделение не выбрано.");
+                return;
+            }
+
             using (var waiter = new OperationWaiter())
             {
                 customerSalesContext.Value =
                     !Properties.Settings.Default.IsCustomerOfflineMode
-                        ? (BaseCustomerSalesContext)new OnlineCustomerSalesContext(targetCustomerId, currentRegion, cbDepartmentSelector.SelectedValue.ToString())
-                        : (BaseCustomerSalesContext)new OfflineCustomerSalesContext(targetCustomerId, Properties.Settings.Default.CustomerInputDbfPath);
+                        ? (BaseCustomerSalesContext)new OnlineCustomerSalesContext(targetCustomerId,
+                            controlDeparmentSelector.Region, controlDeparmentSelector.SelectedDepartment.Code ?? string.Empty)
+                        : (BaseCustomerSalesContext)new OfflineCustomerSalesContext(targetCustomerId,
+                            Properties.Settings.Default.CustomerInputDbfPath);
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)

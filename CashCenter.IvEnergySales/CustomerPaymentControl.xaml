@@ -23,7 +23,7 @@
                     <Label x:Name="lblRegionName" FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
                     <Label Content="Код отделения" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <ComboBox x:Name="cbDepartmentSelector" Grid.Column="1" Grid.Row="1" IsReadOnly="True" DisplayMemberPath="DepartmentFullName" SelectedValuePath="DepartmentCode" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <local:DepartmentSelectorControl x:Name="controlDeparmentSelector" Grid.Column="1" Grid.Row="1" />
                 </Grid>
                 <Grid x:Name="gridOfflineDataSrcView">
                     <Grid.RowDefinitions>
