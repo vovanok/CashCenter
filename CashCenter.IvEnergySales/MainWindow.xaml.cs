@@ -1,9 +1,7 @@
 using System.Windows;
 using CashCenter.IvEnergySales.Logging;
 using CashCenter.IvEnergySales.Check;
-using System;
 using CashCenter.Common;
-using CashCenter.Dal;
 
 namespace CashCenter.IvEnergySales
 {
@@ -20,6 +18,7 @@ namespace CashCenter.IvEnergySales
             try
             {
                 checkPrinter = new CheckPrinter();
+                customerControl.CheckPrinter = checkPrinter;
             }
             catch
             {
@@ -51,7 +50,7 @@ namespace CashCenter.IvEnergySales
         private void miDataMigration_Click(object sender, RoutedEventArgs e)
         {
             var dataMigrationDialog = new DataMigrationDialog();
-            dataMigrationDialog.Show();
+            dataMigrationDialog.ShowDialog();
         }
 
         #endregion
