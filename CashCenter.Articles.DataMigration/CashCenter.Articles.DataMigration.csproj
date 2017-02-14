@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{327CF52C-FE76-44E0-9940-E03C9AEAA76A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CashCenter.Articles.DataMigration</RootNamespace>
+    <AssemblyName>CashCenter.Articles.DataMigration</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArticlesImporter.cs" />
+    <Compile Include="ImportResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
+      <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
+      <Name>CashCenter.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Dal\CashCenter.Dal.csproj">
+      <Project>{cad4a97e-4f23-41d9-bc76-0f7633c0e1f6}</Project>
+      <Name>CashCenter.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
+      <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
+      <Name>CashCenter.DbfRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.ZeusDb\CashCenter.ZeusDb.csproj">
+      <Project>{42193820-cd62-41d5-af50-cb7be873ddfd}</Project>
+      <Name>CashCenter.ZeusDb</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

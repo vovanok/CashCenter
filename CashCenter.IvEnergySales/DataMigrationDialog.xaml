@@ -7,17 +7,32 @@
         mc:Ignorable="d"
         Title="DataMigrationDialog" Width="500" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <StackPanel Margin="5,5,5,5">
-        <GroupBox Header="Импорт данных о товарах">
-            <StackPanel Margin="5,0,5,0">
+        <GroupBox Header="Импорт данных о товарах из DBF">
+            <StackPanel>
                 <Label Content="Путь к DBF файлу для импорта" />
-                <local:FileSelectorControl FilesFilter="*.DBF|*.DBF" />
-                <Button x:Name="btmImportArticles" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" Click="btmImportArticles_Click" HorizontalAlignment="Right"/>
+                <local:FileSelectorControl x:Name="fscDbfFileSelector" FilesFilter="*.DBF|*.DBF" />
+                <Grid Margin="0,5,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    
+                    <Label Content="Тип стоимости товара" Grid.Column="0" Grid.Row="0" />
+                    <ComboBox x:Name="cbArticlePriceType" Grid.Column="1" Grid.Row="0" DisplayMemberPath="DisplayInfo" SelectedValuePath="Item" />
+                </Grid>
+                <Button x:Name="btnImportArticlesFromDbf" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Right" Click="On_btnImportArticlesFromDbf_Click" />
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Экспорт данных о покупках">
-            
+        <GroupBox Header="Импорт данных о товарах из удаленной БД">
+            <StackPanel>
+                <Label Content="Отделение" />
+                <local:DepartmentSelectorControl x:Name="controlDepartamentSelector" />
+                <Button x:Name="btnImportArticlesFromDb" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Right" Click="On_btnImportArticlesFromDb_Click"/>
+            </StackPanel>
         </GroupBox>
         <Button x:Name="btnClose" Content="Закрыть" Width="100" Height="30" HorizontalAlignment="Right" Margin="0,5,5,0" Click="On_btnClose_Click"/>
-        
     </StackPanel>
 </Window>

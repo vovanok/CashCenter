@@ -10,11 +10,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Name" Type="varchar(max)" Nullable="false" />
-          <Property Name="Count" Type="int" Nullable="false" />
-          <Property Name="Measure" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Barcode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="Measure" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Barcode" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="ArticlePrice">
           <Key>
@@ -31,8 +31,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Name" Type="varchar(max)" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsDefault" Type="bit" Nullable="false" />
           <Property Name="IsWholesale" Type="bit" Nullable="false" />
         </EntityType>
@@ -42,7 +42,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ArticlePriceId" Type="int" Nullable="false" />
-          <Property Name="Count" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_ArticlePrice_To_Article">
@@ -109,12 +109,12 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Count" Type="Int32" Nullable="false" />
-          <Property Name="Measure" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Barcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="ArticlePrice" Relationship="Self.FK_ArticlePrice_To_Article" FromRole="Article" ToRole="ArticlePrice" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="Measure" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Barcode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ArticlePrices" Relationship="Self.FK_ArticlePrice_To_Article" FromRole="Article" ToRole="ArticlePrice" />
         </EntityType>
         <EntityType Name="ArticlePrice">
           <Key>
@@ -127,18 +127,18 @@
           <Property Name="Value" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
           <NavigationProperty Name="Article" Relationship="Self.FK_ArticlePrice_To_Article" FromRole="ArticlePrice" ToRole="Article" />
           <NavigationProperty Name="ArticlePriceType" Relationship="Self.FK_ArticlePrice_To_ArticlePriceType" FromRole="ArticlePrice" ToRole="ArticlePriceType" />
-          <NavigationProperty Name="ArticleSale" Relationship="Self.FK_ArticleSale_To_ArticlePrice" FromRole="ArticlePrice" ToRole="ArticleSale" />
+          <NavigationProperty Name="ArticleSales" Relationship="Self.FK_ArticleSale_To_ArticlePrice" FromRole="ArticlePrice" ToRole="ArticleSale" />
         </EntityType>
         <EntityType Name="ArticlePriceType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IsDefault" Type="Boolean" Nullable="false" />
           <Property Name="IsWholesale" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="ArticlePrice" Relationship="Self.FK_ArticlePrice_To_ArticlePriceType" FromRole="ArticlePriceType" ToRole="ArticlePrice" />
+          <NavigationProperty Name="ArticlePrices" Relationship="Self.FK_ArticlePrice_To_ArticlePriceType" FromRole="ArticlePriceType" ToRole="ArticlePrice" />
         </EntityType>
         <EntityType Name="ArticleSale">
           <Key>
@@ -146,7 +146,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ArticlePriceId" Type="Int32" Nullable="false" />
-          <Property Name="Count" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="ArticlePrice" Relationship="Self.FK_ArticleSale_To_ArticlePrice" FromRole="ArticleSale" ToRole="ArticlePrice" />
         </EntityType>
@@ -186,22 +186,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="CashCenterEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Article" EntityType="Self.Article" />
-          <EntitySet Name="ArticlePrice" EntityType="Self.ArticlePrice" />
-          <EntitySet Name="ArticlePriceType" EntityType="Self.ArticlePriceType" />
-          <EntitySet Name="ArticleSale" EntityType="Self.ArticleSale" />
+        <EntityContainer Name="CashCenterContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Articles" EntityType="Self.Article" />
+          <EntitySet Name="ArticlePrices" EntityType="Self.ArticlePrice" />
+          <EntitySet Name="ArticlePriceTypes" EntityType="Self.ArticlePriceType" />
+          <EntitySet Name="ArticleSales" EntityType="Self.ArticleSale" />
           <AssociationSet Name="FK_ArticlePrice_To_Article" Association="Self.FK_ArticlePrice_To_Article">
-            <End Role="Article" EntitySet="Article" />
-            <End Role="ArticlePrice" EntitySet="ArticlePrice" />
+            <End Role="Article" EntitySet="Articles" />
+            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
           </AssociationSet>
           <AssociationSet Name="FK_ArticlePrice_To_ArticlePriceType" Association="Self.FK_ArticlePrice_To_ArticlePriceType">
-            <End Role="ArticlePriceType" EntitySet="ArticlePriceType" />
-            <End Role="ArticlePrice" EntitySet="ArticlePrice" />
+            <End Role="ArticlePriceType" EntitySet="ArticlePriceTypes" />
+            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
           </AssociationSet>
           <AssociationSet Name="FK_ArticleSale_To_ArticlePrice" Association="Self.FK_ArticleSale_To_ArticlePrice">
-            <End Role="ArticlePrice" EntitySet="ArticlePrice" />
-            <End Role="ArticleSale" EntitySet="ArticleSale" />
+            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
+            <End Role="ArticleSale" EntitySet="ArticleSales" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -209,20 +209,20 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CashCenterModelStoreContainer" CdmEntityContainer="CashCenterEntities">
-          <EntitySetMapping Name="Article">
+        <EntityContainerMapping StorageEntityContainer="CashCenterModelStoreContainer" CdmEntityContainer="CashCenterContext">
+          <EntitySetMapping Name="Articles">
             <EntityTypeMapping TypeName="CashCenterModel.Article">
               <MappingFragment StoreEntitySet="Article">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Measure" ColumnName="Measure" />
                 <ScalarProperty Name="Barcode" ColumnName="Barcode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ArticlePrice">
+          <EntitySetMapping Name="ArticlePrices">
             <EntityTypeMapping TypeName="CashCenterModel.ArticlePrice">
               <MappingFragment StoreEntitySet="ArticlePrice">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -233,7 +233,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ArticlePriceType">
+          <EntitySetMapping Name="ArticlePriceTypes">
             <EntityTypeMapping TypeName="CashCenterModel.ArticlePriceType">
               <MappingFragment StoreEntitySet="ArticlePriceType">
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -244,12 +244,12 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ArticleSale">
+          <EntitySetMapping Name="ArticleSales">
             <EntityTypeMapping TypeName="CashCenterModel.ArticleSale">
               <MappingFragment StoreEntitySet="ArticleSale">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ArticlePriceId" ColumnName="ArticlePriceId" />
-                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -268,7 +268,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

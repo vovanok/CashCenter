@@ -16,7 +16,7 @@ namespace CashCenter.Dal
     {
         public int Id { get; set; }
         public int ArticlePriceId { get; set; }
-        public int Count { get; set; }
+        public double Quantity { get; set; }
         public System.DateTime Date { get; set; }
     
         public virtual ArticlePrice ArticlePrice { get; set; }

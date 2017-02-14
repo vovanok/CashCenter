@@ -53,6 +53,9 @@
     <Compile Include="Entities\PayJournal.cs" />
     <Compile Include="Entities\PaymentKind.cs" />
     <Compile Include="Entities\PaymentReason.cs" />
+    <Compile Include="Entities\Warehouse.cs" />
+    <Compile Include="Entities\WarehouseCategory.cs" />
+    <Compile Include="Entities\WarehousePrice.cs" />
     <Compile Include="ZeusDbController.cs" />
     <Compile Include="ZeusDbController.Sql.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

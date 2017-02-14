@@ -17,7 +17,7 @@ namespace CashCenter.Dal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ArticlePriceType()
         {
-            this.ArticlePrice = new HashSet<ArticlePrice>();
+            this.ArticlePrices = new HashSet<ArticlePrice>();
         }
     
         public int Id { get; set; }
@@ -27,6 +27,6 @@ namespace CashCenter.Dal
         public bool IsWholesale { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ArticlePrice> ArticlePrice { get; set; }
+        public virtual ICollection<ArticlePrice> ArticlePrices { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CashCenter.Common;
 using CashCenter.Common.DataEntities;
-using CashCenter.Common.DbQualification;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.Check;
 using System;
@@ -183,7 +182,7 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                var customerPayment = new Common.DataEntities.CustomerPayment(customerSalesContext.Value.Customer,
+                var customerPayment = new CustomerPayment(customerSalesContext.Value.Customer,
                     dayValue, nightValue, paymentCost, 19, reasonId, DateTime.Now); // TODO: Make combobox for paymentKind
 
                 if (!customerSalesContext.Value.Pay(customerPayment))

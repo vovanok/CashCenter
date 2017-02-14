@@ -77,22 +77,6 @@
     <ApplicationIcon>Content\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.Firebird, Version=5.7.0.0, Culture=neutral, PublicKeyToken=42d22d092898e5f8, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.Firebird.5.7.0\lib\net40-client\EntityFramework.Firebird.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.7.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.5.7.0\lib\net40-client\FirebirdSql.Data.FirebirdClient.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -130,6 +114,9 @@
     <Compile Include="DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DepartmentSelectorControl.xaml.cs">
+      <DependentUpon>DepartmentSelectorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FileSelectorControl.xaml.cs">
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
@@ -157,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DataMigrationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DepartmentSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,9 +190,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Data\ZEUS.FDB" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <AppDesigner Include="Properties\" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -237,6 +225,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CashCenter.Articles.DataMigration\CashCenter.Articles.DataMigration.csproj">
+      <Project>{327cf52c-fe76-44e0-9940-e03c9aeaa76a}</Project>
+      <Name>CashCenter.Articles.DataMigration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>

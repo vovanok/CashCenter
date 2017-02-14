@@ -13,10 +13,10 @@ namespace CashCenter.Dal
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CashCenterEntities : DbContext
+    public partial class CashCenterContext : DbContext
     {
-        public CashCenterEntities()
-            : base("name=CashCenterEntities")
+        public CashCenterContext()
+            : base("name=CashCenterContext")
         {
         }
     
@@ -25,9 +25,9 @@ namespace CashCenter.Dal
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Article> Article { get; set; }
-        public virtual DbSet<ArticlePrice> ArticlePrice { get; set; }
-        public virtual DbSet<ArticlePriceType> ArticlePriceType { get; set; }
-        public virtual DbSet<ArticleSale> ArticleSale { get; set; }
+        public virtual DbSet<Article> Articles { get; set; }
+        public virtual DbSet<ArticlePrice> ArticlePrices { get; set; }
+        public virtual DbSet<ArticlePriceType> ArticlePriceTypes { get; set; }
+        public virtual DbSet<ArticleSale> ArticleSales { get; set; }
     }
 }

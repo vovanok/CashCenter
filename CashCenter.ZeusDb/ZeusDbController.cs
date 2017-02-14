@@ -422,6 +422,118 @@ namespace CashCenter.ZeusDb
             }
         }
 
+        public List<Warehouse> GetWarehouses()
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.GET_WAREHOUSES);
+                dataReader = command.ExecuteReader();
+
+                var result = new List<Warehouse>();
+                while (dataReader.Read())
+                {
+                    int id = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_ID);
+                    string code = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_CODE);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_NAME);
+                    float quantity = dataReader.GetFieldFromReader<float>(Sql.WAREHOUSE_QUANTITY);
+                    string unitName = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_UNITNAME);
+                    string barcode = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_BARCODE);
+
+                    result.Add(new Warehouse(id, code, name, quantity, unitName, barcode));
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException("Ошибка получения товаров.", e);
+                return new List<Warehouse>();
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
+        public List<WarehouseCategory> GetWarehouseCategories()
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.GET_WAREHOUSE_CATEGORIES);
+                dataReader = command.ExecuteReader();
+
+                var result = new List<WarehouseCategory>();
+                while (dataReader.Read())
+                {
+                    int id = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_CATEGORY_ID);
+                    string code = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_CATEGORY_CODE);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_CATEGORY_NAME);
+                    bool isDefault = dataReader.GetFieldFromReader<bool>(Sql.WAREHOUSE_CATEGORY_IS_DEFAULT);
+                    bool isWholesale = dataReader.GetFieldFromReader<bool>(Sql.WAREHOUSE_CATEGORY_IS_WHOLESALE);
+
+                    result.Add(new WarehouseCategory(id, code, name, isDefault, isWholesale));
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException("Ошибка получения типов стоимостей товаров.", e);
+                return new List<WarehouseCategory>();
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
+        public List<WarehousePrice> GetWarehousePrices()
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.GET_WAREHOUSE_PRICES);
+                dataReader = command.ExecuteReader();
+
+                var result = new List<WarehousePrice>();
+                while (dataReader.Read())
+                {
+                    int id = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_PRICE_ID);
+                    int warehouseId = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_PRICE_WAREHOUSE_ID);
+                    int warehouseCategoryId = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_PRICE_WAREHOUSE_CATEGORY_ID);
+                    DateTime entryDate = dataReader.GetFieldFromReader<DateTime>(Sql.WAREHOUSE_PRICE_ENTRY_DATE);
+                    decimal priceValue = dataReader.GetFieldFromReader<decimal>(Sql.WAREHOUSE_PRICE_PRICE_VALUE);
+
+                    result.Add(new WarehousePrice(id, warehouseId, warehouseCategoryId, entryDate, priceValue));
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException("Ошибка получения стоимостей товаров.", e);
+                return new List<WarehousePrice>();
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
         private DbCommand GetDbCommandByQuery(string query)
         {
             if (dbConnection.State != ConnectionState.Open)

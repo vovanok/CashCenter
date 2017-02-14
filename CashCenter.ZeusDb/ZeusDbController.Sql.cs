@@ -52,6 +52,25 @@
             public const string PARAM_PENALTY_VALUE = "@PENALTY_VALUE";
             public const string PARAM_METERS_ID = "@METERS_ID";
 
+            public const string WAREHOUSE_ID = "ID";
+            public const string WAREHOUSE_CODE = "CODE";
+            public const string WAREHOUSE_NAME = "NAME";
+            public const string WAREHOUSE_QUANTITY = "QUANTITY";
+            public const string WAREHOUSE_UNITNAME = "UNIT_NAME";
+            public const string WAREHOUSE_BARCODE = "BARCODE";
+
+            public const string WAREHOUSE_CATEGORY_ID = "ID";
+            public const string WAREHOUSE_CATEGORY_CODE = "CODE";
+            public const string WAREHOUSE_CATEGORY_NAME = "NAME";
+            public const string WAREHOUSE_CATEGORY_IS_DEFAULT = "IS_DEFAULT";
+            public const string WAREHOUSE_CATEGORY_IS_WHOLESALE = "IS_WHOLESALE";
+
+            public const string WAREHOUSE_PRICE_ID = "ID";
+            public const string WAREHOUSE_PRICE_WAREHOUSE_ID = "WAREHOUSE_ID";
+            public const string WAREHOUSE_PRICE_WAREHOUSE_CATEGORY_ID = "WAREHOUSE_CATEGORY_ID";
+            public const string WAREHOUSE_PRICE_ENTRY_DATE = "ENTRY_DATE";
+            public const string WAREHOUSE_PRICE_PRICE_VALUE = "PRICE_VALUE";
+
             public static readonly string GET_CUSTOMER =
                 $@"
             select first 1
@@ -188,6 +207,21 @@
                 $@"
             select first 1 {END_BALANCE}, {PENALTY_BALANCE}
             from r090$print({PARAM_CUSTOMER_ID}, {PARAM_DAY_ENCODING})";
+
+            public static readonly string GET_WAREHOUSES =
+                $@"
+            select {WAREHOUSE_ID}, {WAREHOUSE_CODE}, {WAREHOUSE_NAME}, {WAREHOUSE_QUANTITY}, {WAREHOUSE_UNITNAME}, {WAREHOUSE_BARCODE}
+            from warehouse";
+
+            public static readonly string GET_WAREHOUSE_CATEGORIES =
+                $@"
+            select {WAREHOUSE_CATEGORY_ID}, {WAREHOUSE_CATEGORY_CODE}, {WAREHOUSE_CATEGORY_NAME}, {WAREHOUSE_CATEGORY_IS_DEFAULT}, {WAREHOUSE_CATEGORY_IS_WHOLESALE}
+            from warehouse_category";
+
+            public static readonly string GET_WAREHOUSE_PRICES =
+                $@"
+            select {WAREHOUSE_PRICE_ID}, {WAREHOUSE_PRICE_WAREHOUSE_ID}, {WAREHOUSE_PRICE_WAREHOUSE_CATEGORY_ID}, {WAREHOUSE_PRICE_ENTRY_DATE}, {WAREHOUSE_PRICE_PRICE_VALUE}
+            from warehouse_price";
         }
     }
 }
