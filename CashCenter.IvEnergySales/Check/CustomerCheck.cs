@@ -1,6 +1,6 @@
 namespace CashCenter.IvEnergySales.Check
 {
-	public class MainCheck : BaseCheck
+	public class CustomerCheck : BaseCheck
 	{
 		public string SalesDepartmentInfo { get; set; }
         public string DepartmentCode { get; set; }
@@ -11,7 +11,7 @@ namespace CashCenter.IvEnergySales.Check
 
         public decimal Cost { get; set; }
 
-		public MainCheck(CheckPrinter checkPrinter) : base(checkPrinter)
+		public CustomerCheck(CheckPrinter checkPrinter) : base(checkPrinter)
 		{
 		}
 

@@ -316,7 +316,7 @@ namespace CashCenter.IvEnergySales
             bool isPrintSuccess = false;
             using (var waiter = new OperationWaiter())
             {
-                var mainCheck = new MainCheck(CheckPrinter)
+                var mainCheck = new CustomerCheck(CheckPrinter)
                 {
                     SalesDepartmentInfo = Config.SalesDepartmentInfo,
                     DepartmentCode = customerSalesContext.Value.InfoForCheck.DbCode,
