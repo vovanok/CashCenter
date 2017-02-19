@@ -11,7 +11,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     class OnlineCustomerSalesContext : BaseCustomerSalesContext
     {
-        private const string PAY_JOURNAL_NAME = "Пачка квитанций 50 ЭСК";
+        private const string PAY_JOURNAL_NAME = "Пачка квитанций от РКЦ Ивановской области";
+        private const int PAYMENT_KIND_ID = 2000;
+        private const string PAYMENT_KIND_NAME = "РКЦ Ивановской области";
+        private const int PAYMENT_KIND_TYPE_ID = 2;
 
         private ZeusDbController db;
         private RegionDef regionDef;
@@ -73,7 +76,13 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
                 }
 
-                var payJournal = AddOrUpdatePayJournal(payment.KindId, payment.CreateDate, payment.Cost);
+                var existingPaymentKind = db.GetPaymentKind(PAYMENT_KIND_ID);
+                if (existingPaymentKind == null)
+                {
+                    db.AddPaymentKind(new PaymentKind(PAYMENT_KIND_ID, PAYMENT_KIND_NAME, PAYMENT_KIND_TYPE_ID));
+                }
+
+                var payJournal = AddOrUpdatePayJournal(PAYMENT_KIND_ID, payment.CreateDate, payment.Cost);
 
                 var customerCounterId = db.GetCustomerCounterId(Customer.Id);
 

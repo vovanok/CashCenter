@@ -6,10 +6,13 @@
 
         public string Name { get; private set; }
 
-        public PaymentKind(int id, string name)
+        public int TypeId { get; private set; }
+
+        public PaymentKind(int id, string name, int typeId)
         {
             Id = id;
             Name = name;
+            TypeId = typeId;
         }
     }
 }

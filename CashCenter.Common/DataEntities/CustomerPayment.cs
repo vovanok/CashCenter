@@ -9,7 +9,6 @@ namespace CashCenter.Common.DataEntities
         public int NewDayValue { get; private set; }
         public int NewNightValue { get; private set; }
         public decimal Cost { get; private set; }
-        public int KindId { get; private set; }
         public int ReasonId { get; private set; }
         public DateTime CreateDate { get; private set; }
         public string Description { get; private set; }
@@ -18,13 +17,12 @@ namespace CashCenter.Common.DataEntities
         public string ValidationErrorMessage { get; private set; }
 
         public CustomerPayment(Customer customer, int newDayValue, int newNightValue,
-            decimal cost, int kindId, int reasonId, DateTime createDate)
+            decimal cost, int reasonId, DateTime createDate)
         {
             Customer = customer;
             NewDayValue = newDayValue;
             NewNightValue = newNightValue;
             Cost = cost;
-            KindId = kindId;
             ReasonId = reasonId;
             CreateDate = createDate;
 
@@ -36,14 +34,6 @@ namespace CashCenter.Common.DataEntities
         {
             if (costValue <= 0)
                 return $"Сумма платежа должна быть положительна ({costValue}).";
-
-            return null;
-        }
-
-        private string ValidatePaymentKindId(int paymentKindId)
-        {
-            if (paymentKindId < 0)
-                return $"Вид платежа некорректен (id = {paymentKindId}).";
 
             return null;
         }
@@ -92,7 +82,6 @@ namespace CashCenter.Common.DataEntities
             var validators = new Func<string>[]
             {
                 () => ValidateCost(Cost),
-                () => ValidatePaymentKindId(KindId),
                 () => ValidateDayCounterValue(NewDayValue),
                 () => ValidateNightCounterValue(NewNightValue),
                 () => ValidateReasonId(ReasonId)

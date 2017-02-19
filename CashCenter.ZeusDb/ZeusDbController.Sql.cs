@@ -27,6 +27,7 @@
 
             public const string PAYMENT_KIND_ID = "PAYMENT_KIND_ID";
             public const string PAYMENT_KIND_NAME = "PAYMENT_KIND_NAME";
+            public const string PAYMENT_KIND_TYPE_ID = "PAYMENT_KIND_TYPE_ID";
 
             public const string END_BALANCE = "END_BALANCE";
             public const string PENALTY_BALANCE = "PENALTY_BALANCE";
@@ -36,6 +37,7 @@
             public const string PARAM_END_DATE = "@END_DATE";
             public const string PARAM_PAYMENT_KIND_ID = "@PAYMENT_KIND_ID";
             public const string PARAM_PAYMENT_KIND_NAME = "@PAYMENT_KIND_NAME";
+            public const string PARAM_PAYMENT_TYPE_ID = "@PAYMENT_TYPE_ID";
             public const string PARAM_CREATE_DATE = "@CREATE_DATE";
             public const string PARAM_PAYMENT_COST = "@PAYMENT_COST";
             public const string PARAM_PAY_JOURNAL_NAME = "@PAY_JOURNAL_NAME";
@@ -109,14 +111,14 @@
 
             public static readonly string GET_PAYMENT_KIND =
                 $@"
-			select first 1 id {PAYMENT_KIND_ID}, name {PAYMENT_KIND_NAME}
+			select first 1 id {PAYMENT_KIND_ID}, name {PAYMENT_KIND_NAME}, paymenttypeid {PAYMENT_KIND_TYPE_ID}
 			from paymentkind
-			where paymentkind.name = {PARAM_PAYMENT_KIND_NAME}";
+			where paymentkind.id = {PARAM_PAYMENT_TYPE_ID}";
 
             public static readonly string INSERT_PAYMENT_KIND =
                 $@"
 			insert into paymentkind
-			values(null, {PARAM_PAYMENT_KIND_NAME}, 1)
+			values({PARAM_PAYMENT_KIND_ID}, {PARAM_PAYMENT_KIND_NAME}, {PARAM_PAYMENT_TYPE_ID})
 			returning id";
 
             public static readonly string GET_PAYJOURNAL =

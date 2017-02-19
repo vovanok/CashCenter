@@ -18,7 +18,10 @@ namespace CashCenter.Common
         private const string CHECK_PRINTER_MAX_LINE_LENGTH = "CheckPrinterMaxLineLength";
         private const string CHECK_PRINTER_COUNT_EMPTY_LINES_AFTER_CHECK = "CheckPrinterCountEmptyLinesAfterCheck";
 
+        public const string SALES_MAIN_INFO = "SalesMainInfo";
         public const string SALES_DEPARTAMENT_INFO = "SalesDepartmentInfo";
+
+        public const string NDS_PERCENT = "NdsPercent";
 
         public static string DbConnectionStringFormat => GetAppSettingByKey(DB_CONNECTION_STRING_FORMAT, string.Empty);
         public static string DbfConnectionStringFormat => GetAppSettingByKey(DBF_CONNECTION_STRING_FORMAT, string.Empty);
@@ -34,7 +37,10 @@ namespace CashCenter.Common
 		public static int CheckPrinterMaxLineLength => GetAppSettingByKeyAsInt(CHECK_PRINTER_MAX_LINE_LENGTH, 10);
 		public static int CheckPrinterCountEmptyLinesAfterCheck => GetAppSettingByKeyAsInt(CHECK_PRINTER_COUNT_EMPTY_LINES_AFTER_CHECK, 0);
 
+        public static string SalesMainInfo => GetAppSettingByKey(SALES_MAIN_INFO, string.Empty);
         public static string SalesDepartmentInfo => GetAppSettingByKey(SALES_DEPARTAMENT_INFO, string.Empty);
+
+        public static int NdsPercent => GetAppSettingByKeyAsInt(NDS_PERCENT, 0);
 
         private static string GetAppSettingByKey(string key, string defaultValue)
 		{

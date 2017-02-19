@@ -547,5 +547,70 @@ namespace CashCenter.ZeusDb
             command.CommandText = query;
             return command;
         }
+
+        public PaymentKind AddPaymentKind(PaymentKind kind)
+        {
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.INSERT_PAYMENT_KIND);
+                command.AddParameter(Sql.PARAM_PAYMENT_KIND_ID, kind.Id);
+                command.AddParameter(Sql.PARAM_PAYMENT_KIND_NAME, kind.Name);
+                command.AddParameter(Sql.PARAM_PAYMENT_TYPE_ID, kind.TypeId);
+
+                int id = (int)command.ExecuteScalar();
+
+                command.Transaction.Commit();
+                command.Dispose();
+
+                return new PaymentKind(id, kind.Name, kind.TypeId);
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка добавления вида платежа.", e);
+                return null;
+            }
+            finally
+            {
+                dbConnection?.Close();
+            }
+        }
+
+        public PaymentKind GetPaymentKind(int paymentKindId)
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.GET_PAYMENT_KIND);
+                command.AddParameter(Sql.PARAM_PAYMENT_TYPE_ID, paymentKindId);
+
+                dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
+
+                PaymentKind paymentKind = null;
+                if (dataReader.Read())
+                {
+                    string name = dataReader.GetFieldFromReader<string>(Sql.PAYMENT_KIND_NAME) ?? string.Empty;
+                    int typeId = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_TYPE_ID);
+
+                    paymentKind = new PaymentKind(paymentKindId, name, typeId);
+                }
+
+                return paymentKind;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка получения вида платежа с номером {paymentKindId}.", e);
+                return null;
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
     }
 }

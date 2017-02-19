@@ -1,3 +1,5 @@
+using CashCenter.Common;
+
 namespace CashCenter.IvEnergySales.Check
 {
 	public class CustomerCheck : BaseCheck
@@ -19,7 +21,14 @@ namespace CashCenter.IvEnergySales.Check
 		{
             printer.OpenCheck();
 
+            printer.PrintLine(StringUtils.StringInCenter("КАССОВЫЙ ЧЕК", Config.CheckPrinterMaxLineLength));
+            printer.PrintLine(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
+            printer.PrintText(Config.SalesMainInfo);
+            printer.PrintLine(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
+
             printer.PrintText(SalesDepartmentInfo);
+            printer.PrintLine(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
+
             printer.PrintText($"Код отделения: {DepartmentCode}");
             printer.PrintText($"Лицевой счет: {CustomerId}");
             printer.PrintText($"ФИО: {CustomerName}");
@@ -32,6 +41,17 @@ namespace CashCenter.IvEnergySales.Check
             printer.Quantity = 1;
             printer.Price = Cost;
             printer.Department = 1;
+
+            printer.Tax1 = Config.NdsPercent == 18
+                ? 1
+                : Config.NdsPercent == 10
+                    ? 2
+                    : Config.NdsPercent == 20
+                        ? 3
+                        : 0;
+            printer.Tax2 = 0;
+            printer.Tax3 = 0;
+            printer.Tax4 = 0;
 
             printer.Sale();
 

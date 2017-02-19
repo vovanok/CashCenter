@@ -165,7 +165,7 @@
     </Compile>
     <Compile Include="Check\BaseCheck.cs" />
     <Compile Include="Check\CheckPrinter.cs" />
-    <Compile Include="Check\MainCheck.cs" />
+    <Compile Include="Check\CustomerCheck.cs" />
     <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -214,17 +214,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="DrvFRLib">
-      <Guid>{332C8050-469C-4B4D-A192-68CD3CB252BA}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CashCenter.Articles.DataMigration\CashCenter.Articles.DataMigration.csproj">
       <Project>{327cf52c-fe76-44e0-9940-e03c9aeaa76a}</Project>
       <Name>CashCenter.Articles.DataMigration</Name>
@@ -263,6 +252,17 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="DrvFRLib">
+      <Guid>{332C8050-469C-4B4D-A192-68CD3CB252BA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -183,7 +183,7 @@ namespace CashCenter.IvEnergySales
             using (var waiter = new OperationWaiter())
             {
                 var customerPayment = new CustomerPayment(customerSalesContext.Value.Customer,
-                    dayValue, nightValue, paymentCost, 19, reasonId, DateTime.Now); // TODO: Make combobox for paymentKind
+                    dayValue, nightValue, paymentCost, reasonId, DateTime.Now);
 
                 if (!customerSalesContext.Value.Pay(customerPayment))
                     return;

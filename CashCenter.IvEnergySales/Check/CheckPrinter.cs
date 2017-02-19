@@ -120,6 +120,46 @@ namespace CashCenter.IvEnergySales.Check
             }
         }
 
+        public int Tax1
+        {
+            get { return driver != null ? driver.Tax1 : 0; }
+            set
+            {
+                if (driver != null)
+                    driver.Tax1 = value;
+            }
+        }
+
+        public int Tax2
+        {
+            get { return driver != null ? driver.Tax2 : 0; }
+            set
+            {
+                if (driver != null)
+                    driver.Tax2 = value;
+            }
+        }
+
+        public int Tax3
+        {
+            get { return driver != null ? driver.Tax3 : 0; }
+            set
+            {
+                if (driver != null)
+                    driver.Tax3 = value;
+            }
+        }
+
+        public int Tax4
+        {
+            get { return driver != null ? driver.Tax4 : 0; }
+            set
+            {
+                if (driver != null)
+                    driver.Tax4 = value;
+            }
+        }
+
         public void Connect()
         {
             driver?.Connect();
@@ -174,9 +214,13 @@ namespace CashCenter.IvEnergySales.Check
 
         public void PrintText(string text)
         {
-            var textLines = StringUtils.SplitStringByLines(text, Config.CheckPrinterMaxLineLength);
-            foreach (string line in textLines)
-                PrintLine(line);
+            var lines = text.Split('|');
+            foreach(var line in lines)
+            {
+                var textLines = StringUtils.SplitStringByLines(line, Config.CheckPrinterMaxLineLength);
+                foreach (string textLine in textLines)
+                    PrintLine(textLine);
+            }
         }
 
 		public void PrintLine(string line)
