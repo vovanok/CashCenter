@@ -114,7 +114,7 @@
                     <Label x:Name="lblDayDeltaCounterValue" Content="0" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     <Label x:Name="lblNightDeltaCounterValue" Content="0" Grid.Column="3" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-                    <Label x:Name="lblIsNormative" Visibility="Hidden" Content="По нормативу" Grid.ColumnSpan="4" Grid.RowSpan="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30"/>
+                    <Label x:Name="lblIsNormative" Content="По нормативу" Grid.ColumnSpan="4" Grid.RowSpan="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Foreground="DarkRed"/>
                 </Grid>
 
                 <Grid>

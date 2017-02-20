@@ -42,9 +42,15 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     // Получение задолженности плательщика
                     var zeusDebt = db.GetDebt(customerId, now.Year * 12 + now.Month);
 
-                    Customer = new Common.DataEntities.Customer(zeusCustomer.Id, departamentCode ?? string.Empty, zeusCustomer.Name,
-                        GetZeusCustomerAddress(zeusCustomer), zeusCustomerCountersValues.EndDayValue,
-                        zeusCustomerCountersValues.EndNightValue, zeusDebt.Balance, zeusDebt.Penalty);
+                    Customer = new Common.DataEntities.Customer(
+                        zeusCustomer.Id,
+                        departamentCode ?? string.Empty,
+                        zeusCustomer.Name,
+                        GetZeusCustomerAddress(zeusCustomer),
+                        zeusCustomerCountersValues != null ? zeusCustomerCountersValues.EndDayValue : 0,
+                        zeusCustomerCountersValues != null ? zeusCustomerCountersValues.EndNightValue : 0,
+                        zeusDebt != null ? zeusDebt.Balance : 0,
+                        zeusDebt != null ? zeusDebt.Penalty : 0);
 
                     PaymentReasons = db.GetPaymentReasons()?
                             .Select(zeusReason => new Common.DataEntities.PaymentReason(zeusReason.Id, zeusReason.Name))?.ToList()
