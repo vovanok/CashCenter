@@ -34,6 +34,9 @@ namespace CashCenter.IvEnergySales.Check
             printer.PrintText($"ФИО: {CustomerName}");
             printer.PrintText($"Основание: {PaymentReason.ToUpper()}");
             printer.PrintText($"Кассир: {CashierName}");
+            printer.PrintText("ПРИХОД");
+            printer.PrintText("НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА");
+            printer.PrintText("ЭЛЕКТРОЭНЕРГИЯ");
 
             printer.PrintLine("");
 
