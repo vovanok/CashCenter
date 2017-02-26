@@ -189,7 +189,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Data\ZEUS.FDB" />
     <AppDesigner Include="Properties\" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -208,10 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Content\icon.ico" />
-    <Content Include="Data\DbCodeMapping.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CashCenter.Articles.DataMigration\CashCenter.Articles.DataMigration.csproj">
