@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CashCenter.Dal;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CashCenter.IvEnergySales
 {
@@ -23,6 +12,45 @@ namespace CashCenter.IvEnergySales
         public ArticlesControl()
         {
             InitializeComponent();
+        }
+
+        private void UpdateArticles()
+        {
+            var filteredArticles = DalController.Instance.GetArticlesByFilter(tbArticleCodeFilter.Text, tbArticleNameFilter.Text, tbArticleBarcodeFilter.Text);
+            var articlesInfo = filteredArticles.Select(article =>
+                new
+                {
+                    Code = article.Code,
+                    Name = article.Name,
+                    Barcode = article.Barcode,
+                    QuantityMeasure = string.Format("{0} {1}", article.Quantity, article.Measure)
+                });
+
+            dgArticles.ItemsSource = articlesInfo;
+        }
+
+        #region Filters handlers
+
+        private void On_tbArticleCodeFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateArticles();
+        }
+
+        private void On_tbArticleNameFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateArticles();
+        }
+
+        private void On_tbArticleBarcodeFilter_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateArticles();
+        }
+
+        #endregion
+
+        private void On_dgArticles_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            e.Cancel = true;
         }
     }
 }

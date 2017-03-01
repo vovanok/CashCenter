@@ -12,23 +12,24 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="16px"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" />
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" />
-            <TextBox Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Center" />
+            <TextBox x:Name="tbArticleCodeFilter" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" TextChanged="On_tbArticleCodeFilter_TextChanged" />
+            <TextBox x:Name="tbArticleNameFilter" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" TextChanged="On_tbArticleNameFilter_TextChanged" />
+            <TextBox x:Name="tbArticleBarcodeFilter" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Center" TextChanged="On_tbArticleBarcodeFilter_TextChanged" />
         </Grid>
         
-        <DataGrid AutoGenerateColumns="False" Height="250">
+        <DataGrid x:Name="dgArticles" AutoGenerateColumns="False" Height="250" Margin="0,0,0,5" RowHeaderWidth="0" CanUserResizeColumns="False" CanUserResizeRows="False" VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" BeginningEdit="On_dgArticles_BeginningEdit">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Код" Width="1*" />
-                <DataGridTextColumn Header="Название" Width="2*" />
-                <DataGridTextColumn Header="Штрихкод" Width="2*" />
-                <DataGridTextColumn Header="В наличии" Width="2*"/>
+                <DataGridTextColumn Header="Код" Width="1*" Binding="{Binding Path = Code}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Название" Width="2*" Binding="{Binding Path = Name}" />
+                <DataGridTextColumn Header="Штрихкод" Width="2*" Binding="{Binding Path = Barcode}"/>
+                <DataGridTextColumn Header="В наличии" Width="2*" Binding="{Binding Path = QuantityMeasure}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -48,7 +49,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Grid.Column="1" Grid.Row="0">
+            <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,10,0">
                 <Label Content="Количество" />
                 <TextBox />
                 <Label Content="Итоговая цена" />

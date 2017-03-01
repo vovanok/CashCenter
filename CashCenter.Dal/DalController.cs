@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CashCenter.Dal
@@ -51,6 +52,14 @@ namespace CashCenter.Dal
             var deletedArticles = context.Articles.RemoveRange(articles);
             context.SaveChanges();
             return deletedArticles;
+        }
+
+        public IEnumerable<Article> GetArticlesByFilter(string codeFilter, string nameFilter, string barcodeFilter)
+        {
+            return GetArticles().Where(article =>
+                (!string.IsNullOrEmpty(codeFilter) && article.Code.IndexOf(codeFilter, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
+                (!string.IsNullOrEmpty(nameFilter) && article.Name.IndexOf(nameFilter, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
+                (!string.IsNullOrEmpty(nameFilter) && article.Barcode.IndexOf(barcodeFilter, StringComparison.CurrentCultureIgnoreCase) >= 0));
         }
 
         #endregion
