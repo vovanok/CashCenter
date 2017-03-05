@@ -54,14 +54,6 @@ namespace CashCenter.Dal
             return deletedArticles;
         }
 
-        public IEnumerable<Article> GetArticlesByFilter(string codeFilter, string nameFilter, string barcodeFilter)
-        {
-            return GetArticles().Where(article =>
-                (!string.IsNullOrEmpty(codeFilter) && article.Code.IndexOf(codeFilter, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
-                (!string.IsNullOrEmpty(nameFilter) && article.Name.IndexOf(nameFilter, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
-                (!string.IsNullOrEmpty(nameFilter) && article.Barcode.IndexOf(barcodeFilter, StringComparison.CurrentCultureIgnoreCase) >= 0));
-        }
-
         #endregion
 
         #region Artile price types
@@ -94,9 +86,9 @@ namespace CashCenter.Dal
 
         #region Article prices
 
-        public List<ArticlePrice> GetArticlePrices()
+        public IEnumerable<ArticlePrice> GetArticlePrices()
         {
-            return context.ArticlePrices.ToList();
+            return context.ArticlePrices;
         }
 
         public ArticlePrice AddArticlePrice(ArticlePrice articlePrice)
@@ -111,6 +103,17 @@ namespace CashCenter.Dal
             var newAriclePrices = context.ArticlePrices.AddRange(articlePrices);
             context.SaveChanges();
             return newAriclePrices;
+        }
+
+        #endregion
+
+        #region Article sales
+
+        public ArticleSale AddArticleSale(ArticleSale artilceSale)
+        {
+            var newArticle = context.ArticleSales.Add(artilceSale);
+            context.SaveChanges();
+            return newArticle;
         }
 
         #endregion

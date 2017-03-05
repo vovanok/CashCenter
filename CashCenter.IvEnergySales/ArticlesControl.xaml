@@ -23,38 +23,44 @@
             <TextBox x:Name="tbArticleNameFilter" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" TextChanged="On_tbArticleNameFilter_TextChanged" />
             <TextBox x:Name="tbArticleBarcodeFilter" Grid.Column="2" Grid.Row="0" VerticalContentAlignment="Center" TextChanged="On_tbArticleBarcodeFilter_TextChanged" />
         </Grid>
-        
-        <DataGrid x:Name="dgArticles" AutoGenerateColumns="False" Height="250" Margin="0,0,0,5" RowHeaderWidth="0" CanUserResizeColumns="False" CanUserResizeRows="False" VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" BeginningEdit="On_dgArticles_BeginningEdit">
+
+        <DataGrid x:Name="dgArticles" AutoGenerateColumns="False" RowHeaderWidth="0" CanUserResizeColumns="False"
+                  CanUserResizeRows="False" Height="250" Margin="0,0,0,5" VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="True" BeginningEdit="On_dgArticles_BeginningEdit" SelectionChanged="On_dgArticles_SelectionChanged"
+                  SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Код" Width="1*" Binding="{Binding Path = Code}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Название" Width="2*" Binding="{Binding Path = Name}" />
-                <DataGridTextColumn Header="Штрихкод" Width="2*" Binding="{Binding Path = Barcode}"/>
+                <DataGridTextColumn Header="Код" Width="1*" Binding="{Binding Path = Article.Code}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Название" Width="2*" Binding="{Binding Path = Article.Name}" />
+                <DataGridTextColumn Header="Штрихкод" Width="2*" Binding="{Binding Path = Article.Barcode}"/>
                 <DataGridTextColumn Header="В наличии" Width="2*" Binding="{Binding Path = QuantityMeasure}"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <DataGrid Grid.Column="0" Grid.Row="0" Height="200">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Тип цены" Width="1*" />
-                    <DataGridTextColumn Header="Значение" Width="1*" />
-                </DataGrid.Columns>
-            </DataGrid>
+            <GroupBox Grid.Column="0" Grid.Row="0" Height="200" Header="Цены">
+                <DataGrid x:Name="dgPricesTypes" AutoGenerateColumns="False" RowHeaderWidth="0" CanUserResizeColumns="False"
+                          CanUserResizeRows="False" SelectionChanged="On_dgPricesTypes_SelectionChanged" SelectionMode="Single" BeginningEdit="On_dgPricesTypes_BeginningEdit" HeadersVisibility="None">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="3*" Binding="{Binding Path = Type.Name}" />
+                        <DataGridTextColumn Width="1*" Binding="{Binding Path = Price.Value}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
 
             <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,0,10,0">
                 <Label Content="Количество" />
-                <TextBox />
+                <TextBox x:Name="tbQuantity" Text="0" GotFocus="On_tbQuantity_GotFocus" PreviewMouseLeftButtonDown="On_tbQuantity_PreviewMouseLeftButtonDown" TextChanged="On_tbQuantity_TextChanged" />
                 <Label Content="Итоговая цена" />
-                <Label Content="0" FontSize="20" FontWeight="Bold" />
-                <Button Content="Оплатить" Height="50" />
+                <Label x:Name="lblPrice" Content="0" FontSize="20" FontWeight="Bold" />
+                <Button x:Name="btnPay" Content="Оплатить" Height="50" Click="On_btnPay_Click" />
             </StackPanel>
         </Grid>
     </StackPanel>
