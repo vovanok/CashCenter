@@ -38,8 +38,7 @@ namespace CashCenter.DbfRegistry
 
             private static readonly string GET_ORGANIZATIONS =
                 $@"select {ORGANIZATION_DEPARTAMENT_CODE}, {ORGANIZATION_ID}, {ORGANIZATION_CONTRACT_NUMBER}, {ORGANIZATION_NAME}, {ORGANIZATION_INN}, {ORGANIZATION_KPP}
-                   from {{0}}
-                   where {ORGANIZATION_CONTRACT_NUMBER} like {{1}} and {ORGANIZATION_NAME} like {{2}} and {ORGANIZATION_KPP} like {{3}}";
+                   from {{0}}";
 
             private static readonly string GET_ARTICLES =
                 $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
@@ -50,9 +49,9 @@ namespace CashCenter.DbfRegistry
                 return string.Format(GET_CUSTOMER, tableName, customerId);
             }
 
-            public static string GetOrganizationsQuery(string tableName, string contractNumberPart, string namePart, string innPart)
+            public static string GetOrganizationsQuery(string tableName)
             {
-                return string.Format(GET_ORGANIZATIONS, tableName, contractNumberPart, namePart, innPart);
+                return string.Format(GET_ORGANIZATIONS, tableName);
             }
 
             public static string GetArticlesQuery(string tableName)
@@ -108,14 +107,14 @@ namespace CashCenter.DbfRegistry
             }
         }
 
-        public List<Organization> GetOrganizations(string contractNumberPart, string namePart, string innPart)
+        public List<Organization> GetOrganizations()
         {
             try
             {
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetOrganizationsQuery(dbfName, contractNumberPart, namePart, innPart);
+                command.CommandText = Sql.GetOrganizationsQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 

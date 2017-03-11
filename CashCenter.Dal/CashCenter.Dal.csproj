@@ -95,6 +95,21 @@
       <DependentUpon>CashCenterModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="DalController.cs" />
+    <Compile Include="Department.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Organization.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrganizationPayment.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentReason.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentType.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

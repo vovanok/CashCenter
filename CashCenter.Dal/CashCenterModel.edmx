@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CashCenterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CashCenterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Article">
           <Key>
             <PropertyRef Name="Id" />
@@ -45,6 +45,56 @@
           <Property Name="Quantity" Type="float" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Inn" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Kpp" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrganizationPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="OrganizationId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="DocumentNumber" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Cost" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="PaymentTypeId" Type="int" Nullable="false" />
+          <Property Name="Code1C" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IncastCode" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PaymentReasonId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentReason">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
         <Association Name="FK_ArticlePrice_To_Article">
           <End Role="Article" Type="Self.Article" Multiplicity="1" />
           <End Role="ArticlePrice" Type="Self.ArticlePrice" Multiplicity="*" />
@@ -81,11 +131,64 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Organization_ToDepartment">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Organization" Type="Self.Organization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Organization">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPayment_ToOrganization">
+          <End Role="Organization" Type="Self.Organization" Multiplicity="1" />
+          <End Role="OrganizationPayment" Type="Self.OrganizationPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrganizationPayment">
+              <PropertyRef Name="OrganizationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPayment_ToPaymentReason">
+          <End Role="PaymentReason" Type="Self.PaymentReason" Multiplicity="1" />
+          <End Role="OrganizationPayment" Type="Self.OrganizationPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentReason">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrganizationPayment">
+              <PropertyRef Name="PaymentReasonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPayment_ToPaymentType">
+          <End Role="PaymentType" Type="Self.PaymentType" Multiplicity="1" />
+          <End Role="OrganizationPayment" Type="Self.OrganizationPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrganizationPayment">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CashCenterModelStoreContainer">
           <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticlePrice" EntityType="Self.ArticlePrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticlePriceType" EntityType="Self.ArticlePriceType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticleSale" EntityType="Self.ArticleSale" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Organization" EntityType="Self.Organization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrganizationPayment" EntityType="Self.OrganizationPayment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentReason" EntityType="Self.PaymentReason" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentType" EntityType="Self.PaymentType" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ArticlePrice_To_Article" Association="Self.FK_ArticlePrice_To_Article">
             <End Role="Article" EntitySet="Article" />
             <End Role="ArticlePrice" EntitySet="ArticlePrice" />
@@ -98,9 +201,24 @@
             <End Role="ArticlePrice" EntitySet="ArticlePrice" />
             <End Role="ArticleSale" EntitySet="ArticleSale" />
           </AssociationSet>
+          <AssociationSet Name="FK_Organization_ToDepartment" Association="Self.FK_Organization_ToDepartment">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Organization" EntitySet="Organization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPayment_ToOrganization" Association="Self.FK_OrganizationPayment_ToOrganization">
+            <End Role="Organization" EntitySet="Organization" />
+            <End Role="OrganizationPayment" EntitySet="OrganizationPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPayment_ToPaymentReason" Association="Self.FK_OrganizationPayment_ToPaymentReason">
+            <End Role="PaymentReason" EntitySet="PaymentReason" />
+            <End Role="OrganizationPayment" EntitySet="OrganizationPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPayment_ToPaymentType" Association="Self.FK_OrganizationPayment_ToPaymentType">
+            <End Role="PaymentType" EntitySet="PaymentType" />
+            <End Role="OrganizationPayment" EntitySet="OrganizationPayment" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CashCenterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -203,7 +321,134 @@
             <End Role="ArticlePrice" EntitySet="ArticlePrices" />
             <End Role="ArticleSale" EntitySet="ArticleSales" />
           </AssociationSet>
+          <EntitySet Name="Departments" EntityType="CashCenterModel.Department" />
+          <EntitySet Name="Organizations" EntityType="CashCenterModel.Organization" />
+          <EntitySet Name="OrganizationPayments" EntityType="CashCenterModel.OrganizationPayment" />
+          <EntitySet Name="PaymentReasons" EntityType="CashCenterModel.PaymentReason" />
+          <EntitySet Name="PaymentTypes" EntityType="CashCenterModel.PaymentType" />
+          <AssociationSet Name="FK_Organization_ToDepartment" Association="CashCenterModel.FK_Organization_ToDepartment">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Organization" EntitySet="Organizations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPayment_ToOrganization" Association="CashCenterModel.FK_OrganizationPayment_ToOrganization">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="OrganizationPayment" EntitySet="OrganizationPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPayment_ToPaymentReason" Association="CashCenterModel.FK_OrganizationPayment_ToPaymentReason">
+            <End Role="PaymentReason" EntitySet="PaymentReasons" />
+            <End Role="OrganizationPayment" EntitySet="OrganizationPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrganizationPayment_ToPaymentType" Association="CashCenterModel.FK_OrganizationPayment_ToPaymentType">
+            <End Role="PaymentType" EntitySet="PaymentTypes" />
+            <End Role="OrganizationPayment" EntitySet="OrganizationPayments" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Organizations" Relationship="CashCenterModel.FK_Organization_ToDepartment" FromRole="Department" ToRole="Organization" />
+        </EntityType>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Inn" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Kpp" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_Organization_ToDepartment" FromRole="Organization" ToRole="Department" />
+          <NavigationProperty Name="OrganizationPayments" Relationship="CashCenterModel.FK_OrganizationPayment_ToOrganization" FromRole="Organization" ToRole="OrganizationPayment" />
+        </EntityType>
+        <EntityType Name="OrganizationPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DocumentNumber" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Code1C" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IncastCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentReasonId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Organization" Relationship="CashCenterModel.FK_OrganizationPayment_ToOrganization" FromRole="OrganizationPayment" ToRole="Organization" />
+          <NavigationProperty Name="PaymentReason" Relationship="CashCenterModel.FK_OrganizationPayment_ToPaymentReason" FromRole="OrganizationPayment" ToRole="PaymentReason" />
+          <NavigationProperty Name="PaymentType" Relationship="CashCenterModel.FK_OrganizationPayment_ToPaymentType" FromRole="OrganizationPayment" ToRole="PaymentType" />
+        </EntityType>
+        <EntityType Name="PaymentReason">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrganizationPayments" Relationship="CashCenterModel.FK_OrganizationPayment_ToPaymentReason" FromRole="PaymentReason" ToRole="OrganizationPayment" />
+        </EntityType>
+        <EntityType Name="PaymentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrganizationPayments" Relationship="CashCenterModel.FK_OrganizationPayment_ToPaymentType" FromRole="PaymentType" ToRole="OrganizationPayment" />
+        </EntityType>
+        <Association Name="FK_Organization_ToDepartment">
+          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="CashCenterModel.Organization" Role="Organization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Organization">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPayment_ToOrganization">
+          <End Type="CashCenterModel.Organization" Role="Organization" Multiplicity="1" />
+          <End Type="CashCenterModel.OrganizationPayment" Role="OrganizationPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrganizationPayment">
+              <PropertyRef Name="OrganizationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPayment_ToPaymentReason">
+          <End Type="CashCenterModel.PaymentReason" Role="PaymentReason" Multiplicity="1" />
+          <End Type="CashCenterModel.OrganizationPayment" Role="OrganizationPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentReason">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrganizationPayment">
+              <PropertyRef Name="PaymentReasonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrganizationPayment_ToPaymentType">
+          <End Type="CashCenterModel.PaymentType" Role="PaymentType" Multiplicity="1" />
+          <End Type="CashCenterModel.OrganizationPayment" Role="OrganizationPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrganizationPayment">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -251,6 +496,61 @@
                 <ScalarProperty Name="ArticlePriceId" ColumnName="ArticlePriceId" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="CashCenterModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Organizations">
+            <EntityTypeMapping TypeName="CashCenterModel.Organization">
+              <MappingFragment StoreEntitySet="Organization">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Kpp" ColumnName="Kpp" />
+                <ScalarProperty Name="Inn" ColumnName="Inn" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrganizationPayments">
+            <EntityTypeMapping TypeName="CashCenterModel.OrganizationPayment">
+              <MappingFragment StoreEntitySet="OrganizationPayment">
+                <ScalarProperty Name="PaymentReasonId" ColumnName="PaymentReasonId" />
+                <ScalarProperty Name="IncastCode" ColumnName="IncastCode" />
+                <ScalarProperty Name="Code1C" ColumnName="Code1C" />
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="OrganizationId" ColumnName="OrganizationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentReasons">
+            <EntityTypeMapping TypeName="CashCenterModel.PaymentReason">
+              <MappingFragment StoreEntitySet="PaymentReason">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentTypes">
+            <EntityTypeMapping TypeName="CashCenterModel.PaymentType">
+              <MappingFragment StoreEntitySet="PaymentType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

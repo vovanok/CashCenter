@@ -16,7 +16,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             : base(contractNumberPart, namePart, innPart)
         {
             dbfRegistry = new DbfRegistryController(inputDbfFilename);
-            var dbfOrganizations = dbfRegistry.GetOrganizations(contractNumberPart, namePart, innPart);
+            var dbfOrganizations = dbfRegistry.GetOrganizations(/*contractNumberPart, namePart, innPart*/); //TODO
 
             if (dbfOrganizations != null)
             {
