@@ -118,6 +118,15 @@ namespace CashCenter.Dal
 
         #endregion
 
+        #region Customer
+
+        public Customer GetCustomerById(int id)
+        {
+            return context.Customers.FirstOrDefault(item => item.Id == id);
+        }
+
+        #endregion
+
         public void ClearAllArticlesData()
         {
             context.ArticleSales.RemoveRange(context.ArticleSales);

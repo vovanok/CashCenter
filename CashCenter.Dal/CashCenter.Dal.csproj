@@ -94,6 +94,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CashCenterModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerPayment.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DalController.cs" />
     <Compile Include="Department.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>

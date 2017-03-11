@@ -34,5 +34,7 @@ namespace CashCenter.Dal
         public virtual DbSet<OrganizationPayment> OrganizationPayments { get; set; }
         public virtual DbSet<PaymentReason> PaymentReasons { get; set; }
         public virtual DbSet<PaymentType> PaymentTypes { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<CustomerPayment> CustomerPayments { get; set; }
     }
 }

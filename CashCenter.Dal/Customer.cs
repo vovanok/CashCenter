@@ -12,21 +12,24 @@ namespace CashCenter.Dal
     using System;
     using System.Collections.Generic;
     
-    public partial class PaymentReason
+    public partial class Customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PaymentReason()
+        public Customer()
         {
-            this.OrganizationPayments = new HashSet<OrganizationPayment>();
             this.CustomerPayments = new HashSet<CustomerPayment>();
         }
     
         public int Id { get; set; }
-        public int Code { get; set; }
+        public int DepartmentId { get; set; }
         public string Name { get; set; }
+        public string Address { get; set; }
+        public int DayValue { get; set; }
+        public int NightValue { get; set; }
+        public decimal Balance { get; set; }
+        public decimal Penalty { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganizationPayment> OrganizationPayments { get; set; }
+        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerPayment> CustomerPayments { get; set; }
     }
