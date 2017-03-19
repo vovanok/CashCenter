@@ -110,10 +110,10 @@
     <Compile Include="OrganizationPayment.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PaymentReason.cs">
+    <Compile Include="PaymentKind.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PaymentType.cs">
+    <Compile Include="PaymentReason.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -152,6 +152,12 @@
       <DependentUpon>CashCenterModel.edmx</DependentUpon>
       <LastGenOutput>CashCenterModel.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
+      <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
+      <Name>CashCenter.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

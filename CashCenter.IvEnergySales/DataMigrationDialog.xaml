@@ -5,34 +5,73 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CashCenter.IvEnergySales"
         mc:Ignorable="d"
-        Title="DataMigrationDialog" Width="500" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Импорт/экспорт данных" Width="500" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <StackPanel Margin="5,5,5,5">
-        <GroupBox Header="Импорт данных о товарах из DBF">
-            <StackPanel>
-                <Label Content="Путь к DBF файлу для импорта" />
-                <local:FileSelectorControl x:Name="fscDbfFileSelector" FilesFilter="*.DBF|*.DBF" />
-                <Grid Margin="0,5,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    
-                    <Label Content="Тип стоимости товара" Grid.Column="0" Grid.Row="0" />
-                    <ComboBox x:Name="cbArticlePriceType" Grid.Column="1" Grid.Row="0" DisplayMemberPath="DisplayInfo" SelectedValuePath="Item" />
-                </Grid>
-                <Button x:Name="btnImportArticlesFromDbf" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Right" Click="On_btnImportArticlesFromDbf_Click" />
-            </StackPanel>
-        </GroupBox>
-        <GroupBox Header="Импорт данных о товарах из удаленной БД">
-            <StackPanel>
-                <Label Content="Отделение" />
-                <local:DepartmentSelectorControl x:Name="controlDepartamentSelector" />
-                <Button x:Name="btnImportArticlesFromDb" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Right" Click="On_btnImportArticlesFromDb_Click"/>
-            </StackPanel>
-        </GroupBox>
+        <TabControl>
+            <TabItem Header="Импорт физ.лиц из DBF">
+                <StackPanel>
+                    <Label Content="Путь к DBF файлу для импорта" />
+                    <local:FileSelectorControl x:Name="fscCustomersDbfFileSelector" FilesFilter="*.DBF|*.DBF" />
+                    <Button x:Name="btnImportCustomersFromDbf" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" Click="On_btnImportCustomersFromDbf_Click" />
+                </StackPanel>
+            </TabItem>            
+            <TabItem Header="Импорт товаров из DBF">
+                <StackPanel>
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Тип стоимости товара" Grid.Column="0" Grid.Row="0" />
+                        <ComboBox x:Name="cbArticlePriceType" Grid.Column="1" Grid.Row="0" DisplayMemberPath="DisplayInfo" SelectedValuePath="Item" />
+                    </Grid>
+                    <Label Content="Путь к DBF файлу для импорта" />
+                    <local:FileSelectorControl x:Name="fscArticlesDbfFileSelector" FilesFilter="*.DBF|*.DBF" />
+                    <Button x:Name="btnImportArticlesFromDbf" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" Click="On_btnImportArticlesFromDbf_Click" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Импорт из Зевса">
+                <StackPanel>
+                    <Label Content="Что импортировать" />
+                    <ListBox x:Name="lbImportTargets">
+                        <ListBox.ItemTemplate>
+                            <HierarchicalDataTemplate>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked}"/>
+                            </HierarchicalDataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Label Content="Из какого отделения" />
+                    <local:DepartmentSelectorControl x:Name="controlDepartamentSelector" />
+                    <Button x:Name="btnImportFromDb" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" Click="On_btnImportFromDb_Click"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Экспорт платежей физ. лиц">
+                <StackPanel>
+                    <Label Content="За какой период" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="30px"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <DatePicker x:Name="dpBeginPeriod" Grid.Column="0" Grid.Row="0" />
+                        <Label Content="-" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center"/>
+                        <DatePicker x:Name="dpEndPeriod" Grid.Column="2" Grid.Row="0" />
+                    </Grid>
+                    <WrapPanel Margin="0,5,0,0">
+                        <Button x:Name="btnExportCustomerPaymentsToOff" Content="Экспортировать в OFF" Width="150" Height="30" HorizontalAlignment="Left" Click="On_btnExportCustomerPaymentsToOff_Click" />
+                        <Button x:Name="btnExportCustomerPaymentsToDb" Content="Экспортировать в Зевс" Width="150" Height="30" Margin="15,0,0,0" HorizontalAlignment="Left" Click="On_btnExportCustomerPaymentsToDb_Click" />
+                    </WrapPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
         <Button x:Name="btnClose" Content="Закрыть" Width="100" Height="30" HorizontalAlignment="Right" Margin="0,5,5,0" Click="On_btnClose_Click"/>
     </StackPanel>
 </Window>

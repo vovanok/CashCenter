@@ -1,6 +1,9 @@
-﻿using System;
+﻿using CashCenter.Common;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
+using System.Text;
 
 namespace CashCenter.Dal
 {
@@ -21,37 +24,110 @@ namespace CashCenter.Dal
             }
         }
 
+        #region Common
+
+        public IEnumerable<PaymentReason> PaymentReasons
+        {
+            get { return context.PaymentReasons; }
+        }
+
+        public PaymentReason GetPaymentReasonByCode(int code)
+        {
+            return context.PaymentReasons.FirstOrDefault(item => item.Code == code);
+        }
+
+        public Department GetDepartmentByCode(string code)
+        {
+            return context.Departments.FirstOrDefault(item => item.Code == code);
+        }
+
+        public IEnumerable<PaymentReason> AddPaymentReasonsRange(IEnumerable<PaymentReason> paymentReasons)
+        {
+            try
+            {
+                var newPaymentReasons = context.PaymentReasons.AddRange(paymentReasons);
+                Save();
+                return newPaymentReasons;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления оснований оплаты", ex);
+                return null;
+            }
+        }
+
+        public IEnumerable<PaymentKind> AddPaymentKindsRange(IEnumerable<PaymentKind> paymentKinds)
+        {
+            try
+            {
+                var newPaymentKinds = context.PaymentKinds.AddRange(paymentKinds);
+                Save();
+                return newPaymentKinds;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления видов оплаты", ex);
+                return null;
+            }
+        }
+
+        #endregion
+
         #region Articles
+
+        public IEnumerable<Article> Articles
+        {
+            get { return context.Articles; }
+        }
 
         public Article GetArticleByCode(string code)
         {
             return context.Articles.FirstOrDefault(article => article.Code == code);
         }
 
-        public IEnumerable<Article> GetArticles()
-        {
-            return context.Articles;
-        }
-
         public Article AddArticle(Article article)
         {
-            var newArticle = context.Articles.Add(article);
-            context.SaveChanges();
-            return newArticle;
+            try
+            {
+                var newArticle = context.Articles.Add(article);
+                Save();
+                return newArticle;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления товара", ex);
+                return null;
+            }
         }
 
         public IEnumerable<Article> AddArticleRange(IEnumerable<Article> articles)
         {
-            var newArticles = context.Articles.AddRange(articles);
-            context.SaveChanges();
-            return newArticles;
+            try
+            {
+                var newArticles = context.Articles.AddRange(articles);
+                Save();
+                return newArticles;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления товаров", ex);
+                return null;
+            }
         }
 
         public IEnumerable<Article> DeleteArticleRange(IEnumerable<Article> articles)
         {
-            var deletedArticles = context.Articles.RemoveRange(articles);
-            context.SaveChanges();
-            return deletedArticles;
+            try
+            {
+                var deletedArticles = context.Articles.RemoveRange(articles);
+                Save();
+                return deletedArticles;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка удаления товаров", ex);
+                return null;
+            }
         }
 
         #endregion
@@ -70,16 +146,32 @@ namespace CashCenter.Dal
 
         public ArticlePriceType AddArticlePriceType(ArticlePriceType articlePriceType)
         {
-            var newArticlePriceTypes = context.ArticlePriceTypes.Add(articlePriceType);
-            context.SaveChanges();
-            return newArticlePriceTypes;
+            try
+            {
+                var newArticlePriceTypes = context.ArticlePriceTypes.Add(articlePriceType);
+                Save();
+                return newArticlePriceTypes;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления типа стоимости товара", ex);
+                return null;
+            }
         }
 
         public IEnumerable<ArticlePriceType> AddArticlePriceTypeRange(IEnumerable<ArticlePriceType> articlePriceTypes)
         {
-            var newArticlePriceTypes = context.ArticlePriceTypes.AddRange(articlePriceTypes);
-            context.SaveChanges();
-            return newArticlePriceTypes;
+            try
+            {
+                var newArticlePriceTypes = context.ArticlePriceTypes.AddRange(articlePriceTypes);
+                Save();
+                return newArticlePriceTypes;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления типов стоимости товара", ex);
+                return null;
+            }
         }
 
         #endregion
@@ -93,16 +185,32 @@ namespace CashCenter.Dal
 
         public ArticlePrice AddArticlePrice(ArticlePrice articlePrice)
         {
-            var newArticlePrice = context.ArticlePrices.Add(articlePrice);
-            context.SaveChanges();
-            return newArticlePrice;
+            try
+            {
+                var newArticlePrice = context.ArticlePrices.Add(articlePrice);
+                Save();
+                return newArticlePrice;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления стоимости товара", ex);
+                return null;
+            }
         }
 
         public IEnumerable<ArticlePrice> AddArticlePriceRange(IEnumerable<ArticlePrice> articlePrices)
         {
-            var newAriclePrices = context.ArticlePrices.AddRange(articlePrices);
-            context.SaveChanges();
-            return newAriclePrices;
+            try
+            {
+                var newAriclePrices = context.ArticlePrices.AddRange(articlePrices);
+                Save();
+                return newAriclePrices;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления стоимостей товара", ex);
+                return null;
+            }
         }
 
         #endregion
@@ -111,29 +219,169 @@ namespace CashCenter.Dal
 
         public ArticleSale AddArticleSale(ArticleSale artilceSale)
         {
-            var newArticle = context.ArticleSales.Add(artilceSale);
-            context.SaveChanges();
-            return newArticle;
+            try
+            {
+                var newArticle = context.ArticleSales.Add(artilceSale);
+                Save();
+                return newArticle;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления платежа по товару", ex);
+                return null;
+            }
         }
 
         #endregion
 
         #region Customer
 
+        public IEnumerable<Customer> Customers
+        {
+            get { return context.Customers; }
+        }
+
+        public IEnumerable<CustomerPayment> CustomerPayments
+        {
+            get { return context.CustomerPayments; }
+        }
+
         public Customer GetCustomerById(int id)
         {
-            return context.Customers.FirstOrDefault(item => item.Id == id);
+            return Customers.FirstOrDefault(item => item.Id == id);
+        }
+
+        public Customer AddCustomer(Customer customer)
+        {
+            try
+            {
+                var resultCustomer = context.Customers.Add(customer);
+                Save();
+                return resultCustomer;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления физ. лица", ex);
+                return null;
+            }
+        }
+
+        public IEnumerable<Customer> AddCustomersRange(IEnumerable<Customer> customers)
+        {
+            try
+            {
+                var resultCustomers = context.Customers.AddRange(customers);
+                Save();
+                return resultCustomers;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления физ. лиц", ex);
+                return null;
+            }
+        }
+
+        public CustomerPayment AddCustomerPayment(CustomerPayment customerPayment)
+        {
+            try
+            {
+                var newCustomerPayment = context.CustomerPayments.Add(customerPayment);
+                Save();
+                return newCustomerPayment;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления платежа физ. лица", ex);
+                return null;
+            }
         }
 
         #endregion
 
+        #region Clear routines
+
         public void ClearAllArticlesData()
         {
-            context.ArticleSales.RemoveRange(context.ArticleSales);
-            context.ArticlePrices.RemoveRange(context.ArticlePrices);
-            context.Articles.RemoveRange(context.Articles);
-            context.ArticlePriceTypes.RemoveRange(context.ArticlePriceTypes);
+            try
+            {
+                context.ArticleSales.RemoveRange(context.ArticleSales);
+                context.ArticlePrices.RemoveRange(context.ArticlePrices);
+                context.Articles.RemoveRange(context.Articles);
+                context.ArticlePriceTypes.RemoveRange(context.ArticlePriceTypes);
+                Save();
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка очистки данных о товарах.", ex);
+            }
+        }
+
+        public void ClearAllCustomersData()
+        {
+            try
+            {
+                context.Customers.RemoveRange(context.Customers);
+                Save();
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка очистки данных о физ. лицах", ex);
+            }
+        }
+
+        public void ClearPaymentReasons()
+        {
+            try
+            {
+                context.PaymentReasons.RemoveRange(context.PaymentReasons);
+                Save();
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка очистки данных об основаниях оплаты", ex);
+            }
+        }
+
+        public void ClearPaymentKinds()
+        {
+            try
+            {
+                context.PaymentKinds.RemoveRange(context.PaymentKinds);
+                Save();
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка очистки данных о видах оплаты", ex);
+            }
+        }
+
+        public void Save()
+        {
             context.SaveChanges();
+        }
+
+        #endregion
+
+        private void HandleEntityFrameworkError(string message, Exception exception)
+        {
+            var entityValidationException = exception as DbEntityValidationException;
+            if (entityValidationException == null)
+            {
+                Log.ErrorWithException(message, exception);
+                return;
+            }
+
+            var sbErrorContent = new StringBuilder();
+            foreach (var entityValidationError in entityValidationException.EntityValidationErrors)
+            {
+                sbErrorContent.AppendLine($"Таблица {entityValidationError.Entry.Entity.GetType().Name} в состоянии {entityValidationError.Entry.State} ошибки:");
+                foreach (var validationError in entityValidationError.ValidationErrors)
+                {
+                    sbErrorContent.AppendLine($"\tСвойство: {validationError.PropertyName}, ошибка: {validationError.ErrorMessage}");
+                }
+            }
+
+            Log.ErrorWithException($"{message}\n{sbErrorContent}", exception);
         }
     }
 }

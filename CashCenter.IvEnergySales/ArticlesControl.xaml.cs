@@ -42,7 +42,7 @@ namespace CashCenter.IvEnergySales
             var name = tbArticleNameFilter.Text;
             var barcode = tbArticleBarcodeFilter.Text;
 
-            var filteredArticles = DalController.Instance.GetArticles().Where(article =>
+            var filteredArticles = DalController.Instance.Articles.Where(article =>
                     (!string.IsNullOrEmpty(code) && article.Code.IndexOf(code, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
                     (!string.IsNullOrEmpty(name) && article.Name.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
                     (!string.IsNullOrEmpty(barcode) && article.Barcode.IndexOf(barcode, StringComparison.CurrentCultureIgnoreCase) >= 0));

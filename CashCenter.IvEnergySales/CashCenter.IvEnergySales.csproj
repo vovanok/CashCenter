@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="BusinessLogic\BaseCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\BaseOrganizationSalesContext.cs" />
+    <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
     <Compile Include="BusinessLogic\OfflineCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\OfflineOrganizationSalesContext.cs" />

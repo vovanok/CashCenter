@@ -56,6 +56,44 @@ namespace CashCenter.ZeusDb
             }
         }
 
+        public List<Customer> GetCustomers()
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.GET_CUSTOMERS);
+                dataReader = command.ExecuteReader();
+
+                var result = new List<Customer>();
+                while (dataReader.Read())
+                {
+                    int id = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_ID);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
+                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT, true) ?? string.Empty;
+                    string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
+                    string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
+                    string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
+
+                    result.Add(new Customer(id, DepartamentDef?.Code ?? string.Empty, name, flat, buildingNumber, streetName, localityName));
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException("Ошибка получения физических лиц.", e);
+                return new List<Customer>();
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
         public Customer GetCustomer(int customerId)
         {
             DbDataReader dataReader = null;
@@ -605,6 +643,41 @@ namespace CashCenter.ZeusDb
             {
                 Log.ErrorWithException($"Ошибка получения вида платежа с номером {paymentKindId}.", e);
                 return null;
+            }
+            finally
+            {
+                dataReader?.Close();
+                dbConnection?.Close();
+            }
+        }
+
+        public List<PaymentKind> GetPaymentKinds()
+        {
+            DbDataReader dataReader = null;
+
+            try
+            {
+                dbConnection.Open();
+
+                var command = GetDbCommandByQuery(Sql.GET_PAYMENT_KINDS);
+                dataReader = command.ExecuteReader();
+
+                var result = new List<PaymentKind>();
+                while (dataReader.Read())
+                {
+                    int id = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_ID);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.PAYMENT_KIND_NAME) ?? string.Empty;
+                    int typeId = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_TYPE_ID);
+
+                    result.Add(new PaymentKind(id, name, typeId));
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException("Ошибка получения видов платежа.", e);
+                return new List<PaymentKind>();
             }
             finally
             {

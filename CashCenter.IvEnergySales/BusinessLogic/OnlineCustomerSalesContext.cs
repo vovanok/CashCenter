@@ -46,7 +46,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                         zeusCustomer.Id,
                         departamentCode ?? string.Empty,
                         zeusCustomer.Name,
-                        GetZeusCustomerAddress(zeusCustomer),
+                        zeusCustomer.Address,
                         zeusCustomerCountersValues != null ? zeusCustomerCountersValues.EndDayValue : 0,
                         zeusCustomerCountersValues != null ? zeusCustomerCountersValues.EndNightValue : 0,
                         zeusDebt != null ? zeusDebt.Balance : 0,
@@ -156,22 +156,6 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 return Math.Min(cost - balance, penalty);
 
             return 0;
-        }
-
-        private string GetZeusCustomerAddress(ZeusDb.Entities.Customer zeusCustomer)
-        {
-            if (zeusCustomer == null)
-                return string.Empty;
-
-            var addressComponents = new[]
-            {
-                zeusCustomer.LocalityName,
-                zeusCustomer.StreetName,
-                zeusCustomer.BuildingNumber,
-                zeusCustomer.Flat
-            };
-
-            return string.Join(", ", addressComponents.Where(item => !string.IsNullOrEmpty(item)));
         }
     }
 }

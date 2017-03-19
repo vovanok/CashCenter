@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <StackPanel>
-        <GroupBox Header="Источник данных">
+        <GroupBox x:Name="gbDataSource" Header="Источник данных">
             <StackPanel>
                 <Grid x:Name="gridOnlineDataSrcView">
                     <Grid.RowDefinitions>

@@ -41,8 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArticlesImporter.cs" />
+    <Compile Include="ArticlesDbfImporter.cs" />
+    <Compile Include="ArticlesRemoteImporter.cs" />
+    <Compile Include="BaseDbfImporter.cs" />
+    <Compile Include="BaseExporter.cs" />
+    <Compile Include="BaseRemoteImporter.cs" />
+    <Compile Include="CustomerPaymentsOffExporter.cs" />
+    <Compile Include="CustomerPaymentsRemoteExporter.cs" />
+    <Compile Include="CustomersDbfImporter.cs" />
+    <Compile Include="CustomersRemoteImporter.cs" />
     <Compile Include="ImportResult.cs" />
+    <Compile Include="PaymentReasonsRemoteImporter.cs" />
+    <Compile Include="PaymentKindsRemoteImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +67,10 @@
     <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
       <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
       <Name>CashCenter.DbfRegistry</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.OffRegistry\CashCenter.OffRegistry.csproj">
+      <Project>{376d1352-4182-4c9a-a71a-d15609b5f096}</Project>
+      <Name>CashCenter.OffRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.ZeusDb\CashCenter.ZeusDb.csproj">
       <Project>{42193820-cd62-41d5-af50-cb7be873ddfd}</Project>

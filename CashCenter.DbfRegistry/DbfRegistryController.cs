@@ -36,6 +36,10 @@ namespace CashCenter.DbfRegistry
                    from {{0}}
                    where {CUSTOMER_ID} = {{1}}";
 
+            private static readonly string GET_CUSTOMERS =
+                $@"select {CUSTOMER_DEPARTMENT_CODE}, {CUSTOMER_ID}, {CUSTOMER_COUNTERS_END_DAY_VALUE}, {CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {CUSTOMER_END_BALANCE}
+                   from {{0}}";
+
             private static readonly string GET_ORGANIZATIONS =
                 $@"select {ORGANIZATION_DEPARTAMENT_CODE}, {ORGANIZATION_ID}, {ORGANIZATION_CONTRACT_NUMBER}, {ORGANIZATION_NAME}, {ORGANIZATION_INN}, {ORGANIZATION_KPP}
                    from {{0}}";
@@ -47,6 +51,11 @@ namespace CashCenter.DbfRegistry
             public static string GetCustomerQuery(string tableName, int customerId)
             {
                 return string.Format(GET_CUSTOMER, tableName, customerId);
+            }
+
+            public static string GetCustomersQuery(string tableName)
+            {
+                return string.Format(GET_CUSTOMERS, tableName);
             }
 
             public static string GetOrganizationsQuery(string tableName)
@@ -100,6 +109,42 @@ namespace CashCenter.DbfRegistry
             {
                 Log.ErrorWithException($"Ошибка получения лицевого счета из файла {dbfName} с ИД {customerId}.", e);
                 return null;
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        public List<Customer> GetCustomers()
+        {
+            try
+            {
+                dbfConnection.Open();
+
+                var command = dbfConnection.CreateCommand();
+                command.CommandText = Sql.GetCustomersQuery(dbfName);
+
+                var dataReader = command.ExecuteReader();
+
+                var customers = new List<Customer>();
+                while (dataReader.Read())
+                {
+                    int id = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
+                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_DEPARTMENT_CODE);
+                    int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
+                    int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
+                    decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_END_BALANCE);
+
+                    customers.Add(new Customer(id, departamentCode, dayValue, nightValue, balance));
+                }
+
+                return customers;
+            }
+            catch (Exception e)
+            {
+                Log.ErrorWithException($"Ошибка получения физ.лиц из файла {dbfName}.", e);
+                return new List<Customer>();
             }
             finally
             {

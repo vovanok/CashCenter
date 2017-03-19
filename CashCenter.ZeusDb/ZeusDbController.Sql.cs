@@ -97,6 +97,29 @@
                   customer.aggr$state_id <> 4 and
                   is_payment_locked <> 1";
 
+            public static readonly string GET_CUSTOMERS =
+                $@"
+            select
+                customer.id {CUSTOMER_ID}, 
+                customer.name {CUSTOMER_NAME},
+                customer.flat {CUSTOMER_FLAT},
+                customer.aggr$state_id,
+                customer_building.building_number {CUSTOMER_BUILDING_NUMBER},
+                customer_building.street_name {CUSTOMER_STREET_NAME},
+                customer_building.locality_name {CUSTOMER_LOCALITY_NAME}
+            from customer
+                left join
+                    (select building.id ID,
+                        building.number BUILDING_NUMBER,
+                        street.name STREET_NAME,
+                        locality.name LOCALITY_NAME
+                    from building
+                        inner join street on building.street_id = street.id
+                        inner join locality on building.locality_id = locality.id) customer_building
+                on customer.building_id = customer_building.ID
+            where customer.aggr$state_id <> 4 and
+                  is_payment_locked <> 1";
+
             public static readonly string GET_CUSTOMER_COUNTER_VALUES =
                 $@"
             select first 1
@@ -114,6 +137,11 @@
 			select first 1 id {PAYMENT_KIND_ID}, name {PAYMENT_KIND_NAME}, paymenttypeid {PAYMENT_KIND_TYPE_ID}
 			from paymentkind
 			where paymentkind.id = {PARAM_PAYMENT_TYPE_ID}";
+
+            public static readonly string GET_PAYMENT_KINDS =
+                $@"
+			select id {PAYMENT_KIND_ID}, name {PAYMENT_KIND_NAME}, paymenttypeid {PAYMENT_KIND_TYPE_ID}
+			from paymentkind";
 
             public static readonly string INSERT_PAYMENT_KIND =
                 $@"

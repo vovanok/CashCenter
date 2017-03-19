@@ -15,6 +15,8 @@ namespace CashCenter.IvEnergySales
 {
     public partial class CustomerPaymentControl : UserControl
     {
+        private bool IS_USE_LOCAL_DB = true;
+
         private Observed<BaseCustomerSalesContext> customerSalesContext = new Observed<BaseCustomerSalesContext>();
 
         private bool IsSalesContextReady
@@ -75,6 +77,7 @@ namespace CashCenter.IvEnergySales
         {
             using (var waiter = new OperationWaiter())
             {
+                gbDataSource.Visibility = IS_USE_LOCAL_DB ? Visibility.Visible : Visibility.Collapsed;
                 gridOfflineDataSrcView.Visibility = Properties.Settings.Default.IsCustomerOfflineMode ? Visibility.Visible : Visibility.Collapsed;
                 gridOnlineDataSrcView.Visibility = !Properties.Settings.Default.IsCustomerOfflineMode ? Visibility.Visible : Visibility.Collapsed;
 
@@ -131,11 +134,13 @@ namespace CashCenter.IvEnergySales
             using (var waiter = new OperationWaiter())
             {
                 customerSalesContext.Value =
-                    !Properties.Settings.Default.IsCustomerOfflineMode
-                        ? (BaseCustomerSalesContext)new OnlineCustomerSalesContext(targetCustomerId,
-                            controlDeparmentSelector.Region, controlDeparmentSelector.SelectedDepartment.Code ?? string.Empty)
-                        : (BaseCustomerSalesContext)new OfflineCustomerSalesContext(targetCustomerId,
-                            Properties.Settings.Default.CustomerInputDbfPath);
+                    IS_USE_LOCAL_DB
+                        ? new CustomerSalesContext(targetCustomerId)
+                        : !Properties.Settings.Default.IsCustomerOfflineMode
+                            ? (BaseCustomerSalesContext)new OnlineCustomerSalesContext(targetCustomerId,
+                                controlDeparmentSelector.Region, controlDeparmentSelector.SelectedDepartment.Code ?? string.Empty)
+                            : (BaseCustomerSalesContext)new OfflineCustomerSalesContext(targetCustomerId,
+                                Properties.Settings.Default.CustomerInputDbfPath);
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)

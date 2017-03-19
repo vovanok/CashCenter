@@ -1,4 +1,6 @@
-﻿namespace CashCenter.ZeusDb.Entities
+﻿using System.Linq;
+
+namespace CashCenter.ZeusDb.Entities
 {
     public class Customer
     {
@@ -15,6 +17,15 @@
         public string StreetName { get; private set; }
 
         public string LocalityName { get; private set; }
+
+        public string Address
+        {
+            get
+            {
+                var addressComponents = new[] { LocalityName, StreetName, BuildingNumber, Flat };
+                return string.Join(", ", addressComponents.Where(item => !string.IsNullOrEmpty(item)));
+            }
+        }
 
         public Customer(int id, string departamentCode, string name, string flat,
             string buildingNumber, string streetName, string localityName)
