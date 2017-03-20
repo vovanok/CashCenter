@@ -37,11 +37,11 @@ namespace CashCenter.Articles.DataMigration
                 if (db == null)
                     return false;
 
-                var existingPaymentKind = db.GetPaymentKind(customerPayment.PaymentKind.Code);
+                var existingPaymentKind = db.GetPaymentKind(customerPayment.PaymentKind.Id);
                 if (existingPaymentKind == null)
-                    db.AddPaymentKind(new ZeusDb.Entities.PaymentKind(customerPayment.PaymentKind.Code, customerPayment.PaymentKind.Name, customerPayment.PaymentKind.TypeCode));
+                    db.AddPaymentKind(new ZeusDb.Entities.PaymentKind(customerPayment.PaymentKind.Id, customerPayment.PaymentKind.Name, customerPayment.PaymentKind.TypeZeusId));
 
-                var payJournal = AddOrUpdatePayJournal(db, customerPayment.PaymentKind.Code, customerPayment.CreateDate, customerPayment.Cost);
+                var payJournal = AddOrUpdatePayJournal(db, customerPayment.PaymentKind.Id, customerPayment.CreateDate, customerPayment.Cost);
 
                 var customerCounterId = db.GetCustomerCounterId(customerPayment.Customer.Id);
 
@@ -71,7 +71,7 @@ namespace CashCenter.Articles.DataMigration
                 var pay = db.AddPay(
                     new ZeusDb.Entities.Pay(
                         customerPayment.Customer.Id,
-                        customerPayment.PaymentReason.Code,
+                        customerPayment.PaymentReason.Id,
                         metersId,
                         payJournal.Id,
                         customerPayment.Cost,

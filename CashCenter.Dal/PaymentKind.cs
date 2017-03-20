@@ -17,18 +17,17 @@ namespace CashCenter.Dal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PaymentKind()
         {
-            this.OrganizationPayments = new HashSet<OrganizationPayment>();
             this.CustomerPayments = new HashSet<CustomerPayment>();
+            this.OrganizationPayments = new HashSet<OrganizationPayment>();
         }
     
         public int Id { get; set; }
-        public int Code { get; set; }
         public string Name { get; set; }
-        public int TypeCode { get; set; }
+        public int TypeZeusId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganizationPayment> OrganizationPayments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerPayment> CustomerPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrganizationPayment> OrganizationPayments { get; set; }
     }
 }

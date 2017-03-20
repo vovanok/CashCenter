@@ -25,7 +25,7 @@ namespace CashCenter.Articles.DataMigration
                 var importedPaymentKinds = db.GetPaymentKinds();
                 var paymentKindsForAdd = importedPaymentKinds.Select(paymentKind => new PaymentKind
                     {
-                        Code = paymentKind.Id,
+                        Id = paymentKind.Id,
                         Name = paymentKind.Name
                     });
 

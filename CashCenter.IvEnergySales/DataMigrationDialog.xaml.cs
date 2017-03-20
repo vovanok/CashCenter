@@ -104,8 +104,7 @@ namespace CashCenter.IvEnergySales
 
         private void RefreshArticlePriceTypes()
         {
-            var artilePriceTypeSelectorItems =
-                DalController.Instance.GetArticlePriceTypes()
+            var artilePriceTypeSelectorItems = DalController.Instance.ArticlePriceTypes
                 .Select(artPriceType => new { Item = artPriceType, DisplayInfo = $"{artPriceType.Code} {artPriceType.Name}" });
 
             cbArticlePriceType.ItemsSource = artilePriceTypeSelectorItems;

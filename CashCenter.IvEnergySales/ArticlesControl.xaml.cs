@@ -95,7 +95,7 @@ namespace CashCenter.IvEnergySales
                 .Where(price => price != null)
                 .Select(price =>
                 {
-                    var type = DalController.Instance.GetArticlePriceTypes().FirstOrDefault(priceType => priceType.Id == price.ArticlePriceTypeId);
+                    var type = DalController.Instance.ArticlePriceTypes.FirstOrDefault(priceType => priceType.Id == price.ArticlePriceTypeId);
                     return new ArticlePriceWithType(price, type);
                 });
 

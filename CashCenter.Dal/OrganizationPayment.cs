@@ -26,7 +26,7 @@ namespace CashCenter.Dal
         public int PaymentReasonId { get; set; }
     
         public virtual Organization Organization { get; set; }
-        public virtual PaymentKind PaymentKind { get; set; }
         public virtual PaymentReason PaymentReason { get; set; }
+        public virtual PaymentKind PaymentKind { get; set; }
     }
 }

@@ -31,11 +31,6 @@ namespace CashCenter.Dal
             get { return context.PaymentReasons; }
         }
 
-        public PaymentReason GetPaymentReasonByCode(int code)
-        {
-            return context.PaymentReasons.FirstOrDefault(item => item.Code == code);
-        }
-
         public Department GetDepartmentByCode(string code)
         {
             return context.Departments.FirstOrDefault(item => item.Code == code);
@@ -78,11 +73,6 @@ namespace CashCenter.Dal
         public IEnumerable<Article> Articles
         {
             get { return context.Articles; }
-        }
-
-        public Article GetArticleByCode(string code)
-        {
-            return context.Articles.FirstOrDefault(article => article.Code == code);
         }
 
         public Article AddArticle(Article article)
@@ -134,14 +124,9 @@ namespace CashCenter.Dal
 
         #region Artile price types
 
-        public ArticlePriceType GetArticlePriceTypeByCode(string code)
+        public IEnumerable<ArticlePriceType> ArticlePriceTypes
         {
-            return context.ArticlePriceTypes.FirstOrDefault(articlePriceType => articlePriceType.Code == code);
-        }
-
-        public IEnumerable<ArticlePriceType> GetArticlePriceTypes()
-        {
-            return context.ArticlePriceTypes;
+            get { return context.ArticlePriceTypes; }
         }
 
         public ArticlePriceType AddArticlePriceType(ArticlePriceType articlePriceType)
@@ -367,6 +352,12 @@ namespace CashCenter.Dal
             var entityValidationException = exception as DbEntityValidationException;
             if (entityValidationException == null)
             {
+                if (exception.InnerException != null)
+                {
+                    HandleEntityFrameworkError(message, exception.InnerException);
+                    return;
+                }
+                
                 Log.ErrorWithException(message, exception);
                 return;
             }

@@ -47,7 +47,7 @@ namespace CashCenter.Articles.DataMigration
                 DalController.Instance.AddArticlePriceTypeRange(articlePriceTypesForAdd);
 
                 var articles = DalController.Instance.Articles.ToList();
-                var articlePriceTypes = DalController.Instance.GetArticlePriceTypes().ToList();
+                var articlePriceTypes = DalController.Instance.ArticlePriceTypes;
 
                 // Article prices
                 var importingWarehousePrices = db.GetWarehousePrices();

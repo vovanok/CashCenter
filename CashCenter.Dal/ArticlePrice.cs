@@ -26,9 +26,9 @@ namespace CashCenter.Dal
         public System.DateTime EntryDate { get; set; }
         public decimal Value { get; set; }
     
-        public virtual Article Article { get; set; }
-        public virtual ArticlePriceType ArticlePriceType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ArticleSale> ArticleSales { get; set; }
+        public virtual Article Article { get; set; }
+        public virtual ArticlePriceType ArticlePriceType { get; set; }
     }
 }

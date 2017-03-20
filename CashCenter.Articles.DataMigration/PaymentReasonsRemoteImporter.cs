@@ -25,7 +25,7 @@ namespace CashCenter.Articles.DataMigration
                 var importedPaymentReasons = db.GetPaymentReasons();
                 var paymentReasonsForAdd = importedPaymentReasons.Select(paymentReason => new PaymentReason
                 {
-                    Code = paymentReason.Id,
+                    Id = paymentReason.Id,
                     Name = paymentReason.Name
                 });
 

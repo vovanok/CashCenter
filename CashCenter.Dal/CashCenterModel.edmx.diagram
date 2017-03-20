@@ -5,30 +5,30 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="eda829cd9637439b94745c4661261cae" Name="Diagram1">
-        <EntityTypeShape EntityType="CashCenterModel.Article" Width="1.5" PointX="2.625" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CashCenterModel.ArticlePrice" Width="1.5" PointX="2.625" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CashCenterModel.ArticlePriceType" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CashCenterModel.ArticlePrice" Width="1.625" PointX="2.5" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CashCenterModel.ArticleSale" Width="1.5" PointX="4.75" PointY="0.5" IsExpanded="true" />
-        <AssociationConnector Association="CashCenterModel.FK_ArticlePrice_To_Article" ManuallyRouted="false" />
-        <AssociationConnector Association="CashCenterModel.FK_ArticlePrice_To_ArticlePriceType" ManuallyRouted="false" />
         <AssociationConnector Association="CashCenterModel.FK_ArticleSale_To_ArticlePrice" ManuallyRouted="false" />
         <EntityTypeShape EntityType="CashCenterModel.Department" Width="1.5" PointX="7.5" PointY="1" FillColor="Maroon" />
         <EntityTypeShape EntityType="CashCenterModel.Organization" Width="1.5" PointX="9.75" PointY="0.5" FillColor="255, 128, 128" />
-        <EntityTypeShape EntityType="CashCenterModel.PaymentReason" Width="1.5" PointX="9.75" PointY="3.5" FillColor="Maroon" />
         <AssociationConnector Association="CashCenterModel.FK_Organization_ToDepartment" />
         <EntityTypeShape EntityType="CashCenterModel.Customer" Width="1.5" PointX="5" PointY="3.875" FillColor="Green" />
         <AssociationConnector Association="CashCenterModel.FK_Customer_ToDepartment" ManuallyRouted="false" >
         </AssociationConnector>
-        <EntityTypeShape EntityType="CashCenterModel.PaymentKind" Width="1.5" PointX="11.875" PointY="4.625" FillColor="Maroon" />
         <EntityTypeShape EntityType="CashCenterModel.OrganizationPayment" Width="2.125" PointX="11.75" PointY="0.5" FillColor="255, 128, 0" />
         <AssociationConnector Association="CashCenterModel.FK_OrganizationPayment_ToOrganization" />
-        <AssociationConnector Association="CashCenterModel.FK_OrganizationPayment_ToPaymentKind" />
-        <AssociationConnector Association="CashCenterModel.FK_OrganizationPayment_ToPaymentReason" />
-        <EntityTypeShape EntityType="CashCenterModel.CustomerPayment" Width="1.5" PointX="7.125" PointY="3.875" FillColor="Green" />
+        <EntityTypeShape EntityType="CashCenterModel.CustomerPayment" Width="1.75" PointX="7.125" PointY="3.875" FillColor="Green" />
         <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToCustomer" />
-        <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToPaymentKind" />
+        <EntityTypeShape EntityType="CashCenterModel.PaymentReason" Width="1.5" PointX="9.625" PointY="3.5" FillColor="Maroon" />
         <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToPaymentReason" />
-      </Diagram>
+        <AssociationConnector Association="CashCenterModel.FK_OrganizationPayment_ToPaymentReason" />
+        <EntityTypeShape EntityType="CashCenterModel.PaymentKind" Width="1.5" PointX="11.75" PointY="4.5" FillColor="Maroon" />
+        <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToPaymentKind" />
+        <AssociationConnector Association="CashCenterModel.FK_OrganizationPayment_ToPaymentKind" />
+        <EntityTypeShape EntityType="CashCenterModel.Article" Width="1.5" PointX="0.5" PointY="0.625" />
+        <EntityTypeShape EntityType="CashCenterModel.ArticlePriceType" Width="1.625" PointX="2.5" PointY="3.625" />
+        <AssociationConnector Association="CashCenterModel.FK_ArticlePrice_To_Article" />
+        <AssociationConnector Association="CashCenterModel.FK_ArticlePrice_To_ArticlePriceType" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
