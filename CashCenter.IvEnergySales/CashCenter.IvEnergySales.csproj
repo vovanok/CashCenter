@@ -220,10 +220,6 @@
     <Resource Include="Content\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CashCenter.Articles.DataMigration\CashCenter.Articles.DataMigration.csproj">
-      <Project>{327cf52c-fe76-44e0-9940-e03c9aeaa76a}</Project>
-      <Name>CashCenter.Articles.DataMigration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>
@@ -235,6 +231,10 @@
     <ProjectReference Include="..\CashCenter.Dal\CashCenter.Dal.csproj">
       <Project>{cad4a97e-4f23-41d9-bc76-0f7633c0e1f6}</Project>
       <Name>CashCenter.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.DataMigration\CashCenter.DataMigration.csproj">
+      <Project>{718380a0-3293-4a26-9ad4-86f836647b07}</Project>
+      <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
       <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>

@@ -4,7 +4,7 @@ using CashCenter.OffRegistry;
 using System;
 using System.Linq;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public class CustomerPaymentsOffExporter : BaseExporter
     {

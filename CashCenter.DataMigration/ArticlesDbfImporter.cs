@@ -4,7 +4,7 @@ using CashCenter.Common;
 using CashCenter.DbfRegistry;
 using System.Linq;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public class ArticlesDbfImporter : BaseDbfImporter
     {

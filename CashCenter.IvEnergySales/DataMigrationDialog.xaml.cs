@@ -1,4 +1,4 @@
-﻿using CashCenter.Articles.DataMigration;
+﻿using CashCenter.DataMigration;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DbfRegistry;

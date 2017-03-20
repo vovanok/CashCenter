@@ -1,6 +1,6 @@
 ﻿using CashCenter.Common.DbQualification;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public abstract class BaseRemoteImporter
     {

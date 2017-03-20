@@ -1,7 +1,7 @@
 ﻿using CashCenter.Dal;
 using System.Collections.Generic;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public class ImportResult
     {

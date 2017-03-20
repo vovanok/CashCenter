@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{327CF52C-FE76-44E0-9940-E03C9AEAA76A}</ProjectGuid>
+    <ProjectGuid>{718380A0-3293-4A26-9AD4-86F836647B07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CashCenter.Articles.DataMigration</RootNamespace>
-    <AssemblyName>CashCenter.Articles.DataMigration</AssemblyName>
+    <RootNamespace>CashCenter.DataMigration</RootNamespace>
+    <AssemblyName>CashCenter.DataMigration</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -51,8 +51,8 @@
     <Compile Include="CustomersDbfImporter.cs" />
     <Compile Include="CustomersRemoteImporter.cs" />
     <Compile Include="ImportResult.cs" />
-    <Compile Include="PaymentReasonsRemoteImporter.cs" />
     <Compile Include="PaymentKindsRemoteImporter.cs" />
+    <Compile Include="PaymentReasonsRemoteImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

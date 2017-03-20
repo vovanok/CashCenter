@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public abstract class BaseExporter
     {

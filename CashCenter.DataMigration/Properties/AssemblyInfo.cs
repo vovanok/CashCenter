@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CashCenter.Articles.DataMigration")]
+[assembly: AssemblyTitle("CashCenter.DataMigration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CashCenter.Articles.DataMigration")]
+[assembly: AssemblyProduct("CashCenter.DataMigration")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("327cf52c-fe76-44e0-9940-e03c9aeaa76a")]
+[assembly: Guid("718380a0-3293-4a26-9ad4-86f836647b07")]
 
 // Version information for an assembly consists of the following four values:
 //

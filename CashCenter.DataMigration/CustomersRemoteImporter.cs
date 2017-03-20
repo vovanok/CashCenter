@@ -5,7 +5,7 @@ using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.ZeusDb;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public class CustomersRemoteImporter : BaseRemoteImporter
     {

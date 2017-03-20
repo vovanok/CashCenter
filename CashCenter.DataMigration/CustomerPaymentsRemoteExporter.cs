@@ -5,7 +5,7 @@ using CashCenter.ZeusDb;
 using System;
 using System.Linq;
 
-namespace CashCenter.Articles.DataMigration
+namespace CashCenter.DataMigration
 {
     public class CustomerPaymentsRemoteExporter : BaseExporter
     {
