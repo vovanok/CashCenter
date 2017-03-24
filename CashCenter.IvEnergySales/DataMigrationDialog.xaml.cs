@@ -1,7 +1,6 @@
 ﻿using CashCenter.DataMigration;
 using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.DbfRegistry;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
