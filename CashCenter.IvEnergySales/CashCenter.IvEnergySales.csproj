@@ -106,10 +106,8 @@
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="BusinessLogic\BaseCustomerSalesContext.cs" />
-    <Compile Include="BusinessLogic\BaseOrganizationSalesContext.cs" />
     <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
-    <Compile Include="BusinessLogic\OfflineOrganizationSalesContext.cs" />
     <Compile Include="CustomerPaymentControl.xaml.cs">
       <DependentUpon>CustomerPaymentControl.xaml</DependentUpon>
     </Compile>

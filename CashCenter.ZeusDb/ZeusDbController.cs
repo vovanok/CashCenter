@@ -93,45 +93,6 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public ZeusCustomer GetCustomer(int customerId)
-        {
-            DbDataReader dataReader = null;
-
-            try
-            {
-                dbConnection.Open();
-
-                var command = GetDbCommandByQuery(Sql.GET_CUSTOMER);
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
-
-                dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
-
-                ZeusCustomer result = null;
-                if (dataReader.Read())
-                {
-                    string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
-                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT) ?? string.Empty;
-                    string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
-                    string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
-                    string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
-
-                    result = new ZeusCustomer(customerId, DepartmentCode ?? string.Empty, name, flat, buildingNumber, streetName, localityName);
-                }
-
-                return result;
-            }
-            catch (Exception e)
-            {
-                Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerId}.", e);
-                return null;
-            }
-            finally
-            {
-                dataReader?.Close();
-                dbConnection?.Close();
-            }
-        }
-
         public ZeusCustomerCounters GetCustomerCounterValues(int customerId, DateTime beginDate, DateTime endDate)
         {
             DbDataReader dataReader = null;

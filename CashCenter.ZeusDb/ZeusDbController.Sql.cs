@@ -73,30 +73,6 @@
             public const string WAREHOUSE_PRICE_ENTRY_DATE = "ENTRY_DATE";
             public const string WAREHOUSE_PRICE_PRICE_VALUE = "PRICE_VALUE";
 
-            public static readonly string GET_CUSTOMER =
-                $@"
-            select first 1
-                customer.id {CUSTOMER_ID}, 
-                customer.name {CUSTOMER_NAME},
-                customer.flat {CUSTOMER_FLAT},
-                customer.aggr$state_id,
-                customer_building.building_number {CUSTOMER_BUILDING_NUMBER},
-                customer_building.street_name {CUSTOMER_STREET_NAME},
-                customer_building.locality_name {CUSTOMER_LOCALITY_NAME}
-            from customer
-                left join
-                    (select building.id ID,
-                        building.number BUILDING_NUMBER,
-                        street.name STREET_NAME,
-                        locality.name LOCALITY_NAME
-                    from building
-                        inner join street on building.street_id = street.id
-                        inner join locality on building.locality_id = locality.id) customer_building
-                on customer.building_id = customer_building.ID
-            where customer.id = {PARAM_CUSTOMER_ID} and
-                  customer.aggr$state_id <> 4 and
-                  is_payment_locked <> 1";
-
             public static readonly string GET_CUSTOMERS =
                 $@"
             select

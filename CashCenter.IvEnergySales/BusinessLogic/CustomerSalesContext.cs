@@ -33,8 +33,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
                 }
 
-                string validationErrorMessage;
-                if (!payment.IsValid(out validationErrorMessage))
+                if (!payment.IsValid(out string validationErrorMessage))
                 {
                     Log.Error($"{ERROR_PREFIX}\n{validationErrorMessage}");
                     return false;

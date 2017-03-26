@@ -21,8 +21,7 @@ namespace CashCenter.Common
                     this.value = value;
                 }
 
-                if (OnChange != null)
-                    OnChange(value);
+                OnChange?.Invoke(value);
             }
         }
 

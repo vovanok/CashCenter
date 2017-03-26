@@ -2,7 +2,6 @@
 using CashCenter.DbfRegistry.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.OleDb;
 using System.IO;
 
@@ -31,11 +30,6 @@ namespace CashCenter.DbfRegistry
             public const string ARTICLES_BARCODE = "SHTRIHKOD";
             public const string ARTICLES_PRICE = "TOVARCENA";
             
-            private static readonly string GET_CUSTOMER =
-                $@"select {CUSTOMER_DEPARTMENT_CODE}, {CUSTOMER_ID}, {CUSTOMER_COUNTERS_END_DAY_VALUE}, {CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {CUSTOMER_END_BALANCE}
-                   from {{0}}
-                   where {CUSTOMER_ID} = {{1}}";
-
             private static readonly string GET_CUSTOMERS =
                 $@"select {CUSTOMER_DEPARTMENT_CODE}, {CUSTOMER_ID}, {CUSTOMER_COUNTERS_END_DAY_VALUE}, {CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {CUSTOMER_END_BALANCE}
                    from {{0}}";
@@ -47,11 +41,6 @@ namespace CashCenter.DbfRegistry
             private static readonly string GET_ARTICLES =
                 $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
                    form {{0}}";
-
-            public static string GetCustomerQuery(string tableName, int customerId)
-            {
-                return string.Format(GET_CUSTOMER, tableName, customerId);
-            }
 
             public static string GetCustomersQuery(string tableName)
             {
@@ -75,45 +64,9 @@ namespace CashCenter.DbfRegistry
         public DbfRegistryController(string fileName)
         {
             var fileInfo = new FileInfo(fileName);
-            dbfConnection = new OleDbConnection();
-            dbfConnection.ConnectionString = string.Format(Config.DbfConnectionStringFormat, fileInfo.Directory.FullName);
-            this.dbfName = fileInfo.Name;
-        }
-
-        public Customer GetCustomer(int customerId)
-        {
-            try
-            {
-                dbfConnection.Open();
-
-                var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetCustomerQuery(dbfName, customerId);
-
-                var dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
-
-                Customer customer = null;
-                if (dataReader.Read())
-                {
-                    int id = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
-                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_DEPARTMENT_CODE);
-                    int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
-                    int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
-                    decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_END_BALANCE);
-
-                    customer = new Customer(id, departamentCode, dayValue, nightValue, balance);
-                }
-
-                return customer;
-            }
-            catch (Exception e)
-            {
-                Log.ErrorWithException($"Ошибка получения лицевого счета из файла {dbfName} с ИД {customerId}.", e);
-                return null;
-            }
-            finally
-            {
-                dbfConnection?.Close();
-            }
+            var connectionString = string.Format(Config.DbfConnectionStringFormat, fileInfo.Directory.FullName);
+            dbfConnection = new OleDbConnection(connectionString);
+            dbfName = fileInfo.Name;
         }
 
         public List<Customer> GetCustomers()

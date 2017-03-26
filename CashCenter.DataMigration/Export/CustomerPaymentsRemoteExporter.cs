@@ -90,7 +90,7 @@ namespace CashCenter.DataMigration
 
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
