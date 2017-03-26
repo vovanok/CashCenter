@@ -19,42 +19,6 @@
             <Label Content="Имя кассира" Grid.Column="0" Grid.Row="0" />
             <TextBox x:Name="tbCasherName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Padding="0,5,0,5" />
         </Grid>
-        <GroupBox Header="Настройки оплаты физическим лицом">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="6*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                
-                <Label Grid.Column="0" Grid.Row="0">
-                    <TextBlock TextWrapping="Wrap" Text="Работать в режиме оффлайн" />
-                </Label>
-                <CheckBox x:Name="cbIsCustomerOfflineMode" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
-
-                <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
-                    <TextBlock TextWrapping="Wrap" Text="Путь в входному dbf файлу" />
-                </Label>
-                <StackPanel Grid.Column="1" Grid.Row="1">
-                    <TextBox x:Name="tbCustomerInputDbfPath" Padding="0,5,0,5" />
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Button x:Name="btnImportAndSelectCustomerInputDbfPath" Content="Импортировать и выбрать" Grid.Column="0" Grid.Row="0" Click="On_btnImportAndSelectCustomerInputDbfPath_Click"/>
-                        <Button x:Name="btnSelectCustomerInputDbfPath" Content="Выбрать" Grid.Column="1" Grid.Row="0" Click="On_btnSelectCustomerInputDbfPath_Click"/>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-        </GroupBox>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

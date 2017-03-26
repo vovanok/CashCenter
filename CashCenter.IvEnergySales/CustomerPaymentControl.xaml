@@ -6,43 +6,7 @@
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <StackPanel>
-        <GroupBox x:Name="gbDataSource" Header="Источник данных">
-            <StackPanel>
-                <Grid x:Name="gridOnlineDataSrcView">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label Content="Название района" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Label x:Name="lblRegionName" FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-
-                    <Label Content="Код отделения" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <local:DepartmentSelectorControl x:Name="controlDeparmentSelector" Grid.Column="1" Grid.Row="1" />
-                </Grid>
-                <Grid x:Name="gridOfflineDataSrcView">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <Label Content="DBF файл" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Label FontWeight="Bold" Grid.Column="1" Grid.Row="0">
-                        <TextBlock x:Name="lblDbfFileName" TextWrapping="Wrap"/>
-                    </Label>
-                </Grid>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox x:Name="gbPrivateInfo" Header="Лицевой счет" Height="128">
+        <GroupBox x:Name="gbPrivateInfo" Header="Лицевой счет" Height="153">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -53,13 +17,18 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Номер лицевого счета" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                <Label Content="Имя плательщика" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                <Label Content="Адрес плательщика" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Район" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label x:Name="lblRegionName" FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
-                <Grid Grid.Column="1" Grid.Row="0">
+                <Label Content="Отделение" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <local:DepartmentSelectorControl x:Name="controlDeparmentSelector" Grid.Column="1" Grid.Row="1" />
+
+                <Label Content="Номер лицевого счета" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Grid Grid.Column="1" Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1*"/>
@@ -69,10 +38,13 @@
                     <Button x:Name="btnFindCustomer" Content="Поиск" Click="On_btnFindCustomer_Click" Grid.Column="1"/>
                 </Grid>
 
-                <Viewbox Grid.Column="1" Grid.Row="1">
+                <Label Content="Имя плательщика" Grid.Column="0" Grid.Row="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Viewbox Grid.Column="1" Grid.Row="3">
                     <Label x:Name="lblCustomerName" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
-                <Viewbox Grid.Column="1" Grid.Row="2" >
+
+                <Label Content="Адрес плательщика" Grid.Column="0" Grid.Row="4" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Viewbox Grid.Column="1" Grid.Row="4" >
                     <Label x:Name="lblCustomerAddress" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
             </Grid>

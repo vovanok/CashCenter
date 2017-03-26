@@ -8,8 +8,6 @@ namespace CashCenter.Common
         private const string DBF_CONNECTION_STRING_FORMAT = "DbfConnectionStringFormat";
         private const string DBCODE_MAPPING_XML_PATH = "DbCodeMappingXmlPath";
         private const string OUTPUT_DIRECTORY = "OutputDirectory";
-        private const string INPUT_DIRECTORY = "InputDirectory";
-        private const string CUSTOMER_INPUT_SUBFOLDER_NAME_FORMAT = "CustomerInputSubfolderNameFormat";
         private const string CUSTOMER_OUTPUT_FILE_FORMAT = "CustomerOutputFileFormat";
         private const string ORGANIZATION_OUTPUT_FILE_FORMAT = "OrganizationOutputFileFormat";
 
@@ -27,8 +25,6 @@ namespace CashCenter.Common
         public static string DbfConnectionStringFormat => GetAppSettingByKey(DBF_CONNECTION_STRING_FORMAT, string.Empty);
         public static string DbCodeMappingXmlPath => GetAppSettingByKey(DBCODE_MAPPING_XML_PATH, "DbCodeMapping.xml");
         public static string OutputDirectory => GetAppSettingByKey(OUTPUT_DIRECTORY, string.Empty);
-        public static string InputDirectory => GetAppSettingByKey(INPUT_DIRECTORY, string.Empty);
-        public static string CustomerInputSubdirectoryNameFormat = GetAppSettingByKey(CUSTOMER_INPUT_SUBFOLDER_NAME_FORMAT, string.Empty);
         public static string CustomerOutputFileFormat => GetAppSettingByKey(CUSTOMER_OUTPUT_FILE_FORMAT, string.Empty);
         public static string OrganizationOutputFileFormat => GetAppSettingByKey(ORGANIZATION_OUTPUT_FILE_FORMAT, string.Empty);
 

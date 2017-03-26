@@ -37,7 +37,7 @@ namespace CashCenter.ZeusDb
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.REASON_ID);
                     string name = dataReader.GetFieldFromReader<string>(Sql.REASON_NAME);
-                    bool isCanPay = dataReader.GetFieldFromReader<int>(Sql.REASON_CANPAY) == 1;
+                    bool isCanPay = dataReader.GetFieldFromReader<string>(Sql.REASON_CANPAY) == "1";
 
                     result.Add(new PaymentReason(id, name, isCanPay));
                 }
@@ -72,7 +72,7 @@ namespace CashCenter.ZeusDb
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_ID);
                     string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
-                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT, true) ?? string.Empty;
+                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT) ?? string.Empty;
                     string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
@@ -111,7 +111,7 @@ namespace CashCenter.ZeusDb
                 if (dataReader.Read())
                 {
                     string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
-                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT, true) ?? string.Empty;
+                    string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT) ?? string.Empty;
                     string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
@@ -151,10 +151,10 @@ namespace CashCenter.ZeusDb
                 CustomerCounters result = null;
                 if (dataReader.Read())
                 {
-                    string counterName = dataReader.GetFieldFromReader<string>(Sql.COUNTER_NAME, true);
+                    string counterName = dataReader.GetFieldFromReader<string>(Sql.COUNTER_NAME);
                     int endDayValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
-                    int endNightValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE, true);
-                    bool isTwoTariff = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_IS_TWO_TARIFF) == 1;
+                    int endNightValue = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
+                    bool isTwoTariff = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_COUNTERS_IS_TWO_TARIFF) == "1";
 
                     if (counterName == null)
                         return null;

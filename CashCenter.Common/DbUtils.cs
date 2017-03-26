@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Data.Common;
 
@@ -6,43 +5,10 @@ namespace CashCenter.Common
 {
     public static class Utils
     {
-        public static T GetFieldFromReader<T>(this DbDataReader dataReader, string columnName, bool isMayBeNull = false)
+        public static T GetFieldFromReader<T>(this DbDataReader dataReader, string columnName)
         {
-            var result = default(T);
-
-            try
-            {
-                int ordinal = dataReader.GetOrdinal(columnName);
-                if (dataReader.IsDBNull(ordinal))
-                {
-                    if (!isMayBeNull)
-                        Log.Warning($"Не найдено поле в колонке {columnName}.");
-
-                    return result;
-                }
-
-                if (typeof(T) == typeof(int))
-                    return (T)Convert.ChangeType(dataReader.GetInt32(ordinal), typeof(T));
-
-                if (typeof(T) == typeof(string))
-                    return (T)Convert.ChangeType(dataReader.GetString(ordinal), typeof(T));
-
-                if (typeof(T) == typeof(decimal))
-                    return (T)Convert.ChangeType(dataReader.GetDecimal(ordinal), typeof(T));
-
-                if (typeof(T) == typeof(double))
-                    return (T)Convert.ChangeType(dataReader.GetDouble(ordinal), typeof(T));
-
-                if (typeof(T) == typeof(DateTime))
-                    return (T)Convert.ChangeType(dataReader.GetDateTime(ordinal), typeof(T));
-
-                return result;
-            }
-            catch (Exception e)
-            {
-                Log.ErrorWithException($"Ошибка получения поля в колонке {columnName}.", e);
-                return result;
-            }
+            int ordinal = dataReader.GetOrdinal(columnName);
+            return dataReader.GetFieldValue<T>(ordinal);
         }
 
         public static void AddParameter<T>(this DbCommand command, string paramName, T paramValue)

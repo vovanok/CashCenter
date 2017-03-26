@@ -109,9 +109,7 @@
     <Compile Include="BusinessLogic\BaseOrganizationSalesContext.cs" />
     <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
-    <Compile Include="BusinessLogic\OfflineCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\OfflineOrganizationSalesContext.cs" />
-    <Compile Include="BusinessLogic\OnlineCustomerSalesContext.cs" />
     <Compile Include="CustomerPaymentControl.xaml.cs">
       <DependentUpon>CustomerPaymentControl.xaml</DependentUpon>
     </Compile>
@@ -133,11 +131,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
@@ -205,10 +198,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
