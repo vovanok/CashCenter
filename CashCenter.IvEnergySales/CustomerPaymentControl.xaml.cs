@@ -15,7 +15,7 @@ namespace CashCenter.IvEnergySales
 {
     public partial class CustomerPaymentControl : UserControl
     {
-        private Observed<BaseCustomerSalesContext> customerSalesContext = new Observed<BaseCustomerSalesContext>();
+        private Observed<CustomerSalesContext> customerSalesContext = new Observed<CustomerSalesContext>();
 
         private bool IsSalesContextReady
         {
@@ -71,17 +71,17 @@ namespace CashCenter.IvEnergySales
             customerSalesContext.Value = null;
         }
 
-        private void SalesContext_OnChange(BaseCustomerSalesContext newSalesContext)
+        private void SalesContext_OnChange(CustomerSalesContext newCustomerSalesContext)
         {
             using (var waiter = new OperationWaiter())
             {
-                if (newSalesContext == null)
+                if (newCustomerSalesContext == null)
                     tbCustomerId.Text = string.Empty;
 
-                gbPaymentInfo.IsEnabled = newSalesContext != null && newSalesContext.IsCustomerFinded;
+                gbPaymentInfo.IsEnabled = newCustomerSalesContext != null && newCustomerSalesContext.IsCustomerFinded;
 
                 // Payment reasons
-                cbPaymentReasons.ItemsSource = newSalesContext?.PaymentReasons ?? new List<PaymentReason>();
+                cbPaymentReasons.ItemsSource = newCustomerSalesContext?.PaymentReasons ?? new List<PaymentReason>();
                 if (cbPaymentReasons.Items.Count > 0)
                     cbPaymentReasons.SelectedIndex = 0;
 
@@ -93,16 +93,16 @@ namespace CashCenter.IvEnergySales
                 tbDescription.Text = string.Empty;
 
                 lblIsNormative.Visibility =
-                    newSalesContext != null &&
-                    newSalesContext.Customer != null &&
-                    newSalesContext.Customer.IsNormative()
+                    newCustomerSalesContext != null &&
+                    newCustomerSalesContext.Customer != null &&
+                    newCustomerSalesContext.Customer.IsNormative()
                         ? Visibility.Visible
                         : Visibility.Hidden;
 
                 tbNightCurrentCounterValue.IsEnabled =
-                    newSalesContext != null &&
-                    newSalesContext.Customer != null &&
-                    newSalesContext.Customer.IsTwoTariff();
+                    newCustomerSalesContext != null &&
+                    newCustomerSalesContext.Customer != null &&
+                    newCustomerSalesContext.Customer.IsTwoTariff();
 
                 UpdateDayDeltaValueLbl();
                 UpdateNightDeltaValueLbl();

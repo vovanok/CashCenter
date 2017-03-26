@@ -1,14 +1,22 @@
 ﻿using CashCenter.Common;
 using CashCenter.Dal;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
-    public class CustomerSalesContext : BaseCustomerSalesContext
+    public class CustomerSalesContext
     {
+        protected const string ERROR_PREFIX = "Ошибка совершения платежа.";
+
+        public Customer Customer { get; protected set; }
+        public InfoForCheck InfoForCheck { get; protected set; }
+        public IEnumerable<PaymentReason> PaymentReasons { get; protected set; }
+
+        public bool IsCustomerFinded => Customer != null;
+
         public CustomerSalesContext(int customerId)
-            : base(customerId)
         {
             var dalCustomer = DalController.Instance.GetCustomerById(customerId);
             if (dalCustomer == null)
@@ -17,7 +25,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             PaymentReasons = DalController.Instance.PaymentReasons;
         }
 
-        public override bool Pay(CustomerPayment payment)
+        public bool Pay(CustomerPayment payment)
         {
             try
             {
