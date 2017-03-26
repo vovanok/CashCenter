@@ -2,7 +2,7 @@
 
 namespace CashCenter.ZeusDb.Entities
 {
-    public class WarehousePrice
+    public class ZeusWarehousePrice
     {
         public int Id { get; private set; }
 
@@ -14,7 +14,7 @@ namespace CashCenter.ZeusDb.Entities
 
         public decimal PriceValue { get; private set; }
 
-        public WarehousePrice(int id, int warehouseId, int warehouseCategoryId,
+        public ZeusWarehousePrice(int id, int warehouseId, int warehouseCategoryId,
             DateTime entryDate, decimal priceValue)
         {
             Id = id;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using CashCenter.Common.DbQualification;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.ZeusDb;
@@ -9,9 +8,9 @@ namespace CashCenter.DataMigration
 {
     public class PaymentReasonsRemoteImporter : BaseRemoteImporter
     {
-        public override void Import(DepartmentDef departmentDef)
+        public override void Import(Department department)
         {
-            if (departmentDef == null)
+            if (department == null)
             {
                 Log.Error("Для импорта из БД не указано отделение.");
                 return;
@@ -21,7 +20,7 @@ namespace CashCenter.DataMigration
             {
                 DalController.Instance.ClearPaymentReasons();
 
-                var db = new ZeusDbController(departmentDef);
+                var db = new ZeusDbController(department.Code, department.Url, department.Path);
                 var importedPaymentReasons = db.GetPaymentReasons();
                 var paymentReasonsForAdd = importedPaymentReasons.Select(paymentReason => new PaymentReason
                 {

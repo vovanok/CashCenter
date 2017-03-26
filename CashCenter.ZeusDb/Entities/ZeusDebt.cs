@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.ZeusDb.Entities
 {
-    public class Debt
+    public class ZeusDebt
     {
         public int CustomerId { get; private set; }
 
@@ -8,7 +8,7 @@
 
         public decimal Penalty { get; private set; }
 
-        public Debt(int customerId, decimal balance, decimal penalty)
+        public ZeusDebt(int customerId, decimal balance, decimal penalty)
         {
             CustomerId = customerId;
             Balance = balance;

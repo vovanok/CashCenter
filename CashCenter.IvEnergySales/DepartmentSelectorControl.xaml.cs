@@ -1,5 +1,5 @@
-﻿using CashCenter.Common.DbQualification;
-using System.Collections.Generic;
+﻿using CashCenter.Common;
+using CashCenter.Dal;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,16 +9,16 @@ namespace CashCenter.IvEnergySales
 {
     public partial class DepartmentSelectorControl : UserControl
     {
-        public RegionDef Region { get; private set; }
+        public Region Region { get; private set; }
 
-        public DepartmentDef SelectedDepartment
+        public Department SelectedDepartment
         {
             get
             {
                 if (cbDepartmentSelector.Items.Count == 0)
                     return null;
 
-                return cbDepartmentSelector.SelectedValue as DepartmentDef;
+                return cbDepartmentSelector.SelectedValue as Department;
             }
         }
 
@@ -26,14 +26,13 @@ namespace CashCenter.IvEnergySales
         {
             InitializeComponent();
 
-            Region = QualifierManager.GetCurrentRegion();
-
+            Region = DalController.Instance.Regions.FirstOrDefault(region => region.Id == Config.CurrentRegionId);
             if (Region != null)
             {
                 lblErrorMessage.Visibility = Visibility.Collapsed;
 
-                cbDepartmentSelector.ItemsSource = (Region.Departments ?? new List<DepartmentDef>())
-                    .Select(departmentDef => new { Department = departmentDef, DepartmentFullName = $"{departmentDef.Code} {departmentDef.Name}" });
+                cbDepartmentSelector.ItemsSource = Region.Departments
+                    .Select(department => new { Department = department, DepartmentFullName = $"{department.Code} {department.Name}" });
 
                 if (cbDepartmentSelector.Items.Count > 0)
                     cbDepartmentSelector.SelectedIndex = 0;

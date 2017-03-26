@@ -44,18 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\CounterValues.cs" />
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\CustomerCounters.cs" />
-    <Compile Include="Entities\Debt.cs" />
-    <Compile Include="Entities\Meter.cs" />
-    <Compile Include="Entities\Pay.cs" />
-    <Compile Include="Entities\PayJournal.cs" />
-    <Compile Include="Entities\PaymentKind.cs" />
-    <Compile Include="Entities\PaymentReason.cs" />
-    <Compile Include="Entities\Warehouse.cs" />
-    <Compile Include="Entities\WarehouseCategory.cs" />
-    <Compile Include="Entities\WarehousePrice.cs" />
+    <Compile Include="Entities\ZeusCounterValues.cs" />
+    <Compile Include="Entities\ZeusCustomer.cs" />
+    <Compile Include="Entities\ZeusCustomerCounters.cs" />
+    <Compile Include="Entities\ZeusDebt.cs" />
+    <Compile Include="Entities\ZeusMeter.cs" />
+    <Compile Include="Entities\ZeusPay.cs" />
+    <Compile Include="Entities\ZeusPayJournal.cs" />
+    <Compile Include="Entities\ZeusPaymentKind.cs" />
+    <Compile Include="Entities\ZeusPaymentReason.cs" />
+    <Compile Include="Entities\ZeusWarehouse.cs" />
+    <Compile Include="Entities\ZeusWarehouseCategory.cs" />
+    <Compile Include="Entities\ZeusWarehousePrice.cs" />
     <Compile Include="ZeusDbController.cs" />
     <Compile Include="ZeusDbController.Sql.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

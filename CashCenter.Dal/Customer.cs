@@ -28,9 +28,12 @@ namespace CashCenter.Dal
         public int NightValue { get; set; }
         public decimal Balance { get; set; }
         public decimal Penalty { get; set; }
+        public bool IsActive { get; set; }
+        public string Email { get; set; }
+        public string Number { get; set; }
     
+        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerPayment> CustomerPayments { get; set; }
-        public virtual Department Department { get; set; }
     }
 }

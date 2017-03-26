@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.ZeusDb.Entities
 {
-    public class WarehouseCategory
+    public class ZeusWarehouseCategory
     {
         public int Id { get; private set; }
 
@@ -12,7 +12,7 @@
 
         public bool IsWholesale { get; private set; }
 
-        public WarehouseCategory(int id, string code, string name,
+        public ZeusWarehouseCategory(int id, string code, string name,
             bool isDefault, bool isWholesale)
         {
             Id = id;

@@ -1,6 +1,5 @@
 ﻿using CashCenter.Common.DataEntities;
-using CashCenter.Common.DbQualification;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {

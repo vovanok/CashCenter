@@ -48,10 +48,6 @@
     <Compile Include="DataEntities\Organization.cs" />
     <Compile Include="DataEntities\OrganizationPayment.cs" />
     <Compile Include="DataEntities\PaymentReason.cs" />
-    <Compile Include="DbQualification\DepartmentDef.cs" />
-    <Compile Include="DbQualification\QualifierDef.cs" />
-    <Compile Include="DbQualification\QualifierManager.cs" />
-    <Compile Include="DbQualification\RegionDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Observed.cs" />

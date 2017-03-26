@@ -5,7 +5,6 @@ using System.Data;
 using FirebirdSql.Data.FirebirdClient;
 using CashCenter.ZeusDb.Entities;
 using CashCenter.Common;
-using CashCenter.Common.DbQualification;
 
 namespace CashCenter.ZeusDb
 {
@@ -13,15 +12,15 @@ namespace CashCenter.ZeusDb
     {
         private DbConnection dbConnection;
 
-        public DepartmentDef DepartamentDef { get; private set; }
+        public string DepartmentCode { get; private set; }
 
-        public ZeusDbController(DepartmentDef departamentDef)
+        public ZeusDbController(string departmentCode, string dbUrl, string dbPath)
         {
-            this.DepartamentDef = departamentDef;
-            this.dbConnection = new FbConnection(string.Format(Config.DbConnectionStringFormat, departamentDef.Url, departamentDef.Path));
+            DepartmentCode = departmentCode;
+            this.dbConnection = new FbConnection(string.Format(Config.DbConnectionStringFormat, dbUrl, dbPath));
         }
 
-        public List<PaymentReason> GetPaymentReasons()
+        public List<ZeusPaymentReason> GetPaymentReasons()
         {
             DbDataReader dataReader = null;
 
@@ -32,14 +31,14 @@ namespace CashCenter.ZeusDb
                 var command = GetDbCommandByQuery(Sql.GET_REASONS);
                 dataReader = command.ExecuteReader();
 
-                var result = new List<PaymentReason>();
+                var result = new List<ZeusPaymentReason>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.REASON_ID);
                     string name = dataReader.GetFieldFromReader<string>(Sql.REASON_NAME);
                     bool isCanPay = dataReader.GetFieldFromReader<string>(Sql.REASON_CANPAY) == "1";
 
-                    result.Add(new PaymentReason(id, name, isCanPay));
+                    result.Add(new ZeusPaymentReason(id, name, isCanPay));
                 }
 
                 return result;
@@ -47,7 +46,7 @@ namespace CashCenter.ZeusDb
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка получения оснований для оплаты.", e);
-                return new List<PaymentReason>();
+                return new List<ZeusPaymentReason>();
             }
             finally
             {
@@ -56,7 +55,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public List<Customer> GetCustomers()
+        public List<ZeusCustomer> GetCustomers()
         {
             DbDataReader dataReader = null;
 
@@ -67,7 +66,7 @@ namespace CashCenter.ZeusDb
                 var command = GetDbCommandByQuery(Sql.GET_CUSTOMERS);
                 dataReader = command.ExecuteReader();
 
-                var result = new List<Customer>();
+                var result = new List<ZeusCustomer>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_ID);
@@ -77,7 +76,7 @@ namespace CashCenter.ZeusDb
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    result.Add(new Customer(id, DepartamentDef?.Code ?? string.Empty, name, flat, buildingNumber, streetName, localityName));
+                    result.Add(new ZeusCustomer(id, DepartmentCode ?? string.Empty, name, flat, buildingNumber, streetName, localityName));
                 }
 
                 return result;
@@ -85,7 +84,7 @@ namespace CashCenter.ZeusDb
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка получения физических лиц.", e);
-                return new List<Customer>();
+                return new List<ZeusCustomer>();
             }
             finally
             {
@@ -94,7 +93,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public Customer GetCustomer(int customerId)
+        public ZeusCustomer GetCustomer(int customerId)
         {
             DbDataReader dataReader = null;
 
@@ -107,7 +106,7 @@ namespace CashCenter.ZeusDb
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
-                Customer result = null;
+                ZeusCustomer result = null;
                 if (dataReader.Read())
                 {
                     string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
@@ -116,7 +115,7 @@ namespace CashCenter.ZeusDb
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    result = new Customer(customerId, DepartamentDef?.Code ?? string.Empty, name, flat, buildingNumber, streetName, localityName);
+                    result = new ZeusCustomer(customerId, DepartmentCode ?? string.Empty, name, flat, buildingNumber, streetName, localityName);
                 }
 
                 return result;
@@ -133,7 +132,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public CustomerCounters GetCustomerCounterValues(int customerId, DateTime beginDate, DateTime endDate)
+        public ZeusCustomerCounters GetCustomerCounterValues(int customerId, DateTime beginDate, DateTime endDate)
         {
             DbDataReader dataReader = null;
 
@@ -148,7 +147,7 @@ namespace CashCenter.ZeusDb
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
-                CustomerCounters result = null;
+                ZeusCustomerCounters result = null;
                 if (dataReader.Read())
                 {
                     string counterName = dataReader.GetFieldFromReader<string>(Sql.COUNTER_NAME);
@@ -159,7 +158,7 @@ namespace CashCenter.ZeusDb
                     if (counterName == null)
                         return null;
 
-                    result = new CustomerCounters(customerId, endDayValue, endNightValue, isTwoTariff);
+                    result = new ZeusCustomerCounters(customerId, endDayValue, endNightValue, isTwoTariff);
                 }
 
                 return result;
@@ -176,7 +175,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public Debt GetDebt(int customerId, int dayEncoding)
+        public ZeusDebt GetDebt(int customerId, int dayEncoding)
         {
             DbDataReader dataReader = null;
 
@@ -190,13 +189,13 @@ namespace CashCenter.ZeusDb
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
-                Debt debt = null;
+                ZeusDebt debt = null;
                 if (dataReader.Read())
                 {
                     var balance = dataReader.GetFieldFromReader<decimal>(Sql.END_BALANCE);
                     var penalty = dataReader.GetFieldFromReader<decimal>(Sql.PENALTY_BALANCE);
 
-                    debt = new Debt(customerId, balance, penalty);
+                    debt = new ZeusDebt(customerId, balance, penalty);
                 }
 
                 return debt;
@@ -246,7 +245,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public PayJournal GetPayJournal(DateTime createDate, int paymentKindId)
+        public ZeusPayJournal GetPayJournal(DateTime createDate, int paymentKindId)
         {
             DbDataReader dataReader = null;
 
@@ -260,13 +259,13 @@ namespace CashCenter.ZeusDb
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
-                PayJournal resultPayJournal = null;
+                ZeusPayJournal resultPayJournal = null;
                 if (dataReader.Read())
                 {
                     var id = dataReader.GetFieldFromReader<int>(Sql.PAY_JOURNAL_ID);
                     var name = dataReader.GetFieldFromReader<string>(Sql.PAY_JOURNAL_NAME);
 
-                    resultPayJournal = new PayJournal(id, name, createDate, paymentKindId);
+                    resultPayJournal = new ZeusPayJournal(id, name, createDate, paymentKindId);
                 }
 
                 return resultPayJournal;
@@ -283,7 +282,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public void AddRequireToPayJournal(PayJournal payJournal, decimal additionCost)
+        public void AddRequireToPayJournal(ZeusPayJournal payJournal, decimal additionCost)
         {
             try
             {
@@ -307,7 +306,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public PayJournal AddPayJournal(PayJournal payJournal, decimal cost)
+        public ZeusPayJournal AddPayJournal(ZeusPayJournal payJournal, decimal cost)
         {
             try
             {
@@ -324,7 +323,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new PayJournal(id, payJournal.Name, payJournal.CreateDate, payJournal.PaymentKindId);
+                return new ZeusPayJournal(id, payJournal.Name, payJournal.CreateDate, payJournal.PaymentKindId);
             }
             catch (Exception e)
             {
@@ -337,7 +336,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public Pay AddPay(Pay pay)
+        public ZeusPay AddPay(ZeusPay pay)
         {
             try
             {
@@ -357,7 +356,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new Pay(id, pay.CustomerId, pay.ReasonId, pay.MetersId, pay.JournalId,
+                return new ZeusPay(id, pay.CustomerId, pay.ReasonId, pay.MetersId, pay.JournalId,
                     pay.Cost, pay.PenaltyTotal, pay.Description);
             }
             catch (Exception e)
@@ -371,7 +370,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public CounterValues AddCounterValues(CounterValues counterValues, DateTime createDate)
+        public ZeusCounterValues AddCounterValues(ZeusCounterValues counterValues, DateTime createDate)
         {
             try
             {
@@ -389,7 +388,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new CounterValues(id, counterValues.CustomerId,
+                return new ZeusCounterValues(id, counterValues.CustomerId,
                     counterValues.CustomerCounterId, counterValues.Value1,
                     counterValues.Value2);
             }
@@ -428,7 +427,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public Meter AddMeters(Meter meter)
+        public ZeusMeter AddMeters(ZeusMeter meter)
         {
             try
             {
@@ -446,7 +445,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new Meter(id, meter.CustomerId, meter.CustomerCounterId,
+                return new ZeusMeter(id, meter.CustomerId, meter.CustomerCounterId,
                     meter.Value1, meter.Value2, meter.CounterValuesId);
             }
             catch (Exception e)
@@ -460,7 +459,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public List<Warehouse> GetWarehouses()
+        public List<ZeusWarehouse> GetWarehouses()
         {
             DbDataReader dataReader = null;
 
@@ -471,7 +470,7 @@ namespace CashCenter.ZeusDb
                 var command = GetDbCommandByQuery(Sql.GET_WAREHOUSES);
                 dataReader = command.ExecuteReader();
 
-                var result = new List<Warehouse>();
+                var result = new List<ZeusWarehouse>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_ID);
@@ -481,7 +480,7 @@ namespace CashCenter.ZeusDb
                     string unitName = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_UNITNAME);
                     string barcode = dataReader.GetFieldFromReader<string>(Sql.WAREHOUSE_BARCODE);
 
-                    result.Add(new Warehouse(id, code, name, quantity, unitName, barcode));
+                    result.Add(new ZeusWarehouse(id, code, name, quantity, unitName, barcode));
                 }
 
                 return result;
@@ -489,7 +488,7 @@ namespace CashCenter.ZeusDb
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка получения товаров.", e);
-                return new List<Warehouse>();
+                return new List<ZeusWarehouse>();
             }
             finally
             {
@@ -498,7 +497,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public List<WarehouseCategory> GetWarehouseCategories()
+        public List<ZeusWarehouseCategory> GetWarehouseCategories()
         {
             DbDataReader dataReader = null;
 
@@ -509,7 +508,7 @@ namespace CashCenter.ZeusDb
                 var command = GetDbCommandByQuery(Sql.GET_WAREHOUSE_CATEGORIES);
                 dataReader = command.ExecuteReader();
 
-                var result = new List<WarehouseCategory>();
+                var result = new List<ZeusWarehouseCategory>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_CATEGORY_ID);
@@ -518,7 +517,7 @@ namespace CashCenter.ZeusDb
                     bool isDefault = dataReader.GetFieldFromReader<bool>(Sql.WAREHOUSE_CATEGORY_IS_DEFAULT);
                     bool isWholesale = dataReader.GetFieldFromReader<bool>(Sql.WAREHOUSE_CATEGORY_IS_WHOLESALE);
 
-                    result.Add(new WarehouseCategory(id, code, name, isDefault, isWholesale));
+                    result.Add(new ZeusWarehouseCategory(id, code, name, isDefault, isWholesale));
                 }
 
                 return result;
@@ -526,7 +525,7 @@ namespace CashCenter.ZeusDb
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка получения типов стоимостей товаров.", e);
-                return new List<WarehouseCategory>();
+                return new List<ZeusWarehouseCategory>();
             }
             finally
             {
@@ -535,7 +534,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public List<WarehousePrice> GetWarehousePrices()
+        public List<ZeusWarehousePrice> GetWarehousePrices()
         {
             DbDataReader dataReader = null;
 
@@ -546,7 +545,7 @@ namespace CashCenter.ZeusDb
                 var command = GetDbCommandByQuery(Sql.GET_WAREHOUSE_PRICES);
                 dataReader = command.ExecuteReader();
 
-                var result = new List<WarehousePrice>();
+                var result = new List<ZeusWarehousePrice>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.WAREHOUSE_PRICE_ID);
@@ -555,7 +554,7 @@ namespace CashCenter.ZeusDb
                     DateTime entryDate = dataReader.GetFieldFromReader<DateTime>(Sql.WAREHOUSE_PRICE_ENTRY_DATE);
                     decimal priceValue = dataReader.GetFieldFromReader<decimal>(Sql.WAREHOUSE_PRICE_PRICE_VALUE);
 
-                    result.Add(new WarehousePrice(id, warehouseId, warehouseCategoryId, entryDate, priceValue));
+                    result.Add(new ZeusWarehousePrice(id, warehouseId, warehouseCategoryId, entryDate, priceValue));
                 }
 
                 return result;
@@ -563,7 +562,7 @@ namespace CashCenter.ZeusDb
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка получения стоимостей товаров.", e);
-                return new List<WarehousePrice>();
+                return new List<ZeusWarehousePrice>();
             }
             finally
             {
@@ -586,7 +585,7 @@ namespace CashCenter.ZeusDb
             return command;
         }
 
-        public PaymentKind AddPaymentKind(PaymentKind kind)
+        public ZeusPaymentKind AddPaymentKind(ZeusPaymentKind kind)
         {
             try
             {
@@ -602,7 +601,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new PaymentKind(id, kind.Name, kind.TypeId);
+                return new ZeusPaymentKind(id, kind.Name, kind.TypeId);
             }
             catch (Exception e)
             {
@@ -615,7 +614,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public PaymentKind GetPaymentKind(int paymentKindId)
+        public ZeusPaymentKind GetPaymentKind(int paymentKindId)
         {
             DbDataReader dataReader = null;
 
@@ -628,13 +627,13 @@ namespace CashCenter.ZeusDb
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
 
-                PaymentKind paymentKind = null;
+                ZeusPaymentKind paymentKind = null;
                 if (dataReader.Read())
                 {
                     string name = dataReader.GetFieldFromReader<string>(Sql.PAYMENT_KIND_NAME) ?? string.Empty;
                     int typeId = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_TYPE_ID);
 
-                    paymentKind = new PaymentKind(paymentKindId, name, typeId);
+                    paymentKind = new ZeusPaymentKind(paymentKindId, name, typeId);
                 }
 
                 return paymentKind;
@@ -651,7 +650,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public List<PaymentKind> GetPaymentKinds()
+        public List<ZeusPaymentKind> GetPaymentKinds()
         {
             DbDataReader dataReader = null;
 
@@ -662,14 +661,14 @@ namespace CashCenter.ZeusDb
                 var command = GetDbCommandByQuery(Sql.GET_PAYMENT_KINDS);
                 dataReader = command.ExecuteReader();
 
-                var result = new List<PaymentKind>();
+                var result = new List<ZeusPaymentKind>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_ID);
                     string name = dataReader.GetFieldFromReader<string>(Sql.PAYMENT_KIND_NAME) ?? string.Empty;
                     int typeId = dataReader.GetFieldFromReader<int>(Sql.PAYMENT_KIND_TYPE_ID);
 
-                    result.Add(new PaymentKind(id, name, typeId));
+                    result.Add(new ZeusPaymentKind(id, name, typeId));
                 }
 
                 return result;
@@ -677,7 +676,7 @@ namespace CashCenter.ZeusDb
             catch (Exception e)
             {
                 Log.ErrorWithException("Ошибка получения видов платежа.", e);
-                return new List<PaymentKind>();
+                return new List<ZeusPaymentKind>();
             }
             finally
             {

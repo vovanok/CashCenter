@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.ZeusDb.Entities
 {
-    public class PaymentReason
+    public class ZeusPaymentReason
     {
         public int Id { get; private set; }
 
@@ -8,7 +8,7 @@
 
         public bool IsCanPay { get; private set; }
 
-        public PaymentReason(int id, string name, bool isCanPay)
+        public ZeusPaymentReason(int id, string name, bool isCanPay)
         {
             Id = id;
             Name = name;

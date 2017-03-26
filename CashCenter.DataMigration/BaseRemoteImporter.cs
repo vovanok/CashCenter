@@ -1,9 +1,9 @@
-﻿using CashCenter.Common.DbQualification;
+﻿using CashCenter.Dal;
 
 namespace CashCenter.DataMigration
 {
     public abstract class BaseRemoteImporter
     {
-        public abstract void Import(DepartmentDef departmentDef);
+        public abstract void Import(Department department);
     }
 }

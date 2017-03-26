@@ -1,6 +1,6 @@
 namespace CashCenter.ZeusDb.Entities
 {
-    public class Meter
+    public class ZeusMeter
     {
         public int Id { get; private set; }
 
@@ -14,7 +14,7 @@ namespace CashCenter.ZeusDb.Entities
 
         public int CounterValuesId { get; private set; }
 
-        public Meter(int id, int customerId, int customerCounterId, int value1,
+        public ZeusMeter(int id, int customerId, int customerCounterId, int value1,
             int? value2, int counterValuesId)
         {
             Id = id;

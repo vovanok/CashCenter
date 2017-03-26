@@ -1,7 +1,7 @@
 ﻿using CashCenter.Common;
-using CashCenter.Common.DbQualification;
 using CashCenter.Dal;
 using CashCenter.ZeusDb;
+using CashCenter.ZeusDb.Entities;
 using System;
 using System.Linq;
 
@@ -28,25 +28,31 @@ namespace CashCenter.DataMigration
 
         private bool ExportCustomerPayment(CustomerPayment customerPayment)
         {
-            if (customerPayment == null)
+            if (customerPayment == null || customerPayment.Customer == null || customerPayment.Customer.Department == null)
                 return false;
 
             try
             {
-                var db = GetDbControllerByCustomer(customerPayment.Customer);
-                if (db == null)
-                    return false;
+                var db = new ZeusDbController(
+                    customerPayment.Customer.Department.Code,
+                    customerPayment.Customer.Department.Url,
+                    customerPayment.Customer.Department.Path);
 
                 var existingPaymentKind = db.GetPaymentKind(customerPayment.PaymentKind.Id);
                 if (existingPaymentKind == null)
-                    db.AddPaymentKind(new ZeusDb.Entities.PaymentKind(customerPayment.PaymentKind.Id, customerPayment.PaymentKind.Name, customerPayment.PaymentKind.TypeZeusId));
+                {
+                    db.AddPaymentKind(new ZeusPaymentKind(
+                        customerPayment.PaymentKind.Id,
+                        customerPayment.PaymentKind.Name,
+                        customerPayment.PaymentKind.TypeZeusId));
+                }
 
                 var payJournal = AddOrUpdatePayJournal(db, customerPayment.PaymentKind.Id, customerPayment.CreateDate, customerPayment.Cost);
 
                 var customerCounterId = db.GetCustomerCounterId(customerPayment.Customer.Id);
 
                 int? metersId = null;
-                ZeusDb.Entities.CounterValues counterValues = null;
+                ZeusCounterValues counterValues = null;
 
                 var isNormative = customerPayment.Customer.DayValue <= 0 && customerPayment.Customer.NightValue <= 0;
                 var isTwoTariff = customerPayment.Customer.DayValue > 0 && customerPayment.Customer.NightValue > 0;
@@ -56,12 +62,12 @@ namespace CashCenter.DataMigration
 
                     // 1.
                     counterValues = db.AddCounterValues(
-                        new ZeusDb.Entities.CounterValues(customerPayment.Customer.Id, customerCounterId, customerPayment.NewDayValue, correctedNightValue),
+                        new ZeusCounterValues(customerPayment.Customer.Id, customerCounterId, customerPayment.NewDayValue, correctedNightValue),
                         customerPayment.CreateDate);
 
                     // 2.
                     var meters = db.AddMeters(
-                        new ZeusDb.Entities.Meter(-1, customerPayment.Customer.Id, customerCounterId, customerPayment.NewDayValue, correctedNightValue, counterValues.Id));
+                        new ZeusMeter(-1, customerPayment.Customer.Id, customerCounterId, customerPayment.NewDayValue, correctedNightValue, counterValues.Id));
                     metersId = meters.Id;
                 }
 
@@ -69,7 +75,7 @@ namespace CashCenter.DataMigration
 
                 // 3.
                 var pay = db.AddPay(
-                    new ZeusDb.Entities.Pay(
+                    new ZeusPay(
                         customerPayment.Customer.Id,
                         customerPayment.PaymentReason.Id,
                         metersId,
@@ -90,26 +96,7 @@ namespace CashCenter.DataMigration
             }
         }
 
-        private ZeusDbController GetDbControllerByCustomer(Customer customer)
-        {
-            var regionDef = QualifierManager.GetCurrentRegion();
-            if (regionDef == null)
-                return null;
-
-            var dbControllers = regionDef.Departments
-                .Where(departmentDef => departmentDef.Code == customer?.Department?.Code)
-                .Select(departmentDef => new ZeusDbController(departmentDef));
-
-            foreach (var dbController in dbControllers)
-            {
-                if (dbController.GetCustomer(customer.Id) != null)
-                    return dbController;
-            }
-
-            return null;
-        }
-
-        private ZeusDb.Entities.PayJournal AddOrUpdatePayJournal(ZeusDbController db, int paymentKindId, DateTime createDate, decimal cost)
+        private ZeusPayJournal AddOrUpdatePayJournal(ZeusDbController db, int paymentKindId, DateTime createDate, decimal cost)
         {
             if (db == null)
                 return null;
@@ -118,7 +105,7 @@ namespace CashCenter.DataMigration
             if (payJournal != null)
                 db.AddRequireToPayJournal(payJournal, cost);
             else
-                payJournal = db.AddPayJournal(new ZeusDb.Entities.PayJournal(PAY_JOURNAL_NAME, createDate, paymentKindId), cost);
+                payJournal = db.AddPayJournal(new ZeusPayJournal(PAY_JOURNAL_NAME, createDate, paymentKindId), cost);
 
             return payJournal;
         }

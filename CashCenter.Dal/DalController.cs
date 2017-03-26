@@ -347,6 +347,15 @@ namespace CashCenter.Dal
 
         #endregion
 
+        #region Regions and departments
+
+        public IEnumerable<Region> Regions
+        {
+            get { return context.Regions; }
+        }
+
+        #endregion
+
         private void HandleEntityFrameworkError(string message, Exception exception)
         {
             var entityValidationException = exception as DbEntityValidationException;

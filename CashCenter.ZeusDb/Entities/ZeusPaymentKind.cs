@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.ZeusDb.Entities
 {
-    public class PaymentKind
+    public class ZeusPaymentKind
     {
         public int Id { get; private set; }
 
@@ -8,7 +8,7 @@
 
         public int TypeId { get; private set; }
 
-        public PaymentKind(int id, string name, int typeId)
+        public ZeusPaymentKind(int id, string name, int typeId)
         {
             Id = id;
             Name = name;

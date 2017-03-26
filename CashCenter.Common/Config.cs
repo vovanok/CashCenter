@@ -11,7 +11,7 @@ namespace CashCenter.Common
         private const string CUSTOMER_OUTPUT_FILE_FORMAT = "CustomerOutputFileFormat";
         private const string ORGANIZATION_OUTPUT_FILE_FORMAT = "OrganizationOutputFileFormat";
 
-        private const string CURRENT_REGION_CODE = "CurrentRegionCode";
+        private const string CURRENT_REGION_ID = "CurrentRegionId";
         private const string CHECK_PRINTER_PASSWORD = "CheckPrinterPassword";
         private const string CHECK_PRINTER_MAX_LINE_LENGTH = "CheckPrinterMaxLineLength";
         private const string CHECK_PRINTER_COUNT_EMPTY_LINES_AFTER_CHECK = "CheckPrinterCountEmptyLinesAfterCheck";
@@ -28,7 +28,7 @@ namespace CashCenter.Common
         public static string CustomerOutputFileFormat => GetAppSettingByKey(CUSTOMER_OUTPUT_FILE_FORMAT, string.Empty);
         public static string OrganizationOutputFileFormat => GetAppSettingByKey(ORGANIZATION_OUTPUT_FILE_FORMAT, string.Empty);
 
-        public static string CurrentRegionCode => GetAppSettingByKey(CURRENT_REGION_CODE, "0000");
+        public static int CurrentRegionId => GetAppSettingByKeyAsInt(CURRENT_REGION_ID, 100);
 		public static int CheckPrinterPassword => GetAppSettingByKeyAsInt(CHECK_PRINTER_PASSWORD, 0);
 		public static int CheckPrinterMaxLineLength => GetAppSettingByKeyAsInt(CHECK_PRINTER_MAX_LINE_LENGTH, 10);
 		public static int CheckPrinterCountEmptyLinesAfterCheck => GetAppSettingByKeyAsInt(CHECK_PRINTER_COUNT_EMPTY_LINES_AFTER_CHECK, 0);

@@ -28,7 +28,6 @@ namespace CashCenter.Dal
         public virtual DbSet<ArticlePrice> ArticlePrices { get; set; }
         public virtual DbSet<ArticleSale> ArticleSales { get; set; }
         public virtual DbSet<Organization> Organizations { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<OrganizationPayment> OrganizationPayments { get; set; }
         public virtual DbSet<CustomerPayment> CustomerPayments { get; set; }
         public virtual DbSet<PaymentReason> PaymentReasons { get; set; }
@@ -37,5 +36,6 @@ namespace CashCenter.Dal
         public virtual DbSet<ArticlePriceType> ArticlePriceTypes { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
     }
 }

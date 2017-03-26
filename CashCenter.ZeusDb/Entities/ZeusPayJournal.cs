@@ -2,7 +2,7 @@ using System;
 
 namespace CashCenter.ZeusDb.Entities
 {
-    public class PayJournal
+    public class ZeusPayJournal
     {
 		public int Id { get; private set; }
 
@@ -12,7 +12,7 @@ namespace CashCenter.ZeusDb.Entities
 
         public int PaymentKindId { get; private set; }
 
-        public PayJournal(int id, string name, DateTime createDate, int paymentKindId)
+        public ZeusPayJournal(int id, string name, DateTime createDate, int paymentKindId)
         {
 	        Id = id;
             Name = name;
@@ -20,7 +20,7 @@ namespace CashCenter.ZeusDb.Entities
             PaymentKindId = paymentKindId;
         }
 
-        public PayJournal(string name, DateTime createDate, int paymentKindId)
+        public ZeusPayJournal(string name, DateTime createDate, int paymentKindId)
             : this(-1, name, createDate, paymentKindId)
         {
         }
