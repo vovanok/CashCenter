@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvRegistryController.cs" />
-    <Compile Include="Entities\OrganizationPayment.cs" />
+    <Compile Include="Entities\CsvOrganizationPayment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace CashCenter.CsvRegistry.Entities
 {
-    public class OrganizationPayment
+    public class CsvOrganizationPayment
     {
         public int OrganizationId { get; private set; }
         public string DocumentNumber { get; private set; }
@@ -16,7 +16,7 @@ namespace CashCenter.CsvRegistry.Entities
         public string IncastCodePayment { get; private set; }
         public int ReasonId { get; private set; }
 
-        public OrganizationPayment(int organizationId, string documentNumber, string departmentCode,
+        public CsvOrganizationPayment(int organizationId, string documentNumber, string departmentCode,
             DateTime createDate, string comment, decimal cost, int paymentTypeId, string paymentTypeName,
             string code1C, string incastCodePayment, int reasonId)
         {

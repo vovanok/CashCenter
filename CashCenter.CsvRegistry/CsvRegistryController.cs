@@ -7,7 +7,7 @@ namespace CashCenter.CsvRegistry
 {
     public class CsvRegistryController
     {
-        public void AddPayment(OrganizationPayment organizationPayment)
+        public void AddPayment(CsvOrganizationPayment organizationPayment)
         {
             var csvFileName = GetCsvFileName(organizationPayment.DepartmentCode, organizationPayment.CreateDate);
             var lineForWrite =

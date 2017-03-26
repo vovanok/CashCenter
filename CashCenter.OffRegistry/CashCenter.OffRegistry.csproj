@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\CustomerPayment.cs" />
+    <Compile Include="Entities\OffCustomerPayment.cs" />
     <Compile Include="OffRegistryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

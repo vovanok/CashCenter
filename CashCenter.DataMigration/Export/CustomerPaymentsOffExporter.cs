@@ -33,7 +33,7 @@ namespace CashCenter.DataMigration
 
             try
             {
-                var offFileCustomerPayment = new OffRegistry.Entities.CustomerPayment(
+                var offFileCustomerPayment = new OffRegistry.Entities.OffCustomerPayment(
                     Guid.NewGuid().ToString(),
                     customerPayment.Customer.Id,
                     customerPayment.NewDayValue,

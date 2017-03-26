@@ -7,7 +7,7 @@ namespace CashCenter.OffRegistry
 {
     public class OffRegistryController
     {
-        public void AddPayment(CustomerPayment customerPayment)
+        public void AddPayment(OffCustomerPayment customerPayment)
         {
             var offFileName = GetOffFileName(customerPayment.DepartmentCode, customerPayment.CreateDate);
             var lineForWrite = GetOffFileLine(customerPayment);
@@ -26,7 +26,7 @@ namespace CashCenter.OffRegistry
             }
         }
         
-        private string GetOffFileLine(CustomerPayment customerPayment)
+        private string GetOffFileLine(OffCustomerPayment customerPayment)
         {
             if (customerPayment == null)
                 return string.Empty;
