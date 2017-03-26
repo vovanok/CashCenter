@@ -104,6 +104,7 @@
     <Compile Include="Department.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntitiesExtensions.cs" />
     <Compile Include="Organization.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>

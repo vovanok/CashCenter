@@ -1,5 +1,5 @@
-﻿using CashCenter.Common.DataEntities;
-﻿using System.Collections.Generic;
+﻿using CashCenter.Dal;
+using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
@@ -9,7 +9,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public Customer Customer { get; protected set; }
         public InfoForCheck InfoForCheck { get; protected set; }
-        public List<PaymentReason> PaymentReasons { get; protected set; }
+        public IEnumerable<PaymentReason> PaymentReasons { get; protected set; }
 
         public bool IsCustomerFinded
         {

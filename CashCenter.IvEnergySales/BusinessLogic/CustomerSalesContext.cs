@@ -1,5 +1,5 @@
 ﻿using CashCenter.Common;
-using CashCenter.Common.DataEntities;
+using CashCenter.Dal;
 using System;
 using System.Linq;
 
@@ -10,23 +10,11 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public CustomerSalesContext(int customerId)
             : base(customerId)
         {
-            var dalCustomer = Dal.DalController.Instance.GetCustomerById(customerId);
+            var dalCustomer = DalController.Instance.GetCustomerById(customerId);
             if (dalCustomer == null)
                 return;
 
-            Customer = new Customer(
-                id: dalCustomer.Id,
-                departmentCode: dalCustomer.Department.Code,
-                name: dalCustomer.Name,
-                address: dalCustomer.Address,
-                dayValue: dalCustomer.DayValue,
-                nightValue: dalCustomer.NightValue,
-                balance: dalCustomer.Balance,
-                penalty: dalCustomer.Penalty);
-
-            PaymentReasons = Dal.DalController.Instance.PaymentReasons
-                .Select(dalReason => new PaymentReason(dalReason.Id, dalReason.Name))
-                .ToList();
+            PaymentReasons = DalController.Instance.PaymentReasons;
         }
 
         public override bool Pay(CustomerPayment payment)
@@ -45,9 +33,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
                 }
 
-                if (!payment.IsValid)
+                string validationErrorMessage;
+                if (!payment.IsValid(out validationErrorMessage))
                 {
-                    Log.Error($"{ERROR_PREFIX}\n{payment.ValidationErrorMessage}");
+                    Log.Error($"{ERROR_PREFIX}\n{validationErrorMessage}");
                     return false;
                 }
 
@@ -62,11 +51,11 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     Description = payment.Description
                 };
 
-                Dal.DalController.Instance.AddCustomerPayment(newDalCustomerPayment);
+                DalController.Instance.AddCustomerPayment(newDalCustomerPayment);
 
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
                 InfoForCheck = new InfoForCheck(payment.Cost, payment.CreateDate,
-                    Customer.DepartmentCode, Customer.Id, Customer.Name, paymentReasonName);
+                    Customer.Department.Code, Customer.Id, Customer.Name, paymentReasonName);
 
                 return true;
             }

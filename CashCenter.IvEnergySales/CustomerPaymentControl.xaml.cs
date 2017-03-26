@@ -1,5 +1,5 @@
 ﻿using CashCenter.Common;
-using CashCenter.Common.DataEntities;
+using CashCenter.Dal;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.Check;
 using System;
@@ -93,10 +93,16 @@ namespace CashCenter.IvEnergySales
                 tbDescription.Text = string.Empty;
 
                 lblIsNormative.Visibility =
-                    newSalesContext != null && newSalesContext.Customer != null && newSalesContext.Customer.IsNormative
-                        ? Visibility.Visible : Visibility.Hidden;
+                    newSalesContext != null &&
+                    newSalesContext.Customer != null &&
+                    newSalesContext.Customer.IsNormative()
+                        ? Visibility.Visible
+                        : Visibility.Hidden;
+
                 tbNightCurrentCounterValue.IsEnabled =
-                    newSalesContext != null && newSalesContext.Customer != null && newSalesContext.Customer.IsTwoTariff;
+                    newSalesContext != null &&
+                    newSalesContext.Customer != null &&
+                    newSalesContext.Customer.IsTwoTariff();
 
                 UpdateDayDeltaValueLbl();
                 UpdateNightDeltaValueLbl();
@@ -172,8 +178,17 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                var customerPayment = new CustomerPayment(customerSalesContext.Value.Customer,
-                    dayValue, nightValue, paymentCost, reasonId, DateTime.Now);
+                var customerPayment = new CustomerPayment
+                {
+                    CustomerId = customerSalesContext.Value.Customer.Id,
+                    NewDayValue = dayValue,
+                    NewNightValue = nightValue,
+                    Cost = paymentCost,
+                    ReasonId = reasonId,
+                    CreateDate = DateTime.Now,
+                    Description = description,
+                    PaymentKindId = 123 // TODO: вынести в настройки
+                };
 
                 if (!customerSalesContext.Value.Pay(customerPayment))
                     return;
