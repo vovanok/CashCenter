@@ -76,7 +76,16 @@ namespace CashCenter.IvEnergySales
             using (var waiter = new OperationWaiter())
             {
                 if (newCustomerSalesContext == null)
-                    tbCustomerId.Text = string.Empty;
+                    tbCustomerNumber.Text = string.Empty;
+
+                tbCustomerEmail.IsEnabled = newCustomerSalesContext != null && newCustomerSalesContext.IsCustomerFinded;
+
+                tbCustomerEmail.Text =
+                    newCustomerSalesContext != null &&
+                    newCustomerSalesContext.Customer != null &&
+                    newCustomerSalesContext.Customer.Email != null
+                        ? newCustomerSalesContext.Customer.Email
+                        : string.Empty;
 
                 gbPaymentInfo.IsEnabled = newCustomerSalesContext != null && newCustomerSalesContext.IsCustomerFinded;
 
@@ -111,9 +120,9 @@ namespace CashCenter.IvEnergySales
 
         private void FindCustomerInfo()
         {
-            if (!int.TryParse(tbCustomerId.Text, out int targetCustomerId))
+            if (!int.TryParse(tbCustomerNumber.Text, out int targetCustomerNumber))
             {
-                Log.Error($"Номер лицевого счета должен быть числом ({tbCustomerId.Text}).");
+                Log.Error($"Номер лицевого счета должен быть числом ({tbCustomerNumber.Text}).");
                 return;
             }
 
@@ -131,11 +140,11 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                customerSalesContext.Value = new CustomerSalesContext(targetCustomerId);
+                customerSalesContext.Value = new CustomerSalesContext(targetCustomerNumber);
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)
-                Log.Info($"Плательщик с номером лицевого счета {targetCustomerId} не найден.");
+                Log.Info($"Плательщик с номером лицевого счета {targetCustomerNumber} не найден.");
         }
 
         private void On_btnPay_Click(object sender, RoutedEventArgs e)
@@ -178,6 +187,9 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
+                if (customerSalesContext.Value.Customer.Email != tbCustomerEmail.Text)
+                    customerSalesContext.Value.ChangeEmail(tbCustomerEmail.Text);
+
                 var customerPayment = new CustomerPayment
                 {
                     CustomerId = customerSalesContext.Value.Customer.Id,
@@ -205,7 +217,7 @@ namespace CashCenter.IvEnergySales
             FindCustomerInfo();
         }
 
-        private void On_tbCustomerId_KeyUp(object sender, KeyEventArgs e)
+        private void On_tbCustomerNumber_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
                 return;

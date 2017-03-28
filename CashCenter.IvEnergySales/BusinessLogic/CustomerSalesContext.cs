@@ -25,6 +25,24 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             PaymentReasons = DalController.Instance.PaymentReasons;
         }
 
+        public void ChangeEmail(string email)
+        {
+            if (Customer == null)
+            {
+                Log.Error("Плательщик не задан.");
+                return;
+            }
+
+            if (!StringUtils.IsValidEmail(email))
+            {
+                Log.Error("Адрес электронной почты не задан или имеет неверный формат.");
+                return;
+            }
+
+            Customer.Email = email;
+            DalController.Instance.Save();
+        }
+
         public bool Pay(CustomerPayment payment)
         {
             try
