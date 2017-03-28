@@ -16,9 +16,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public bool IsCustomerFinded => Customer != null;
 
-        public CustomerSalesContext(int customerId)
+        public CustomerSalesContext(string departmentCode, string customerNumber)
         {
-            var dalCustomer = DalController.Instance.GetCustomerById(customerId);
+            var dalCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
+                customer.Number == customerNumber &&
+                customer.Department.Code == departmentCode);
+
             if (dalCustomer == null)
                 return;
 

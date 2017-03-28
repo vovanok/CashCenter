@@ -231,11 +231,6 @@ namespace CashCenter.Dal
             get { return context.CustomerPayments; }
         }
 
-        public Customer GetCustomerById(int id)
-        {
-            return Customers.FirstOrDefault(item => item.Id == id);
-        }
-
         public Customer AddCustomer(Customer customer)
         {
             try
