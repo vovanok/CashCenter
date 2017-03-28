@@ -1,39 +1,49 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.ZeusDb;
+using CashCenter.ZeusDb.Entities;
 
 namespace CashCenter.DataMigration
 {
-    public class PaymentReasonsRemoteImporter : BaseRemoteImporter
+    public class PaymentReasonsRemoteImporter : BaseRemoteImporter<ZeusPaymentReason, PaymentReason>
     {
-        public override void Import(Department department)
+        protected override void CreateNewItems(IEnumerable<PaymentReason> paymentReasons)
         {
-            if (department == null)
-            {
-                Log.Error("Для импорта из БД не указано отделение.");
-                return;
-            }
+            DalController.Instance.AddPaymentReasonsRange(paymentReasons);
+        }
 
-            try
-            {
-                DalController.Instance.ClearPaymentReasons();
+        protected override void DeleteAllTargetItems()
+        {
+        }
 
-                var db = new ZeusDbController(department.Code, department.Url, department.Path);
-                var importedPaymentReasons = db.GetPaymentReasons();
-                var paymentReasonsForAdd = importedPaymentReasons.Select(paymentReason => new PaymentReason
+        protected override IEnumerable<ZeusPaymentReason> GetSourceItems()
+        {
+            if (db == null)
+                return new List<ZeusPaymentReason>();
+
+            return db.GetPaymentReasons();
+        }
+
+        protected override PaymentReason GetTargetItemBySource(ZeusPaymentReason zeusPaymentReason)
+        {
+            return new PaymentReason
                 {
-                    Id = paymentReason.Id,
-                    Name = paymentReason.Name
-                });
+                    Id = zeusPaymentReason.Id,
+                    Name = zeusPaymentReason.Name
+                };
+        }
 
-                DalController.Instance.AddPaymentReasonsRange(paymentReasonsForAdd);
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorWithException("Ошибка импортирования данных из удаленной БД", ex);
-            }
+        protected override bool TryUpdateExistingItem(ZeusPaymentReason zeusPaymentReason)
+        {
+            var existingPaymentReason = DalController.Instance.PaymentReasons
+                .FirstOrDefault(paymentReason => paymentReason.Id == zeusPaymentReason.Id);
+
+            if (existingPaymentReason == null)
+                return false;
+
+            existingPaymentReason.Name = zeusPaymentReason.Name;
+
+            return true;
         }
     }
 }

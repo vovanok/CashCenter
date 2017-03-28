@@ -1,39 +1,50 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.ZeusDb;
+using CashCenter.ZeusDb.Entities;
 
 namespace CashCenter.DataMigration
 {
-    public class PaymentKindsRemoteImporter : BaseRemoteImporter
+    public class PaymentKindsRemoteImporter : BaseRemoteImporter<ZeusPaymentKind, PaymentKind>
     {
-        public override void Import(Department department)
+        protected override void DeleteAllTargetItems()
         {
-            if (department == null)
-            {
-                Log.Error("Для импорта из БД не указано отделение.");
-                return;
-            }
+        }
 
-            try
-            {
-                DalController.Instance.ClearPaymentKinds();
+        protected override IEnumerable<ZeusPaymentKind> GetSourceItems()
+        {
+            if (db == null)
+                return new List<ZeusPaymentKind>();
 
-                var db = new ZeusDbController(department.Code, department.Url, department.Path);
-                var importedPaymentKinds = db.GetPaymentKinds();
-                var paymentKindsForAdd = importedPaymentKinds.Select(paymentKind => new PaymentKind
-                    {
-                        Id = paymentKind.Id,
-                        Name = paymentKind.Name
-                    });
+            return db.GetPaymentKinds();
+        }
 
-                DalController.Instance.AddPaymentKindsRange(paymentKindsForAdd);
-            }
-            catch (Exception ex)
+        protected override bool TryUpdateExistingItem(ZeusPaymentKind zeusPaymentKind)
+        {
+            var existingPaymentKind = DalController.Instance.PaymentKinds
+                .FirstOrDefault(paymentKind => paymentKind.Id == zeusPaymentKind.Id);
+
+            if (existingPaymentKind == null)
+                return false;
+
+            existingPaymentKind.Name = zeusPaymentKind.Name;
+            existingPaymentKind.TypeZeusId = zeusPaymentKind.TypeId;
+
+            return true;
+        }
+
+        protected override void CreateNewItems(IEnumerable<PaymentKind> paymentKinds)
+        {
+            DalController.Instance.AddPaymentKindsRange(paymentKinds);
+        }
+
+        protected override PaymentKind GetTargetItemBySource(ZeusPaymentKind zeusPaymentKind)
+        {
+            return new PaymentKind
             {
-                Log.ErrorWithException("Ошибка импортирования данных из удаленной БД", ex);
-            }
+                Id = zeusPaymentKind.Id,
+                Name = zeusPaymentKind.Name
+            };
         }
     }
 }

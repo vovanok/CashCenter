@@ -14,9 +14,9 @@ namespace CashCenter.IvEnergySales
         {
             public bool IsChecked { get; set; }
             public string Name { get; private set; }
-            public BaseRemoteImporter Importer { get; private set; }
+            public IRemoteImportiable Importer { get; private set; }
 
-            public ImportTargetItem(string name, BaseRemoteImporter importer)
+            public ImportTargetItem(string name, IRemoteImportiable importer)
             {
                 IsChecked = false;
                 Name = name;
@@ -26,9 +26,7 @@ namespace CashCenter.IvEnergySales
 
         private List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
         {
-            new ImportTargetItem("Товары", new ArticlesRemoteImporter()),
             new ImportTargetItem("Физ. лица", new CustomersRemoteImporter()),
-            new ImportTargetItem("Юр. лица", null), //TODO
             new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter()),
             new ImportTargetItem("Виды оплаты", new PaymentKindsRemoteImporter())
         };
@@ -39,33 +37,6 @@ namespace CashCenter.IvEnergySales
 
             RefreshArticlePriceTypes();
             lbImportTargets.ItemsSource = importTargetItems.Where(item => item.Importer != null);
-        }
-
-        private void On_btnImportArticlesFromDbf_Click(object sender, RoutedEventArgs e)
-        {
-            var articlePriceType = cbArticlePriceType.SelectedItem as Dal.ArticlePriceType;
-            if (articlePriceType == null)
-            {
-                Log.Error("Не выбран тип стоимости товара. Если их нет, произведите импорт из удаленной БД.");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(fscArticlesDbfFileSelector.FileName))
-            {
-                Log.Error("DBF файл не выбран.");
-                return;
-            }
-
-            if (MessageBox.Show($@"Вы уверены что хотите произвести импорт из файла: {fscArticlesDbfFileSelector.FileName}",
-                "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                using (var waiter = new OperationWaiter())
-                {
-                    var importer = new ArticlesDbfImporter();
-                    importer.PriceType = articlePriceType;
-                    importer.Import(fscArticlesDbfFileSelector.FileName);
-                }
-            }
         }
 
         private void On_btnImportFromDb_Click(object sender, RoutedEventArgs e)
@@ -105,10 +76,6 @@ namespace CashCenter.IvEnergySales
         {
             var artilePriceTypeSelectorItems = DalController.Instance.ArticlePriceTypes
                 .Select(artPriceType => new { Item = artPriceType, DisplayInfo = $"{artPriceType.Code} {artPriceType.Name}" });
-
-            cbArticlePriceType.ItemsSource = artilePriceTypeSelectorItems;
-            if (cbArticlePriceType.Items.Count > 0)
-                cbArticlePriceType.SelectedIndex = 0;
         }
 
         private void On_btnImportCustomersFromDbf_Click(object sender, RoutedEventArgs e)

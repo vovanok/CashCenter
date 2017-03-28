@@ -15,25 +15,6 @@
                     <Button x:Name="btnImportCustomersFromDbf" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" Click="On_btnImportCustomersFromDbf_Click" />
                 </StackPanel>
             </TabItem>            
-            <TabItem Header="Импорт товаров из DBF">
-                <StackPanel>
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-
-                        <Label Content="Тип стоимости товара" Grid.Column="0" Grid.Row="0" />
-                        <ComboBox x:Name="cbArticlePriceType" Grid.Column="1" Grid.Row="0" DisplayMemberPath="DisplayInfo" SelectedValuePath="Item" />
-                    </Grid>
-                    <Label Content="Путь к DBF файлу для импорта" />
-                    <local:FileSelectorControl x:Name="fscArticlesDbfFileSelector" FilesFilter="*.DBF|*.DBF" />
-                    <Button x:Name="btnImportArticlesFromDbf" Content="Импортировать" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" Click="On_btnImportArticlesFromDbf_Click" />
-                </StackPanel>
-            </TabItem>
             <TabItem Header="Импорт из Зевса">
                 <StackPanel>
                     <Label Content="Что импортировать" />

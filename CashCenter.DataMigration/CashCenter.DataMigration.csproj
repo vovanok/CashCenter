@@ -41,10 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Artile\ArticlesDbfImporter.cs" />
-    <Compile Include="Artile\ArticlesRemoteImporter.cs" />
     <Compile Include="BaseDbfImporter.cs" />
     <Compile Include="BaseExporter.cs" />
+    <Compile Include="BaseImporter.cs" />
     <Compile Include="BaseRemoteImporter.cs" />
     <Compile Include="Customer\CustomerPaymentsOffExporter.cs" />
     <Compile Include="Customer\CustomerPaymentsRemoteExporter.cs" />
@@ -53,6 +52,7 @@
     <Compile Include="ImportResult.cs" />
     <Compile Include="Customer\PaymentKindsRemoteImporter.cs" />
     <Compile Include="Customer\PaymentReasonsRemoteImporter.cs" />
+    <Compile Include="IRemoteImportiable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

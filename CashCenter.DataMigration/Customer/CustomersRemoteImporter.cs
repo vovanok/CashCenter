@@ -1,54 +1,90 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.ZeusDb;
+using CashCenter.ZeusDb.Entities;
 
 namespace CashCenter.DataMigration
 {
-    public class CustomersRemoteImporter : BaseRemoteImporter
+    public class CustomersRemoteImporter : BaseRemoteImporter<ZeusCustomer, Customer>
     {
-        public override void Import(Department department)
+        private DateTime beginDate;
+        private DateTime endDate;
+        private int dayEncoding;
+
+        public CustomersRemoteImporter()
         {
-            if (department == null)
+            var now = DateTime.Now;
+            beginDate = new DateTime(now.Year, now.Month, 1);
+            endDate = beginDate.AddMonths(1).AddDays(-1);
+            dayEncoding = now.Year * 12 + now.Month;
+        }
+
+        protected override void CreateNewItems(IEnumerable<Customer> customers)
+        {
+            DalController.Instance.AddCustomersRange(customers);
+        }
+
+        protected override void DeleteAllTargetItems()
+        {
+            foreach (var customer in DalController.Instance.Customers)
             {
-                Log.Error("Для импорта из БД не указано отделение.");
-                return;
+                customer.IsActive = false;
             }
+        }
 
-            try
+        protected override IEnumerable<ZeusCustomer> GetSourceItems()
+        {
+            if (db == null)
+                return new List<ZeusCustomer>();
+
+            return db.GetCustomers();
+        }
+
+        protected override Customer GetTargetItemBySource(ZeusCustomer zeusCustomer)
+        {
+            if (db == null)
+                return null;
+
+            var counterValues = db.GetCustomerCounterValues(zeusCustomer.Id, beginDate, endDate);
+            var debt = db.GetDebt(zeusCustomer.Id, dayEncoding);
+
+            return new Customer
             {
-                var now = DateTime.Now;
-                var beginDate = new DateTime(now.Year, now.Month, 1);
-                var endDate = beginDate.AddMonths(1).AddDays(-1);
+                DepartmentId = sourceDepartment.Id,
+                Number = zeusCustomer.Id,
+                Name = zeusCustomer.Name,
+                Address = zeusCustomer.Address,
+                DayValue = counterValues.EndDayValue,
+                NightValue = counterValues.EndNightValue,
+                Balance = debt.Balance,
+                Penalty = debt.Penalty,
+                IsActive = true,
+                Email = string.Empty
+            };
+        }
 
-                var db = new ZeusDbController(department.Code, department.Url, department.Path);
-                var importingCustomers = db.GetCustomers();
+        protected override bool TryUpdateExistingItem(ZeusCustomer zeusCustomer)
+        {
+            var existingCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
+                customer.Department.Id == sourceDepartment.Id &&
+                customer.Number == zeusCustomer.Id);
 
-                var customersForAdd = importingCustomers.Select(customer =>
-                    {
-                        var counterValues = db.GetCustomerCounterValues(customer.Id, beginDate, endDate);
-                        var debt = db.GetDebt(customer.Id, now.Year * 12 + now.Month);
+            if (existingCustomer == null)
+                return false;
 
-                        return new Customer
-                        {
-                            DepartmentId = department.Id,
-                            Number = customer.Id,
-                            Name = customer.Name,
-                            Address = customer.Address,
-                            DayValue = counterValues.EndDayValue,
-                            NightValue = counterValues.EndNightValue,
-                            Balance = debt.Balance,
-                            Penalty = debt.Penalty
-                        };
-                    });
+            var counterValues = db.GetCustomerCounterValues(zeusCustomer.Id, beginDate, endDate);
+            var debt = db.GetDebt(zeusCustomer.Id, dayEncoding);
 
-                DalController.Instance.AddCustomersRange(customersForAdd);
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorWithException("Ошибка импортирования данных из удаленной БД", ex);
-            }
+            existingCustomer.Name = zeusCustomer.Name;
+            existingCustomer.Address = zeusCustomer.Address;
+            existingCustomer.DayValue = counterValues.EndDayValue;
+            existingCustomer.NightValue = counterValues.EndNightValue;
+            existingCustomer.Balance = debt.Balance;
+            existingCustomer.Penalty = debt.Penalty;
+            existingCustomer.IsActive = true;
+
+            return true;
         }
     }
 }

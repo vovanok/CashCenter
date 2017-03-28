@@ -31,6 +31,11 @@ namespace CashCenter.Dal
             get { return context.PaymentReasons; }
         }
 
+        public IEnumerable<PaymentKind> PaymentKinds
+        {
+            get { return context.PaymentKinds; }
+        }
+
         public Department GetDepartmentByCode(string code)
         {
             return context.Departments.FirstOrDefault(item => item.Code == code);
