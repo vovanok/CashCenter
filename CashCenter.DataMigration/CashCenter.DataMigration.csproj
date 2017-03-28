@@ -41,18 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Import\ArticlesDbfImporter.cs" />
-    <Compile Include="Import\ArticlesRemoteImporter.cs" />
-    <Compile Include="Import\BaseDbfImporter.cs" />
-    <Compile Include="Export\BaseExporter.cs" />
-    <Compile Include="Import\BaseRemoteImporter.cs" />
-    <Compile Include="Export\CustomerPaymentsOffExporter.cs" />
-    <Compile Include="Export\CustomerPaymentsRemoteExporter.cs" />
-    <Compile Include="Import\CustomersDbfImporter.cs" />
-    <Compile Include="Import\CustomersRemoteImporter.cs" />
-    <Compile Include="Import\ImportResult.cs" />
-    <Compile Include="Import\PaymentKindsRemoteImporter.cs" />
-    <Compile Include="Import\PaymentReasonsRemoteImporter.cs" />
+    <Compile Include="Artile\ArticlesDbfImporter.cs" />
+    <Compile Include="Artile\ArticlesRemoteImporter.cs" />
+    <Compile Include="BaseDbfImporter.cs" />
+    <Compile Include="BaseExporter.cs" />
+    <Compile Include="BaseRemoteImporter.cs" />
+    <Compile Include="Customer\CustomerPaymentsOffExporter.cs" />
+    <Compile Include="Customer\CustomerPaymentsRemoteExporter.cs" />
+    <Compile Include="Customer\CustomersDbfImporter.cs" />
+    <Compile Include="Customer\CustomersRemoteImporter.cs" />
+    <Compile Include="ImportResult.cs" />
+    <Compile Include="Customer\PaymentKindsRemoteImporter.cs" />
+    <Compile Include="Customer\PaymentReasonsRemoteImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

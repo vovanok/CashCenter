@@ -120,9 +120,9 @@ namespace CashCenter.IvEnergySales
 
         private void FindCustomerInfo()
         {
-            if (!string.IsNullOrEmpty(tbCustomerNumber.Text))
+            if (!int.TryParse(tbCustomerNumber.Text, out int customerNumber))
             {
-                Log.Error($"Номер лицевого счета не задан.");
+                Log.Error($"Номер лицевого счета должен быть числом.");
                 return;
             }
 
@@ -140,11 +140,11 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                customerSalesContext.Value = new CustomerSalesContext(controlDeparmentSelector.SelectedDepartment.Code, tbCustomerNumber.Text);
+                customerSalesContext.Value = new CustomerSalesContext(controlDeparmentSelector.SelectedDepartment.Code, customerNumber);
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)
-                Log.Info($"Плательщик с лицевым счетом {tbCustomerNumber.Text} не найден.");
+                Log.Info($"Плательщик с номером лицевого счета {customerNumber} не найден.");
         }
 
         private void On_btnPay_Click(object sender, RoutedEventArgs e)

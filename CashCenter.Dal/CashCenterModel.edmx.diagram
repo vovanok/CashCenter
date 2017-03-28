@@ -26,7 +26,7 @@
         <EntityTypeShape EntityType="CashCenterModel.Region" Width="1.5" PointX="7" PointY="0.5" FillColor="Maroon" />
         <AssociationConnector Association="CashCenterModel.FK_Department_ToRegion" />
         <AssociationConnector Association="CashCenterModel.FK_Organization_ToDepartment" />
-        <EntityTypeShape EntityType="CashCenterModel.Customer" Width="1.5" PointX="5.125" PointY="3.875" FillColor="Green" />
+        <EntityTypeShape EntityType="CashCenterModel.Customer" Width="1.5" PointX="5.25" PointY="3.875" FillColor="Green" />
         <AssociationConnector Association="CashCenterModel.FK_Customer_ToDepartment" />
         <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToCustomer" />
         </Diagram>

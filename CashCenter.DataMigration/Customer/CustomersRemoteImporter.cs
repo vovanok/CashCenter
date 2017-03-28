@@ -18,8 +18,6 @@ namespace CashCenter.DataMigration
 
             try
             {
-                DalController.Instance.ClearAllCustomersData();
-
                 var now = DateTime.Now;
                 var beginDate = new DateTime(now.Year, now.Month, 1);
                 var endDate = beginDate.AddMonths(1).AddDays(-1);
@@ -35,6 +33,7 @@ namespace CashCenter.DataMigration
                         return new Customer
                         {
                             DepartmentId = department.Id,
+                            Number = customer.Id,
                             Name = customer.Name,
                             Address = customer.Address,
                             DayValue = counterValues.EndDayValue,

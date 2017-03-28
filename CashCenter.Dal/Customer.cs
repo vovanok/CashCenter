@@ -30,7 +30,7 @@ namespace CashCenter.Dal
         public decimal Penalty { get; set; }
         public bool IsActive { get; set; }
         public string Email { get; set; }
-        public string Number { get; set; }
+        public int Number { get; set; }
     
         public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
