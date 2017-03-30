@@ -169,14 +169,14 @@ namespace CashCenter.IvEnergySales
 
             var errorList = new List<string>();
 
-            if (!int.TryParse(tbDayCurrentCounterValue.Text, out int dayValue))
-                errorList.Add($"Некорректное показание дневного счетчика. Оно должно быть числом ({dayValue}).");
+            if (!int.TryParse(tbDayCurrentCounterValue.Text, out int dayValue) && dayValue >= 0)
+                errorList.Add($"Некорректное показание дневного счетчика. Оно должно быть положительным числом ({dayValue}). Возможно показание не задано или является слишком большим.");
 
-            if (!int.TryParse(tbNightCurrentCounterValue.Text, out int nightValue))
-                errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом ({nightValue}).");
+            if (!int.TryParse(tbNightCurrentCounterValue.Text, out int nightValue) && nightValue >= 0)
+                errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом ({nightValue}). Возможно показание не задано или является слишком большим.");
 
             if (!decimal.TryParse(tbCost.Text, out decimal paymentCost))
-                errorList.Add($"Некорректное значение суммы платежа. Оно должно быть числом ({paymentCost}).");
+                errorList.Add($"Некорректное значение суммы платежа. Оно должно быть числом ({paymentCost}). Возможно сумма не задана или является слишком большой.");
 
             if (!(cbPaymentReasons.SelectedValue is int))
                 errorList.Add($"Некорректное значение основания платежа.");

@@ -8,7 +8,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class CustomerSalesContext
     {
-        protected const string ERROR_PREFIX = "Ошибка совершения платежа.";
+        protected const string PAY_ERROR_PREFIX = "Ошибка совершения платежа.";
 
         public Customer Customer { get; protected set; }
         public InfoForCheck InfoForCheck { get; protected set; }
@@ -41,11 +41,14 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public void ChangeEmail(string email)
         {
-            if (Customer == null)
-            {
-                Log.Error("Плательщик не задан.");
+            if (string.IsNullOrEmpty(email))
                 return;
-            }
+
+            if (!IsCustomerFinded)
+                return;
+
+            if (Customer.Email == email)
+                return;
 
             if (!StringUtils.IsValidEmail(email))
             {
@@ -63,36 +66,26 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             {
                 if (!IsCustomerFinded)
                 {
-                    Log.Error($"{ERROR_PREFIX}\nОтсутствует плательщик.");
+                    Log.Error($"{PAY_ERROR_PREFIX}\nОтсутствует плательщик.");
                     return false;
                 }
 
                 if (payment == null)
                 {
-                    Log.Error($"{ERROR_PREFIX}\nОтсутствует платеж.");
+                    Log.Error($"{PAY_ERROR_PREFIX}\nОтсутствует платеж.");
                     return false;
                 }
 
                 if (!payment.IsValid(out string validationErrorMessage))
                 {
-                    Log.Error($"{ERROR_PREFIX}\n{validationErrorMessage}");
+                    Log.Error($"{PAY_ERROR_PREFIX}\n{validationErrorMessage}");
                     return false;
                 }
 
-                var newDalCustomerPayment = new Dal.CustomerPayment()
-                {
-                    CustomerId = payment.Customer.Id,
-                    NewDayValue = payment.NewDayValue,
-                    NewNightValue = payment.NewNightValue,
-                    Cost = payment.Cost,
-                    ReasonId = payment.ReasonId,
-                    CreateDate = payment.CreateDate,
-                    Description = payment.Description
-                };
-
-                DalController.Instance.AddCustomerPayment(newDalCustomerPayment);
+                DalController.Instance.AddCustomerPayment(payment);
 
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
+
                 InfoForCheck = new InfoForCheck(payment.Cost, payment.CreateDate,
                     Customer.Department.Code, Customer.Id, Customer.Name, paymentReasonName);
 
@@ -100,7 +93,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             }
             catch(Exception e)
             {
-                Log.ErrorWithException("Ошибка добавления платежа в БД", e);
+                Log.ErrorWithException("Ошибка создание платежа физ.лица.", e);
                 return false;
             }
         }
