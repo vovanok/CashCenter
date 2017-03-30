@@ -140,7 +140,7 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                customerSalesContext.Value = new CustomerSalesContext(controlDeparmentSelector.SelectedDepartment.Code, customerNumber);
+                customerSalesContext.Value = new CustomerSalesContext(controlDeparmentSelector.SelectedDepartment, customerNumber);
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)
