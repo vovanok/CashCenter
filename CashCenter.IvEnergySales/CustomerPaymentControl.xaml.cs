@@ -43,6 +43,12 @@ namespace CashCenter.IvEnergySales
         {
             InitializeComponent();
 
+            if (controlDeparmentSelector.Region == null)
+            {
+                Log.Error("Район не выбран.");
+                return;
+            }
+            
             customerSalesContext.OnChange += SalesContext_OnChange;
         }
 
@@ -120,25 +126,25 @@ namespace CashCenter.IvEnergySales
 
         private void FindCustomerInfo()
         {
-            if (!int.TryParse(tbCustomerNumber.Text, out int customerNumber))
-            {
-                Log.Error($"Номер лицевого счета должен быть числом.");
-                return;
-            }
-
-            if (controlDeparmentSelector.Region == null)
-            {
-                Log.Error("Район не выбран.");
-                return;
-            }
-
             if (controlDeparmentSelector.SelectedDepartment == null)
             {
                 Log.Error("Отделение не выбрано.");
                 return;
             }
 
-            using (var waiter = new OperationWaiter())
+            if (string.IsNullOrEmpty(tbCustomerNumber.Text))
+            {
+                Log.Error("Номер лицевого счета не задан.");
+                return;
+            }
+
+            if (!int.TryParse(tbCustomerNumber.Text, out int customerNumber))
+            {
+                Log.Error("Номер лицевого счета не является числом или имеет слишком большое значение.");
+                return;
+            }
+
+            using (new OperationWaiter())
             {
                 customerSalesContext.Value = new CustomerSalesContext(controlDeparmentSelector.SelectedDepartment, customerNumber);
             }

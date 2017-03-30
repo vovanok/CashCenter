@@ -21,15 +21,22 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             if (department == null)
                 return;
 
-            var customers = DalController.Instance.Customers.Where(customer => customer.Number == customerNumber);
-            
-            Customer = customers.FirstOrDefault(customer => customer.Department.Id == department.Id)
-                ?? customers.FirstOrDefault(customer => customer.Department.Code == department.Code);
+            try
+            {
+                var customers = DalController.Instance.Customers.Where(customer => customer.Number == customerNumber);
 
-            if (Customer == null)
-                return;
+                Customer = customers.FirstOrDefault(customer => customer.Department.Id == department.Id)
+                    ?? customers.FirstOrDefault(customer => customer.Department.Code == department.Code);
 
-            PaymentReasons = DalController.Instance.PaymentReasons;
+                if (Customer == null)
+                    return;
+
+                PaymentReasons = DalController.Instance.PaymentReasons;
+            }
+            catch(Exception ex)
+            {
+                Log.ErrorWithException("Ошибка поиска физ. лица", ex);
+            }
         }
 
         public void ChangeEmail(string email)
