@@ -12,12 +12,14 @@ namespace CashCenter.DataMigration
             DalController.Instance.AddCustomersRange(customers);
         }
 
-        protected override void DeleteAllTargetItems()
+        protected override int DeleteAllTargetItems()
         {
             foreach (var customer in DalController.Instance.Customers)
             {
                 customer.IsActive = false;
             }
+
+            return DalController.Instance.Customers.Count();
         }
 
         protected override IEnumerable<DbfCustomer> GetSourceItems()

@@ -12,8 +12,9 @@ namespace CashCenter.DataMigration
             DalController.Instance.AddPaymentReasonsRange(paymentReasons);
         }
 
-        protected override void DeleteAllTargetItems()
+        protected override int DeleteAllTargetItems()
         {
+            return 0;
         }
 
         protected override IEnumerable<ZeusPaymentReason> GetSourceItems()

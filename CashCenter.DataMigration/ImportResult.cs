@@ -1,21 +1,22 @@
-﻿using CashCenter.Dal;
-using System.Collections.Generic;
-
-namespace CashCenter.DataMigration
+﻿namespace CashCenter.DataMigration
 {
     public class ImportResult
     {
-        public List<Article> AddedArticles { get; private set; }
+        public int AddedCount { get; private set; }
 
-        public List<Article> UpdatedArticles { get; private set; }
+        public int UpdatedCount { get; private set; }
 
-        public List<Article> DeletedArticles { get; private set; }
+        public int DeletedCount { get; private set; }
 
-        public ImportResult()
+        public ImportResult() : this(0, 0, 0)
         {
-            AddedArticles = new List<Article>();
-            UpdatedArticles = new List<Article>();
-            DeletedArticles = new List<Article>();
+        }
+
+        public ImportResult(int addedCount, int updatedCount, int deletedCount)
+        {
+            AddedCount = addedCount;
+            UpdatedCount = updatedCount;
+            DeletedCount = deletedCount;
         }
     }
 }

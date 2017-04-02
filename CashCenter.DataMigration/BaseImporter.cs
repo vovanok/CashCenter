@@ -6,26 +6,35 @@ namespace CashCenter.DataMigration
 {
     public abstract class BaseImporter<TSource, TTarget>
     {
-        public void Import()
+        public ImportResult Import()
         {
             var sourceItems = GetSourceItems();
 
             if (sourceItems == null)
-                return;
+                return new ImportResult();
 
-            DeleteAllTargetItems();
+            var addedCount = 0;
+            var updatedCount = 0;
+            var deletedCount = DeleteAllTargetItems();
 
             var itemsForCreation = sourceItems.Select(sourceItem =>
                 {
-                    if (!TryUpdateExistingItem(sourceItem))
-                        return GetTargetItemBySource(sourceItem);
+                    if (TryUpdateExistingItem(sourceItem))
+                    {
+                        updatedCount++;
+                        deletedCount--;
+                        return default(TTarget);
+                    }
 
-                    return default(TTarget);
+                    addedCount++;
+                    return GetTargetItemBySource(sourceItem);
                 }).Where(targetItem => !targetItem.Equals(default(TTarget)));
 
             CreateNewItems(itemsForCreation);
 
             DalController.Instance.Save();
+
+            return new ImportResult(addedCount, updatedCount, deletedCount);
         }
 
         protected abstract void CreateNewItems(IEnumerable<TTarget> itemsForCreation);
@@ -36,6 +45,6 @@ namespace CashCenter.DataMigration
 
         protected abstract IEnumerable<TSource> GetSourceItems();
 
-        protected abstract void DeleteAllTargetItems();
+        protected abstract int DeleteAllTargetItems();
     }
 }

@@ -7,8 +7,9 @@ namespace CashCenter.DataMigration
 {
     public class PaymentKindsRemoteImporter : BaseRemoteImporter<ZeusPaymentKind, PaymentKind>
     {
-        protected override void DeleteAllTargetItems()
+        protected override int DeleteAllTargetItems()
         {
+            return 0;
         }
 
         protected override IEnumerable<ZeusPaymentKind> GetSourceItems()
