@@ -49,6 +49,7 @@
     <Compile Include="Customer\CustomerPaymentsRemoteExporter.cs" />
     <Compile Include="Customer\CustomersDbfImporter.cs" />
     <Compile Include="Customer\CustomersRemoteImporter.cs" />
+    <Compile Include="IDbfImportiable.cs" />
     <Compile Include="ImportResult.cs" />
     <Compile Include="Customer\PaymentKindsRemoteImporter.cs" />
     <Compile Include="Customer\PaymentReasonsRemoteImporter.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.DbfRegistry.Entities
 {
-    public class Organization
+    public class DbfOrganization
     {
         public int Id { get; private set; }
         public string DepartamentCode { get; private set; }
@@ -9,7 +9,7 @@
         public string Inn { get; private set; }
         public string Kpp { get; private set; }
 
-        public Organization(int id, string departamentCode,
+        public DbfOrganization(int id, string departamentCode,
             string contractNumber, string name, string inn, string kpp)
         {
             Id = id;

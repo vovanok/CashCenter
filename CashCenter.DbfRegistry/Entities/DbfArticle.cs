@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.DbfRegistry.Entities
 {
-    public class Article
+    public class DbfArticle
     {
         public string Code { get; private set; }
 
@@ -10,7 +10,7 @@
 
         public decimal Price { get; private set; }
 
-        public Article(string code, string name, string barcode, decimal price)
+        public DbfArticle(string code, string name, string barcode, decimal price)
         {
             Code = code;
             Name = name;

@@ -1,82 +1,69 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
-using CashCenter.DbfRegistry;
-using System;
+﻿using CashCenter.Dal;
+using CashCenter.DbfRegistry.Entities;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CashCenter.DataMigration
 {
-    public class CustomersDbfImporter : BaseDbfImporter
+    public class CustomersDbfImporter : BaseDbfImporter<DbfCustomer, Customer>
     {
-        public override void Import(string dbfFilename)
+        protected override void CreateNewItems(IEnumerable<Customer> customers)
         {
-            if (string.IsNullOrEmpty(dbfFilename))
-            {
-                Log.Error($"{IMPORT_ERROR_PREFIX} Путь к файлу не задан.");
-                return;
-            }
+            DalController.Instance.AddCustomersRange(customers);
+        }
 
-            try
+        protected override void DeleteAllTargetItems()
+        {
+            foreach (var customer in DalController.Instance.Customers)
             {
-                var dbfRegistry = new DbfRegistryController(dbfFilename);
-                var importedCustomers = dbfRegistry.GetCustomers();
-
-                var existingCustomers = DalController.Instance.Customers;
-
-                foreach (var importedCustomer in importedCustomers)
-                {
-                    var existingCustomer = existingCustomers.FirstOrDefault(customer =>
-                        customer.Id == importedCustomer.Id && customer.Department.Code == importedCustomer.DepartmentCode);
-                    if (existingCustomer != null)
-                    {
-                        UpdateCustomerByImportedCustomer(existingCustomer, importedCustomer);
-                    }
-                    else
-                    {
-                        AddNewCustomerByImportedCustomer(importedCustomer);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorWithException(IMPORT_ERROR_PREFIX, ex);
+                customer.IsActive = false;
             }
         }
 
-        private void AddNewCustomerByImportedCustomer(DbfRegistry.Entities.Customer importedCustomer)
+        protected override IEnumerable<DbfCustomer> GetSourceItems()
         {
-            if (importedCustomer == null)
-                return;
+            if (dbfRegistry == null)
+                return new List<DbfCustomer>();
 
-            var department = DalController.Instance.GetDepartmentByCode(importedCustomer.DepartmentCode);
+            return dbfRegistry.GetCustomers();
+        }
+
+        protected override Customer GetTargetItemBySource(DbfCustomer dbfCustomer)
+        {
+            var department = DalController.Instance.GetDepartmentByCode(dbfCustomer.DepartmentCode);
             if (department == null)
-                return;
+                return null;
 
-            var newCustomer = new Customer
+            return new Customer
             {
-                Id = importedCustomer.Id,
                 DepartmentId = department.Id,
+                Number = dbfCustomer.Id,
                 Name = string.Empty,
                 Address = string.Empty,
-                DayValue = importedCustomer.DayValue,
-                NightValue = importedCustomer.NightValue,
-                Balance = importedCustomer.Balance,
-                Penalty = 0
+                DayValue = dbfCustomer.DayValue,
+                NightValue = dbfCustomer.NightValue,
+                Balance = dbfCustomer.Balance,
+                Penalty = 0,
+                IsActive = true,
+                Email = string.Empty
             };
-
-            DalController.Instance.AddCustomer(newCustomer);
         }
 
-        private void UpdateCustomerByImportedCustomer(Customer customer, DbfRegistry.Entities.Customer importedCustomer)
+        protected override bool TryUpdateExistingItem(DbfCustomer dbfCustomer)
         {
-            if (customer == null || importedCustomer == null)
-                return;
+            var existingCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
+                customer.Department.Code == dbfCustomer.DepartmentCode &&
+                customer.Number == dbfCustomer.Id);
 
-            customer.DayValue = importedCustomer.DayValue;
-            customer.NightValue = importedCustomer.NightValue;
-            customer.Balance = importedCustomer.Balance;
+            if (existingCustomer == null)
+                return false;
 
-            DalController.Instance.Save();
+            existingCustomer.DayValue = dbfCustomer.DayValue;
+            existingCustomer.NightValue = dbfCustomer.NightValue;
+            existingCustomer.Balance = dbfCustomer.Balance;
+            existingCustomer.IsActive = true;
+
+            return true;
         }
     }
 }

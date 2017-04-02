@@ -42,10 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbfRegistryController.cs" />
-    <Compile Include="Entities\Article.cs" />
-    <Compile Include="Entities\ArticlesSet.cs" />
-    <Compile Include="Entities\Customer.cs" />
-    <Compile Include="Entities\Organization.cs" />
+    <Compile Include="Entities\DbfArticle.cs" />
+    <Compile Include="Entities\DbfArticlesSet.cs" />
+    <Compile Include="Entities\DbfCustomer.cs" />
+    <Compile Include="Entities\DbfOrganization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

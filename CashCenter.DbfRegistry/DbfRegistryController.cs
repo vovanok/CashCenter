@@ -69,7 +69,7 @@ namespace CashCenter.DbfRegistry
             dbfName = fileInfo.Name;
         }
 
-        public List<Customer> GetCustomers()
+        public List<DbfCustomer> GetCustomers()
         {
             try
             {
@@ -80,7 +80,7 @@ namespace CashCenter.DbfRegistry
 
                 var dataReader = command.ExecuteReader();
 
-                var customers = new List<Customer>();
+                var customers = new List<DbfCustomer>();
                 while (dataReader.Read())
                 {
                     int id = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
@@ -89,7 +89,7 @@ namespace CashCenter.DbfRegistry
                     int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
                     decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_END_BALANCE);
 
-                    customers.Add(new Customer(id, departamentCode, dayValue, nightValue, balance));
+                    customers.Add(new DbfCustomer(id, departamentCode, dayValue, nightValue, balance));
                 }
 
                 return customers;
@@ -97,7 +97,7 @@ namespace CashCenter.DbfRegistry
             catch (Exception e)
             {
                 Log.ErrorWithException($"Ошибка получения физ.лиц из файла {dbfName}.", e);
-                return new List<Customer>();
+                return new List<DbfCustomer>();
             }
             finally
             {
@@ -105,7 +105,7 @@ namespace CashCenter.DbfRegistry
             }
         }
 
-        public List<Organization> GetOrganizations()
+        public List<DbfOrganization> GetOrganizations()
         {
             try
             {
@@ -116,7 +116,7 @@ namespace CashCenter.DbfRegistry
 
                 var dataReader = command.ExecuteReader();
 
-                List<Organization> organizations = new List<Organization>();
+                List<DbfOrganization> organizations = new List<DbfOrganization>();
                 while (dataReader.Read())
                 {
                     int id = dataReader.GetFieldFromReader<int>(Sql.ORGANIZATION_ID);
@@ -126,7 +126,7 @@ namespace CashCenter.DbfRegistry
                     string inn = dataReader.GetFieldFromReader<string>(Sql.ORGANIZATION_INN);
                     string kpp = dataReader.GetFieldFromReader<string>(Sql.ORGANIZATION_KPP);
 
-                    organizations.Add(new Organization(id, departamentCode, contractNumber, name, inn, kpp));
+                    organizations.Add(new DbfOrganization(id, departamentCode, contractNumber, name, inn, kpp));
                 }
 
                 return organizations;
@@ -134,7 +134,7 @@ namespace CashCenter.DbfRegistry
             catch (Exception e)
             {
                 Log.ErrorWithException($"Ошибка получения организаций из файла {dbfName}.", e);
-                return new List<Organization>();
+                return new List<DbfOrganization>();
             }
             finally
             {
@@ -142,7 +142,7 @@ namespace CashCenter.DbfRegistry
             }
         }
 
-        public ArticlesSet GetArticles()
+        public DbfArticlesSet GetArticles()
         {
             try
             {
@@ -157,7 +157,7 @@ namespace CashCenter.DbfRegistry
                 if (dataReader.Read())
                     date = dataReader.GetFieldFromReader<DateTime>(Sql.ARTICLES_DATA);
 
-                var articles = new List<Article>();
+                var articles = new List<DbfArticle>();
                 while (dataReader.Read())
                 {
                     var code = dataReader.GetFieldFromReader<string>(Sql.ARTICLES_CODE);
@@ -165,15 +165,15 @@ namespace CashCenter.DbfRegistry
                     var barcode = dataReader.GetFieldFromReader<string>(Sql.ARTICLES_BARCODE);
                     var price = dataReader.GetFieldFromReader<decimal>(Sql.ARTICLES_PRICE);
 
-                    articles.Add(new Article(code, name, barcode, price));
+                    articles.Add(new DbfArticle(code, name, barcode, price));
                 }
 
-                return new ArticlesSet(date, articles);
+                return new DbfArticlesSet(date, articles);
             }
             catch(Exception ex)
             {
                 Log.ErrorWithException($"Ошибка загрузки товаров из DBF файла: {dbfName}", ex);
-                return new ArticlesSet();
+                return new DbfArticlesSet();
             }
         }
     }
