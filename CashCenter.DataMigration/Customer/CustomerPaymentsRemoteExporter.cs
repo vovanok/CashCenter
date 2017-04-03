@@ -29,36 +29,32 @@ namespace CashCenter.DataMigration
                     customerPayment.Customer.Department.Url,
                     customerPayment.Customer.Department.Path);
 
-                var existingPaymentKind = db.GetPaymentKind(customerPayment.PaymentKind.Id);
+                var paymentKind = DalController.Instance.PaymentKinds.FirstOrDefault(item => item.Id == customerPayment.PaymentKindId);
+                if (paymentKind == null)
+                    return false;
+
+                var existingPaymentKind = db.GetPaymentKind(paymentKind.Id);
                 if (existingPaymentKind == null)
-                {
-                    db.AddPaymentKind(new ZeusPaymentKind(
-                        customerPayment.PaymentKind.Id,
-                        customerPayment.PaymentKind.Name,
-                        customerPayment.PaymentKind.TypeZeusId));
-                }
+                    db.AddPaymentKind(new ZeusPaymentKind(paymentKind.Id, paymentKind.Name, paymentKind.TypeZeusId));
 
                 var payJournal = AddOrUpdatePayJournal(db, customerPayment.PaymentKind.Id, customerPayment.CreateDate, customerPayment.Cost);
 
-                var customerCounterId = db.GetCustomerCounterId(customerPayment.Customer.Id);
+                var customerCounterId = db.GetCustomerCounterId(customerPayment.Customer.Number);
 
                 int? metersId = null;
                 ZeusCounterValues counterValues = null;
 
-                var isNormative = customerPayment.Customer.DayValue <= 0 && customerPayment.Customer.NightValue <= 0;
-                var isTwoTariff = customerPayment.Customer.DayValue > 0 && customerPayment.Customer.NightValue > 0;
-                if (!isNormative)
+                if (!customerPayment.Customer.IsNormative())
                 {
-                    int? correctedNightValue = isTwoTariff ? (int?)customerPayment.NewNightValue : null;
+                    int? correctedNightValue = customerPayment.Customer.IsTwoTariff() ? (int?)customerPayment.NewNightValue : 0;
 
                     // 1.
-                    counterValues = db.AddCounterValues(
-                        new ZeusCounterValues(customerPayment.Customer.Id, customerCounterId, customerPayment.NewDayValue, correctedNightValue),
-                        customerPayment.CreateDate);
+                    var newCounterValues = new ZeusCounterValues(customerPayment.Customer.Number, customerCounterId, customerPayment.NewDayValue, correctedNightValue);
+                    counterValues = db.AddCounterValues(newCounterValues, customerPayment.CreateDate);
 
                     // 2.
-                    var meters = db.AddMeters(
-                        new ZeusMeter(-1, customerPayment.Customer.Id, customerCounterId, customerPayment.NewDayValue, correctedNightValue, counterValues.Id));
+                    var newMeters = new ZeusMeter(-1, customerPayment.Customer.Number, customerCounterId, customerPayment.NewDayValue, correctedNightValue, counterValues.Id);
+                    var meters = db.AddMeters(newMeters);
                     metersId = meters.Id;
                 }
 
@@ -67,7 +63,7 @@ namespace CashCenter.DataMigration
                 // 3.
                 var pay = db.AddPay(
                     new ZeusPay(
-                        customerPayment.Customer.Id,
+                        customerPayment.Customer.Number,
                         customerPayment.PaymentReason.Id,
                         metersId,
                         payJournal.Id,

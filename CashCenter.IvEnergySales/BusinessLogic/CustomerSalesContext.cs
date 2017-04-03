@@ -23,7 +23,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
             try
             {
-                var customers = DalController.Instance.Customers.Where(customer => customer.Number == customerNumber);
+                var customers = DalController.Instance.Customers.Where(customer => customer.Number == customerNumber && customer.IsActive);
 
                 Customer = customers.FirstOrDefault(customer => customer.Department.Id == department.Id)
                     ?? customers.FirstOrDefault(customer => customer.Department.Code == department.Code);

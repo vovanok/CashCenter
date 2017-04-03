@@ -39,6 +39,9 @@ namespace CashCenter.IvEnergySales
 
             RefreshArticlePriceTypes();
             lbImportTargets.ItemsSource = importTargetItems.Where(item => item.Importer != null);
+
+            dpBeginPeriod.SelectedDate = DateTime.Now;
+            dpEndPeriod.SelectedDate = DateTime.Now;
         }
 
         private void On_btnImportFromDb_Click(object sender, RoutedEventArgs e)

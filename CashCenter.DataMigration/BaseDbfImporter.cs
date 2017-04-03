@@ -9,6 +9,8 @@ namespace CashCenter.DataMigration
         where TSource : class
         where TTarget : class
     {
+        private const string TEMP_DBF_FILE_NAME = "dbfimp";
+
         protected DbfRegistryController dbfRegistry;
 
         public ImportResult Import(string dbfFilename)
@@ -25,17 +27,29 @@ namespace CashCenter.DataMigration
                 return new ImportResult();
             }
 
-            dbfRegistry = new DbfRegistryController(dbfFilename);
+            var tempFilename = Path.Combine(Path.GetDirectoryName(dbfFilename), TEMP_DBF_FILE_NAME) + Path.GetExtension(dbfFilename);
+            if (File.Exists(tempFilename))
+                File.Delete(tempFilename);
+
+            File.Copy(dbfFilename, tempFilename);
+
+            dbfRegistry = new DbfRegistryController(tempFilename);
+
+            var result = new ImportResult();
 
             try
             {
-                return Import();
+                result = Import();
             }
             catch (Exception ex)
             {
                 Log.ErrorWithException("Ошибка импортирования данных из DBF файла", ex);
-                return new ImportResult();
             }
+
+            if (File.Exists(tempFilename))
+                File.Delete(tempFilename);
+
+            return result;
         }
     }
 }

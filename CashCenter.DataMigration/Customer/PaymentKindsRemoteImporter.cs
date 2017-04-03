@@ -44,7 +44,8 @@ namespace CashCenter.DataMigration
             return new PaymentKind
             {
                 Id = zeusPaymentKind.Id,
-                Name = zeusPaymentKind.Name
+                Name = zeusPaymentKind.Name,
+                TypeZeusId = zeusPaymentKind.Id
             };
         }
     }
