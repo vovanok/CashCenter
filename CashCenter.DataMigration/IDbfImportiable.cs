@@ -2,6 +2,6 @@
 {
     public interface IDbfImportiable
     {
-        void Import(string dbfFilename);
+        ImportResult Import(string dbfFilename);
     }
 }

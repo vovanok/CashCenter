@@ -12,7 +12,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public Customer Customer { get; protected set; }
         public InfoForCheck InfoForCheck { get; protected set; }
-        public IEnumerable<PaymentReason> PaymentReasons { get; protected set; }
+        public List<PaymentReason> PaymentReasons { get; protected set; }
 
         public bool IsCustomerFinded => Customer != null;
 
@@ -31,7 +31,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 if (Customer == null)
                     return;
 
-                PaymentReasons = DalController.Instance.PaymentReasons;
+                PaymentReasons = DalController.Instance.PaymentReasons.ToList();
             }
             catch(Exception ex)
             {
@@ -76,7 +76,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
                 }
 
-                if (!payment.IsValid(out string validationErrorMessage))
+                if (!payment.IsValid(Customer, out string validationErrorMessage))
                 {
                     Log.Error($"{PAY_ERROR_PREFIX}\n{validationErrorMessage}");
                     return false;

@@ -3,30 +3,21 @@ using CashCenter.Dal;
 using CashCenter.OffRegistry;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CashCenter.DataMigration
 {
-    public class CustomerPaymentsOffExporter : BaseExporter
+    public class CustomerPaymentsOffExporter : BaseExporter<CustomerPayment>
     {
         private OffRegistryController outputController = new OffRegistryController();
 
-        public override void Export(DateTime beginDatetime, DateTime endDatetime)
+        protected override List<CustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            var customerPaymentsForExport = DalController.Instance.CustomerPayments.Where(customerPayment =>
-                beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime);
-
-            var countSuccess = 0;
-
-            foreach (var customerPayment in customerPaymentsForExport)
-            {
-                if (ExportCustomerPayment(customerPayment))
-                    countSuccess++;
-            }
-
-            Log.Info($"Экспортировано {countSuccess} из {customerPaymentsForExport.Count()}.\nOFF файлы находятся в директории {Config.OutputDirectory}.");
+            return DalController.Instance.CustomerPayments.Where(customerPayment =>
+                beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        private bool ExportCustomerPayment(CustomerPayment customerPayment)
+        protected override bool TryExportOneItem(CustomerPayment customerPayment)
         {
             if (customerPayment == null)
                 return false;

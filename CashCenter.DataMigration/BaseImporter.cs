@@ -5,6 +5,8 @@ using System.Linq;
 namespace CashCenter.DataMigration
 {
     public abstract class BaseImporter<TSource, TTarget>
+        where TSource : class
+        where TTarget : class
     {
         public ImportResult Import()
         {
@@ -22,13 +24,14 @@ namespace CashCenter.DataMigration
                     if (TryUpdateExistingItem(sourceItem))
                     {
                         updatedCount++;
-                        deletedCount--;
-                        return default(TTarget);
+                        if (deletedCount > 0)
+                            deletedCount--;
+                        return null;
                     }
 
                     addedCount++;
                     return GetTargetItemBySource(sourceItem);
-                }).Where(targetItem => !targetItem.Equals(default(TTarget)));
+                }).Where(targetItem => targetItem != null);
 
             CreateNewItems(itemsForCreation);
 

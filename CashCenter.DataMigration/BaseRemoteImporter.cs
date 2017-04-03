@@ -6,16 +6,18 @@ using System;
 namespace CashCenter.DataMigration
 {
     public abstract class BaseRemoteImporter<TSource, TTarget> : BaseImporter<TSource, TTarget>, IRemoteImportiable
+        where TSource : class
+        where TTarget : class
     {
         protected Department sourceDepartment;
         protected ZeusDbController db;
 
-        public void Import(Department department)
+        public ImportResult Import(Department department)
         {
             if (department == null)
             {
                 Log.Error("Для импорта из БД не указано отделение.");
-                return;
+                return new ImportResult();
             }
 
             try
@@ -23,11 +25,12 @@ namespace CashCenter.DataMigration
                 sourceDepartment = department;
                 db = new ZeusDbController(department.Code, department.Url, department.Path);
 
-                Import();
+                return Import();
             }
             catch (Exception ex)
             {
                 Log.ErrorWithException("Ошибка импортирования данных из удаленной БД", ex);
+                return new ImportResult();
             }
         }
     }

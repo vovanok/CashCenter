@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System;
+using System.Text;
 
 namespace CashCenter.IvEnergySales
 {
@@ -48,23 +50,40 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            if (MessageBox.Show("Вы уверены что хотите произвести импорт из удаленной базы данных:\n"
-                + $"{department.Url}\nДанные будут полностью перезаписаны", "Предупреждение",
-                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show($"Вы уверены что хотите произвести импорт из удаленной базы данных:\n{department.Url}",
+                "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
             {
-                using (var waiter = new OperationWaiter())
-                {
-                    var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
-                        .Where(item => item != null && item.IsChecked);
+                return;
+            }
 
-                    foreach (var importTargetItem in selectedImportTargets)
+            var resultMessage = new StringBuilder("Результат импортирования\n\n");
+            var waiter = new OperationWaiter();
+            using (waiter)
+            {
+                var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
+                    .Where(item => item != null && item.IsChecked);
+
+                foreach (var importTargetItem in selectedImportTargets)
+                {
+                    var importResult = importTargetItem.Importer.Import(controlDepartamentSelector.SelectedDepartment);
+
+                    resultMessage.AppendLine(importTargetItem.Name);
+                    if (importResult == null)
                     {
-                        importTargetItem.Importer.Import(controlDepartamentSelector.SelectedDepartment);
+                        resultMessage.AppendLine("\tОшибка импортирования");
+                        continue;
                     }
 
-                    RefreshArticlePriceTypes();
+                    resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
+                    resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
+                    resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
                 }
+
+                RefreshArticlePriceTypes();
             }
+
+            resultMessage.AppendLine($"\nЗатрачено времени: {waiter.DeltaTime}");
+            Log.Info(resultMessage.ToString());
         }
 
         private void On_btnClose_Click(object sender, RoutedEventArgs e)
@@ -91,17 +110,20 @@ namespace CashCenter.IvEnergySales
                     "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
                 return;
 
+            ImportResult importResult = new ImportResult();
             using (var waiter = new OperationWaiter())
             {
                 var importer = new CustomersDbfImporter();
-                importer.Import(fscCustomersDbfFileSelector.FileName);
+                importResult = importer.Import(fscCustomersDbfFileSelector.FileName);
             }
 
-            using (var waiter = new OperationWaiter())
+            if (importResult == null)
             {
-                var importer = new CustomersDbfImporter();
-                importer.Import(fscCustomersDbfFileSelector.FileName);
+                Log.Info("Ошибка импортирования.");
+                return;
             }
+
+            Log.Info($"Результат импортирования\nДобавлено: {importResult.AddedCount}\nОбновлено: {importResult.UpdatedCount}\nУдалено: {importResult.DeletedCount}");
         }
 
         private void On_btnExportCustomerPaymentsToOff_Click(object sender, RoutedEventArgs e)
@@ -114,7 +136,7 @@ namespace CashCenter.IvEnergySales
             DoExport("базу Зевс", new CustomerPaymentsRemoteExporter());
         }
 
-        private void DoExport(string messageEnd, BaseExporter exporter)
+        private void DoExport(string messageEnd, BaseExporter<CustomerPayment> exporter)
         {
             if (messageEnd == null || exporter == null)
                 return;
@@ -137,7 +159,18 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            exporter.Export(dpBeginPeriod.SelectedDate.Value, dpEndPeriod.SelectedDate.Value);
+            var beginDatetime = dpBeginPeriod.SelectedDate.Value.Date;
+            var endDatetime = dpEndPeriod.SelectedDate.Value.AddDays(1).Date;
+
+            var exportResult = exporter.Export(beginDatetime, endDatetime);
+
+            if (exportResult.SuccessCount == 0 && exportResult.FailCount == 0)
+            {
+                Log.Info("Нет платежей для экспортирования.");
+                return;
+            }
+
+            Log.Info($"Экспортировано {exportResult.SuccessCount} из {exportResult.SuccessCount + exportResult.FailCount} платежей.");
         }
     }
 }

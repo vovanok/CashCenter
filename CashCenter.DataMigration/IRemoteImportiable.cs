@@ -4,6 +4,6 @@ namespace CashCenter.DataMigration
 {
     public interface IRemoteImportiable
     {
-        void Import(Department department);
+        ImportResult Import(Department department);
     }
 }

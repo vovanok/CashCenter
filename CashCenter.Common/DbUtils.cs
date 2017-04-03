@@ -8,6 +8,9 @@ namespace CashCenter.Common
         public static T GetFieldFromReader<T>(this DbDataReader dataReader, string columnName)
         {
             int ordinal = dataReader.GetOrdinal(columnName);
+            if (dataReader.IsDBNull(ordinal))
+                return default(T);
+
             return dataReader.GetFieldValue<T>(ordinal);
         }
 

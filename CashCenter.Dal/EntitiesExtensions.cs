@@ -15,14 +15,13 @@ namespace CashCenter.Dal
             return customer.DayValue > 0 && customer.NightValue > 0;
         }
 
-
-        public static bool IsValid(this CustomerPayment customerPayment, out string errorMessage)
+        public static bool IsValid(this CustomerPayment customerPayment, Customer customer, out string errorMessage)
         {
             var validators = new Func<string>[]
             {
                 () => customerPayment.ValidateCost(customerPayment.Cost),
-                () => customerPayment.ValidateDayCounterValue(customerPayment.NewDayValue),
-                () => customerPayment.ValidateNightCounterValue(customerPayment.NewNightValue),
+                () => customerPayment.ValidateDayCounterValue(customer, customerPayment.NewDayValue),
+                () => customerPayment.ValidateNightCounterValue(customer, customerPayment.NewNightValue),
                 () => customerPayment.ValidateReasonId(customerPayment.ReasonId)
             };
 
@@ -46,33 +45,33 @@ namespace CashCenter.Dal
             return null;
         }
 
-        private static string ValidateDayCounterValue(this CustomerPayment customerPayment, int dayCounterValue)
+        private static string ValidateDayCounterValue(this CustomerPayment customerPayment, Customer customer, int dayCounterValue)
         {
-            if (customerPayment.Customer == null)
+            if (customer == null)
                 return "Плательщик не задан";
 
-            if (customerPayment.Customer.IsNormative())
+            if (customer.IsNormative())
                 return null;
 
-            if (dayCounterValue < customerPayment.Customer.DayValue)
-                return $"Новое показание дневного счетчика меньше предыдущего ({dayCounterValue} < {customerPayment.Customer.DayValue}).";
+            if (dayCounterValue < customer.DayValue)
+                return $"Новое показание дневного счетчика меньше предыдущего ({dayCounterValue} < {customer.DayValue}).";
 
             return null;
         }
 
-        private static string ValidateNightCounterValue(this CustomerPayment customerPayment, int nightCounterValue)
+        private static string ValidateNightCounterValue(this CustomerPayment customerPayment, Customer customer, int nightCounterValue)
         {
-            if (customerPayment.Customer == null)
+            if (customer == null)
                 return "Плательщик не задан";
 
-            if (customerPayment.Customer.IsNormative())
+            if (customer.IsNormative())
                 return null;
 
-            if (!customerPayment.Customer.IsTwoTariff())
+            if (!customer.IsTwoTariff())
                 return null;
 
-            if (nightCounterValue < customerPayment.Customer.NightValue)
-                return $"Новое показание ночного счетчика меньше меньше предыдущего ({nightCounterValue} < {customerPayment.Customer.NightValue}).";
+            if (nightCounterValue < customer.NightValue)
+                return $"Новое показание ночного счетчика меньше меньше предыдущего ({nightCounterValue} < {customer.NightValue}).";
 
             return null;
         }

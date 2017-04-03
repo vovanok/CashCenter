@@ -1,32 +1,23 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
+﻿using CashCenter.Dal;
 using CashCenter.ZeusDb;
 using CashCenter.ZeusDb.Entities;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CashCenter.DataMigration
 {
-    public class CustomerPaymentsRemoteExporter : BaseExporter
+    public class CustomerPaymentsRemoteExporter : BaseExporter<CustomerPayment>
     {
         private const string PAY_JOURNAL_NAME = "Пачка квитанций от РКЦ Ивановской области";
 
-        public override void Export(DateTime beginDatetime, DateTime endDatetime)
+        protected override List<CustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            var customerPaymentsForExport = DalController.Instance.CustomerPayments.Where(customerPayment =>
-                beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime);
-
-            var countSuccess = 0;
-            foreach (var customerPayment in customerPaymentsForExport)
-            {
-                if (ExportCustomerPayment(customerPayment))
-                    countSuccess++;
-            }
-
-            Log.Info($"Экспортировано {countSuccess} из {customerPaymentsForExport.Count()}");
+            return DalController.Instance.CustomerPayments.Where(customerPayment =>
+                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        private bool ExportCustomerPayment(CustomerPayment customerPayment)
+        protected override bool TryExportOneItem(CustomerPayment customerPayment)
         {
             if (customerPayment == null || customerPayment.Customer == null || customerPayment.Customer.Department == null)
                 return false;
