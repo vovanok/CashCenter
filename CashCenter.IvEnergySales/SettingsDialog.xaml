@@ -19,6 +19,18 @@
             <Label Content="Имя кассира" Grid.Column="0" Grid.Row="0" />
             <TextBox x:Name="tbCasherName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Padding="0,5,0,5" />
         </Grid>
+        <GroupBox Header="Отделения">
+            <DataGrid x:Name="dgDepartments" AutoGenerateColumns="False" RowHeaderWidth="0"
+                      CanUserResizeRows="False" Height="100" VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.CanContentScroll="True" SelectionMode="Single" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Код" Width="0.6*" Binding="{Binding Path = Code}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Название" Width="1.1*" Binding="{Binding Path = Name}" IsReadOnly="True" />
+                    <DataGridTextColumn Header="Url" Width="1.2*" Binding="{Binding Path = Url}"/>
+                    <DataGridTextColumn Header="Путь" Width="2*" Binding="{Binding Path = Path}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

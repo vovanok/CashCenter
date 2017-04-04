@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace CashCenter.Common
 {
-    public static class Utils
+    public static class DbUtils
     {
         public static T GetFieldFromReader<T>(this DbDataReader dataReader, string columnName)
         {
