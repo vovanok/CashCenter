@@ -82,7 +82,10 @@ namespace CashCenter.IvEnergySales
             using (var waiter = new OperationWaiter())
             {
                 if (newCustomerSalesContext == null)
+                {
                     tbCustomerNumber.Text = string.Empty;
+                    tbCustomerNumber.Focus();
+                }
 
                 tbCustomerEmail.IsEnabled = newCustomerSalesContext != null && newCustomerSalesContext.IsCustomerFinded;
 
@@ -150,10 +153,31 @@ namespace CashCenter.IvEnergySales
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)
+            {
                 Log.Info($"Плательщик с номером лицевого счета {customerNumber} не найден.");
+                return;
+            }
+
+            if (tbDayCurrentCounterValue.IsEnabled)
+            {
+                tbDayCurrentCounterValue.Focus();
+                return;
+            }
+
+            if (tbNightCurrentCounterValue.IsEnabled)
+            {
+                tbNightCurrentCounterValue.Focus();
+                return;
+            }
+
+            if (tbCost.IsEnabled)
+            {
+                tbCost.Focus();
+                return;
+            }
         }
 
-        private void On_btnPay_Click(object sender, RoutedEventArgs e)
+        private void DoPay()
         {
             if (customerSalesContext.Value == null || !customerSalesContext.Value.IsCustomerFinded)
             {
@@ -225,7 +249,7 @@ namespace CashCenter.IvEnergySales
 
         private void On_tbCustomerNumber_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter)
+            if (e.Key != Key.Enter || e.IsToggled || string.IsNullOrEmpty(tbCustomerNumber.Text))
                 return;
 
             FindCustomerInfo();
@@ -244,6 +268,11 @@ namespace CashCenter.IvEnergySales
         private void On_tbNightCurrentCounterValue_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateNightDeltaValueLbl();
+        }
+
+        private void On_btnPay_Click(object sender, RoutedEventArgs e)
+        {
+            DoPay();
         }
 
         #endregion
@@ -290,6 +319,33 @@ namespace CashCenter.IvEnergySales
                 e.Handled = true;
                 tbCost.Focus();
             }
+        }
+
+        private void On_tbDayCurrentCounterValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            if (tbNightCurrentCounterValue.IsEnabled)
+                tbNightCurrentCounterValue.Focus();
+            else
+                tbCost.Focus();
+        }
+
+        private void On_tbNightCurrentCounterValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            tbCost.Focus();
+        }
+
+        private void On_tbCost_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+
+            DoPay();
         }
 
         #endregion

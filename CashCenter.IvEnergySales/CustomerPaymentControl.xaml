@@ -81,8 +81,8 @@
                     <Label FontWeight="Bold" Grid.Column="2" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Текущие показания"/>
                     </Label>
-                    <TextBox x:Name="tbDayCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbDayCurrentCounterValue_TextChanged" GotFocus="On_tbDayCurrentCounterValue_GotFocus" PreviewMouseLeftButtonDown="On_tbDayCurrentCounterValue_PreviewMouseLeftButtonDown"/>
-                    <TextBox x:Name="tbNightCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbNightCurrentCounterValue_TextChanged" PreviewMouseLeftButtonDown="On_tbNightCurrentCounterValue_PreviewMouseLeftButtonDown" GotFocus="On_tbNightCurrentCounterValue_GotFocus"/>
+                    <TextBox x:Name="tbDayCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbDayCurrentCounterValue_TextChanged" GotFocus="On_tbDayCurrentCounterValue_GotFocus" PreviewMouseLeftButtonDown="On_tbDayCurrentCounterValue_PreviewMouseLeftButtonDown" KeyDown="On_tbDayCurrentCounterValue_KeyDown"/>
+                    <TextBox x:Name="tbNightCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbNightCurrentCounterValue_TextChanged" PreviewMouseLeftButtonDown="On_tbNightCurrentCounterValue_PreviewMouseLeftButtonDown" GotFocus="On_tbNightCurrentCounterValue_GotFocus" KeyDown="On_tbNightCurrentCounterValue_KeyDown"/>
 
                     <Label FontWeight="Bold" Grid.Column="3" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Разница"/>
@@ -112,7 +112,7 @@
                     <Button x:Name="btnPay" Content="Оплатить" Grid.Column="0" Grid.Row="3" Margin="15,5,15,0" Click="On_btnPay_Click"/>
 
                     <ComboBox x:Name="cbPaymentReasons" DisplayMemberPath="Name" SelectedValuePath="Id" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="tbCost" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="On_tbCost_GotFocus" PreviewMouseLeftButtonDown="On_tbCost_PreviewMouseLeftButtonDown"/>
+                    <TextBox x:Name="tbCost" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="On_tbCost_GotFocus" PreviewMouseLeftButtonDown="On_tbCost_PreviewMouseLeftButtonDown" KeyDown="On_tbCost_KeyDown"/>
                     <TextBox x:Name="tbDescription" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                     <Button x:Name="btnClear" Content="Очистить" Grid.Column="1" Grid.Row="3" Margin="15,5,15,0" Click="On_btnClear_Click"/>
                 </Grid>
