@@ -275,6 +275,11 @@ namespace CashCenter.IvEnergySales
             DoPay();
         }
 
+        private void On_controlDeparmentSelector_DepartmentChanged(object sender, SelectionChangedEventArgs e)
+        {
+            tbCustomerNumber.Focus();
+        }
+
         #endregion
 
         #region Text boxes focus manipulation

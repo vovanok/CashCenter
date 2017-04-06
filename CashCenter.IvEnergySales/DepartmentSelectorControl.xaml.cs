@@ -22,6 +22,12 @@ namespace CashCenter.IvEnergySales
             }
         }
 
+        public event SelectionChangedEventHandler DepartmentChanged
+        {
+            add { cbDepartmentSelector.SelectionChanged += value; }
+            remove { cbDepartmentSelector.SelectionChanged -= value; }
+        }
+
         public DepartmentSelectorControl()
         {
             InitializeComponent();
