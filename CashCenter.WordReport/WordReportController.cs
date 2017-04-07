@@ -1,6 +1,7 @@
 ﻿using CashCenter.Common;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace CashCenter.WordReport
 {
@@ -47,6 +48,8 @@ namespace CashCenter.WordReport
                             customerPaymentRow.Cells[4].Range.Text = customerPayment.Cost.ToString("0.00");
                             customerPaymentRow.Cells[5].Range.Text = customerPayment.CreationDate.ToString("dd.MM.yyyy");
                         }
+
+                        document.Bookmarks["TotalCost"].Range.Text = model.CustomerPayments.Sum(payment => payment.Cost).ToString("0.00");
                     }
 
                     application.Activate();
