@@ -1,5 +1,4 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
+﻿using CashCenter.Dal;
 using CashCenter.OffRegistry;
 using System;
 using System.Linq;
@@ -16,8 +15,20 @@ namespace CashCenter.DataMigration
             return DalController.Instance.CustomerPayments.Where(customerPayment =>
                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
+        
+        protected override int TryExportItems(IEnumerable<CustomerPayment> items)
+        {
+            var countSuccess = 0;
+            foreach(var item in items)
+            {
+                if (TryExportOneItem(item))
+                    countSuccess++;
+            }
 
-        protected override bool TryExportOneItem(CustomerPayment customerPayment)
+            return countSuccess;
+        }
+
+        private bool TryExportOneItem(CustomerPayment customerPayment)
         {
             if (customerPayment == null)
                 return false;

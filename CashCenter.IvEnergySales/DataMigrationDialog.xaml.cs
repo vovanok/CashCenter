@@ -139,6 +139,11 @@ namespace CashCenter.IvEnergySales
             DoExport("базу Зевс", new CustomerPaymentsRemoteExporter());
         }
 
+        private void On_btnExportCustomerPaymentsToWordReport_Click(object sender, RoutedEventArgs e)
+        {
+            DoExport("отчет Word", new CustomerPaymentsWordReportExporter());
+        }
+
         private void DoExport(string messageEnd, BaseExporter<CustomerPayment> exporter)
         {
             if (messageEnd == null || exporter == null)
@@ -163,7 +168,7 @@ namespace CashCenter.IvEnergySales
             }
 
             var beginDatetime = dpBeginPeriod.SelectedDate.Value.Date;
-            var endDatetime = dpEndPeriod.SelectedDate.Value.AddDays(1).Date;
+            var endDatetime = dpEndPeriod.SelectedDate.Value.AddDays(1).AddSeconds(-1).Date;
 
             var exportResult = exporter.Export(beginDatetime, endDatetime);
 

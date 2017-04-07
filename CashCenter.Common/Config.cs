@@ -10,6 +10,7 @@ namespace CashCenter.Common
         private const string OUTPUT_DIRECTORY = "OutputDirectory";
         private const string CUSTOMER_OUTPUT_FILE_FORMAT = "CustomerOutputFileFormat";
         private const string ORGANIZATION_OUTPUT_FILE_FORMAT = "OrganizationOutputFileFormat";
+        private const string CUSTOMERS_REPORT_TEMPLATE_FILENAME = "CustomersReportTemplateFilename";
 
         private const string CURRENT_REGION_ID = "CurrentRegionId";
         private const string CHECK_PRINTER_PASSWORD = "CheckPrinterPassword";
@@ -27,6 +28,7 @@ namespace CashCenter.Common
         public static string OutputDirectory => GetAppSettingByKey(OUTPUT_DIRECTORY, string.Empty);
         public static string CustomerOutputFileFormat => GetAppSettingByKey(CUSTOMER_OUTPUT_FILE_FORMAT, string.Empty);
         public static string OrganizationOutputFileFormat => GetAppSettingByKey(ORGANIZATION_OUTPUT_FILE_FORMAT, string.Empty);
+        public static string CustomersReportTemplateFilename => GetAppSettingByKey(CUSTOMERS_REPORT_TEMPLATE_FILENAME, string.Empty);
 
         public static int CurrentRegionId => GetAppSettingByKeyAsInt(CURRENT_REGION_ID, 100);
 		public static int CheckPrinterPassword => GetAppSettingByKeyAsInt(CHECK_PRINTER_PASSWORD, 0);

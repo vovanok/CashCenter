@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{718380A0-3293-4A26-9AD4-86F836647B07}</ProjectGuid>
+    <ProjectGuid>{8CAEDE27-E6B3-4CFC-A5F2-1B35A17407F0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CashCenter.DataMigration</RootNamespace>
-    <AssemblyName>CashCenter.DataMigration</AssemblyName>
+    <RootNamespace>CashCenter.WordReport</RootNamespace>
+    <AssemblyName>CashCenter.WordReport</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NetOffice, Version=1.7.3.0, Culture=neutral, PublicKeyToken=acf636d62c39f8f5, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\NetOffice.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="OfficeApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=7c1c3e9d16cace88, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\OfficeApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,49 +47,28 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="VBIDEApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=a3637beacf571e8a, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\VBIDEApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="WordApi, Version=1.7.3.0, Culture=neutral, PublicKeyToken=dd9255e6bcd130c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetOffice.Word.1.7.3.0\lib\net45\WordApi.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseDbfImporter.cs" />
-    <Compile Include="BaseExporter.cs" />
-    <Compile Include="BaseImporter.cs" />
-    <Compile Include="BaseRemoteImporter.cs" />
-    <Compile Include="Customer\CustomerPaymentsOffExporter.cs" />
-    <Compile Include="Customer\CustomerPaymentsRemoteExporter.cs" />
-    <Compile Include="Customer\CustomerPaymentsWordReportExporter.cs" />
-    <Compile Include="Customer\CustomersDbfImporter.cs" />
-    <Compile Include="Customer\CustomersRemoteImporter.cs" />
-    <Compile Include="ExportResult.cs" />
-    <Compile Include="IDbfImportiable.cs" />
-    <Compile Include="ImportResult.cs" />
-    <Compile Include="Customer\PaymentKindsRemoteImporter.cs" />
-    <Compile Include="Customer\PaymentReasonsRemoteImporter.cs" />
-    <Compile Include="IRemoteImportiable.cs" />
+    <Compile Include="ReportCustomerPaymentModel.cs" />
+    <Compile Include="ReportCustomersModel.cs" />
+    <Compile Include="WordReportController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CashCenter.Dal\CashCenter.Dal.csproj">
-      <Project>{cad4a97e-4f23-41d9-bc76-0f7633c0e1f6}</Project>
-      <Name>CashCenter.Dal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
-      <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
-      <Name>CashCenter.DbfRegistry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CashCenter.OffRegistry\CashCenter.OffRegistry.csproj">
-      <Project>{376d1352-4182-4c9a-a71a-d15609b5f096}</Project>
-      <Name>CashCenter.OffRegistry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CashCenter.WordReport\CashCenter.WordReport.csproj">
-      <Project>{8caede27-e6b3-4cfc-a5f2-1b35a17407f0}</Project>
-      <Name>CashCenter.WordReport</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CashCenter.ZeusDb\CashCenter.ZeusDb.csproj">
-      <Project>{42193820-cd62-41d5-af50-cb7be873ddfd}</Project>
-      <Name>CashCenter.ZeusDb</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

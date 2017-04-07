@@ -17,7 +17,19 @@ namespace CashCenter.DataMigration
                  beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        protected override bool TryExportOneItem(CustomerPayment customerPayment)
+        protected override int TryExportItems(IEnumerable<CustomerPayment> items)
+        {
+            var countSuccess = 0;
+            foreach (var item in items)
+            {
+                if (TryExportOneItem(item))
+                    countSuccess++;
+            }
+
+            return countSuccess;
+        }
+
+        private bool TryExportOneItem(CustomerPayment customerPayment)
         {
             if (customerPayment == null || customerPayment.Customer == null || customerPayment.Customer.Department == null)
                 return false;

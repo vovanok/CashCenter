@@ -5,26 +5,24 @@ namespace CashCenter.DataMigration
 {
     public abstract class BaseExporter<TSource>
     {
+        protected DateTime beginDatetime;
+        protected DateTime endDatetime;
+
         public ExportResult Export(DateTime beginDatetime, DateTime endDatetime)
         {
+            this.beginDatetime = beginDatetime;
+            this.endDatetime = endDatetime;
+
             var itemsForExport = GetSourceItems(beginDatetime, endDatetime);
 
-            var successCount = 0;
-            var failCount = 0;
-
-            foreach (var customerPayment in itemsForExport)
-            {
-                if (TryExportOneItem(customerPayment))
-                    successCount++;
-                else
-                    failCount++;
-            }
+            var successCount = TryExportItems(itemsForExport);
+            var failCount = itemsForExport.Count - successCount;
 
             return new ExportResult(successCount, failCount);
         }
 
         protected abstract List<TSource> GetSourceItems(DateTime beginDatetime, DateTime endDatetime);
 
-        protected abstract bool TryExportOneItem(TSource item);
+        protected abstract int TryExportItems(IEnumerable<TSource> items);
     }
 }
