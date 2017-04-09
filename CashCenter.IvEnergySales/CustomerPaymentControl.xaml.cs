@@ -42,14 +42,6 @@ namespace CashCenter.IvEnergySales
         public CustomerPaymentControl()
         {
             InitializeComponent();
-
-            if (controlDeparmentSelector.Region == null)
-            {
-                Log.Error("Район не выбран.");
-                return;
-            }
-            
-            customerSalesContext.OnChange += SalesContext_OnChange;
         }
 
         public void SettingsWereChanged()
@@ -64,16 +56,7 @@ namespace CashCenter.IvEnergySales
                 return;
 #endif
             
-            if (controlDeparmentSelector.Region != null)
-            {
-                lblRegionName.Content = controlDeparmentSelector.Region.Name;
-            }
-            else
-            {
-                lblRegionName.Content = "Район не задан";
-                lblRegionName.Foreground = Brushes.Red;
-            }
-
+            customerSalesContext.OnChange += SalesContext_OnChange;
             customerSalesContext.Value = null;
         }
 

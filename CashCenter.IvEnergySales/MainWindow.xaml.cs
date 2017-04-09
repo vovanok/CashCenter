@@ -1,5 +1,4 @@
 using System.Windows;
-using CashCenter.IvEnergySales.Logging;
 using CashCenter.IvEnergySales.Check;
 using CashCenter.Common;
 
@@ -12,8 +11,6 @@ namespace CashCenter.IvEnergySales
         public MainWindow()
 		{
 			InitializeComponent();
-
-            Log.SetLogger(new MessageBoxLog());
 
             try
             {

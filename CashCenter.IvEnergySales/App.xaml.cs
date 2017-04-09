@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CashCenter.Common;
+using CashCenter.IvEnergySales.Logging;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace CashCenter.IvEnergySales
 {
@@ -13,5 +10,16 @@ namespace CashCenter.IvEnergySales
 	/// </summary>
 	public partial class App : Application
 	{
-	}
+        private App()
+        {
+            Log.SetLogger(new MessageBoxLog());
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+        }
+
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            Log.ErrorWithException("Глобальная ошибка в приложении.", e.Exception);
+            e.Handled = false;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using CashCenter.Common;
 using CashCenter.Dal;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,25 +32,33 @@ namespace CashCenter.IvEnergySales
         public DepartmentSelectorControl()
         {
             InitializeComponent();
+        }
 
-            Region = DalController.Instance.Regions.FirstOrDefault(region => region.Id == Config.CurrentRegionId);
-            if (Region != null)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
             {
-                lblErrorMessage.Visibility = Visibility.Collapsed;
+                Region = DalController.Instance.Regions.FirstOrDefault(region => region.Id == Config.CurrentRegionId);
+                if (Region != null)
+                {
+                    lblRegionName.Content = Region.Name ?? string.Empty;
 
-                cbDepartmentSelector.ItemsSource = Region.Departments
-                    .Select(department => new { Department = department, DepartmentFullName = $"{department.Code} {department.Name}" });
+                    cbDepartmentSelector.ItemsSource = Region.Departments
+                        .Select(department => new { Department = department, DepartmentFullName = $"{department.Code} {department.Name}" });
 
-                if (cbDepartmentSelector.Items.Count > 0)
-                    cbDepartmentSelector.SelectedIndex = 0;
+                    if (cbDepartmentSelector.Items.Count > 0)
+                        cbDepartmentSelector.SelectedIndex = 0;
+                }
+                else
+                {
+                    lblRegionName.Content = "Район не задан";
+                    lblRegionName.Foreground = Brushes.Red;
+                    cbDepartmentSelector.IsEnabled = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lblErrorMessage.Content = "Район не задан";
-                lblErrorMessage.Foreground = Brushes.Red;
-                cbDepartmentSelector.IsEnabled = false;
-
-                lblErrorMessage.Visibility = Visibility.Visible;
+                Log.ErrorWithException("Ошибка загрузки департаметов.", ex);
             }
         }
     }
