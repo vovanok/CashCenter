@@ -23,12 +23,15 @@ namespace CashCenter.DataMigration
 
         protected override int DeleteAllTargetItems()
         {
-            foreach (var customer in existingCustomers)
+            var customersForDelete = existingCustomers
+                .Where(item => item.Department.Code == sourceDepartment.Code);
+
+            foreach (var customer in customersForDelete)
             {
                 customer.IsActive = false;
             }
 
-            return existingCustomers.Count;
+            return customersForDelete.Count();
         }
 
         protected override IEnumerable<ZeusCustomer> GetSourceItems()
