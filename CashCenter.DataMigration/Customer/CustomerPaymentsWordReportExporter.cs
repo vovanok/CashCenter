@@ -20,12 +20,16 @@ namespace CashCenter.DataMigration
             var customerPaymentModels = items.Select(item =>
                 new ReportCustomerPaymentModel(item.Customer.Number, item.NewDayValue, item.NewNightValue, item.Cost, item.CreateDate));
 
+            var customerPaymentModelsCount = customerPaymentModels.Count();
+            if (customerPaymentModelsCount == 0)
+                return 0;
+
             var reportModel = new ReportCustomersModel(beginDatetime, endDatetime, customerPaymentModels);
 
             var wordReport = new WordReportController(Config.CustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
-            return customerPaymentModels.Count();
+            return customerPaymentModelsCount;
         }
     }
 }

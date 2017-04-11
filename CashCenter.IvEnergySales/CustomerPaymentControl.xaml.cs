@@ -211,8 +211,7 @@ namespace CashCenter.IvEnergySales
                     Cost = paymentCost,
                     ReasonId = reasonId,
                     CreateDate = DateTime.Now,
-                    Description = description,
-                    PaymentKindId = 123 // TODO: вынести в настройки
+                    Description = description
                 };
 
                 if (!customerSalesContext.Value.Pay(customerPayment))

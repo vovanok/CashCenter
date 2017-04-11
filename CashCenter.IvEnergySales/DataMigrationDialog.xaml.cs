@@ -29,8 +29,7 @@ namespace CashCenter.IvEnergySales
         private List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
         {
             new ImportTargetItem("Физ. лица", new CustomersRemoteImporter()),
-            new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter()),
-            new ImportTargetItem("Виды оплаты", new PaymentKindsRemoteImporter())
+            new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter())
         };
 
         public DataMigrationDialog()

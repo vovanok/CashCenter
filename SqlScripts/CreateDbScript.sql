@@ -21,13 +21,6 @@ CREATE TABLE [dbo].[PaymentReason] (
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
-CREATE TABLE [dbo].[PaymentKind] (
-    [Id]         INT            NOT NULL,
-    [Name]       NVARCHAR (MAX) NOT NULL,
-    [TypeZeusId] INT            NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC)
-);
-
 CREATE TABLE [dbo].[Organization] (
     [Id]             INT            IDENTITY (1, 1) NOT NULL,
     [ContractNumber] NVARCHAR (50)  NOT NULL,
@@ -40,19 +33,17 @@ CREATE TABLE [dbo].[Organization] (
 );
 
 CREATE TABLE [dbo].[OrganizationPayment] (
-    [Id]              INT            NOT NULL,
-    [OrganizationId]  INT            NOT NULL,
-    [Date]            DATETIME       NOT NULL,
-    [DocumentNumber]  INT            NOT NULL,
-    [Comment]         NVARCHAR (MAX) NOT NULL,
-    [Cost]            DECIMAL (18, 2)   NOT NULL,
-    [PaymentKindId]   INT            NOT NULL,
-    [Code1C]          NVARCHAR (50)  NOT NULL,
-    [IncastCode]      NVARCHAR (50)  NOT NULL,
-    [PaymentReasonId] INT            NOT NULL,
+    [Id]              INT             NOT NULL,
+    [OrganizationId]  INT             NOT NULL,
+    [Date]            DATETIME        NOT NULL,
+    [DocumentNumber]  INT             NOT NULL,
+    [Comment]         NVARCHAR (MAX)  NOT NULL,
+    [Cost]            DECIMAL (18, 2) NOT NULL,
+    [Code1C]          NVARCHAR (50)   NOT NULL,
+    [IncastCode]      NVARCHAR (50)   NOT NULL,
+    [PaymentReasonId] INT             NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_OrganizationPayment_ToPaymentReason] FOREIGN KEY ([PaymentReasonId]) REFERENCES [dbo].[PaymentReason] ([Id]),
-    CONSTRAINT [FK_OrganizationPayment_ToPaymentKind] FOREIGN KEY ([PaymentKindId]) REFERENCES [dbo].[PaymentKind] ([Id]),
     CONSTRAINT [FK_OrganizationPayment_ToOrganization] FOREIGN KEY ([OrganizationId]) REFERENCES [dbo].[Organization] ([Id])
 );
 
@@ -73,18 +64,16 @@ CREATE TABLE [dbo].[Customer] (
 );
 
 CREATE TABLE [dbo].[CustomerPayment] (
-    [Id]            INT            IDENTITY (1, 1) NOT NULL,
-    [CustomerId]    INT            NOT NULL,
-    [NewDayValue]   INT            NOT NULL,
-    [NewNightValue] INT            NOT NULL,
-    [Cost]          DECIMAL (18, 2)   NOT NULL,
-    [ReasonId]      INT            NOT NULL,
-    [CreateDate]    DATETIME       NOT NULL,
-    [Description]   NVARCHAR (MAX) NOT NULL,
-    [PaymentKindId] INT            NOT NULL,
+    [Id]            INT             IDENTITY (1, 1) NOT NULL,
+    [CustomerId]    INT             NOT NULL,
+    [NewDayValue]   INT             NOT NULL,
+    [NewNightValue] INT             NOT NULL,
+    [Cost]          DECIMAL (18, 2) NOT NULL,
+    [ReasonId]      INT             NOT NULL,
+    [CreateDate]    DATETIME        NOT NULL,
+    [Description]   NVARCHAR (MAX)  NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_CustomerPayment_ToPaymentReason] FOREIGN KEY ([ReasonId]) REFERENCES [dbo].[PaymentReason] ([Id]),
-    CONSTRAINT [FK_CustomerPayment_ToPaymentKind] FOREIGN KEY ([PaymentKindId]) REFERENCES [dbo].[PaymentKind] ([Id]),
     CONSTRAINT [FK_CustomerPayment_ToCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer] ([Id])
 );
 

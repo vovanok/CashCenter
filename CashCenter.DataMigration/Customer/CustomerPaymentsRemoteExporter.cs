@@ -10,6 +10,9 @@ namespace CashCenter.DataMigration
     public class CustomerPaymentsRemoteExporter : BaseExporter<CustomerPayment>
     {
         private const string PAY_JOURNAL_NAME = "Пачка квитанций от РКЦ Ивановской области";
+        private const int PAYMENT_KIND_ID = 123;
+        private const string PAYMENT_KIND_NAME = "РКЦ Ивановской области";
+        private const int PAYMENT_KIND_TYPE_ID = 1;
 
         protected override List<CustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
@@ -41,15 +44,11 @@ namespace CashCenter.DataMigration
                     customerPayment.Customer.Department.Url,
                     customerPayment.Customer.Department.Path);
 
-                var paymentKind = DalController.Instance.PaymentKinds.FirstOrDefault(item => item.Id == customerPayment.PaymentKindId);
-                if (paymentKind == null)
-                    return false;
-
-                var existingPaymentKind = db.GetPaymentKind(paymentKind.Id);
+                var existingPaymentKind = db.GetPaymentKind(PAYMENT_KIND_ID);
                 if (existingPaymentKind == null)
-                    db.AddPaymentKind(new ZeusPaymentKind(paymentKind.Id, paymentKind.Name, paymentKind.TypeZeusId));
+                    db.AddPaymentKind(new ZeusPaymentKind(PAYMENT_KIND_ID, PAYMENT_KIND_NAME, PAYMENT_KIND_TYPE_ID));
 
-                var payJournal = AddOrUpdatePayJournal(db, customerPayment.PaymentKind.Id, customerPayment.CreateDate, customerPayment.Cost);
+                var payJournal = AddOrUpdatePayJournal(db, PAYMENT_KIND_ID, customerPayment.CreateDate, customerPayment.Cost);
 
                 var customerCounterId = db.GetCustomerCounterId(customerPayment.Customer.Number);
 

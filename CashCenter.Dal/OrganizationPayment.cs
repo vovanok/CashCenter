@@ -20,13 +20,11 @@ namespace CashCenter.Dal
         public int DocumentNumber { get; set; }
         public string Comment { get; set; }
         public decimal Cost { get; set; }
-        public int PaymentKindId { get; set; }
         public string Code1C { get; set; }
         public string IncastCode { get; set; }
         public int PaymentReasonId { get; set; }
     
         public virtual Organization Organization { get; set; }
         public virtual PaymentReason PaymentReason { get; set; }
-        public virtual PaymentKind PaymentKind { get; set; }
     }
 }

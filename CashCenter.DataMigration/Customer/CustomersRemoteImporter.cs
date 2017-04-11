@@ -7,8 +7,6 @@ namespace CashCenter.DataMigration
 {
     public class CustomersRemoteImporter : BaseRemoteImporter<ZeusCustomer, Customer>
     {
-        private int dayEncoding;
-
         private List<Customer> existingCustomers = new List<Customer>();
 
         public CustomersRemoteImporter()

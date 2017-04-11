@@ -31,11 +31,6 @@ namespace CashCenter.Dal
             get { return context.PaymentReasons; }
         }
 
-        public IEnumerable<PaymentKind> PaymentKinds
-        {
-            get { return context.PaymentKinds; }
-        }
-
         public IEnumerable<Department> Departments
         {
             get { return context.Departments; }
@@ -57,21 +52,6 @@ namespace CashCenter.Dal
             catch (Exception ex)
             {
                 HandleEntityFrameworkError("Ошибка добавления оснований оплаты", ex);
-                return null;
-            }
-        }
-
-        public IEnumerable<PaymentKind> AddPaymentKindsRange(IEnumerable<PaymentKind> paymentKinds)
-        {
-            try
-            {
-                var newPaymentKinds = context.PaymentKinds.AddRange(paymentKinds);
-                Save();
-                return newPaymentKinds;
-            }
-            catch (Exception ex)
-            {
-                HandleEntityFrameworkError("Ошибка добавления видов оплаты", ex);
                 return null;
             }
         }
@@ -329,19 +309,6 @@ namespace CashCenter.Dal
             catch (Exception ex)
             {
                 HandleEntityFrameworkError("Ошибка очистки данных об основаниях оплаты", ex);
-            }
-        }
-
-        public void ClearPaymentKinds()
-        {
-            try
-            {
-                context.PaymentKinds.RemoveRange(context.PaymentKinds);
-                Save();
-            }
-            catch (Exception ex)
-            {
-                HandleEntityFrameworkError("Ошибка очистки данных о видах оплаты", ex);
             }
         }
 

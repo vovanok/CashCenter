@@ -27,8 +27,8 @@ namespace CashCenter.Dal
         public string Kpp { get; set; }
         public int DepartmentId { get; set; }
     
+        public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganizationPayment> OrganizationPayments { get; set; }
-        public virtual Department Department { get; set; }
     }
 }

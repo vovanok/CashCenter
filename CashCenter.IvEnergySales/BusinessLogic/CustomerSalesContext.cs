@@ -82,15 +82,6 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
                 }
 
-                var paymentKind = DalController.Instance.PaymentKinds.FirstOrDefault(item => item.Id == payment.PaymentKindId);
-                if (paymentKind == null)
-                {
-                    DalController.Instance.AddPaymentKindsRange(new[]
-                        {
-                        new PaymentKind { Id = payment.PaymentKindId, Name = "РКЦ Ивановской области", TypeZeusId = 1 }
-                    });
-                }
-                
                 DalController.Instance.AddCustomerPayment(payment);
 
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
