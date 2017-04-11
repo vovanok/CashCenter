@@ -184,7 +184,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <AppDesigner Include="Properties\" />
-    <None Include="Data\CustomersReportTemplate.docx">
+    <None Include="Templates\CustomersReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">
