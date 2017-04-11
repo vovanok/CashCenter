@@ -167,8 +167,8 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            var beginDatetime = dpBeginPeriod.SelectedDate.Value.Date;
-            var endDatetime = dpEndPeriod.SelectedDate.Value.AddDays(1).AddSeconds(-1).Date;
+            var beginDatetime = dpBeginPeriod.SelectedDate.Value.DayBegin();
+            var endDatetime = dpEndPeriod.SelectedDate.Value.DayEnd();
 
             var exportResult = exporter.Export(beginDatetime, endDatetime);
 

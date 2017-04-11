@@ -34,7 +34,7 @@ namespace CashCenter.DataMigration
             return new Customer
             {
                 DepartmentId = department.Id,
-                Number = dbfCustomer.Id,
+                Number = dbfCustomer.Number,
                 Name = string.Empty,
                 Address = string.Empty,
                 DayValue = dbfCustomer.DayValue,
@@ -50,7 +50,7 @@ namespace CashCenter.DataMigration
         {
             var existingCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
                 customer.Department.Code == dbfCustomer.DepartmentCode &&
-                customer.Number == dbfCustomer.Id);
+                customer.Number == dbfCustomer.Number);
 
             if (existingCustomer == null)
                 return false;

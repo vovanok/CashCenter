@@ -83,13 +83,13 @@ namespace CashCenter.DbfRegistry
                 var customers = new List<DbfCustomer>();
                 while (dataReader.Read())
                 {
-                    int id = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
+                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
                     string departamentCode = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_DEPARTMENT_CODE);
                     int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
                     int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
                     decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_END_BALANCE);
 
-                    customers.Add(new DbfCustomer(id, departamentCode, dayValue, nightValue, balance));
+                    customers.Add(new DbfCustomer(number, departamentCode, dayValue, nightValue, balance));
                 }
 
                 return customers;

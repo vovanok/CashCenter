@@ -4,7 +4,7 @@ namespace CashCenter.ZeusDb.Entities
     {
         public int Id { get; private set; }
 
-        public int CustomerId { get; private set; }
+        public int CustomerNumber { get; private set; }
 
         public int CustomerCounterId { get; private set; }
 
@@ -12,11 +12,11 @@ namespace CashCenter.ZeusDb.Entities
 
         public int? Value2 { get; private set; }
 
-        public ZeusCounterValues(int id, int customerId,
+        public ZeusCounterValues(int id, int customerNumber,
             int customerCounterId, int value1, int? value2)
         {
             Id = id;
-            CustomerId = customerId;
+            CustomerNumber = customerNumber;
             CustomerCounterId = customerCounterId;
             Value1 = value1;
             Value2 = value2;

@@ -50,7 +50,7 @@ namespace CashCenter.DataMigration
             return new Customer
             {
                 DepartmentId = sourceDepartment.Id,
-                Number = zeusCustomer.Id,
+                Number = zeusCustomer.Number,
                 Name = zeusCustomer.Name,
                 Address = zeusCustomer.Address,
                 DayValue = 0,
@@ -69,7 +69,7 @@ namespace CashCenter.DataMigration
 
             var existingCustomer = existingCustomers.FirstOrDefault(customer =>
                 customer.Department.Id == sourceDepartment.Id &&
-                customer.Number == zeusCustomer.Id);
+                customer.Number == zeusCustomer.Number);
 
             if (existingCustomer == null)
                 return false;

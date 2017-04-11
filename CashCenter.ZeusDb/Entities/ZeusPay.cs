@@ -4,7 +4,7 @@ namespace CashCenter.ZeusDb.Entities
     {
         public int Id { get; private set; }
 
-        public int CustomerId { get; private set; }
+        public int CustomerNumber { get; private set; }
 
         public int ReasonId { get; private set; }
 
@@ -18,11 +18,11 @@ namespace CashCenter.ZeusDb.Entities
 
         public string Description { get; private set; }
 
-        public ZeusPay(int id, int customerId, int reasonId, int? metersId, int journalId,
+        public ZeusPay(int id, int customerNumber, int reasonId, int? metersId, int journalId,
             decimal cost, decimal penaltyTotal, string description)
         {
             Id = id;
-            CustomerId = customerId;
+            CustomerNumber = customerNumber;
             ReasonId = reasonId;
             MetersId = metersId;
             JournalId = journalId;
@@ -31,9 +31,9 @@ namespace CashCenter.ZeusDb.Entities
             Description = description;
         }
 
-        public ZeusPay(int customerId, int reasonId, int? metersId, int journalId,
+        public ZeusPay(int customerNumber, int reasonId, int? metersId, int journalId,
                 decimal cost, decimal penaltyTotal, string description)
-            : this(-1, customerId, reasonId, metersId, journalId, cost, penaltyTotal, description)
+            : this(-1, customerNumber, reasonId, metersId, journalId, cost, penaltyTotal, description)
         {
         }
     }

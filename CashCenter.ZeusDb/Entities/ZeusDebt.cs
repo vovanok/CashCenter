@@ -2,15 +2,15 @@
 {
     public class ZeusDebt
     {
-        public int CustomerId { get; private set; }
+        public int CustomerNumber { get; private set; }
 
         public decimal Balance { get; private set; }
 
         public decimal Penalty { get; private set; }
 
-        public ZeusDebt(int customerId, decimal balance, decimal penalty)
+        public ZeusDebt(int customerNumber, decimal balance, decimal penalty)
         {
-            CustomerId = customerId;
+            CustomerNumber = customerNumber;
             Balance = balance;
             Penalty = penalty;
         }

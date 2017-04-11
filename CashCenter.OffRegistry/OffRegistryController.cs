@@ -33,7 +33,7 @@ namespace CashCenter.OffRegistry
 
             var lineComponents = new[]
             {
-                $"CustID = {customerPayment.CustomerId}",
+                $"CustID = {customerPayment.CustomerNumber}",
                 $"Day = {customerPayment.DayValue}",
                 $"Night = {customerPayment.NightValue}",
                 "",

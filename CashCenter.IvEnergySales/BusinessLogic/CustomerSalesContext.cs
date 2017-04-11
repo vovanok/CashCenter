@@ -82,12 +82,21 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return false;
                 }
 
+                var paymentKind = DalController.Instance.PaymentKinds.FirstOrDefault(item => item.Id == payment.PaymentKindId);
+                if (paymentKind == null)
+                {
+                    DalController.Instance.AddPaymentKindsRange(new[]
+                        {
+                        new PaymentKind { Id = payment.PaymentKindId, Name = "РКЦ Ивановской области", TypeZeusId = 1 }
+                    });
+                }
+                
                 DalController.Instance.AddCustomerPayment(payment);
 
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
 
                 InfoForCheck = new InfoForCheck(payment.Cost, payment.CreateDate,
-                    Customer.Department.Code, Customer.Id, Customer.Name, paymentReasonName);
+                    Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName);
 
                 return true;
             }

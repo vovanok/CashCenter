@@ -12,7 +12,8 @@ namespace CashCenter.WordReport
         public IEnumerable<ReportCustomerPaymentModel> CustomerPayments { get; private set; }
 
         public ReportCustomersModel(
-            DateTime startDate, DateTime endDate, IEnumerable<ReportCustomerPaymentModel> customerPayments)
+            DateTime startDate, DateTime endDate,
+            IEnumerable<ReportCustomerPaymentModel> customerPayments)
         {
             StartDate = startDate;
             EndDate = endDate;

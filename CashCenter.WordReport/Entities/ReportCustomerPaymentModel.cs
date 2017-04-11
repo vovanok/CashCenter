@@ -4,7 +4,7 @@ namespace CashCenter.WordReport
 {
     public class ReportCustomerPaymentModel
     {
-        public int Number { get; private set; }
+        public int CustomerNumber { get; private set; }
 
         public int DayValue { get; private set; }
 
@@ -15,9 +15,10 @@ namespace CashCenter.WordReport
         public DateTime CreationDate { get; private set; }
 
         public ReportCustomerPaymentModel(
-            int number, int dayValue, int nightValue, decimal cost, DateTime creationDate)
+            int customerNumber, int dayValue, int nightValue,
+            decimal cost, DateTime creationDate)
         {
-            Number = number;
+            CustomerNumber = customerNumber;
             DayValue = dayValue;
             NightValue = nightValue;
             Cost = cost;

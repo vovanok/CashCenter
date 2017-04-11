@@ -42,7 +42,7 @@ namespace CashCenter.WordReport
                         foreach (var customerPayment in model.CustomerPayments)
                         {
                             var customerPaymentRow = paymentsTable.Rows.Add();
-                            customerPaymentRow.Cells[1].Range.Text = customerPayment.Number.ToString();
+                            customerPaymentRow.Cells[1].Range.Text = customerPayment.CustomerNumber.ToString();
                             customerPaymentRow.Cells[2].Range.Text = customerPayment.DayValue.ToString();
                             customerPaymentRow.Cells[3].Range.Text = customerPayment.NightValue.ToString();
                             customerPaymentRow.Cells[4].Range.Text = customerPayment.Cost.ToString("0.00");

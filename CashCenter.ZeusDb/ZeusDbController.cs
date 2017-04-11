@@ -69,14 +69,14 @@ namespace CashCenter.ZeusDb
                 var result = new List<ZeusCustomer>();
                 while (dataReader.Read())
                 {
-                    int id = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_ID);
+                    int number = dataReader.GetFieldFromReader<int>(Sql.CUSTOMER_ID);
                     string name = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_NAME) ?? string.Empty;
                     string flat = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_FLAT) ?? string.Empty;
                     string buildingNumber = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_BUILDING_NUMBER) ?? string.Empty;
                     string streetName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_STREET_NAME) ?? string.Empty;
                     string localityName = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_LOCALITY_NAME) ?? string.Empty;
 
-                    result.Add(new ZeusCustomer(id, DepartmentCode ?? string.Empty, name, flat, buildingNumber, streetName, localityName));
+                    result.Add(new ZeusCustomer(number, DepartmentCode ?? string.Empty, name, flat, buildingNumber, streetName, localityName));
                 }
 
                 return result;
@@ -93,7 +93,8 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public ZeusCustomerCounters GetCustomerCounterValues(int customerId, DateTime beginDate, DateTime endDate)
+        public ZeusCustomerCounters GetCustomerCounterValues(
+            int customerNumber, DateTime beginDate, DateTime endDate)
         {
             DbDataReader dataReader = null;
 
@@ -102,7 +103,7 @@ namespace CashCenter.ZeusDb
                 dbConnection.Open();
 
                 var command = GetDbCommandByQuery(Sql.GET_CUSTOMER_COUNTER_VALUES);
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerNumber);
                 command.AddParameter(Sql.PARAM_START_DATE, beginDate.ToShortDateString());
                 command.AddParameter(Sql.PARAM_END_DATE, endDate.ToShortDateString());
 
@@ -119,14 +120,14 @@ namespace CashCenter.ZeusDb
                     if (counterName == null)
                         return null;
 
-                    result = new ZeusCustomerCounters(customerId, endDayValue, endNightValue, isTwoTariff);
+                    result = new ZeusCustomerCounters(customerNumber, endDayValue, endNightValue, isTwoTariff);
                 }
 
                 return result;
             }
             catch (Exception e)
             {
-                Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerId}.", e);
+                Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerNumber}.", e);
                 return null;
             }
             finally
@@ -136,7 +137,7 @@ namespace CashCenter.ZeusDb
             }
         }
 
-        public ZeusDebt GetDebt(int customerId, int dayEncoding)
+        public ZeusDebt GetDebt(int customerNumber, int dayEncoding)
         {
             DbDataReader dataReader = null;
 
@@ -145,7 +146,7 @@ namespace CashCenter.ZeusDb
                 dbConnection.Open();
 
                 var command = GetDbCommandByQuery(Sql.SELECT_DEBT);
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerId);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, customerNumber);
                 command.AddParameter(Sql.PARAM_DAY_ENCODING, dayEncoding);
 
                 dataReader = command.ExecuteReader(CommandBehavior.SingleRow);
@@ -156,14 +157,14 @@ namespace CashCenter.ZeusDb
                     var balance = dataReader.GetFieldFromReader<decimal>(Sql.END_BALANCE);
                     var penalty = dataReader.GetFieldFromReader<decimal>(Sql.PENALTY_BALANCE);
 
-                    debt = new ZeusDebt(customerId, balance, penalty);
+                    debt = new ZeusDebt(customerNumber, balance, penalty);
                 }
 
                 return debt;
             }
             catch (Exception e)
             {
-                Log.ErrorWithException($"Ошибка получения задолжности для плательщика {customerId}.", e);
+                Log.ErrorWithException($"Ошибка получения задолжности для плательщика {customerNumber}.", e);
                 return null;
             }
             finally
@@ -304,7 +305,7 @@ namespace CashCenter.ZeusDb
                 dbConnection.Open();
 
                 var command = GetDbCommandByQuery(Sql.INSERT_PAY);
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, pay.CustomerId);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, pay.CustomerNumber);
                 command.AddParameter(Sql.PARAM_PAY_JOURNAL_ID, pay.JournalId);
                 command.AddParameter(Sql.PARAM_REASON_ID, pay.ReasonId);
                 command.AddParameter(Sql.PARAM_METERS_ID, pay.MetersId);
@@ -317,7 +318,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new ZeusPay(id, pay.CustomerId, pay.ReasonId, pay.MetersId, pay.JournalId,
+                return new ZeusPay(id, pay.CustomerNumber, pay.ReasonId, pay.MetersId, pay.JournalId,
                     pay.Cost, pay.PenaltyTotal, pay.Description);
             }
             catch (Exception e)
@@ -338,7 +339,7 @@ namespace CashCenter.ZeusDb
                 dbConnection.Open();
 
                 var command = GetDbCommandByQuery(Sql.INSERT_COUNTERVALUES);
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, counterValues.CustomerId);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, counterValues.CustomerNumber);
                 command.AddParameter(Sql.PARAM_CUSTOMER_COUNTER_ID, counterValues.CustomerCounterId);
                 command.AddParameter(Sql.PARAM_CREATE_DATE, createDate.ToShortDateString());
                 command.AddParameter(Sql.PARAM_VALUE1, counterValues.Value1);
@@ -349,7 +350,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new ZeusCounterValues(id, counterValues.CustomerId,
+                return new ZeusCounterValues(id, counterValues.CustomerNumber,
                     counterValues.CustomerCounterId, counterValues.Value1,
                     counterValues.Value2);
             }
@@ -395,7 +396,7 @@ namespace CashCenter.ZeusDb
                 dbConnection.Open();
 
                 var command = GetDbCommandByQuery(Sql.INSERT_METERS);
-                command.AddParameter(Sql.PARAM_CUSTOMER_ID, meter.CustomerId);
+                command.AddParameter(Sql.PARAM_CUSTOMER_ID, meter.CustomerNumber);
                 command.AddParameter(Sql.PARAM_CUSTOMER_COUNTER_ID, meter.CustomerCounterId);
                 command.AddParameter(Sql.PARAM_VALUE1, meter.Value1);
                 command.AddParameter(Sql.PARAM_VALUE2, meter.Value2);
@@ -406,7 +407,7 @@ namespace CashCenter.ZeusDb
                 command.Transaction.Commit();
                 command.Dispose();
 
-                return new ZeusMeter(id, meter.CustomerId, meter.CustomerCounterId,
+                return new ZeusMeter(id, meter.CustomerNumber, meter.CustomerCounterId,
                     meter.Value1, meter.Value2, meter.CounterValuesId);
             }
             catch (Exception e)

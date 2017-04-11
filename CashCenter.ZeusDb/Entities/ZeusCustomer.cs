@@ -4,7 +4,7 @@ namespace CashCenter.ZeusDb.Entities
 {
     public class ZeusCustomer
     {
-        public int Id { get; private set; }
+        public int Number { get; private set; }
 
         public string DepartamentCode { get; private set; }
 
@@ -27,10 +27,10 @@ namespace CashCenter.ZeusDb.Entities
             }
         }
 
-        public ZeusCustomer(int id, string departamentCode, string name, string flat,
+        public ZeusCustomer(int number, string departamentCode, string name, string flat,
             string buildingNumber, string streetName, string localityName)
         {
-            Id = id;
+            Number = number;
             Name = name;
             Flat = flat;
             BuildingNumber = buildingNumber;

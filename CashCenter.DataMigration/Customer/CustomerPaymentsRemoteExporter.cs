@@ -65,7 +65,14 @@ namespace CashCenter.DataMigration
                     counterValues = db.AddCounterValues(newCounterValues, customerPayment.CreateDate);
 
                     // 2.
-                    var newMeters = new ZeusMeter(-1, customerPayment.Customer.Number, customerCounterId, customerPayment.NewDayValue, correctedNightValue, counterValues.Id);
+                    var newMeters = new ZeusMeter(
+                        -1,
+                        customerPayment.Customer.Number,
+                        customerCounterId,
+                        customerPayment.NewDayValue,
+                        correctedNightValue,
+                        counterValues.Id);
+
                     var meters = db.AddMeters(newMeters);
                     metersId = meters.Id;
                 }

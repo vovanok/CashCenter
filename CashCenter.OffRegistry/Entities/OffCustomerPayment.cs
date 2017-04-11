@@ -5,7 +5,7 @@ namespace CashCenter.OffRegistry.Entities
     public class OffCustomerPayment
     {
         public string Id { get; private set; }
-        public int CustomerId { get; private set; }
+        public int CustomerNumber { get; private set; }
         public int DayValue { get; private set; }
         public int NightValue { get; private set; }
         public int ReasonId { get; private set; }
@@ -13,11 +13,11 @@ namespace CashCenter.OffRegistry.Entities
         public DateTime CreateDate { get; private set; }
         public string DepartmentCode { get; private set; }
 
-        public OffCustomerPayment(string id, int customerId, int dayValue, int nightValue,
+        public OffCustomerPayment(string id, int customerNumber, int dayValue, int nightValue,
             int reasonId, decimal totalCost, DateTime createDate, string departmentCode)
         {
             Id = id;
-            CustomerId = customerId;
+            CustomerNumber = customerNumber;
             DayValue = dayValue;
             NightValue = nightValue;
             ReasonId = reasonId;

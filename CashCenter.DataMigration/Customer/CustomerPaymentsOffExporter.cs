@@ -1,5 +1,6 @@
 ﻿using CashCenter.Dal;
 using CashCenter.OffRegistry;
+using CashCenter.OffRegistry.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -35,9 +36,9 @@ namespace CashCenter.DataMigration
 
             try
             {
-                var offFileCustomerPayment = new OffRegistry.Entities.OffCustomerPayment(
+                var offFileCustomerPayment = new OffCustomerPayment(
                     Guid.NewGuid().ToString(),
-                    customerPayment.Customer.Id,
+                    customerPayment.Customer.Number,
                     customerPayment.NewDayValue,
                     customerPayment.NewNightValue,
                     customerPayment.ReasonId,

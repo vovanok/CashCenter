@@ -2,7 +2,7 @@
 {
     public class ZeusCustomerCounters
     {
-        public int CustomerId { get; private set; }
+        public int CustomerNumber { get; private set; }
 
         public int EndDayValue { get; private set; }
 
@@ -10,9 +10,9 @@
 
         public bool IsTwoTariff { get; private set; }
 
-        public ZeusCustomerCounters(int customerId, int endDayValue, int endNightValue, bool isTwoTariff)
+        public ZeusCustomerCounters(int customerNumber, int endDayValue, int endNightValue, bool isTwoTariff)
         {
-            CustomerId = customerId;
+            CustomerNumber = customerNumber;
             EndDayValue = endDayValue;
             EndNightValue = endNightValue;
             IsTwoTariff = isTwoTariff;
