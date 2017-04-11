@@ -45,7 +45,6 @@
     <Compile Include="Entities\DbfArticle.cs" />
     <Compile Include="Entities\DbfArticlesSet.cs" />
     <Compile Include="Entities\DbfCustomer.cs" />
-    <Compile Include="Entities\DbfOrganization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

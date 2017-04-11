@@ -17,7 +17,6 @@ namespace CashCenter.Dal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Department()
         {
-            this.Organizations = new HashSet<Organization>();
             this.Customers = new HashSet<Customer>();
         }
     
@@ -29,8 +28,6 @@ namespace CashCenter.Dal
         public string Path { get; set; }
     
         public virtual Region Region { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Organization> Organizations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers { get; set; }
     }

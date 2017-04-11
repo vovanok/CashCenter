@@ -18,7 +18,6 @@ namespace CashCenter.Dal
         public PaymentReason()
         {
             this.CustomerPayments = new HashSet<CustomerPayment>();
-            this.OrganizationPayments = new HashSet<OrganizationPayment>();
         }
     
         public int Id { get; set; }
@@ -26,7 +25,5 @@ namespace CashCenter.Dal
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerPayment> CustomerPayments { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganizationPayment> OrganizationPayments { get; set; }
     }
 }

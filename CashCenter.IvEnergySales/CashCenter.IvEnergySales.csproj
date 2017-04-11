@@ -120,9 +120,6 @@
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="OperationWaiter.cs" />
-    <Compile Include="OrganizationPaymentControl.xaml.cs">
-      <DependentUpon>OrganizationPaymentControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -168,10 +165,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="OrganizationPaymentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -212,10 +205,6 @@
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CashCenter.CsvRegistry\CashCenter.CsvRegistry.csproj">
-      <Project>{4a31c820-34cd-4d75-8b47-7ed6115f36ab}</Project>
-      <Name>CashCenter.CsvRegistry</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.Dal\CashCenter.Dal.csproj">
       <Project>{cad4a97e-4f23-41d9-bc76-0f7633c0e1f6}</Project>

@@ -21,32 +21,6 @@ CREATE TABLE [dbo].[PaymentReason] (
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
-CREATE TABLE [dbo].[Organization] (
-    [Id]             INT            IDENTITY (1, 1) NOT NULL,
-    [ContractNumber] NVARCHAR (50)  NOT NULL,
-    [Name]           NVARCHAR (MAX) NOT NULL,
-    [Inn]            NVARCHAR (50)  NOT NULL,
-    [Kpp]            NVARCHAR (50)  NOT NULL,
-    [DepartmentId]   INT            NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Organization_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[Department] ([Id])
-);
-
-CREATE TABLE [dbo].[OrganizationPayment] (
-    [Id]              INT             NOT NULL,
-    [OrganizationId]  INT             NOT NULL,
-    [Date]            DATETIME        NOT NULL,
-    [DocumentNumber]  INT             NOT NULL,
-    [Comment]         NVARCHAR (MAX)  NOT NULL,
-    [Cost]            DECIMAL (18, 2) NOT NULL,
-    [Code1C]          NVARCHAR (50)   NOT NULL,
-    [IncastCode]      NVARCHAR (50)   NOT NULL,
-    [PaymentReasonId] INT             NOT NULL,
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_OrganizationPayment_ToPaymentReason] FOREIGN KEY ([PaymentReasonId]) REFERENCES [dbo].[PaymentReason] ([Id]),
-    CONSTRAINT [FK_OrganizationPayment_ToOrganization] FOREIGN KEY ([OrganizationId]) REFERENCES [dbo].[Organization] ([Id])
-);
-
 CREATE TABLE [dbo].[Customer] (
     [Id]           INT            IDENTITY (1, 1) NOT NULL,
     [DepartmentId] INT            NOT NULL,

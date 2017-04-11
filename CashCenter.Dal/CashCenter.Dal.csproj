@@ -105,12 +105,6 @@
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EntitiesExtensions.cs" />
-    <Compile Include="Organization.cs">
-      <DependentUpon>CashCenterModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OrganizationPayment.cs">
-      <DependentUpon>CashCenterModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="PaymentReason.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>

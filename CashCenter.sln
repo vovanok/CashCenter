@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.OffRegistry", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.DbfRegistry", "CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj", "{EE97D516-69D4-45FC-B428-C42428BF3559}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.CsvRegistry", "CashCenter.CsvRegistry\CashCenter.CsvRegistry.csproj", "{4A31C820-34CD-4D75-8B47-7ED6115F36AB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.Dal", "CashCenter.Dal\CashCenter.Dal.csproj", "{CAD4A97E-4F23-41D9-BC76-0F7633C0E1F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.DataMigration", "CashCenter.DataMigration\CashCenter.DataMigration.csproj", "{718380A0-3293-4A26-9AD4-86F836647B07}"
@@ -91,18 +89,6 @@ Global
 		{EE97D516-69D4-45FC-B428-C42428BF3559}.Release|x64.Build.0 = Release|Any CPU
 		{EE97D516-69D4-45FC-B428-C42428BF3559}.Release|x86.ActiveCfg = Release|Any CPU
 		{EE97D516-69D4-45FC-B428-C42428BF3559}.Release|x86.Build.0 = Release|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Debug|x64.Build.0 = Debug|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Debug|x86.Build.0 = Debug|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Release|x64.ActiveCfg = Release|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Release|x64.Build.0 = Release|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Release|x86.ActiveCfg = Release|Any CPU
-		{4A31C820-34CD-4D75-8B47-7ED6115F36AB}.Release|x86.Build.0 = Release|Any CPU
 		{CAD4A97E-4F23-41D9-BC76-0F7633C0E1F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAD4A97E-4F23-41D9-BC76-0F7633C0E1F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAD4A97E-4F23-41D9-BC76-0F7633C0E1F6}.Debug|x64.ActiveCfg = Debug|Any CPU
