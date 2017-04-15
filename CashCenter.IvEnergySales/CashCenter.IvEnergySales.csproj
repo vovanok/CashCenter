@@ -111,13 +111,22 @@
     <Compile Include="CustomerPaymentControl.xaml.cs">
       <DependentUpon>CustomerPaymentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
+      <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrationControls\CustomerPaymentsExportControl.xaml.cs">
+      <DependentUpon>CustomerPaymentsExportControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataMigrationControls\CustomerZeusImportControl.xaml.cs">
+      <DependentUpon>CustomerZeusImportControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DepartmentSelectorControl.xaml.cs">
+    <Compile Include="CommonControls\DepartmentSelectorControl.xaml.cs">
       <DependentUpon>DepartmentSelectorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FileSelectorControl.xaml.cs">
+    <Compile Include="CommonControls\FileSelectorControl.xaml.cs">
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="OperationWaiter.cs" />
@@ -138,15 +147,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DataMigrationControls\CustomerDbfImportControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataMigrationControls\CustomerPaymentsExportControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DataMigrationControls\CustomerZeusImportControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataMigrationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DepartmentSelectorControl.xaml">
+    <Page Include="CommonControls\DepartmentSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FileSelectorControl.xaml">
+    <Page Include="CommonControls\FileSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
