@@ -1,10 +1,16 @@
-﻿<UserControl x:Class="CashCenter.IvEnergySales.CustomerPaymentControl"
+﻿<UserControl x:Class="CashCenter.IvEnergySales.CustomerEnergyPaymentControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <Style TargetType="Button" x:Key="MainButton">
+            <Setter Property="Margin" Value="15,5,15,5"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+    </UserControl.Resources>
     <StackPanel>
         <GroupBox x:Name="gbPrivateInfo" Header="Лицевой счет" Height="203">
             <Grid>
@@ -49,7 +55,7 @@
                 <TextBox x:Name="tbCustomerEmail" Grid.Column="1" Grid.Row="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="gbPaymentInfo" Header="Оплата" >
+        <GroupBox x:Name="gbPaymentInfo" Header="Оплата">
             <StackPanel>
                 <Grid Margin="0,0,0,15">
                     <Grid.ColumnDefinitions>
@@ -88,7 +94,6 @@
 
                     <Label x:Name="lblIsNormative" Content="По нормативу" Grid.ColumnSpan="4" Grid.RowSpan="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="30" Foreground="DarkRed"/>
                 </Grid>
-
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -99,18 +104,18 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Label Content="Основание для оплаты" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                     <Label Content="Сумма" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                     <Label Content="Примечание" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Button x:Name="btnPay" Content="Оплатить" Grid.Column="0" Grid.Row="3" Margin="15,5,15,0" Click="On_btnPay_Click"/>
+                    <Button x:Name="btnPay" Content="Оплатить" Grid.Column="0" Grid.Row="3" Click="On_btnPay_Click" Style="{StaticResource MainButton}"/>
 
                     <ComboBox x:Name="cbPaymentReasons" DisplayMemberPath="Name" SelectedValuePath="Id" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                     <TextBox x:Name="tbCost" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="On_tbCost_GotFocus" PreviewMouseLeftButtonDown="On_tbCost_PreviewMouseLeftButtonDown" KeyDown="On_tbCost_KeyDown"/>
                     <TextBox x:Name="tbDescription" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-                    <Button x:Name="btnClear" Content="Очистить" Grid.Column="1" Grid.Row="3" Margin="15,5,15,0" Click="On_btnClear_Click"/>
+                    <Button x:Name="btnClear" Content="Очистить" Grid.Column="1" Grid.Row="3" Click="On_btnClear_Click" Style="{StaticResource MainButton}"/>
                 </Grid>
             </StackPanel>
         </GroupBox>

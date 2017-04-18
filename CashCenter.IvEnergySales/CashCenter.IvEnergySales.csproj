@@ -108,8 +108,12 @@
     </Compile>
     <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
-    <Compile Include="CustomerPaymentControl.xaml.cs">
-      <DependentUpon>CustomerPaymentControl.xaml</DependentUpon>
+    <Compile Include="Command.cs" />
+    <Compile Include="CustomerEnergyPaymentControl.xaml.cs">
+      <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerWaterPaymentControl.xaml.cs">
+      <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
       <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>
@@ -139,11 +143,16 @@
     <Compile Include="SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel.cs" />
     <Page Include="ArticlesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomerPaymentControl.xaml">
+    <Page Include="CustomerEnergyPaymentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomerWaterPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -179,6 +188,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Check\BaseCheck.cs" />
+    <Compile Include="Check\CheckPrinter.cs" />
     <Compile Include="Check\CustomerCheck.cs" />
     <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -222,10 +233,6 @@
     <Resource Include="Content\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CashCenter.Check\CashCenter.Check.csproj">
-      <Project>{61845d5c-8ee1-4be3-87b6-0c6f807c6e9a}</Project>
-      <Name>CashCenter.Check</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>
@@ -238,6 +245,10 @@
       <Project>{718380a0-3293-4a26-9ad4-86f836647b07}</Project>
       <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
+      <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
+      <Name>CashCenter.DbfRegistry</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -245,6 +256,23 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="DrvFRLib">
+      <Guid>{332C8050-469C-4B4D-A192-68CD3CB252BA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\energy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\water.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
