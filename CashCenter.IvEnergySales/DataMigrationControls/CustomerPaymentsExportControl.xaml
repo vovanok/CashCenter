@@ -34,20 +34,23 @@
                 Content="Экспортировать в OFF"
                 Grid.Column="0" Grid.Row="0"
                 Click="On_btnExportCustomerPaymentsToOff_Click"
-                Margin="10,0,10,0"/>
+                Margin="10,0,10,0"
+                Height="30"/>
             <Button
                 x:Name="btnExportCustomerPaymentsToWordReport"
                 Content="Экспортировать в Word"
                 Grid.Column="1" Grid.Row="0"
                 Click="On_btnExportCustomerPaymentsToWordReport_Click"
-                Margin="10,0,10,0"/>
+                Margin="10,0,10,0"
+                Height="30"/>
             <Button
                 x:Name="btnExportCustomerPaymentsToDb"
                 Content="Экспортировать в Зевс"
                 Grid.Column="2" Grid.Row="0" 
                 Click="On_btnExportCustomerPaymentsToDb_Click"
                 Visibility="Hidden"
-                Margin="10,0,10,0"/>
+                Margin="10,0,10,0"
+                Height="30"/>
         </Grid>
     </StackPanel>
 </UserControl>
