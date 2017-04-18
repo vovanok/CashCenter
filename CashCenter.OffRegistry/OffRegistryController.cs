@@ -1,55 +1,57 @@
 ﻿using CashCenter.Common;
 using CashCenter.OffRegistry.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CashCenter.OffRegistry
 {
     public class OffRegistryController
     {
-        public void AddPayment(OffCustomerPayment customerPayment)
+        public void StorePayments(IEnumerable<OffCustomerPayment> customerPayments)
         {
-            var offFileName = GetOffFileName(customerPayment.DepartmentCode, customerPayment.CreateDate);
-            var lineForWrite = GetOffFileLine(customerPayment);
-            var directoryName = Path.GetDirectoryName(offFileName);
+            if (customerPayments == null)
+                return;
+
+            var directoryName = Config.OutputDirectory;
 
             try
             {
+                // Create Output directory if not exist
                 if (!Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
-                File.AppendAllLines(offFileName, new[] { lineForWrite });
+                // Key - filename for store, Value - lines for record to file
+                var filenameToContentMap = new Dictionary<string, IList<string>>();
+
+                foreach (var customerPayment in customerPayments)
+                {
+                    var offFilename = GetOffFileName(customerPayment.DepartmentCode, customerPayment.CreateDate);
+                    var offFilepath = Path.Combine(Config.OutputDirectory, offFilename);
+
+                    if (!filenameToContentMap.ContainsKey(offFilepath))
+                        filenameToContentMap.Add(offFilepath, new List<string>());
+
+                    filenameToContentMap[offFilepath].Add(customerPayment.ToOffFileLine());
+                }
+
+                foreach (var filenameContentPair in filenameToContentMap)
+                {
+                    if (File.Exists(filenameContentPair.Key))
+                        File.Delete(filenameContentPair.Key);
+
+                    File.AppendAllLines(filenameContentPair.Key, filenameContentPair.Value);
+                }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                Log.ErrorWithException("Ошибка записи информации о платеже в off файл.", e);
+                Log.ErrorWithException("Ошибка записи информации о платеже в off файл.", ex);
             }
         }
-        
-        private string GetOffFileLine(OffCustomerPayment customerPayment)
+
+        private string GetOffFileName(string departmentCode, DateTime date)
         {
-            if (customerPayment == null)
-                return string.Empty;
-
-            var lineComponents = new[]
-            {
-                $"CustID = {customerPayment.CustomerNumber}",
-                $"Day = {customerPayment.DayValue}",
-                $"Night = {customerPayment.NightValue}",
-                "",
-                $"ReasonID = {customerPayment.ReasonId}",
-                $"Total = {customerPayment.TotalCost}",
-                $"id = {customerPayment.Id}",
-                $"date = {customerPayment.CreateDate.ToString("dd.MM.yyyy")}"
-            };
-
-            return string.Join("; ", lineComponents);
-        }
-
-        private string GetOffFileName(string departamentCode, DateTime date)
-        {
-            string fileName = string.Format(Config.CustomerOutputFileFormat, departamentCode, date);
-            return Path.Combine(Config.OutputDirectory, fileName);
+            return string.Format(Config.CustomerOutputFileFormat, departmentCode, date);
         }
     }
 }

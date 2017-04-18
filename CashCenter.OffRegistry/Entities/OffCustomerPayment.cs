@@ -25,5 +25,22 @@ namespace CashCenter.OffRegistry.Entities
             CreateDate = createDate;
             DepartmentCode = departmentCode;
         }
+
+        public string ToOffFileLine()
+        {
+            var lineComponents = new[]
+            {
+                $"CustID = {CustomerNumber}",
+                $"Day = {DayValue}",
+                $"Night = {NightValue}",
+                "",
+                $"ReasonID = {ReasonId}",
+                $"Total = {TotalCost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}",
+                $"id = {Id}",
+                $"date = {CreateDate.ToString("dd.MM.yyyy")}"
+            };
+
+            return string.Join("; ", lineComponents);
+        }
     }
 }

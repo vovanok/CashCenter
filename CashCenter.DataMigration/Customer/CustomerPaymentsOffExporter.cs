@@ -17,42 +17,26 @@ namespace CashCenter.DataMigration
                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
         
-        protected override int TryExportItems(IEnumerable<CustomerPayment> items)
+        protected override int TryExportItems(IEnumerable<CustomerPayment> customerPayments)
         {
-            var countSuccess = 0;
-            foreach(var item in items)
-            {
-                if (TryExportOneItem(item))
-                    countSuccess++;
-            }
+            if (customerPayments == null)
+                return 0;
 
-            return countSuccess;
-        }
+            var paymentForStore = customerPayments
+                .Where(customerPayment => customerPayment != null)
+                .Select(customerPayment => 
+                    new OffCustomerPayment(
+                        Guid.NewGuid().ToString(),
+                        customerPayment.Customer.Number,
+                        customerPayment.NewDayValue,
+                        customerPayment.NewNightValue,
+                        customerPayment.ReasonId,
+                        customerPayment.Cost,
+                        customerPayment.CreateDate,
+                        customerPayment.Customer.Department.Code));
 
-        private bool TryExportOneItem(CustomerPayment customerPayment)
-        {
-            if (customerPayment == null)
-                return false;
-
-            try
-            {
-                var offFileCustomerPayment = new OffCustomerPayment(
-                    Guid.NewGuid().ToString(),
-                    customerPayment.Customer.Number,
-                    customerPayment.NewDayValue,
-                    customerPayment.NewNightValue,
-                    customerPayment.ReasonId,
-                    customerPayment.Cost,
-                    customerPayment.CreateDate,
-                    customerPayment.Customer.Department.Code);
-
-                outputController.AddPayment(offFileCustomerPayment);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            outputController.StorePayments(paymentForStore);
+            return paymentForStore.Count();
         }
     }
 }
