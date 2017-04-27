@@ -328,6 +328,45 @@ namespace CashCenter.Dal
 
         #endregion
 
+        #region Water
+
+        public IEnumerable<WaterCustomer> WaterCustomers
+        {
+            get { return context.WaterCustomers; }
+        }
+
+        public WaterCustomer AddWaterCustomer(WaterCustomer customer)
+        {
+            try
+            {
+                var resultCustomer = context.WaterCustomers.Add(customer);
+                Save();
+                return resultCustomer;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления плательщика за воду", ex);
+                return null;
+            }
+        }
+
+        public WaterCustomerPayment AddWaterCustomerPayment(WaterCustomerPayment customerPayment)
+        {
+            try
+            {
+                var newCustomerPayment = context.WaterCustomerPayments.Add(customerPayment);
+                Save();
+                return newCustomerPayment;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления платежа за воду", ex);
+                return null;
+            }
+        }
+
+        #endregion
+
         private void HandleEntityFrameworkError(string message, Exception exception)
         {
             var entityValidationException = exception as DbEntityValidationException;
