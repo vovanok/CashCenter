@@ -1,50 +1,28 @@
-﻿using System.Collections.Generic;
-using DrvFRLib;
+﻿using DrvFRLib;
 using System;
 using CashCenter.Common;
 
-namespace CashCenter.IvEnergySales.Check
+namespace CashCenter.Check
 {
 	public class CashMachine
     {
-		public class OperationResult
-		{
-			public int ErrorCode { get; private set; }
-
-			public string Description { get; private set; }
-
-			public bool IsSuccess
-			{
-				get { return ErrorCode == 0; }
-			}
-
-			internal OperationResult(int errorCode, string description)
-			{
-				ErrorCode = errorCode;
-				Description = description;
-			}
-		}
-
 		public DrvFR Driver { get; private set; }
-
-		public List<OperationResult> Errors { get; private set; } 
 
 		public CashMachine()
 		{
             try
             {
+                LogInfo("Создание драйвера");
                 Driver = new DrvFR();
                 Driver.Timeout = 1000;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка создания драйвера кассового аппарата.", e);
-                throw;
+                throw new SystemException(ex.Message);
             }
 			
 			Driver.Password = Config.CheckPrinterPassword;
-            Driver.OpenSession();
-			Errors = new List<OperationResult>();
+            OpenSession();
 		}
 
         ~CashMachine()
@@ -56,27 +34,37 @@ namespace CashCenter.IvEnergySales.Check
         {
             get
             {
-                int countErrorsBeforeTest = Errors.Count;
-                PrintLine(string.Empty);
-                int countErrorsAfterTest = Errors.Count;
-                return countErrorsAfterTest <= countErrorsBeforeTest;
+                try
+                {
+                    LogInfo("Проверка готовности");
+                    PrintLine(string.Empty);
+                    return true;
+                }
+                catch(Exception)
+                {
+                    return false;
+                }
             }
         }
 
         public void Connect()
         {
+            LogInfo("Соединение с ККМ");
             Driver?.Connect();
             CheckError();
         }
 
         public void Disconnect()
         {
+            LogInfo("Разрыв соединения с ККМ");
             Driver?.Disconnect();
             CheckError();
         }
 
         private void OpenSession()
         {
+            Logger.Info("Открытие сессии");
+
             if (Driver == null)
                 return;
 
@@ -100,13 +88,15 @@ namespace CashCenter.IvEnergySales.Check
 
         private void CloseSession()
         {
+            LogInfo("Закрытие сессии");
             Driver?.Disconnect(); // TODO: seems like error
-
             CheckError();
         }
 
         public void PrintLine(string line)
 		{
+            LogInfo($"Печать строки: {line}");
+
 			if (Driver == null)
 				return;
 
@@ -118,18 +108,22 @@ namespace CashCenter.IvEnergySales.Check
 
 		public void OpenCheck()
 		{
+            LogInfo("Открытие чека");
 			Driver?.OpenCheck();
 			CheckError();
 		}
 
 		public void CloseCheck()
 		{
+            LogInfo("Закрытие чека");
 			Driver?.CloseCheck();
 			CheckError();
 		}
 
 		public void Cut()
 		{
+            LogInfo("Обрезание чека");
+
 			if (Driver == null)
 				return;
 
@@ -141,22 +135,20 @@ namespace CashCenter.IvEnergySales.Check
 
 		public void ShowProperties()
 		{
+            LogInfo("Открытие окна свойств ККМ");
 			Driver?.ShowProperties();
-		}
-
-		public void ResetErrors()
-		{
-			Errors.Clear();
 		}
 
         public void Sale()
         {
+            LogInfo("Продажа");
             Driver?.Sale();
             CheckError();
         }
 
         public void CancelCheck()
         {
+            LogInfo("Отмена чека");
             Driver?.CancelCheck();
             CheckError();
         }
@@ -166,11 +158,20 @@ namespace CashCenter.IvEnergySales.Check
             if (Driver == null)
                 return;
 
-			if (Errors == null)
-				Errors = new List<OperationResult>();
-
-			if (Driver.ResultCode != 0)
-				Errors.Add(new OperationResult(Driver.ResultCode, Driver.ResultCodeDescription));
+            if (Driver.ResultCode != 0)
+            {
+                throw new CheckException(Driver.ResultCode, Driver.ResultCodeDescription);
+            }
 		}
+
+        private void LogInfo(string message)
+        {
+            Logger.Info($"ККМ: {message}");
+        }
+
+        private void LogError(string message)
+        {
+            Logger.Error($"Ошибка ККМ: {message}");
+        }
 	}
 }

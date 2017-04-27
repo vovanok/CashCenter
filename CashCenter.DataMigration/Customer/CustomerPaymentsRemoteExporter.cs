@@ -1,6 +1,6 @@
 ﻿using CashCenter.Dal;
-using CashCenter.ZeusDb;
-using CashCenter.ZeusDb.Entities;
+using CashCenter.DataMigration.Providers.Firebird;
+using CashCenter.DataMigration.Providers.Firebird.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;

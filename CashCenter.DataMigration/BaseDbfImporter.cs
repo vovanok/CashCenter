@@ -1,5 +1,5 @@
 ﻿using CashCenter.Common;
-using CashCenter.DbfRegistry;
+using CashCenter.DataMigration.Providers.Dbf;
 using System;
 using System.IO;
 

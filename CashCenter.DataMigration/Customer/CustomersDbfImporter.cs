@@ -1,5 +1,5 @@
 ﻿using CashCenter.Dal;
-using CashCenter.DbfRegistry.Entities;
+using CashCenter.DataMigration.Providers.Dbf.Entities;
 using System.Linq;
 using System.Collections.Generic;
 

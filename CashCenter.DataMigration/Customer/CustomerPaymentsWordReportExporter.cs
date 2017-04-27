@@ -1,6 +1,7 @@
 ﻿using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.WordReport;
+using CashCenter.DataMigration.Providers.Word;
+using CashCenter.DataMigration.Providers.Word.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

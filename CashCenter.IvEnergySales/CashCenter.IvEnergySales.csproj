@@ -238,10 +238,6 @@
       <Project>{718380a0-3293-4a26-9ad4-86f836647b07}</Project>
       <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CashCenter.DbfRegistry\CashCenter.DbfRegistry.csproj">
-      <Project>{ee97d516-69d4-45fc-b428-c42428bf3559}</Project>
-      <Name>CashCenter.DbfRegistry</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

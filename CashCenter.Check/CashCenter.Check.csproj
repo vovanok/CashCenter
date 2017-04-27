@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Check.cs" />
     <Compile Include="CashMachine.cs" />
+    <Compile Include="CheckException.cs" />
     <Compile Include="CheckPrinter.cs" />
     <Compile Include="NdsPercent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

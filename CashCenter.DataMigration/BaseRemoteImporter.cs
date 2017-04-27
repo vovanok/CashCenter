@@ -1,6 +1,6 @@
 ﻿using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.ZeusDb;
+using CashCenter.DataMigration.Providers.Firebird;
 using System;
 
 namespace CashCenter.DataMigration

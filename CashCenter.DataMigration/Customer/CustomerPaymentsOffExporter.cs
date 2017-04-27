@@ -1,6 +1,6 @@
 ﻿using CashCenter.Dal;
-using CashCenter.OffRegistry;
-using CashCenter.OffRegistry.Entities;
+using CashCenter.DataMigration.Providers.Off;
+using CashCenter.DataMigration.Providers.Off.Entities;
 using System;
 using System.Linq;
 using System.Collections.Generic;
