@@ -108,13 +108,16 @@
     </Compile>
     <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
+    <Compile Include="BusinessLogic\WaterCustomerPaymentContext.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
     <Compile Include="CustomerEnergyPaymentControl.xaml.cs">
       <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomerWaterPaymentControl.xaml.cs">
       <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomerWaterPaymentControlViewModel.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
       <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>
     </Compile>
@@ -133,6 +136,9 @@
     <Compile Include="CommonControls\FileSelectorControl.xaml.cs">
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\CustomerNotAppliedException.cs" />
+    <Compile Include="Exceptions\IncorrectDataException.cs" />
+    <Compile Include="Exceptions\UserException.cs" />
     <Compile Include="OperationWaiter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
