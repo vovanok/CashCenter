@@ -1,7 +1,7 @@
-﻿using CashCenter.Common;
-using CashCenter.IvEnergySales.BusinessLogic;
-using System.Windows;
+﻿using System.Windows;
+using CashCenter.Common;
 using CashCenter.Dal;
+using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.Exceptions;
 
 namespace CashCenter.IvEnergySales
@@ -22,6 +22,7 @@ namespace CashCenter.IvEnergySales
         public Observed<decimal> Counter3Cost { get; } = new Observed<decimal>();
         public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
         public Observed<string> Description { get; } = new Observed<string>();
+        public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
 
         public Command FindCustomerCommand { get; }
         public Command PayCommand { get; }
@@ -36,11 +37,24 @@ namespace CashCenter.IvEnergySales
             Counter1Number.OnChange += (newValue) => DispatchPropertyChanged("Counter1Number");
             Counter2Number.OnChange += (newValue) => DispatchPropertyChanged("Counter2Number");
             Counter3Number.OnChange += (newValue) => DispatchPropertyChanged("Counter3Number");
-            Counter1Cost.OnChange += (newValue) => DispatchPropertyChanged("Counter1Cost");
-            Counter2Cost.OnChange += (newValue) => DispatchPropertyChanged("Counter2Cost");
-            Counter3Cost.OnChange += (newValue) => DispatchPropertyChanged("Counter3Cost");
+            Counter1Cost.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("Counter1Cost");
+                UpdateTotalCost();
+            };
+            Counter2Cost.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("Counter2Cost");
+                UpdateTotalCost();
+            };
+            Counter3Cost.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("Counter3Cost");
+                UpdateTotalCost();
+            };
             TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
+            IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
 
             FindCustomerCommand = new Command(FindCustomerHandler);
             PayCommand = new Command(PayHandler);
@@ -51,34 +65,43 @@ namespace CashCenter.IvEnergySales
 
         private void WaterPaymentcontextCustomerChanged(WaterCustomer customer)
         {
-            if (customer == null)
-            {
-                MessageBox.Show($"Плательщик с номером лицевого счета {CustomerNumber} не найден.");
-                return;
-            }
+            CustomerNumber.Value = customer != null ? (uint)customer.Number : 0;
 
-            CustomerName.Value = customer.Name;
-            CustomerAddress.Value = customer.Address;
-            Email.Value = customer.Email;
+            CustomerName.Value = customer?.Name ?? string.Empty;
+            CustomerAddress.Value = customer?.Address ?? string.Empty;
+            Email.Value = customer?.Email ?? string.Empty;
 
-            Counter1Number.Value = (uint)customer.CounterNumber1;
-            Counter2Number.Value = (uint)customer.CounterNumber2;
-            Counter3Number.Value = (uint)customer.CounterNumber3;
+            Counter1Number.Value = customer != null ? (uint)customer.CounterNumber1 : 0;
+            Counter2Number.Value = customer != null ? (uint)customer.CounterNumber2 : 0;
+            Counter3Number.Value = customer != null ? (uint)customer.CounterNumber3 : 0;
+
+            Counter1Cost.Value = 0;
+            Counter2Cost.Value = 0;
+            Counter3Cost.Value = 0;
+
+            Description.Value = string.Empty;
+
+            IsPaymentEnable.Value = customer != null;
         }
 
         private void FindCustomerHandler(object parameters)
         {
-            context.FindAndApplyCustomer(CustomerNumber.Value);
+            var targetCustomerNumber = CustomerNumber.Value;
+            context.FindAndApplyCustomer(targetCustomerNumber);
+
+            if (context.Customer.Value == null)
+                MessageBox.Show($"Плательщик с номером лицевого счета {targetCustomerNumber} не найден.");
         }
 
         private void PayHandler(object parameters)
         {
             try
             {
-                context.Pay( Email.Value, Counter1Cost.Value,
+                context.Pay(Email.Value, Counter1Cost.Value,
                     Counter2Cost.Value, Counter3Cost.Value, Description.Value);
+                context.ClearCustomer();
             }
-            catch(UserException ex)
+            catch (UserException ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
@@ -87,6 +110,11 @@ namespace CashCenter.IvEnergySales
         private void ClearHandler(object parameters)
         {
             context.ClearCustomer();
+        }
+
+        private void UpdateTotalCost()
+        {
+            TotalCost.Value = Counter1Cost.Value + Counter2Cost.Value + Counter3Cost.Value;
         }
     }
 }

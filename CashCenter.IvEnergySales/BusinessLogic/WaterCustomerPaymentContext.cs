@@ -11,11 +11,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
     {
         public Observed<WaterCustomer> Customer { get; } = new Observed<WaterCustomer>();
 
-        public event Action<WaterCustomer> OnCustomerChanged;
-
-        public WaterCustomerPaymentContext()
+        public event Action<WaterCustomer> OnCustomerChanged
         {
-            Customer.OnChange += OnCustomerChanged;
+            add { Customer.OnChange += value; }
+            remove { Customer.OnChange -= value; }
         }
 
         public void FindAndApplyCustomer(uint number)
