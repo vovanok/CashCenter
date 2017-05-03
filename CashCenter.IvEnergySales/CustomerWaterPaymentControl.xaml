@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales"
              xmlns:converters="clr-namespace:CashCenter.IvEnergySales.Converters"
+             xmlns:behaviors="clr-namespace:CashCenter.IvEnergySales.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="300">
     <UserControl.Resources>
@@ -45,7 +46,8 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}}"
-                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
                     <Button Grid.Column="1" Content="Поиск" Command="{Binding FindCustomerCommand}"/>
                 </Grid>
 
@@ -88,9 +90,15 @@
                     <Label FontWeight="Bold" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Сумма по счетчику"/>
                     </Label>
-                    <TextBox Text="{Binding Counter1Cost.Value}" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding IsPaymentEnable.Value}"/>
-                    <TextBox Text="{Binding Counter2Cost.Value}" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding IsPaymentEnable.Value}"/>
-                    <TextBox Text="{Binding Counter3Cost.Value}" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                    <TextBox Text="{Binding Counter1Cost.Value}" Grid.Column="1" Grid.Row="1"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             IsEnabled="{Binding IsPaymentEnable.Value}" behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                    <TextBox Text="{Binding Counter2Cost.Value}" Grid.Column="1" Grid.Row="2"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             IsEnabled="{Binding IsPaymentEnable.Value}" behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                    <TextBox Text="{Binding Counter3Cost.Value}" Grid.Column="1" Grid.Row="3"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             IsEnabled="{Binding IsPaymentEnable.Value}" behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
                 </Grid>
 
                 <Grid>
