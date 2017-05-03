@@ -10,6 +10,7 @@ namespace CashCenter.IvEnergySales
     {
         private WaterCustomerPaymentContext context = new WaterCustomerPaymentContext();
 
+        public Observed<bool> IsCustomerNumberFocused { get; } = new Observed<bool>();
         public Observed<uint> CustomerNumber { get; } = new Observed<uint>();
         public Observed<string> CustomerName { get; } = new Observed<string>();
         public Observed<string> CustomerAddress { get; } = new Observed<string>();
@@ -55,6 +56,7 @@ namespace CashCenter.IvEnergySales
             TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
+            IsCustomerNumberFocused.OnChange += (newValue) => DispatchPropertyChanged("IsCustomerNumberFocused");
 
             FindCustomerCommand = new Command(FindCustomerHandler);
             PayCommand = new Command(PayHandler);
@@ -66,6 +68,7 @@ namespace CashCenter.IvEnergySales
         private void WaterPaymentcontextCustomerChanged(WaterCustomer customer)
         {
             CustomerNumber.Value = customer != null ? (uint)customer.Number : 0;
+            IsCustomerNumberFocused.Value = customer == null;
 
             CustomerName.Value = customer?.Name ?? string.Empty;
             CustomerAddress.Value = customer?.Address ?? string.Empty;
@@ -87,19 +90,32 @@ namespace CashCenter.IvEnergySales
         private void FindCustomerHandler(object parameters)
         {
             var targetCustomerNumber = CustomerNumber.Value;
-            context.FindAndApplyCustomer(targetCustomerNumber);
+            using (new OperationWaiter())
+            {
+                context.FindAndApplyCustomer(targetCustomerNumber);
+            }
 
             if (context.Customer.Value == null)
+            {
                 MessageBox.Show($"Плательщик с номером лицевого счета {targetCustomerNumber} не найден.");
+
+                // Force focus
+                IsCustomerNumberFocused.Value = false;
+                IsCustomerNumberFocused.Value = true;
+            }
         }
 
         private void PayHandler(object parameters)
         {
             try
             {
-                context.Pay(Email.Value, Counter1Cost.Value,
-                    Counter2Cost.Value, Counter3Cost.Value, Description.Value);
-                context.ClearCustomer();
+                using (new OperationWaiter())
+                {
+                    context.Pay(
+                        Email.Value, Counter1Cost.Value,
+                        Counter2Cost.Value, Counter3Cost.Value, Description.Value);
+                    context.ClearCustomer();
+                }
             }
             catch (UserException ex)
             {

@@ -18,7 +18,7 @@
             <Setter Property="Margin" Value="15,5,15,5"/>
             <Setter Property="Height" Value="30"/>
         </Style>
-        <converters:CustomerNumberToStringConverter x:Key="CustomerNumberToStringConverter" />
+        <converters:CustomerNumberToStringConverter x:Key="CustomerNumberToStringConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <ivenergysales:CustomerWaterPaymentControlViewModel />
@@ -47,7 +47,8 @@
 
                     <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:TextBoxBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}"/>
                     <Button Grid.Column="1" Content="Поиск" Command="{Binding FindCustomerCommand}"/>
                 </Grid>
 
@@ -58,14 +59,14 @@
                 </Viewbox>
 
                 <Label Content="Адрес плательщика" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
-                <Viewbox Grid.Column="1" Grid.Row="2" >
+                <Viewbox Grid.Column="1" Grid.Row="2">
                     <Label Content="{Binding CustomerAddress.Value}" FontWeight="Bold"
                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
 
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
                 <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Email.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
-                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Оплата" Height="230">
@@ -92,13 +93,19 @@
                     </Label>
                     <TextBox Text="{Binding Counter1Cost.Value}" Grid.Column="1" Grid.Row="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             IsEnabled="{Binding IsPaymentEnable.Value}" behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                             IsEnabled="{Binding IsPaymentEnable.Value}"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter2Cost.Value}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             IsEnabled="{Binding IsPaymentEnable.Value}" behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                             IsEnabled="{Binding IsPaymentEnable.Value}"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter3Cost.Value}" Grid.Column="1" Grid.Row="3"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             IsEnabled="{Binding IsPaymentEnable.Value}" behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                             IsEnabled="{Binding IsPaymentEnable.Value}"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
                 </Grid>
 
                 <Grid>
@@ -118,7 +125,10 @@
                     <Label Content="{Binding TotalCost.Value}" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     
                     <Label Content="Примечание" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                    <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="1"
+                             HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                             IsEnabled="{Binding IsPaymentEnable.Value}"
+                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
 
                     <Button Content="Оплатить" Command="{Binding PayCommand}" Grid.Column="0" Grid.Row="2" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
                     <Button Content="Очистить" Command="{Binding ClearCommand}" Grid.Column="1" Grid.Row="2" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
