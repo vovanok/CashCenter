@@ -45,10 +45,14 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}}"
+                    <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}"/>
+                             behaviors:TextBoxBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding FindCustomerCommand}" Key="Return"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
                     <Button Grid.Column="1" Content="Поиск" Command="{Binding FindCustomerCommand}"/>
                 </Grid>
 
@@ -66,7 +70,8 @@
 
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
                 <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Email.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
-                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" behaviors:TextBoxBehavior.IsTabOnEnter="True"
+                         behaviors:TextBoxBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Оплата" Height="230">

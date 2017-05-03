@@ -11,6 +11,7 @@ namespace CashCenter.IvEnergySales
         private WaterCustomerPaymentContext context = new WaterCustomerPaymentContext();
 
         public Observed<bool> IsCustomerNumberFocused { get; } = new Observed<bool>();
+        public Observed<bool> IsEmailFocused { get; } = new Observed<bool>();
         public Observed<uint> CustomerNumber { get; } = new Observed<uint>();
         public Observed<string> CustomerName { get; } = new Observed<string>();
         public Observed<string> CustomerAddress { get; } = new Observed<string>();
@@ -31,6 +32,8 @@ namespace CashCenter.IvEnergySales
 
         public CustomerWaterPaymentControlViewModel()
         {
+            IsCustomerNumberFocused.OnChange += (newValue) => DispatchPropertyChanged("IsCustomerNumberFocused");
+            IsEmailFocused.OnChange += (newValue) => DispatchPropertyChanged("IsEmailFocused");
             CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
             CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
             CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");
@@ -56,7 +59,6 @@ namespace CashCenter.IvEnergySales
             TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
-            IsCustomerNumberFocused.OnChange += (newValue) => DispatchPropertyChanged("IsCustomerNumberFocused");
 
             FindCustomerCommand = new Command(FindCustomerHandler);
             PayCommand = new Command(PayHandler);
@@ -99,9 +101,15 @@ namespace CashCenter.IvEnergySales
             {
                 MessageBox.Show($"Плательщик с номером лицевого счета {targetCustomerNumber} не найден.");
 
-                // Force focus
+                // Force customer number focus
                 IsCustomerNumberFocused.Value = false;
                 IsCustomerNumberFocused.Value = true;
+            }
+            else
+            {
+                // Force email focus
+                IsEmailFocused.Value = false;
+                IsEmailFocused.Value = true;
             }
         }
 
