@@ -1,38 +1,25 @@
+using CashCenter.Check;
 using System.Windows;
-using CashCenter.IvEnergySales.Check;
-using CashCenter.Common;
 
 namespace CashCenter.IvEnergySales
 {
     public partial class MainWindow : Window
 	{
-        private CheckPrinter checkPrinter;
-
         public MainWindow()
 		{
 			InitializeComponent();
-
-            try
-            {
-                checkPrinter = new CheckPrinter();
-                customerControl.CheckPrinter = checkPrinter;
-            }
-            catch
-            {
-                Log.Error("Ошибка создания драйвера. Запустите приложение от имени администратора.");
-            }
         }
 
         #region Menu events handlers
 
         private void On_miCashPrinterSettings_Click(object sender, RoutedEventArgs e)
         {
-            checkPrinter.ShowProperties();
+            CheckPrinter.ShowProperties();
         }
 
         private void On_miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
         {
-            checkPrinter.CancelCheck();
+            CheckPrinter.CancelCheck();
         }
 
         private void On_miSettings_Click(object sender, RoutedEventArgs e)

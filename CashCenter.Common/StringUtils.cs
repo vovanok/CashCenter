@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CashCenter.Common
@@ -79,6 +80,19 @@ namespace CashCenter.Common
             {
                 result.Add(stringValue.Substring(curLineStart, Math.Min(lineLength, stringValue.Length - curLineStart)));
                 curLineStart += lineLength;
+            }
+
+            return result;
+        }
+
+        public static IList<string> SplitStringWithSeparators(string stringValue)
+        {
+            var lines = stringValue.Split('|');
+            var result = new List<string>();
+
+            foreach(var line in lines)
+            {
+                result.AddRange(StringUtils.SplitStringByLines(line, Config.CheckPrinterMaxLineLength));
             }
 
             return result;
