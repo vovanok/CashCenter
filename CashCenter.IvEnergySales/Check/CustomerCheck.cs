@@ -13,7 +13,7 @@ namespace CashCenter.IvEnergySales.Check
         public string CashierName { get; private set; }
 
         public CustomerCheck(string salesDepartmentInfo, string departmentCode,
-                int customerId, string customerName, string paymentReason, string cashierName, decimal cost)
+                int customerNumber, string customerName, string paymentReason, string cashierName, decimal cost)
             : base(new List<string>(), cost)
         {
             CommonLines.Add(StringUtils.StringInCenter("КАССОВЫЙ ЧЕК", Config.CheckPrinterMaxLineLength));
@@ -23,7 +23,7 @@ namespace CashCenter.IvEnergySales.Check
             CommonLines.AddRange(StringUtils.SplitStringWithSeparators(salesDepartmentInfo));
             CommonLines.Add(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
             CommonLines.Add($"Код отделения: {departmentCode}");
-            CommonLines.Add($"Лицевой счет: {customerId}");
+            CommonLines.Add($"Лицевой счет: {customerNumber}");
             CommonLines.Add($"ФИО: {customerName}");
             CommonLines.Add($"Основание: {paymentReason.ToUpper()}");
             CommonLines.Add($"Кассир: {cashierName}");

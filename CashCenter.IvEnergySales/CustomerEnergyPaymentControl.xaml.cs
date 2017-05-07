@@ -1,4 +1,5 @@
-﻿using CashCenter.Common;
+﻿using CashCenter.Check;
+using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.Check;
@@ -36,8 +37,6 @@ namespace CashCenter.IvEnergySales
         {
             get { return IsSalesContextReady ? customerSalesContext.Value.Customer.Balance : 0; }
         }
-
-        public CheckPrinter CheckPrinter { get; set; }
 
         public CustomerEnergyPaymentControl()
         {
@@ -168,7 +167,7 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            if (CheckPrinter == null || !CheckPrinter.IsReady)
+            if (!CheckPrinter.IsReady)
             {
                 if (MessageBox.Show("Кассовый аппарат не подключен. Продолжить без печати чека?", "Требуется подтверждение продолжения", MessageBoxButton.YesNo) == MessageBoxResult.No)
                     return;
@@ -373,7 +372,7 @@ namespace CashCenter.IvEnergySales
 
         private void PrintChecks()
         {
-            if (CheckPrinter == null || !CheckPrinter.IsReady)
+            if (!CheckPrinter.IsReady)
                 return;
 
             if (!IsSalesContextReady || customerSalesContext.Value.InfoForCheck == null)
@@ -382,18 +381,16 @@ namespace CashCenter.IvEnergySales
             bool isPrintSuccess = false;
             using (var waiter = new OperationWaiter())
             {
-                var mainCheck = new CustomerCheck(CheckPrinter)
-                {
-                    SalesDepartmentInfo = Config.SalesDepartmentInfo,
-                    DepartmentCode = customerSalesContext.Value.InfoForCheck.DbCode,
-                    CustomerId = customerSalesContext.Value.InfoForCheck.CustomerId,
-                    CustomerName = customerSalesContext.Value.InfoForCheck.CustomerName,
-                    PaymentReason = customerSalesContext.Value.InfoForCheck.PaymentReasonName,
-                    CashierName = Properties.Settings.Default.CasherName,
-                    Cost = customerSalesContext.Value.InfoForCheck.Cost
-                };
+                var mainCheck = new CustomerCheck(
+                    Config.SalesDepartmentInfo,
+                    customerSalesContext.Value.InfoForCheck.DbCode,
+                    customerSalesContext.Value.InfoForCheck.CustomerNumber,
+                    customerSalesContext.Value.InfoForCheck.CustomerName,
+                    customerSalesContext.Value.InfoForCheck.PaymentReasonName,
+                    Properties.Settings.Default.CasherName,
+                    customerSalesContext.Value.InfoForCheck.Cost);
 
-                isPrintSuccess = mainCheck.Print();
+                CheckPrinter.Print(mainCheck);
             }
 
             if (!isPrintSuccess)
