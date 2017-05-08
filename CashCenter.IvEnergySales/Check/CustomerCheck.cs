@@ -13,8 +13,8 @@ namespace CashCenter.IvEnergySales.Check
         public string CashierName { get; private set; }
 
         public CustomerCheck(string salesDepartmentInfo, string departmentCode,
-                int customerId, string customerName, string paymentReason, string cashierName, decimal cost)
-            : base(new List<string>(), cost)
+                int customerId, string customerName, string paymentReason, string cashierName, decimal cost, string email)
+            : base(new List<string>(), cost, email)
         {
             CommonLines.Add(StringUtils.StringInCenter("КАССОВЫЙ ЧЕК", Config.CheckPrinterMaxLineLength));
             CommonLines.Add(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));

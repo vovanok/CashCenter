@@ -372,24 +372,29 @@ namespace CashCenter.IvEnergySales
 
         private void PrintChecks()
         {
-            if (!CheckPrinter.IsReady)
-                return;
-
             if (!IsSalesContextReady || customerSalesContext.Value.InfoForCheck == null)
                 return;
 
-            using (var waiter = new OperationWaiter())
+            try
             {
-                var mainCheck = new CustomerCheck(
-                    Config.SalesDepartmentInfo,
-                    customerSalesContext.Value.InfoForCheck.DbCode,
-                    customerSalesContext.Value.InfoForCheck.CustomerId,
-                    customerSalesContext.Value.InfoForCheck.CustomerName,
-                    customerSalesContext.Value.InfoForCheck.PaymentReasonName,
-                    Properties.Settings.Default.CasherName,
-                    customerSalesContext.Value.InfoForCheck.Cost);
+                using (var waiter = new OperationWaiter())
+                {
+                    var mainCheck = new CustomerCheck(
+                        Config.SalesDepartmentInfo,
+                        customerSalesContext.Value.InfoForCheck.DbCode,
+                        customerSalesContext.Value.InfoForCheck.CustomerId,
+                        customerSalesContext.Value.InfoForCheck.CustomerName,
+                        customerSalesContext.Value.InfoForCheck.PaymentReasonName,
+                        Properties.Settings.Default.CasherName,
+                        customerSalesContext.Value.InfoForCheck.Cost,
+                        customerSalesContext.Value.InfoForCheck.CustomerEmail);
 
-                CheckPrinter.Print(mainCheck);
+                    CheckPrinter.Print(mainCheck);
+                }
+            }
+            catch(Exception ex)
+            {
+                Message.Error($"Ошибка печати чека. {ex.Message}");
             }
         }
 

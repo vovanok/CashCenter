@@ -28,13 +28,25 @@ namespace CashCenter.Check
             cashMachine.CancelCheck();
         }
 
+        public static void CloseSession()
+        {
+            cashMachine.CloseSession();
+        }
+
         public static void Print(Check check)
         {
             try
             {
+                Logger.Info(">>> НАЧАЛО ПЕЧАТИ ЧЕКА");
+
+                cashMachine.OpenSessionIfNot();
                 cashMachine.Connect();
 
                 cashMachine.OpenCheck();
+
+                if (StringUtils.IsValidEmail(check.Email))
+                    cashMachine.SendEmail(check.Email);
+
                 foreach (var lineAfterOpen in check.CommonLines)
                 {
                     cashMachine.PrintLine(lineAfterOpen);
@@ -56,10 +68,15 @@ namespace CashCenter.Check
 
                 cashMachine.Driver.Summ1 = check.Cost;
                 cashMachine.CloseCheck();
+
+                cashMachine.Disconnect();
+
+                Logger.Info(">>> ПЕЧАТЬ ЧЕКА ЗАВЕРШЕНА");
             }
             catch(Exception ex)
             {
                 Logger.Error("Ошибка печати чека", ex);
+                throw ex;
             }
         }
     }

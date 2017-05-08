@@ -1,36 +1,37 @@
 ﻿using DrvFRLib;
 using System;
 using CashCenter.Common;
+using System.IO;
 
 namespace CashCenter.Check
 {
-	public class CashMachine
+    public class CashMachine
     {
-		public DrvFR Driver { get; private set; }
+        public DrvFR Driver { get; private set; }
 
-		public CashMachine()
-		{
+        public CashMachine()
+        {
             try
             {
                 LogInfo("Создание драйвера");
                 Driver = new DrvFR();
                 Driver.Timeout = 1000;
+                Driver.Password = Config.CheckPrinterPassword;
+                Driver.LogOn = true;
+                Driver.LogFileMaxSize = 100;
+                Driver.LogMaxFileCount = 10;
+                Driver.LogCommands = true;
+                Driver.LogMethods = true;
+                Driver.ComLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ComLog.txt");
+                Driver.CPLogFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CPLog.txt");
             }
             catch (Exception ex)
             {
                 throw new SystemException(ex.Message);
             }
-			
-			Driver.Password = Config.CheckPrinterPassword;
-            OpenSession();
-		}
-
-        ~CashMachine()
-        {
-            CloseSession(); // TODO: move it from destructor
         }
 
-        public bool IsReady // TODO: find better way
+        public bool IsReady
         {
             get
             {
@@ -40,10 +41,23 @@ namespace CashCenter.Check
                     PrintLine(string.Empty);
                     return true;
                 }
-                catch(Exception)
+                catch (Exception ex)
                 {
+                    LogError($"ККМ не готов ({ex.Message}).");
                     return false;
                 }
+            }
+        }
+
+        public bool IsSessionOpen
+        {
+            get
+            {
+                if (Driver == null)
+                    return false;
+
+                Driver.GetECRStatus();
+                return Driver.ECRMode != 4;
             }
         }
 
@@ -61,15 +75,14 @@ namespace CashCenter.Check
             CheckError();
         }
 
-        private void OpenSession()
+        public void OpenSessionIfNot()
         {
             Logger.Info("Открытие сессии");
 
             if (Driver == null)
                 return;
 
-            Driver.GetECRStatus();
-            if (Driver.ECRMode == 4) //Смена закрыта, открываем новую
+            if (!IsSessionOpen)
             {
                 // синхронизируем  время
                 Driver.Time = DateTime.Now;
@@ -86,10 +99,20 @@ namespace CashCenter.Check
             CheckError();
         }
 
-        private void CloseSession()
+        public void SendEmail(string email)
+        {
+            if (Driver == null)
+                return;
+
+            Driver.CustomerEmail = email;
+            Driver.FNSendCustomerEmail();
+            CheckError();
+        }
+
+        public void CloseSession()
         {
             LogInfo("Закрытие сессии");
-            Driver?.Disconnect(); // TODO: seems like error
+            Driver?.FNCloseSession();
             CheckError();
         }
 

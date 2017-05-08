@@ -11,6 +11,8 @@ namespace CashCenter.Check
         public CheckException(int code, string description)
             : base()
         {
+            Code = code;
+            Description = description;
         }
 
         public override string Message => $"Код: {Code}. Описание: {Description}";
