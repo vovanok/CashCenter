@@ -1,4 +1,5 @@
-﻿using CashCenter.Common;
+﻿using CashCenter.Check;
+using CashCenter.Common;
 using CashCenter.IvEnergySales.Logging;
 using System.Windows;
 using System.Windows.Threading;
@@ -23,6 +24,13 @@ namespace CashCenter.IvEnergySales
             Message.Error(errorHeader);
 
             e.Handled = false;
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            CheckPrinter.CloseSession();
         }
     }
 }

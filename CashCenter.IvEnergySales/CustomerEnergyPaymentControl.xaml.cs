@@ -372,29 +372,32 @@ namespace CashCenter.IvEnergySales
 
         private void PrintChecks()
         {
-            if (!CheckPrinter.IsReady)
-                return;
-
             if (!IsSalesContextReady || customerSalesContext.Value.InfoForCheck == null)
                 return;
 
-            bool isPrintSuccess = false;
-            using (var waiter = new OperationWaiter())
+            try
             {
-                var mainCheck = new CustomerCheck(
-                    Config.SalesDepartmentInfo,
-                    customerSalesContext.Value.InfoForCheck.DbCode,
-                    customerSalesContext.Value.InfoForCheck.CustomerNumber,
-                    customerSalesContext.Value.InfoForCheck.CustomerName,
-                    customerSalesContext.Value.InfoForCheck.PaymentReasonName,
-                    Properties.Settings.Default.CasherName,
-                    customerSalesContext.Value.InfoForCheck.Cost);
+                using (var waiter = new OperationWaiter())
+                {
+                    var mainCheck = new CustomerCheck(
+                        Config.SalesDepartmentInfo,
+                        customerSalesContext.Value.InfoForCheck.DbCode,
+                        customerSalesContext.Value.InfoForCheck.CustomerNumber,
+                        customerSalesContext.Value.InfoForCheck.CustomerName,
+                        customerSalesContext.Value.InfoForCheck.PaymentReasonName,
+                        Properties.Settings.Default.CasherName,
+                        customerSalesContext.Value.InfoForCheck.Cost,
+                        customerSalesContext.Value.InfoForCheck.CustomerEmail);
 
-                CheckPrinter.Print(mainCheck);
+                    CheckPrinter.Print(mainCheck);
+                }
             }
-
-            if (!isPrintSuccess)
-                Log.Error($"Ошибка печати чека.");
+            catch(Exception ex)
+            {
+                var errorMessage = "Ошибка печати чека";
+                Logger.Error(errorMessage, ex);
+                Message.Error(errorMessage);
+            }
         }
 
         #endregion

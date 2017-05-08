@@ -87,7 +87,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
 
                 InfoForCheck = new InfoForCheck(payment.Cost, payment.CreateDate,
-                    Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName);
+                    Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email);
 
                 return true;
             }

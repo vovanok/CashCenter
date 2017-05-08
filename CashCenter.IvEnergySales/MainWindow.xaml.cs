@@ -1,4 +1,5 @@
 using CashCenter.Check;
+using System;
 using System.Windows;
 
 namespace CashCenter.IvEnergySales
@@ -19,7 +20,14 @@ namespace CashCenter.IvEnergySales
 
         private void On_miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
         {
-            CheckPrinter.CancelCheck();
+            try
+            {
+                CheckPrinter.CancelCheck();
+            }
+            catch (Exception ex)
+            {
+                Message.Error($"ÊÊÌ םו דמעמג.\n{ex.Message}");
+            }
         }
 
         private void On_miSettings_Click(object sender, RoutedEventArgs e)
