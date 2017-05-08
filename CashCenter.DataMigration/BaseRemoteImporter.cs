@@ -15,11 +15,8 @@ namespace CashCenter.DataMigration
         public ImportResult Import(Department department)
         {
             if (department == null)
-            {
-                Log.Error("Для импорта из БД не указано отделение.");
-                return new ImportResult();
-            }
-
+                throw new ApplicationException("Не задано отделение для импорта");
+            
             try
             {
                 sourceDepartment = department;
@@ -29,8 +26,7 @@ namespace CashCenter.DataMigration
             }
             catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка импортирования данных из удаленной БД", ex);
-                return new ImportResult();
+                throw new SystemException($"Ошибка импортирования данных из удаленной БД.\n{ex.Message}");
             }
         }
     }

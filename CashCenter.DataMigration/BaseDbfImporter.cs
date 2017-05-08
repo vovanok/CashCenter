@@ -1,5 +1,4 @@
-﻿using CashCenter.Common;
-using CashCenter.DataMigration.Providers.Dbf;
+﻿using CashCenter.DataMigration.Providers.Dbf;
 using System;
 using System.IO;
 
@@ -15,17 +14,8 @@ namespace CashCenter.DataMigration
 
         public ImportResult Import(string dbfFilename)
         {
-            if (string.IsNullOrEmpty(dbfFilename))
-            {
-                Log.Error("Путь в файлу DBF для импорта не задан.");
-                return new ImportResult();
-            }
-
             if (!File.Exists(dbfFilename))
-            {
-                Log.Error($"Заданный DBF файл для импорта не существует ({dbfFilename}).");
-                return new ImportResult();
-            }
+                throw new ApplicationException("DBF файл не задан или не существует");
 
             var tempFilename = Path.Combine(Path.GetDirectoryName(dbfFilename), TEMP_DBF_FILE_NAME) + Path.GetExtension(dbfFilename);
             if (File.Exists(tempFilename))
@@ -39,17 +29,17 @@ namespace CashCenter.DataMigration
 
             try
             {
-                result = Import();
+                return Import();
             }
             catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка импортирования данных из DBF файла", ex);
+                throw ex;
             }
-
-            if (File.Exists(tempFilename))
-                File.Delete(tempFilename);
-
-            return result;
+            finally
+            {
+                if (File.Exists(tempFilename))
+                    File.Delete(tempFilename);
+            }
         }
     }
 }

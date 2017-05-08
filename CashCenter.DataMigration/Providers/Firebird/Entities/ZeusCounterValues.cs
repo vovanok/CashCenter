@@ -3,13 +3,9 @@ namespace CashCenter.DataMigration.Providers.Firebird.Entities
     public class ZeusCounterValues
     {
         public int Id { get; private set; }
-
         public int CustomerNumber { get; private set; }
-
         public int CustomerCounterId { get; private set; }
-
         public int Value1 { get; private set; }
-
         public int? Value2 { get; private set; }
 
         public ZeusCounterValues(int id, int customerNumber,

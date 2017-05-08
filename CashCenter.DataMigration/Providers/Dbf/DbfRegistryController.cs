@@ -11,11 +11,18 @@ namespace CashCenter.DataMigration.Providers.Dbf
     {
         private static class Sql
         {
-            public const string CUSTOMER_DEPARTMENT_CODE = "KO";
-            public const string CUSTOMER_ID = "LS";
-            public const string CUSTOMER_COUNTERS_END_DAY_VALUE = "CDAY";
-            public const string CUSTOMER_COUNTERS_END_NIGHT_VALUE = "CNIGHT";
-            public const string CUSTOMER_END_BALANCE = "SUMMA";
+            public const string ENERGY_CUSTOMER_DEPARTMENT_CODE = "KO";
+            public const string ENERGY_CUSTOMER_ID = "LS";
+            public const string ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE = "CDAY";
+            public const string ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE = "CNIGHT";
+            public const string ENERGY_CUSTOMER_END_BALANCE = "SUMMA";
+
+            public const string WATER_CUSTOMER_NUMBER = "SCHET";
+            public const string WATER_CUSTOMER_NAME = "FIO";
+            public const string WATER_CUSTOMER_ADDRESS = "ADRESS";
+            public const string WATER_CUSTOMER_COUNTER_NUMBER1 = "N_SHET1";
+            public const string WATER_CUSTOMER_COUNTER_NUMBER2 = "N_SHET2";
+            public const string WATER_CUSTOMER_COUNTER_NUMBER3 = "N_SHET3";
 
             public const string ARTICLES_DATA = "DATAN";
             public const string ARTICLES_CODE = "TOVARKOD";
@@ -23,17 +30,21 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ARTICLES_BARCODE = "SHTRIHKOD";
             public const string ARTICLES_PRICE = "TOVARCENA";
             
-            private static readonly string GET_CUSTOMERS =
-                $@"select {CUSTOMER_DEPARTMENT_CODE}, {CUSTOMER_ID}, {CUSTOMER_COUNTERS_END_DAY_VALUE}, {CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {CUSTOMER_END_BALANCE}
+            private static readonly string GET_ENERGY_CUSTOMERS =
+                $@"select {ENERGY_CUSTOMER_DEPARTMENT_CODE}, {ENERGY_CUSTOMER_ID}, {ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE}, {ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {ENERGY_CUSTOMER_END_BALANCE}
+                   from {{0}}";
+
+            private static readonly string GET_WATER_CUSTOMERS =
+                $@"select {WATER_CUSTOMER_NUMBER}, {WATER_CUSTOMER_NAME}, {WATER_CUSTOMER_ADDRESS}, {WATER_CUSTOMER_COUNTER_NUMBER1}, {WATER_CUSTOMER_COUNTER_NUMBER2}, {WATER_CUSTOMER_COUNTER_NUMBER3}
                    from {{0}}";
 
             private static readonly string GET_ARTICLES =
                 $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
                    form {{0}}";
 
-            public static string GetCustomersQuery(string tableName)
+            public static string GetWaterCustomersQuery(string tableName)
             {
-                return string.Format(GET_CUSTOMERS, tableName);
+                return string.Format(GET_ENERGY_CUSTOMERS, tableName);
             }
 
             public static string GetArticlesQuery(string tableName)
@@ -53,35 +64,70 @@ namespace CashCenter.DataMigration.Providers.Dbf
             dbfName = fileInfo.Name;
         }
 
-        public List<DbfCustomer> GetCustomers()
+        public List<DbfEnergyCustomer> GetEnergyCustomers()
         {
             try
             {
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetCustomersQuery(dbfName);
+                command.CommandText = Sql.GetWaterCustomersQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 
-                var customers = new List<DbfCustomer>();
+                var energyCustomers = new List<DbfEnergyCustomer>();
                 while (dataReader.Read())
                 {
-                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
-                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_DEPARTMENT_CODE);
-                    int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
-                    int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
-                    decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_END_BALANCE);
+                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_ID);
+                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_DEPARTMENT_CODE);
+                    int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE);
+                    int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE);
+                    decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_END_BALANCE);
 
-                    customers.Add(new DbfCustomer(number, departamentCode, dayValue, nightValue, balance));
+                    energyCustomers.Add(new DbfEnergyCustomer(number, departamentCode, dayValue, nightValue, balance));
                 }
 
-                return customers;
+                return energyCustomers;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка получения физ.лиц из файла {dbfName}.", e);
-                return new List<DbfCustomer>();
+                throw new SystemException($"Ошибка чтения DBF {dbfName}. {ex.Message}");
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        public List<DbfWaterCustomer> GetWaterCustomers()
+        {
+            try
+            {
+                dbfConnection.Open();
+
+                var command = dbfConnection.CreateCommand();
+                command.CommandText = Sql.GetWaterCustomersQuery(dbfName);
+
+                var dataReader = command.ExecuteReader();
+
+                var waterCustomers = new List<DbfWaterCustomer>();
+                while (dataReader.Read())
+                {
+                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_NUMBER);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_NAME);
+                    string address = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_ADDRESS);
+                    int counterNumber1 = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_COUNTER_NUMBER1);
+                    int counterNumber2 = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_COUNTER_NUMBER2);
+                    int counterNumber3 = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_COUNTER_NUMBER3);
+
+                    waterCustomers.Add(new DbfWaterCustomer(number, name, address, counterNumber1, counterNumber2, counterNumber3));
+                }
+
+                return waterCustomers;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка чтения DBF {dbfName}. {ex.Message}");
             }
             finally
             {
@@ -117,10 +163,13 @@ namespace CashCenter.DataMigration.Providers.Dbf
 
                 return new DbfArticlesSet(date, articles);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка загрузки товаров из DBF файла: {dbfName}", ex);
-                return new DbfArticlesSet();
+                throw new SystemException($"Ошибка чтения DBF {dbfName}. {ex.Message}");
+            }
+            finally
+            {
+                dbfConnection?.Close();
             }
         }
     }

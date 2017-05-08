@@ -1,6 +1,7 @@
 ﻿using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,44 +45,50 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             var department = controlDepartamentSelector.SelectedDepartment;
             if (department == null)
             {
-                Log.Error("Отделение не выбрано.");
+                Message.Error("Отделение не выбрано.");
                 return;
             }
 
-            if (MessageBox.Show($"Вы уверены что хотите произвести импорт из удаленной базы данных:\n{department.Url}",
-                "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
-            {
+            if (!Message.YesNoQuestion($"Вы уверены что хотите произвести импорт из удаленной базы данных:\n{department.Url}"))
                 return;
-            }
 
-            var resultMessage = new StringBuilder("Результат импортирования\n\n");
+            var resultMessage = new StringBuilder();
             var waiter = new OperationWaiter();
             using (waiter)
             {
                 var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
                     .Where(item => item != null && item.IsChecked);
 
-                foreach (var importTargetItem in selectedImportTargets)
+                foreach (var importTarget in selectedImportTargets)
                 {
-                    var importResult = importTargetItem.Importer.Import(controlDepartamentSelector.SelectedDepartment);
-
-                    resultMessage.AppendLine(importTargetItem.Name);
-                    if (importResult == null)
+                    try
                     {
-                        resultMessage.AppendLine("\tОшибка импортирования");
-                        continue;
-                    }
+                        Logger.Info($"Импорт \"{importTarget.Name}\"");
 
-                    resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
-                    resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
-                    resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
+                        var importResult = importTarget.Importer.Import(controlDepartamentSelector.SelectedDepartment);
+                        resultMessage.AppendLine($"Результат импортирования \"{importTarget.Name}\"\n\n");
+                        resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
+                        resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
+                        resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
+                        resultMessage.AppendLine();
+                    }
+                    catch (Exception ex)
+                    {
+                        var errorHead = $"Ошибка импортирования \"{importTarget.Name}\"";
+
+                        Logger.Error($"{errorHead}.\n{ex.Message}");
+                        resultMessage.AppendLine(errorHead);
+                        resultMessage.AppendLine();
+                    }
                 }
 
                 RefreshArticlePriceTypes();
             }
 
             resultMessage.AppendLine($"\nЗатрачено времени: {waiter.DeltaTime}");
-            Log.Info(resultMessage.ToString());
+
+            Logger.Info(resultMessage.ToString());
+            Message.Info(resultMessage.ToString());
         }
 
         private void RefreshArticlePriceTypes()

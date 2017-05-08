@@ -1,6 +1,8 @@
 ﻿using CashCenter.Common;
 using CashCenter.DataMigration;
+using System;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,31 +17,43 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
 
         private void On_btnImportCustomersFromDbf_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(fscCustomersDbfFileSelector.FileName) ||
-                !File.Exists(fscCustomersDbfFileSelector.FileName))
+            var sourceFileName = fscCustomersDbfFileSelector.FileName;
+
+            if (!File.Exists(sourceFileName))
             {
-                Log.Error("DBF файл не задан или не существует.");
+                Message.Error("DBF файл не задан или не существует.");
                 return;
             }
 
-            if (MessageBox.Show($"Вы уверены что хотите произвести импорт физ. лиц из файла {fscCustomersDbfFileSelector.FileName}.",
-                    "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+            if (!Message.YesNoQuestion($"Вы уверены что хотите произвести импорт физ. лиц из файла {sourceFileName}."))
                 return;
 
             ImportResult importResult = new ImportResult();
-            using (var waiter = new OperationWaiter())
+            var resultMessage = new StringBuilder();
+            resultMessage.AppendLine("Результат импортирования потребителей электроэнергии\n\n");
+
+            try
             {
-                var importer = new CustomersDbfImporter();
-                importResult = importer.Import(fscCustomersDbfFileSelector.FileName);
+                using (var waiter = new OperationWaiter())
+                {
+                    var importer = new CustomersDbfImporter();
+                    importResult = importer.Import(fscCustomersDbfFileSelector.FileName);
+                    resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
+                    resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
+                    resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
+                    resultMessage.AppendLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorHead = $"Ошибка импортирования потребителей электроэнергии";
+
+                Logger.Error($"{errorHead}.\n{ex.Message}");
+                resultMessage.AppendLine(errorHead);
             }
 
-            if (importResult == null)
-            {
-                Log.Info("Ошибка импортирования.");
-                return;
-            }
-
-            Log.Info($"Результат импортирования\nДобавлено: {importResult.AddedCount}\nОбновлено: {importResult.UpdatedCount}\nУдалено: {importResult.DeletedCount}");
+            Logger.Info(resultMessage.ToString());
+            Message.Info(resultMessage.ToString());
         }
     }
 }

@@ -89,6 +89,7 @@
     <Compile Include="Providers\Dbf\Entities\DbfArticlesSet.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfCustomer.cs" />
     <Compile Include="ExportResult.cs" />
+    <Compile Include="Providers\Dbf\Entities\DbfWaterCustomer.cs" />
     <Compile Include="Providers\Firebird\Entities\ZeusCounterValues.cs" />
     <Compile Include="Providers\Firebird\Entities\ZeusCustomer.cs" />
     <Compile Include="Providers\Firebird\Entities\ZeusCustomerCounters.cs" />
