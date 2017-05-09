@@ -118,6 +118,8 @@
       <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomerWaterPaymentControlViewModel.cs" />
+    <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
+    <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
     <Compile Include="DataMigrationControls\MigrationHelper.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
       <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>

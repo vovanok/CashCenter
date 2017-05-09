@@ -84,6 +84,7 @@
     <Compile Include="Customer\CustomerPaymentsWordReportExporter.cs" />
     <Compile Include="Customer\CustomersDbfImporter.cs" />
     <Compile Include="Customer\CustomersRemoteImporter.cs" />
+    <Compile Include="IExporter.cs" />
     <Compile Include="IImporter.cs" />
     <Compile Include="IRemoteImporter.cs" />
     <Compile Include="Providers\Dbf\DbfRegistryController.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Providers\Word\Entities\ReportCustomerPaymentModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportCustomersModel.cs" />
     <Compile Include="Providers\Word\WordReportController.cs" />
+    <Compile Include="WaterCustomers\WaterCustomerPaymentsDbfExporter.cs" />
     <Compile Include="WaterCustomers\WaterCustomersDbfImporter.cs" />
   </ItemGroup>
   <ItemGroup>

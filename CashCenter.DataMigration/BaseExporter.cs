@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CashCenter.DataMigration
 {
-    public abstract class BaseExporter<TSource>
+    public abstract class BaseExporter<TSource> : IExporter
     {
         protected DateTime beginDatetime;
         protected DateTime endDatetime;
