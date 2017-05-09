@@ -91,7 +91,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Ошибка чтения DBF {dbfName}. {ex.Message}");
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
             }
             finally
             {
@@ -127,7 +127,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Ошибка чтения DBF {dbfName}. {ex.Message}");
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
             }
             finally
             {
@@ -165,7 +165,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Ошибка чтения DBF {dbfName}. {ex.Message}");
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
             }
             finally
             {

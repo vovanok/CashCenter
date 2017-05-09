@@ -523,7 +523,7 @@ namespace CashCenter.DataMigration.Providers.Firebird
         private DbCommand GetDbCommandByQuery(string query)
         {
             if (dbConnection.State != ConnectionState.Open)
-                throw new SystemException("Ошибка получения комманды для текущего подключения к БД. Подключение не открыто.");
+                throw new SystemException("Ошибка получения комманды для текущего подключения к БД. Подключение не открыто");
 
             var command = dbConnection.CreateCommand();
             command.Transaction = dbConnection.BeginTransaction();
@@ -585,7 +585,7 @@ namespace CashCenter.DataMigration.Providers.Firebird
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Ошибка получения вида платежа с номером {paymentKindId}.", ex);
+                throw new SystemException($"Ошибка получения вида платежа с номером {paymentKindId}", ex);
             }
             finally
             {
