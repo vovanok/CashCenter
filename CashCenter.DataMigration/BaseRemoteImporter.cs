@@ -1,5 +1,4 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
+﻿using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Firebird;
 using System;
 
@@ -26,7 +25,7 @@ namespace CashCenter.DataMigration
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Ошибка импортирования данных из удаленной БД.\n{ex.Message}");
+                throw new SystemException("Ошибка импортирования данных из удаленной БД", ex);
             }
         }
     }

@@ -37,36 +37,41 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             if (messageEnd == null || exporter == null)
                 return;
 
-            if (MessageBox.Show($"Вы уверены, что хотите экспортировать плтежи физ.лиц в {messageEnd}?",
-                "Подтверждение", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-            {
+            if (!Message.YesNoQuestion($"Вы уверены, что хотите экспортировать платежи за электроэнергию в {messageEnd}?"))
                 return;
-            }
 
-            if (dpBeginPeriod.SelectedDate == null)
+            if (dpBeginPeriod.SelectedDate == null || dpEndPeriod.SelectedDate == null)
             {
-                Log.Error("Начальная дата не выбрана");
-                return;
-            }
-
-            if (dpEndPeriod.SelectedDate == null)
-            {
-                Log.Error("Конечная дата не выбрана");
+                Message.Error("Начальная или конечная дата не выбрана");
                 return;
             }
 
             var beginDatetime = dpBeginPeriod.SelectedDate.Value.DayBegin();
             var endDatetime = dpEndPeriod.SelectedDate.Value.DayEnd();
 
-            var exportResult = exporter.Export(beginDatetime, endDatetime);
-
-            if (exportResult.SuccessCount == 0 && exportResult.FailCount == 0)
+            try
             {
-                Log.Info("Нет платежей для экспортирования.");
-                return;
-            }
+                Logger.Info($"Экспорта платежей за электроэнергию с {beginDatetime} по {endDatetime}");
 
-            Log.Info($"Экспортировано {exportResult.SuccessCount} из {exportResult.SuccessCount + exportResult.FailCount} платежей.");
+                var exportResult = exporter.Export(beginDatetime, endDatetime);
+                if (exportResult.SuccessCount == 0 && exportResult.FailCount == 0)
+                {
+                    var nothingToExportMessage = "Нет платежей для экспортирования";
+                    Logger.Info(nothingToExportMessage);
+                    Message.Info(nothingToExportMessage);
+                    return;
+                }
+
+                var successResultMessage = $"Экспортировано {exportResult.SuccessCount} из {exportResult.SuccessCount + exportResult.FailCount} платежей.";
+                Logger.Info(successResultMessage);
+                Message.Info(successResultMessage);
+            }
+            catch (Exception ex)
+            {
+                var errorHeader = "Ошибка экспорта платежей за электроэнергию";
+                Logger.Error(errorHeader, ex);
+                Message.Error(errorHeader);
+            }
         }
     }
 }

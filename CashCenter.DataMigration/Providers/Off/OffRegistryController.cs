@@ -45,7 +45,7 @@ namespace CashCenter.DataMigration.Providers.Off
             }
             catch(Exception ex)
             {
-                Log.ErrorWithException("Ошибка записи информации о платеже в off файл.", ex);
+                throw new SystemException("Ошибка записи информации о платеже в off файл", ex);
             }
         }
 

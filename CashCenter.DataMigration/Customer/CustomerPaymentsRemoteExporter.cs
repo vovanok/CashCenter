@@ -95,9 +95,9 @@ namespace CashCenter.DataMigration
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                throw new SystemException("Ошибка экспорта платежа за электроэнергию", ex);
             }
         }
 

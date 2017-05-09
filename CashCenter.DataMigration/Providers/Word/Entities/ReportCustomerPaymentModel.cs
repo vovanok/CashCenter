@@ -5,13 +5,9 @@ namespace CashCenter.DataMigration.Providers.Word.Entities
     public class ReportCustomerPaymentModel
     {
         public int CustomerNumber { get; private set; }
-
         public int DayValue { get; private set; }
-
         public int NightValue { get; private set; }
-
         public decimal Cost { get; private set; }
-
         public DateTime CreationDate { get; private set; }
 
         public ReportCustomerPaymentModel(
