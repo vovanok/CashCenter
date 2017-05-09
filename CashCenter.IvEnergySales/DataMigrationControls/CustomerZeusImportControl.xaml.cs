@@ -1,34 +1,18 @@
 ﻿using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
-    public partial class CustomerZeusImportControl : UserControl
+    public partial class CustomerZeusImportControl : BaseImportControl
     {
-        public class ImportTargetItem
+        private readonly List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
         {
-            public bool IsChecked { get; set; }
-            public string Name { get; private set; }
-            public IRemoteImportiable Importer { get; private set; }
-
-            public ImportTargetItem(string name, IRemoteImportiable importer)
-            {
-                IsChecked = false;
-                Name = name;
-                Importer = importer;
-            }
-        }
-
-        private List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
-        {
-            new ImportTargetItem("Физ. лица", new CustomersRemoteImporter()),
+            new ImportTargetItem("Потребители электроэнергии", new CustomersRemoteImporter()),
             new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter())
         };
 
@@ -53,39 +37,20 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 return;
 
             var resultMessage = new StringBuilder();
-            var waiter = new OperationWaiter();
-            using (waiter)
+
+            var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
+                .Where(item => item != null && item.IsChecked);
+
+            foreach (var importTarget in selectedImportTargets)
             {
-                var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
-                    .Where(item => item != null && item.IsChecked);
+                var remoteImporter = importTarget.Importer as IRemoteImporter;
+                if (remoteImporter != null)
+                    remoteImporter.SourceDepartment = controlDepartamentSelector.SelectedDepartment;
 
-                foreach (var importTarget in selectedImportTargets)
-                {
-                    try
-                    {
-                        Logger.Info($"Импорт \"{importTarget.Name}\"");
-
-                        var importResult = importTarget.Importer.Import(controlDepartamentSelector.SelectedDepartment);
-                        resultMessage.AppendLine($"Результат импортирования \"{importTarget.Name}\"\n\n");
-                        resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
-                        resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
-                        resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
-                        resultMessage.AppendLine();
-                    }
-                    catch (Exception ex)
-                    {
-                        var errorHead = $"Ошибка импортирования \"{importTarget.Name}\"";
-
-                        Logger.Error($"{errorHead}.\n{ex.Message}");
-                        resultMessage.AppendLine(errorHead);
-                        resultMessage.AppendLine();
-                    }
-                }
-
-                RefreshArticlePriceTypes();
+                resultMessage.AppendLine(ImportItem(importTarget));
             }
 
-            resultMessage.AppendLine($"\nЗатрачено времени: {waiter.DeltaTime}");
+            RefreshArticlePriceTypes();
 
             Logger.Info(resultMessage.ToString());
             Message.Info(resultMessage.ToString());

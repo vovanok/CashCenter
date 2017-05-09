@@ -1,15 +1,15 @@
 ﻿using CashCenter.Common;
 using CashCenter.DataMigration;
-using System;
 using System.IO;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
-    public partial class CustomerDbfImportControl : UserControl
+    public partial class CustomerDbfImportControl : BaseImportControl
     {
+        private ImportTargetItem importTargetItem =
+            new ImportTargetItem("Потребители электроэнергии", new CustomersDbfImporter());
+
         public CustomerDbfImportControl()
         {
             InitializeComponent();
@@ -25,35 +25,17 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 return;
             }
 
-            if (!Message.YesNoQuestion($"Вы уверены что хотите произвести импорт физ. лиц из файла {sourceFileName}."))
+            if (!Message.YesNoQuestion($"Вы уверены что хотите произвести импорт потребителей электроэнергии из файла {sourceFileName}."))
                 return;
 
-            ImportResult importResult = new ImportResult();
-            var resultMessage = new StringBuilder();
-            resultMessage.AppendLine("Результат импортирования потребителей электроэнергии\n\n");
+            var dbfImporter = importTargetItem.Importer as IDbfImporter;
+            if (dbfImporter != null)
+                dbfImporter.DbfFilename = fscCustomersDbfFileSelector.FileName;
 
-            try
-            {
-                using (var waiter = new OperationWaiter())
-                {
-                    var importer = new CustomersDbfImporter();
-                    importResult = importer.Import(fscCustomersDbfFileSelector.FileName);
-                    resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
-                    resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
-                    resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
-                    resultMessage.AppendLine();
-                }
-            }
-            catch (Exception ex)
-            {
-                var errorHead = $"Ошибка импортирования потребителей электроэнергии";
+            var resultStatistic = ImportItem(importTargetItem);
 
-                Logger.Error($"{errorHead}.\n{ex.Message}");
-                resultMessage.AppendLine(errorHead);
-            }
-
-            Logger.Info(resultMessage.ToString());
-            Message.Info(resultMessage.ToString());
+            Logger.Info(resultStatistic);
+            Message.Info(resultStatistic);
         }
     }
 }

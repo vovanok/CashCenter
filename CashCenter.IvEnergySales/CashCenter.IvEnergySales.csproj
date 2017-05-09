@@ -118,6 +118,7 @@
       <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomerWaterPaymentControlViewModel.cs" />
+    <Compile Include="DataMigrationControls\BaseImportControl.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
       <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>
     </Compile>
@@ -127,6 +128,7 @@
     <Compile Include="DataMigrationControls\CustomerZeusImportControl.xaml.cs">
       <DependentUpon>CustomerZeusImportControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrationControls\ImportTargetItem.cs" />
     <Compile Include="DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>

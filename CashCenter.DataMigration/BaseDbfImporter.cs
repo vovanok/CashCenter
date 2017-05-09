@@ -4,7 +4,7 @@ using System.IO;
 
 namespace CashCenter.DataMigration
 {
-    public abstract class BaseDbfImporter<TSource, TTarget> : BaseImporter<TSource, TTarget>, IDbfImportiable
+    public abstract class BaseDbfImporter<TSource, TTarget> : BaseImporter<TSource, TTarget>, IDbfImporter
         where TSource : class
         where TTarget : class
     {
@@ -12,16 +12,18 @@ namespace CashCenter.DataMigration
 
         protected DbfRegistryController dbfRegistry;
 
-        public ImportResult Import(string dbfFilename)
+        public string DbfFilename { get; set; }
+
+        public override ImportResult Import()
         {
-            if (!File.Exists(dbfFilename))
+            if (!File.Exists(DbfFilename))
                 throw new ApplicationException("DBF файл не задан или не существует");
 
-            var tempFilename = Path.Combine(Path.GetDirectoryName(dbfFilename), TEMP_DBF_FILE_NAME) + Path.GetExtension(dbfFilename);
+            var tempFilename = Path.Combine(Path.GetDirectoryName(DbfFilename), TEMP_DBF_FILE_NAME) + Path.GetExtension(DbfFilename);
             if (File.Exists(tempFilename))
                 File.Delete(tempFilename);
 
-            File.Copy(dbfFilename, tempFilename);
+            File.Copy(DbfFilename, tempFilename);
 
             dbfRegistry = new DbfRegistryController(tempFilename);
 
@@ -29,7 +31,7 @@ namespace CashCenter.DataMigration
 
             try
             {
-                return Import();
+                return base.Import();
             }
             catch (Exception ex)
             {

@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace CashCenter.DataMigration
 {
-    public abstract class BaseImporter<TSource, TTarget>
+    public abstract class BaseImporter<TSource, TTarget> : IImporter
         where TSource : class
         where TTarget : class
     {
-        public ImportResult Import()
+        public virtual ImportResult Import()
         {
             var sourceItems = GetSourceItems();
 

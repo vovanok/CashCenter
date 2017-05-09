@@ -5,7 +5,8 @@ namespace CashCenter.IvEnergySales
 {
     public class OperationWaiter : IDisposable
     {
-        public TimeSpan DeltaTime { get; private set; }
+        public TimeSpan TimeFromStart { get { return DateTime.Now - startTime; } }
+
         private DateTime startTime;
 
         public OperationWaiter()
@@ -17,7 +18,6 @@ namespace CashCenter.IvEnergySales
         public void Dispose()
         {
             Mouse.OverrideCursor = null;
-            DeltaTime = DateTime.Now - startTime;
         }
     }
 }

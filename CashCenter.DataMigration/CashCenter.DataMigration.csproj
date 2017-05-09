@@ -84,6 +84,8 @@
     <Compile Include="Customer\CustomerPaymentsWordReportExporter.cs" />
     <Compile Include="Customer\CustomersDbfImporter.cs" />
     <Compile Include="Customer\CustomersRemoteImporter.cs" />
+    <Compile Include="IImporter.cs" />
+    <Compile Include="IRemoteImporter.cs" />
     <Compile Include="Providers\Dbf\DbfRegistryController.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticle.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticlesSet.cs" />
@@ -104,10 +106,9 @@
     <Compile Include="Providers\Firebird\Entities\ZeusWarehousePrice.cs" />
     <Compile Include="Providers\Firebird\ZeusDbController.cs" />
     <Compile Include="Providers\Firebird\ZeusDbController.Sql.cs" />
-    <Compile Include="IDbfImportiable.cs" />
+    <Compile Include="IDbfImporter.cs" />
     <Compile Include="ImportResult.cs" />
     <Compile Include="Customer\PaymentReasonsRemoteImporter.cs" />
-    <Compile Include="IRemoteImportiable.cs" />
     <Compile Include="Providers\Off\Entities\OffCustomerPayment.cs" />
     <Compile Include="Providers\Off\OffRegistryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
