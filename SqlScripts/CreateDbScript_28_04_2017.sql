@@ -3,12 +3,14 @@ CREATE TABLE [dbo].[WaterCustomer] (
     [Number]         INT            NOT NULL,
     [Name]           NVARCHAR (MAX) NOT NULL,
     [Address]        NVARCHAR (MAX) NOT NULL,
-    [CounterNumber1] INT            NOT NULL,
-    [CounterNumber2] INT            NOT NULL,
-    [CounterNumber3] INT            NOT NULL,
+    [CounterNumber1] NVARCHAR(20)            NOT NULL,
+    [CounterNumber2] NVARCHAR(20)            NOT NULL,
+    [CounterNumber3] NVARCHAR(20)            NOT NULL,
     [Email]          NVARCHAR (100) NOT NULL,
+    [IsActive]       BIT            NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
 
 CREATE TABLE [dbo].[WaterCustomerPayment] (
     [Id]           INT             IDENTITY (1, 1) NOT NULL,

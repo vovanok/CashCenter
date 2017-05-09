@@ -24,10 +24,11 @@ namespace CashCenter.Dal
         public int Number { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-        public int CounterNumber1 { get; set; }
-        public int CounterNumber2 { get; set; }
-        public int CounterNumber3 { get; set; }
+        public string CounterNumber1 { get; set; }
+        public string CounterNumber2 { get; set; }
+        public string CounterNumber3 { get; set; }
         public string Email { get; set; }
+        public bool IsActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WaterCustomerPayment> WaterCustomerPayments { get; set; }

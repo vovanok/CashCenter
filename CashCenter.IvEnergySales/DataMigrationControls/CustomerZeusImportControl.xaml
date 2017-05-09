@@ -1,12 +1,10 @@
-﻿<migrationControls:BaseImportControl x:Class="CashCenter.IvEnergySales.DataMigrationControls.CustomerZeusImportControl"
+﻿<UserControl x:Class="CashCenter.IvEnergySales.DataMigrationControls.CustomerZeusImportControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
-             xmlns:migrationControls="clr-namespace:CashCenter.IvEnergySales.DataMigrationControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="300">
+             mc:Ignorable="d" d:DesignHeight="150" d:DesignWidth="300">
     <StackPanel>
         <Label Content="Что импортировать" />
         <ListBox x:Name="lbImportTargets">
@@ -27,4 +25,4 @@
             HorizontalAlignment="Left"
             Click="On_btnImportFromDb_Click"/>
     </StackPanel>
-</migrationControls:BaseImportControl>
+</UserControl>

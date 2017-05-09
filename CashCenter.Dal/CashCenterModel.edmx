@@ -107,10 +107,11 @@
           <Property Name="Number" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="CounterNumber1" Type="int" Nullable="false" />
-          <Property Name="CounterNumber2" Type="int" Nullable="false" />
-          <Property Name="CounterNumber3" Type="int" Nullable="false" />
+          <Property Name="CounterNumber1" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CounterNumber2" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CounterNumber3" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="WaterCustomerPayment">
           <Key>
@@ -527,10 +528,11 @@
           <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CounterNumber1" Type="Int32" Nullable="false" />
-          <Property Name="CounterNumber2" Type="Int32" Nullable="false" />
-          <Property Name="CounterNumber3" Type="Int32" Nullable="false" />
+          <Property Name="CounterNumber1" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CounterNumber2" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CounterNumber3" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="WaterCustomerPayments" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomer" ToRole="WaterCustomerPayment" />
         </EntityType>
         <Association Name="FK_WaterCustomerPayment_ToWaterCustomer">
@@ -670,6 +672,7 @@
           <EntitySetMapping Name="WaterCustomers">
             <EntityTypeMapping TypeName="CashCenterModel.WaterCustomer">
               <MappingFragment StoreEntitySet="WaterCustomer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CounterNumber3" ColumnName="CounterNumber3" />
                 <ScalarProperty Name="CounterNumber2" ColumnName="CounterNumber2" />

@@ -15,7 +15,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="tbFileName" Grid.Column="0" Grid.Row="0" />
+        <TextBox x:Name="tbFileName" Grid.Column="0" Grid.Row="0" TextChanged="On_tbFileName_TextChanged" />
         <Button x:Name="btnBrowse" Grid.Column="1" Grid.Row="0" Content=". . ." Click="On_btnBrowse_Click" />
     </Grid>
 </UserControl>

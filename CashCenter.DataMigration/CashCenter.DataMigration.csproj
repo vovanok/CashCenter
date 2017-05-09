@@ -115,6 +115,7 @@
     <Compile Include="Providers\Word\Entities\ReportCustomerPaymentModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportCustomersModel.cs" />
     <Compile Include="Providers\Word\WordReportController.cs" />
+    <Compile Include="WaterCustomers\WaterCustomersDbfImporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">

@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
-    public partial class CustomerZeusImportControl : BaseImportControl
+    public partial class CustomerZeusImportControl : UserControl
     {
         private readonly List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
         {
@@ -47,7 +48,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 if (remoteImporter != null)
                     remoteImporter.SourceDepartment = controlDepartamentSelector.SelectedDepartment;
 
-                resultMessage.AppendLine(ImportItem(importTarget));
+                resultMessage.AppendLine(MigrationHelper.ImportItem(importTarget));
             }
 
             RefreshArticlePriceTypes();

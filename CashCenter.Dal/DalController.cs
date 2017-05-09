@@ -335,6 +335,11 @@ namespace CashCenter.Dal
             get { return context.WaterCustomers; }
         }
 
+        public IEnumerable<WaterCustomerPayment> WaterCustomerPayments
+        {
+            get { return context.WaterCustomerPayments; }
+        }
+
         public WaterCustomer AddWaterCustomer(WaterCustomer customer)
         {
             try
@@ -345,11 +350,26 @@ namespace CashCenter.Dal
             }
             catch (Exception ex)
             {
-                HandleEntityFrameworkError("Ошибка добавления плательщика за воду", ex);
+                HandleEntityFrameworkError("Ошибка добавления потребителя воды", ex);
                 return null;
             }
         }
 
+        public IEnumerable<WaterCustomer> AddWaterCustomersRange(IEnumerable<WaterCustomer> customers)
+        {
+            try
+            {
+                var resultCustomers = context.WaterCustomers.AddRange(customers);
+                Save();
+                return resultCustomers;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления потребителей воды", ex);
+                return null;
+            }
+        }
+        
         public WaterCustomerPayment AddWaterCustomerPayment(WaterCustomerPayment customerPayment)
         {
             try
@@ -378,7 +398,7 @@ namespace CashCenter.Dal
                     return;
                 }
                 
-                Log.ErrorWithException(message, exception);
+                Logger.Error(message, exception);
                 return;
             }
 
@@ -392,7 +412,7 @@ namespace CashCenter.Dal
                 }
             }
 
-            Log.ErrorWithException($"{message}\n{sbErrorContent}", exception);
+            Logger.Error($"{message}\n{sbErrorContent}", exception);
         }
     }
 }

@@ -16,9 +16,9 @@ namespace CashCenter.IvEnergySales
         public Observed<string> CustomerName { get; } = new Observed<string>();
         public Observed<string> CustomerAddress { get; } = new Observed<string>();
         public Observed<string> Email { get; } = new Observed<string>();
-        public Observed<uint> Counter1Number { get; } = new Observed<uint>();
-        public Observed<uint> Counter2Number { get; } = new Observed<uint>();
-        public Observed<uint> Counter3Number { get; } = new Observed<uint>();
+        public Observed<string> Counter1Number { get; } = new Observed<string>();
+        public Observed<string> Counter2Number { get; } = new Observed<string>();
+        public Observed<string> Counter3Number { get; } = new Observed<string>();
         public Observed<decimal> Counter1Cost { get; } = new Observed<decimal>();
         public Observed<decimal> Counter2Cost { get; } = new Observed<decimal>();
         public Observed<decimal> Counter3Cost { get; } = new Observed<decimal>();
@@ -76,9 +76,9 @@ namespace CashCenter.IvEnergySales
             CustomerAddress.Value = customer?.Address ?? string.Empty;
             Email.Value = customer?.Email ?? string.Empty;
 
-            Counter1Number.Value = customer != null ? (uint)customer.CounterNumber1 : 0;
-            Counter2Number.Value = customer != null ? (uint)customer.CounterNumber2 : 0;
-            Counter3Number.Value = customer != null ? (uint)customer.CounterNumber3 : 0;
+            Counter1Number.Value = customer?.CounterNumber1 ?? string.Empty;
+            Counter2Number.Value = customer?.CounterNumber2 ?? string.Empty;
+            Counter3Number.Value = customer?.CounterNumber3 ?? string.Empty;
 
             Counter1Cost.Value = 0;
             Counter2Cost.Value = 0;

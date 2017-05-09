@@ -42,9 +42,14 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
                    form {{0}}";
 
-            public static string GetWaterCustomersQuery(string tableName)
+            public static string GetEnergyCustomersQuery(string tableName)
             {
                 return string.Format(GET_ENERGY_CUSTOMERS, tableName);
+            }
+
+            public static string GetWaterCustomersQuery(string tableName)
+            {
+                return string.Format(GET_WATER_CUSTOMERS, tableName);
             }
 
             public static string GetArticlesQuery(string tableName)
@@ -71,7 +76,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetWaterCustomersQuery(dbfName);
+                command.CommandText = Sql.GetEnergyCustomersQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 
@@ -113,12 +118,12 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 var waterCustomers = new List<DbfWaterCustomer>();
                 while (dataReader.Read())
                 {
-                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_NUMBER);
-                    string name = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_NAME);
-                    string address = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_ADDRESS);
-                    int counterNumber1 = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_COUNTER_NUMBER1);
-                    int counterNumber2 = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_COUNTER_NUMBER2);
-                    int counterNumber3 = (int)dataReader.GetFieldFromReader<double>(Sql.WATER_CUSTOMER_COUNTER_NUMBER3);
+                    int number = int.Parse(dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_NUMBER));
+                    string name = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_NAME) ?? string.Empty;
+                    string address = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_ADDRESS) ?? string.Empty;
+                    string counterNumber1 = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_COUNTER_NUMBER1) ?? string.Empty;
+                    string counterNumber2 = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_COUNTER_NUMBER2) ?? string.Empty;
+                    string counterNumber3 = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_COUNTER_NUMBER3) ?? string.Empty;
 
                     waterCustomers.Add(new DbfWaterCustomer(number, name, address, counterNumber1, counterNumber2, counterNumber3));
                 }

@@ -1,13 +1,12 @@
 ﻿using CashCenter.Common;
 using System;
 using System.Text;
-using System.Windows.Controls;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
-    public class BaseImportControl : UserControl
+    public static class MigrationHelper
     {
-        protected string ImportItem(ImportTargetItem importTarget)
+        public static string ImportItem(ImportTargetItem importTarget)
         {
             var resultStatistic = new StringBuilder();
             var waiter = new OperationWaiter();
@@ -27,7 +26,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 {
                     var errorHead = $"Ошибка импортирования \"{importTarget.Name}\"";
 
-                    Logger.Error($"{errorHead}.\n{ex.Message}");
+                    Logger.Error($"{errorHead}", ex);
                     resultStatistic.AppendLine(errorHead);
                 }
                 finally

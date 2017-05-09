@@ -18,7 +18,10 @@ namespace CashCenter.IvEnergySales
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Log.ErrorWithException("Глобальная ошибка в приложении.", e.Exception);
+            var errorHeader = "Неизвестная ошибка";
+            Logger.Error(errorHeader, e.Exception);
+            Message.Error(errorHeader);
+
             e.Handled = false;
         }
     }
