@@ -47,7 +47,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 return;
 
             var beginDatetime = BeginDatetime.Value.DayBegin();
-            var endDatetime = BeginDatetime.Value.DayEnd();
+            var endDatetime = EndDatetime.Value.DayEnd();
 
             try
             {
