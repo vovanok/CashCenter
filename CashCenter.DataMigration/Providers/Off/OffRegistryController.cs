@@ -51,7 +51,7 @@ namespace CashCenter.DataMigration.Providers.Off
 
         private string GetOffFileName(string departmentCode, DateTime date)
         {
-            return string.Format(Config.CustomerOutputFileFormat, departmentCode, date);
+            return string.Format(Config.EnergyCustomerOffOutputFileFormat, departmentCode, date);
         }
     }
 }

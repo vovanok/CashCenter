@@ -27,21 +27,25 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             Customer.Value = null;
         }
 
-        public void Pay(string email, decimal counter1Cost, decimal counter2Cost, decimal counter3Cost, string description)
+        public void Pay(string email, double counter1Value, double counter2Value, double counter3Value,
+            double counter4Value, decimal penalty, decimal cost, string description, int fiscalNumber)
         {
             if (Customer == null)
                 throw new CustomerNotAppliedException();
 
             var incorrectParameters = new List<string>();
 
-            if (counter1Cost < 0)
-                incorrectParameters.Add("Сумма по счетчику 1");
+            if (counter1Value < 0)
+                incorrectParameters.Add("Показание счетчика 1");
 
-            if (counter2Cost < 0)
-                incorrectParameters.Add("Сумма по счетчику 2");
+            if (counter2Value < 0)
+                incorrectParameters.Add("Показание счетчика 2");
 
-            if (counter3Cost < 0)
-                incorrectParameters.Add("Сумма по счетчику 3");
+            if (counter3Value < 0)
+                incorrectParameters.Add("Показание счетчика 3");
+
+            if (counter4Value < 0)
+                incorrectParameters.Add("Показание счетчика 4");
 
             var isEmailChange = !string.IsNullOrEmpty(email) && Customer.Value.Email != email;
             if (isEmailChange)
@@ -50,22 +54,26 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     incorrectParameters.Add("Адрес электронной почты");
             }
 
-            DalController.Instance.Save();
-
             if (incorrectParameters.Count > 0)
                 throw new IncorrectDataException(incorrectParameters);
 
             if (isEmailChange)
                 Customer.Value.Email = email;
 
+            DalController.Instance.Save();
+
             var newPayment = new WaterCustomerPayment
             {
-                CounterCost1 = counter1Cost,
-                CounterCost2 = counter2Cost,
-                CounterCost3 = counter3Cost,
                 CreateDate = DateTime.Now,
                 CustomerId = Customer.Value.Id,
-                Description = description ?? string.Empty
+                CounterValue1 = counter1Value,
+                CounterValue2 = counter2Value,
+                CounterValue3 = counter3Value,
+                CounterValue4 = counter4Value,
+                Description = description ?? string.Empty,
+                Penalty = penalty,
+                Cost = cost,
+                FiscalNumber = fiscalNumber
             };
 
             DalController.Instance.AddWaterCustomerPayment(newPayment);

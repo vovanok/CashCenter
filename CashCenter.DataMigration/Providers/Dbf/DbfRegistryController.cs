@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 
 namespace CashCenter.DataMigration.Providers.Dbf
 {
@@ -29,7 +30,31 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ARTICLES_NAME = "TOVARNAME";
             public const string ARTICLES_BARCODE = "SHTRIHKOD";
             public const string ARTICLES_PRICE = "TOVARCENA";
-            
+
+            public const string WATER_CUSTOMER_PAYMENT_CREATION_DATE = "DATE";
+            public const string WATER_CUSTOMER_PAYMENT_CUSTOMER_NUMBER = "SCHET";
+            public const string WATER_CUSTOMER_PAYMENT_COST = "SUMZACH";
+            public const string WATER_CUSTOMER_PAYMENT_PERIODCODE = "PER_OPL";
+            public const string WATER_CUSTOMER_PAYMENT_PENALTY = "PENI";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER1 = "N_SCHET1";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST1 = "SUM_SH1";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE1 = "ZN1";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER2 = "N_SCHET2";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST2 = "SUM_SH2";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE2 = "ZN2";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER3 = "N_SCHET3";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST3 = "SUM_SH3";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE3 = "ZN3";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER4 = "N_SCHET4";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST4 = "SUM_SH4";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4 = "ZN4";
+
+            public const string TYPE_DATE = "Date";
+            public const string TYPE_CHARACTER13 = "Character(13)";
+            public const string TYPE_CHARACTER12 = "Character(12)";
+            public const string TYPE_CHARACTER6 = "Character(6)";
+            public const string TYPE_NUMERIC = "Numeric";
+
             private static readonly string GET_ENERGY_CUSTOMERS =
                 $@"select {ENERGY_CUSTOMER_DEPARTMENT_CODE}, {ENERGY_CUSTOMER_ID}, {ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE}, {ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {ENERGY_CUSTOMER_END_BALANCE}
                    from {{0}}";
@@ -41,6 +66,29 @@ namespace CashCenter.DataMigration.Providers.Dbf
             private static readonly string GET_ARTICLES =
                 $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
                    form {{0}}";
+
+            private static readonly string ADD_WATER_CUSTOMER_PAYMENTS_PRE =
+                $@"insert into {{0}} values";
+
+            private static readonly string CREATE_WATER_CUSTOMER_PAYMENTS =
+                $@"create table {{0}} (
+                    [{WATER_CUSTOMER_PAYMENT_CREATION_DATE}] {TYPE_DATE},
+                    [{WATER_CUSTOMER_PAYMENT_CUSTOMER_NUMBER}] {TYPE_CHARACTER12},
+                    [{WATER_CUSTOMER_PAYMENT_COST}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_PERIODCODE}] {TYPE_CHARACTER6},
+                    [{WATER_CUSTOMER_PAYMENT_PENALTY}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER1}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST1}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE1}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER2}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST2}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE2}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER3}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST3}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE3}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER4}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST4}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4}] {TYPE_NUMERIC})";
 
             public static string GetEnergyCustomersQuery(string tableName)
             {
@@ -56,14 +104,26 @@ namespace CashCenter.DataMigration.Providers.Dbf
             {
                 return string.Format(GET_ARTICLES, tableName);
             }
+
+            public static string GetAddWaterCustomerPaymentsPreQuery(string tableName)
+            {
+                return string.Format(ADD_WATER_CUSTOMER_PAYMENTS_PRE, tableName);
+            }
+
+            public static string GetCreateWaterCustomerPaymentsQuery(string tableName)
+            {
+                return string.Format(CREATE_WATER_CUSTOMER_PAYMENTS, tableName);
+            }
         }
 
         private OleDbConnection dbfConnection;
         private string dbfName;
+        private string filename;
 
-        public DbfRegistryController(string fileName)
+        public DbfRegistryController(string filename)
         {
-            var fileInfo = new FileInfo(fileName);
+            this.filename = filename;
+            var fileInfo = new FileInfo(filename);
             var connectionString = string.Format(Config.DbfConnectionStringFormat, fileInfo.Directory.FullName);
             dbfConnection = new OleDbConnection(connectionString);
             dbfName = fileInfo.Name;
@@ -176,6 +236,105 @@ namespace CashCenter.DataMigration.Providers.Dbf
             {
                 dbfConnection?.Close();
             }
+        }
+
+        public void StoreWaterCustomerPayments(IEnumerable<DbfWaterCustomerPayment> payments)
+        {
+            CreateDbf();
+            AddWaterCustomerPayments(payments);
+        }
+
+        private void CreateDbf()
+        {
+            if (File.Exists(filename))
+                File.Delete(filename);
+
+            try
+            {
+                dbfConnection.Open();
+
+                var command = dbfConnection.CreateCommand();
+                command.CommandText = Sql.GetCreateWaterCustomerPaymentsQuery(Path.GetFileNameWithoutExtension(dbfName));
+
+                command.ExecuteNonQuery();
+                command.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка создания DBF {filename}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        private void AddWaterCustomerPayments(IEnumerable<DbfWaterCustomerPayment> payments)
+        {
+            if (payments == null || payments.Count() == 0)
+                return;
+
+            try
+            {
+                dbfConnection.Open();
+
+                foreach (var payment in payments)
+                {
+                    var command = dbfConnection.CreateCommand();
+                
+                    var values = new[]
+                    {
+                        GetStringForQuery(payment.CreationDate.ToString("dd.MM.yyyy")),
+                        payment.CustomerNumber.ToString(),
+                        GetMoneyString(payment.Cost),
+                        GetStringForQuery(payment.PeriodCode),
+                        GetMoneyString(payment.Penalty),
+
+                        GetStringForQuery(payment.CounterNumber1),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue1),
+
+                        GetStringForQuery(payment.CounterNumber2),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue2),
+
+                        GetStringForQuery(payment.CounterNumber3),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue3),
+
+                        GetStringForQuery(payment.CounterNumber4),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue4)
+                    };
+
+                    command.CommandText = $"{Sql.GetAddWaterCustomerPaymentsPreQuery(dbfName)} ({string.Join(", ", values)})";
+                    command.ExecuteNonQuery();
+                    command.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка записи в DBF {dbfName}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        private string GetMoneyString(decimal moneyValue)
+        {
+            return moneyValue.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private string GetCounterValueString(double counterValue)
+        {
+            return counterValue.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private string GetStringForQuery(string value)
+        {
+            return $"'{value}'";
         }
     }
 }

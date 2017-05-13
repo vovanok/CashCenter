@@ -17,10 +17,14 @@ namespace CashCenter.Dal
         public int Id { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int CustomerId { get; set; }
-        public decimal CounterCost1 { get; set; }
-        public decimal CounterCost2 { get; set; }
-        public decimal CounterCost3 { get; set; }
+        public double CounterValue1 { get; set; }
+        public double CounterValue2 { get; set; }
+        public double CounterValue3 { get; set; }
+        public double CounterValue4 { get; set; }
         public string Description { get; set; }
+        public decimal Penalty { get; set; }
+        public decimal Cost { get; set; }
+        public int FiscalNumber { get; set; }
     
         public virtual WaterCustomer WaterCustomer { get; set; }
     }

@@ -16,13 +16,19 @@ namespace CashCenter.IvEnergySales
         public Observed<string> CustomerName { get; } = new Observed<string>();
         public Observed<string> CustomerAddress { get; } = new Observed<string>();
         public Observed<string> Email { get; } = new Observed<string>();
+
         public Observed<string> Counter1Number { get; } = new Observed<string>();
         public Observed<string> Counter2Number { get; } = new Observed<string>();
         public Observed<string> Counter3Number { get; } = new Observed<string>();
-        public Observed<decimal> Counter1Cost { get; } = new Observed<decimal>();
-        public Observed<decimal> Counter2Cost { get; } = new Observed<decimal>();
-        public Observed<decimal> Counter3Cost { get; } = new Observed<decimal>();
-        public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
+        public Observed<string> Counter4Number { get; } = new Observed<string>();
+
+        public Observed<double> Counter1Value { get; } = new Observed<double>();
+        public Observed<double> Counter2Value { get; } = new Observed<double>();
+        public Observed<double> Counter3Value { get; } = new Observed<double>();
+        public Observed<double> Counter4Value { get; } = new Observed<double>();
+
+        public Observed<decimal> Penalty { get; } = new Observed<decimal>();
+        public Observed<decimal> Cost { get; } = new Observed<decimal>();
         public Observed<string> Description { get; } = new Observed<string>();
         public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
 
@@ -38,25 +44,19 @@ namespace CashCenter.IvEnergySales
             CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
             CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");
             Email.OnChange += (newValue) => DispatchPropertyChanged("Email");
+
             Counter1Number.OnChange += (newValue) => DispatchPropertyChanged("Counter1Number");
             Counter2Number.OnChange += (newValue) => DispatchPropertyChanged("Counter2Number");
             Counter3Number.OnChange += (newValue) => DispatchPropertyChanged("Counter3Number");
-            Counter1Cost.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("Counter1Cost");
-                UpdateTotalCost();
-            };
-            Counter2Cost.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("Counter2Cost");
-                UpdateTotalCost();
-            };
-            Counter3Cost.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("Counter3Cost");
-                UpdateTotalCost();
-            };
-            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
+            Counter4Number.OnChange += (newValue) => DispatchPropertyChanged("Counter4Number");
+
+            Counter1Value.OnChange += (newValue) => DispatchPropertyChanged("Counter1Value");
+            Counter2Value.OnChange += (newValue) => DispatchPropertyChanged("Counter2Value");
+            Counter3Value.OnChange += (newValue) => DispatchPropertyChanged("Counter3Value");
+            Counter4Value.OnChange += (newValue) => DispatchPropertyChanged("Counter4Value");
+
+            Penalty.OnChange += (newValue) => DispatchPropertyChanged("Penalty");
+            Cost.OnChange += (newValue) => DispatchPropertyChanged("Cost");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
 
@@ -79,10 +79,15 @@ namespace CashCenter.IvEnergySales
             Counter1Number.Value = customer?.CounterNumber1 ?? string.Empty;
             Counter2Number.Value = customer?.CounterNumber2 ?? string.Empty;
             Counter3Number.Value = customer?.CounterNumber3 ?? string.Empty;
+            Counter4Number.Value = customer?.CounterNumber4 ?? string.Empty;
 
-            Counter1Cost.Value = 0;
-            Counter2Cost.Value = 0;
-            Counter3Cost.Value = 0;
+            Counter1Value.Value = 0;
+            Counter2Value.Value = 0;
+            Counter3Value.Value = 0;
+            Counter4Value.Value = 0;
+
+            Cost.Value = 0;
+            Penalty.Value = 0;
 
             Description.Value = string.Empty;
 
@@ -120,8 +125,8 @@ namespace CashCenter.IvEnergySales
                 using (new OperationWaiter())
                 {
                     context.Pay(
-                        Email.Value, Counter1Cost.Value,
-                        Counter2Cost.Value, Counter3Cost.Value, Description.Value);
+                        Email.Value, Counter1Value.Value, Counter2Value.Value, Counter3Value.Value,
+                        Counter4Value.Value, Penalty.Value, Cost.Value, Description.Value, 0); // TODO: Fiscal number
                     context.ClearCustomer();
                 }
             }
@@ -134,11 +139,6 @@ namespace CashCenter.IvEnergySales
         private void ClearHandler(object parameters)
         {
             context.ClearCustomer();
-        }
-
-        private void UpdateTotalCost()
-        {
-            TotalCost.Value = Counter1Cost.Value + Counter2Cost.Value + Counter3Cost.Value;
         }
     }
 }

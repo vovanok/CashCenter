@@ -42,6 +42,7 @@ namespace CashCenter.DataMigration.WaterCustomers
                 CounterNumber1 = dbfWaterCustomer.CounterNumber1,
                 CounterNumber2 = dbfWaterCustomer.CounterNumber2,
                 CounterNumber3 = dbfWaterCustomer.CounterNumber3,
+                CounterNumber4 = string.Empty,
                 IsActive = true,
                 Email = string.Empty
             };
@@ -60,6 +61,7 @@ namespace CashCenter.DataMigration.WaterCustomers
             existingWaterCustomer.CounterNumber1 = dbfWaterCustomer.CounterNumber1;
             existingWaterCustomer.CounterNumber2 = dbfWaterCustomer.CounterNumber2;
             existingWaterCustomer.CounterNumber3 = dbfWaterCustomer.CounterNumber3;
+            existingWaterCustomer.CounterNumber4 = string.Empty;
             existingWaterCustomer.IsActive = true;
 
             return true;

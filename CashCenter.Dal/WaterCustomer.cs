@@ -27,6 +27,7 @@ namespace CashCenter.Dal
         public string CounterNumber1 { get; set; }
         public string CounterNumber2 { get; set; }
         public string CounterNumber3 { get; set; }
+        public string CounterNumber4 { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
     
