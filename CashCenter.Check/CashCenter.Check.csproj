@@ -45,6 +45,9 @@
     <Compile Include="CashMachine.cs" />
     <Compile Include="CheckException.cs" />
     <Compile Include="CheckPrinter.cs" />
+    <Compile Include="DescriptorModel\CheckDescriptor.cs" />
+    <Compile Include="DescriptorModel\CheckLineDescriptor.cs" />
+    <Compile Include="DescriptorModel\ChecksSetDescriptor.cs" />
     <Compile Include="NdsPercent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

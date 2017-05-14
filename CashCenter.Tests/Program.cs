@@ -32,7 +32,6 @@ namespace CashCenter.Tests
                         Console.WriteLine($"Печать чека {i}");
 
                         CheckPrinter.Print(new CustomerCheck(
-                            "153510 г.о.Кохма, пл.Октябрьская, 14, тел. 58-56-02",
                             "121212",
                             1212121,
                             "Вася Пупкин",

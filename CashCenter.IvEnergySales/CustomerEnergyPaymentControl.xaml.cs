@@ -380,7 +380,6 @@ namespace CashCenter.IvEnergySales
                 using (var waiter = new OperationWaiter())
                 {
                     var mainCheck = new CustomerCheck(
-                        Config.SalesDepartmentInfo,
                         customerSalesContext.Value.InfoForCheck.DbCode,
                         customerSalesContext.Value.InfoForCheck.CustomerNumber,
                         customerSalesContext.Value.InfoForCheck.CustomerName,

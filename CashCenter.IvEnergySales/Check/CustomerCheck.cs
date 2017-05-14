@@ -12,24 +12,21 @@ namespace CashCenter.IvEnergySales.Check
         public string PaymentReason { get; private set; }
         public string CashierName { get; private set; }
 
-        public CustomerCheck(string salesDepartmentInfo, string departmentCode,
-                int customerNumber, string customerName, string paymentReason, string cashierName, decimal cost, string email)
-            : base(new List<string>(), cost, email)
+        public CustomerCheck(string departmentCode, int customerNumber, string customerName,
+            string paymentReason, string cashierName, decimal cost, string email)
+            : base(
+                  "EnergyCustomer", 
+                  new Dictionary<string, string>
+                  {
+                      { "departmentCode", departmentCode },
+                      { "customerNumber", customerNumber.ToString() },
+                      { "customerName", customerName },
+                      { "paymentReason", paymentReason.ToUpper() },
+                      { "cashierName", cashierName }
+                  },
+                  cost,
+                  email)
         {
-            CommonLines.Add(StringUtils.StringInCenter("КАССОВЫЙ ЧЕК", Config.CheckPrinterMaxLineLength));
-            CommonLines.Add(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
-            CommonLines.AddRange(StringUtils.SplitStringWithSeparators(Config.SalesMainInfo));
-            CommonLines.Add(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
-            CommonLines.AddRange(StringUtils.SplitStringWithSeparators(salesDepartmentInfo));
-            CommonLines.Add(StringUtils.FilledString('*', Config.CheckPrinterMaxLineLength));
-            CommonLines.Add($"Код отделения: {departmentCode}");
-            CommonLines.Add($"Лицевой счет: {customerNumber}");
-            CommonLines.Add($"ФИО: {customerName}");
-            CommonLines.Add($"Основание: {paymentReason.ToUpper()}");
-            CommonLines.Add($"Кассир: {cashierName}");
-            CommonLines.Add("ПРИХОД");
-            CommonLines.Add("НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА");
-            CommonLines.Add("ЭЛЕКТРОЭНЕРГИЯ");
         }
     }
 }

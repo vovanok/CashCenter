@@ -47,9 +47,9 @@ namespace CashCenter.Check
                 if (StringUtils.IsValidEmail(check.Email))
                     cashMachine.SendEmail(check.Email);
 
-                foreach (var lineAfterOpen in check.CommonLines)
+                foreach (var commonLine in check.GetCommonLines())
                 {
-                    cashMachine.PrintLine(lineAfterOpen);
+                    cashMachine.PrintLine(commonLine);
                 }
 
                 cashMachine.Driver.CheckType = 0;

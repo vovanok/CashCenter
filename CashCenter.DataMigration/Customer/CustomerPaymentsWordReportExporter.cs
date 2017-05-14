@@ -27,7 +27,7 @@ namespace CashCenter.DataMigration
 
             var reportModel = new ReportCustomersModel(beginDatetime, endDatetime, customerPaymentModels);
 
-            var wordReport = new WordReportController(Config.CustomersReportTemplateFilename);
+            var wordReport = new WordReportController(Config.EnergyCustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
             return customerPaymentModelsCount;
