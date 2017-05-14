@@ -155,7 +155,7 @@
     <Compile Include="SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\TextBoxBehaviour.cs" />
+    <Compile Include="Behaviors\TextBoxBehavior.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="ArticlesControl.xaml">
       <SubType>Designer</SubType>
