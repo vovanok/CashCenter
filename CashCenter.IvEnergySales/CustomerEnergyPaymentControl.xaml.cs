@@ -210,7 +210,8 @@ namespace CashCenter.IvEnergySales
                     Cost = paymentCost,
                     ReasonId = reasonId,
                     CreateDate = DateTime.Now,
-                    Description = description
+                    Description = description,
+                    FiscalNumber = 0 // TODO: Fill fiscal
                 };
 
                 if (!customerSalesContext.Value.Pay(customerPayment))

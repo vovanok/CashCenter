@@ -46,6 +46,7 @@ CREATE TABLE [dbo].[CustomerPayment] (
     [ReasonId]      INT             NOT NULL,
     [CreateDate]    DATETIME        NOT NULL,
     [Description]   NVARCHAR (MAX)  NOT NULL,
+    [FiscalNumber]  INT             NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_CustomerPayment_ToPaymentReason] FOREIGN KEY ([ReasonId]) REFERENCES [dbo].[PaymentReason] ([Id]),
     CONSTRAINT [FK_CustomerPayment_ToCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer] ([Id])
