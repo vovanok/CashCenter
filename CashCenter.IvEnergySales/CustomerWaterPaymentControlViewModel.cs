@@ -120,6 +120,13 @@ namespace CashCenter.IvEnergySales
 
         private void PayHandler(object parameters)
         {
+            var controlForValidate = parameters as DependencyObject;
+            if (!IsValid(controlForValidate))
+            {
+                Message.Error("При вводе были допущены ошибки. Исправте их и попробуйте снова.\nОшибочные поля обведены красным.");
+                return;
+            }
+
             try
             {
                 using (new OperationWaiter())

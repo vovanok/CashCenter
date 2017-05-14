@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CashCenter.IvEnergySales
 {
@@ -12,6 +15,17 @@ namespace CashCenter.IvEnergySales
                 return;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool IsValid(DependencyObject depObj)
+        {
+            if (depObj == null)
+                return false;
+
+            return !Validation.GetHasError(depObj) &&
+                LogicalTreeHelper.GetChildren(depObj)
+                    .OfType<DependencyObject>()
+                    .All(IsValid);
         }
     }
 }

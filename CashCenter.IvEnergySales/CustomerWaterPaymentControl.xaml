@@ -139,12 +139,16 @@
                     <Label Content="Сумма" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Cost.Value}" Grid.Column="1"
                              VerticalContentAlignment="Center"
-                             IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                             IsEnabled="{Binding IsPaymentEnable.Value}"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
                     
                     <Label Content="Пени" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Penalty.Value}" Grid.Column="1" Grid.Row="1"
                              VerticalContentAlignment="Center"
-                             IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                             IsEnabled="{Binding IsPaymentEnable.Value}"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
                     
                     <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="2"
@@ -152,7 +156,8 @@
                              IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
 
-                    <Button Content="Оплатить" Command="{Binding PayCommand}" Grid.Column="0" Grid.Row="3" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                    <Button Content="Оплатить" Grid.Column="0" Grid.Row="3" Style="{StaticResource MainButton}"
+                            Command="{Binding PayCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
                     <Button Content="Очистить" Command="{Binding ClearCommand}" Grid.Column="1" Grid.Row="3" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
                 </Grid>
             </StackPanel>
