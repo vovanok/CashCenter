@@ -69,7 +69,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             Logger.Info("Изменение email успешно завершено");
         }
 
-        public void Pay(string email, int dayValue, int nightValue, decimal cost, int reasonId, string description)
+        public void Pay(string email, int dayValue, int nightValue, decimal cost, int reasonId, string description, bool isWithoutCheck)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
 
-                if (TryPrintChecks(payment.Cost, Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email))
+                if (isWithoutCheck || TryPrintChecks(payment.Cost, Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email))
                 {
                     ChangeEmail(email);
                     DalController.Instance.AddCustomerPayment(payment);

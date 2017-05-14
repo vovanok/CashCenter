@@ -165,8 +165,14 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            if (!CheckPrinter.IsReady && !Message.YesNoQuestion("Кассовый аппарат не подключен. Продолжить без печати чека?"))
-                return;
+            var isWithoutCheck = false;
+            if (!CheckPrinter.IsReady)
+            {
+                if (!Message.YesNoQuestion("Кассовый аппарат не подключен. Продолжить без печати чека?"))
+                    return;
+
+                isWithoutCheck = true;
+            }
 
             var errorList = new List<string>();
 
@@ -199,7 +205,7 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                customerSalesContext.Value.Pay(email, dayValue, nightValue, cost, reasonId, description);
+                customerSalesContext.Value.Pay(email, dayValue, nightValue, cost, reasonId, description, isWithoutCheck);
             }
 
             customerSalesContext.Value = null;
