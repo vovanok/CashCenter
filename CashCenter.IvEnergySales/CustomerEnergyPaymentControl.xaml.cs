@@ -2,8 +2,6 @@
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.IvEnergySales.BusinessLogic;
-using CashCenter.IvEnergySales.Check;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -167,11 +165,8 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            if (!CheckPrinter.IsReady)
-            {
-                if (MessageBox.Show("Кассовый аппарат не подключен. Продолжить без печати чека?", "Требуется подтверждение продолжения", MessageBoxButton.YesNo) == MessageBoxResult.No)
-                    return;
-            }
+            if (!CheckPrinter.IsReady && !Message.YesNoQuestion("Кассовый аппарат не подключен. Продолжить без печати чека?"))
+                return;
 
             var errorList = new List<string>();
 
@@ -181,14 +176,19 @@ namespace CashCenter.IvEnergySales
             if (!int.TryParse(tbNightCurrentCounterValue.Text, out int nightValue) && nightValue >= 0)
                 errorList.Add($"Некорректное показание ночного счетчика. Оно должно быть числом ({nightValue}). Возможно показание не задано или является слишком большим.");
 
-            if (!decimal.TryParse(tbCost.Text, out decimal paymentCost))
-                errorList.Add($"Некорректное значение суммы платежа. Оно должно быть числом ({paymentCost}). Возможно сумма не задана или является слишком большой.");
+            if (!decimal.TryParse(tbCost.Text, out decimal cost))
+                errorList.Add($"Некорректное значение суммы платежа. Оно должно быть числом ({cost}). Возможно сумма не задана или является слишком большой.");
 
             if (!(cbPaymentReasons.SelectedValue is int))
                 errorList.Add($"Некорректное значение основания платежа.");
 
             int reasonId = (int)cbPaymentReasons.SelectedValue;
+
             string description = tbDescription.Text ?? string.Empty;
+
+            string email = tbCustomerEmail.Text;
+            if (!string.IsNullOrEmpty(email) && !StringUtils.IsValidEmail(email))
+                errorList.Add($"Email имеет некорректный формат");
 
             if (errorList.Count > 0)
             {
@@ -199,26 +199,9 @@ namespace CashCenter.IvEnergySales
 
             using (var waiter = new OperationWaiter())
             {
-                if (customerSalesContext.Value.Customer.Email != tbCustomerEmail.Text)
-                    customerSalesContext.Value.ChangeEmail(tbCustomerEmail.Text);
-
-                var customerPayment = new CustomerPayment
-                {
-                    CustomerId = customerSalesContext.Value.Customer.Id,
-                    NewDayValue = dayValue,
-                    NewNightValue = nightValue,
-                    Cost = paymentCost,
-                    ReasonId = reasonId,
-                    CreateDate = DateTime.Now,
-                    Description = description,
-                    FiscalNumber = 0 // TODO: Fill fiscal
-                };
-
-                if (!customerSalesContext.Value.Pay(customerPayment))
-                    return;
+                customerSalesContext.Value.Pay(email, dayValue, nightValue, cost, reasonId, description);
             }
 
-            PrintChecks();
             customerSalesContext.Value = null;
         }
 
@@ -365,39 +348,6 @@ namespace CashCenter.IvEnergySales
             int deltaValue = currentValue - previousCounterValue;
             lblDeltaCounterValue.Content = deltaValue;
             lblDeltaCounterValue.Foreground = deltaValue >= 0 ? Brushes.Black : Brushes.Red;
-        }
-
-        #endregion
-
-        #region Print checks
-
-        private void PrintChecks()
-        {
-            if (!IsSalesContextReady || customerSalesContext.Value.InfoForCheck == null)
-                return;
-
-            try
-            {
-                using (var waiter = new OperationWaiter())
-                {
-                    var mainCheck = new CustomerCheck(
-                        customerSalesContext.Value.InfoForCheck.DbCode,
-                        customerSalesContext.Value.InfoForCheck.CustomerNumber,
-                        customerSalesContext.Value.InfoForCheck.CustomerName,
-                        customerSalesContext.Value.InfoForCheck.PaymentReasonName,
-                        Properties.Settings.Default.CasherName,
-                        customerSalesContext.Value.InfoForCheck.Cost,
-                        customerSalesContext.Value.InfoForCheck.CustomerEmail);
-
-                    CheckPrinter.Print(mainCheck);
-                }
-            }
-            catch(Exception ex)
-            {
-                var errorMessage = "Ошибка печати чека";
-                Logger.Error(errorMessage, ex);
-                Message.Error(errorMessage);
-            }
         }
 
         #endregion

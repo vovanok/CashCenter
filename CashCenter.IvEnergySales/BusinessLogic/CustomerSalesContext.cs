@@ -1,5 +1,7 @@
-﻿using CashCenter.Common;
+﻿using CashCenter.Check;
+using CashCenter.Common;
 using CashCenter.Dal;
+using CashCenter.IvEnergySales.Check;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,6 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         protected const string PAY_ERROR_PREFIX = "Ошибка совершения платежа.";
 
         public Customer Customer { get; protected set; }
-        public InfoForCheck InfoForCheck { get; protected set; }
         public List<PaymentReason> PaymentReasons { get; protected set; }
 
         public bool IsCustomerFinded => Customer != null;
@@ -35,11 +36,13 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             }
             catch(Exception ex)
             {
-                Log.ErrorWithException("Ошибка поиска физ. лица", ex);
+                var message = "Ошибка поиска плательщика за электроэнергию";
+                Logger.Error(message, ex);
+                Message.Error(message);
             }
         }
 
-        public void ChangeEmail(string email)
+        private void ChangeEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
                 return;
@@ -50,50 +53,91 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             if (Customer.Email == email)
                 return;
 
+            Logger.Info("Изменение email");
+
             if (!StringUtils.IsValidEmail(email))
             {
-                Log.Error("Адрес электронной почты не задан или имеет неверный формат.");
+                var message = $"Адрес электронной почты имеет неверный формат ({email})";
+                Logger.Error(message);
+                Message.Error(message);
                 return;
             }
 
             Customer.Email = email;
             DalController.Instance.Save();
+
+            Logger.Info("Изменение email успешно завершено");
         }
 
-        public bool Pay(CustomerPayment payment)
+        public void Pay(string email, int dayValue, int nightValue, decimal cost, int reasonId, string description)
         {
             try
             {
+                Logger.Info($"Платеж за электроэнергию: email = {email}, dayValue = {dayValue}; nightValue = {nightValue}; cost = {cost}; reasonId = {reasonId}; description = {description}");
+
                 if (!IsCustomerFinded)
                 {
-                    Log.Error($"{PAY_ERROR_PREFIX}\nОтсутствует плательщик.");
-                    return false;
+                    var message = $"{PAY_ERROR_PREFIX}\nОтсутствует плательщик.";
+                    Logger.Error(message);
+                    Message.Error(message);
+                    return;
                 }
 
-                if (payment == null)
+                var payment = new CustomerPayment
                 {
-                    Log.Error($"{PAY_ERROR_PREFIX}\nОтсутствует платеж.");
-                    return false;
-                }
+                    CustomerId = Customer.Id,
+                    NewDayValue = dayValue,
+                    NewNightValue = nightValue,
+                    Cost = cost,
+                    ReasonId = reasonId,
+                    CreateDate = DateTime.Now,
+                    Description = description,
+                    FiscalNumber = 0 // TODO: Fill fiscal
+                };
 
                 if (!payment.IsValid(Customer, out string validationErrorMessage))
                 {
-                    Log.Error($"{PAY_ERROR_PREFIX}\n{validationErrorMessage}");
-                    return false;
+                    var message = $"{PAY_ERROR_PREFIX}\n{validationErrorMessage}";
+                    Logger.Error(message);
+                    Message.Error(message);
+                    return;
                 }
-
-                DalController.Instance.AddCustomerPayment(payment);
 
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
 
-                InfoForCheck = new InfoForCheck(payment.Cost, payment.CreateDate,
-                    Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email);
-
-                return true;
+                if (TryPrintChecks(payment.Cost, Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email))
+                {
+                    ChangeEmail(email);
+                    DalController.Instance.AddCustomerPayment(payment);
+                }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                Log.ErrorWithException("Ошибка создание платежа физ.лица.", e);
+                var message = "Ошибка создание платежа за электроэнергию";
+                Logger.Error(message, ex);
+                Message.Error(message);
+            }
+        }
+
+        private bool TryPrintChecks(decimal cost, string departmentCode, int customerNumber,
+            string customerName, string paymentReasonName, string customerEmail)
+        {
+            try
+            {
+                using (var waiter = new OperationWaiter())
+                {
+                    var check = new CustomerCheck(departmentCode, customerNumber, customerName,
+                        paymentReasonName, Properties.Settings.Default.CasherName, cost, customerEmail);
+
+                    CheckPrinter.Print(check);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "Ошибка печати чека";
+                Logger.Error(errorMessage, ex);
+                Message.Error(errorMessage);
                 return false;
             }
         }
