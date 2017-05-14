@@ -7,18 +7,18 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public decimal Cost { get; private set; }
         public DateTime Date { get; private set; }
         public string DbCode { get; private set; }
-        public int CustomerId { get; private set; }
+        public int CustomerNumber { get; private set; }
         public string CustomerName { get; private set; }
         public string PaymentReasonName { get; private set; }
         public string CustomerEmail { get; private set; }
 
-        public InfoForCheck(decimal cost, DateTime date, string dbCode, int customerId,
+        public InfoForCheck(decimal cost, DateTime date, string dbCode, int customerNumber,
             string customerName, string paymentReasonName, string customerEmail)
         {
             Cost = cost;
             Date = date;
             DbCode = dbCode ?? string.Empty;
-            CustomerId = customerId;
+            CustomerNumber = customerNumber;
             CustomerName = customerName ?? string.Empty;
             PaymentReasonName = paymentReasonName ?? string.Empty;
             CustomerEmail = customerEmail ?? string.Empty;

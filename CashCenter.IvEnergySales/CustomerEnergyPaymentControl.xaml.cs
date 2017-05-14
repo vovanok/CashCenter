@@ -14,7 +14,7 @@ using System.Windows.Media;
 
 namespace CashCenter.IvEnergySales
 {
-    public partial class CustomerPaymentControl : UserControl
+    public partial class CustomerEnergyPaymentControl : UserControl
     {
         private Observed<CustomerSalesContext> customerSalesContext = new Observed<CustomerSalesContext>();
 
@@ -38,7 +38,7 @@ namespace CashCenter.IvEnergySales
             get { return IsSalesContextReady ? customerSalesContext.Value.Customer.Balance : 0; }
         }
 
-        public CustomerPaymentControl()
+        public CustomerEnergyPaymentControl()
         {
             InitializeComponent();
         }
@@ -382,7 +382,7 @@ namespace CashCenter.IvEnergySales
                     var mainCheck = new CustomerCheck(
                         Config.SalesDepartmentInfo,
                         customerSalesContext.Value.InfoForCheck.DbCode,
-                        customerSalesContext.Value.InfoForCheck.CustomerId,
+                        customerSalesContext.Value.InfoForCheck.CustomerNumber,
                         customerSalesContext.Value.InfoForCheck.CustomerName,
                         customerSalesContext.Value.InfoForCheck.PaymentReasonName,
                         Properties.Settings.Default.CasherName,
@@ -394,7 +394,9 @@ namespace CashCenter.IvEnergySales
             }
             catch(Exception ex)
             {
-                Message.Error($"Ошибка печати чека. {ex.Message}");
+                var errorMessage = "Ошибка печати чека";
+                Logger.Error(errorMessage, ex);
+                Message.Error(errorMessage);
             }
         }
 

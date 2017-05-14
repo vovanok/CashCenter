@@ -113,6 +113,12 @@
     <Compile Include="Region.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="WaterCustomer.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WaterCustomerPayment.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

@@ -5,17 +5,11 @@ namespace CashCenter.DataMigration.Providers.Firebird.Entities
     public class ZeusCustomer
     {
         public int Number { get; private set; }
-
         public string DepartamentCode { get; private set; }
-
         public string Name { get; private set; }
-
         public string Flat { get; private set; }
-
         public string BuildingNumber { get; private set; }
-
         public string StreetName { get; private set; }
-
         public string LocalityName { get; private set; }
 
         public string Address

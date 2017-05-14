@@ -1,5 +1,4 @@
-﻿using CashCenter.Check;
-using CashCenter.Common;
+﻿using CashCenter.Common;
 using CashCenter.IvEnergySales.Logging;
 using System.Windows;
 using System.Windows.Threading;
@@ -19,15 +18,11 @@ namespace CashCenter.IvEnergySales
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Log.ErrorWithException("Глобальная ошибка в приложении.", e.Exception);
+            var errorHeader = "Неизвестная ошибка";
+            Logger.Error(errorHeader, e.Exception);
+            Message.Error(errorHeader);
+
             e.Handled = false;
-        }
-
-        protected override void OnExit(ExitEventArgs e)
-        {
-            base.OnExit(e);
-
-            CheckPrinter.CloseSession();
         }
     }
 }

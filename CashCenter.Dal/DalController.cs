@@ -328,6 +328,65 @@ namespace CashCenter.Dal
 
         #endregion
 
+        #region Water
+
+        public IEnumerable<WaterCustomer> WaterCustomers
+        {
+            get { return context.WaterCustomers; }
+        }
+
+        public IEnumerable<WaterCustomerPayment> WaterCustomerPayments
+        {
+            get { return context.WaterCustomerPayments; }
+        }
+
+        public WaterCustomer AddWaterCustomer(WaterCustomer customer)
+        {
+            try
+            {
+                var resultCustomer = context.WaterCustomers.Add(customer);
+                Save();
+                return resultCustomer;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления потребителя воды", ex);
+                return null;
+            }
+        }
+
+        public IEnumerable<WaterCustomer> AddWaterCustomersRange(IEnumerable<WaterCustomer> customers)
+        {
+            try
+            {
+                var resultCustomers = context.WaterCustomers.AddRange(customers);
+                Save();
+                return resultCustomers;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления потребителей воды", ex);
+                return null;
+            }
+        }
+        
+        public WaterCustomerPayment AddWaterCustomerPayment(WaterCustomerPayment customerPayment)
+        {
+            try
+            {
+                var newCustomerPayment = context.WaterCustomerPayments.Add(customerPayment);
+                Save();
+                return newCustomerPayment;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления платежа за воду", ex);
+                return null;
+            }
+        }
+
+        #endregion
+
         private void HandleEntityFrameworkError(string message, Exception exception)
         {
             var entityValidationException = exception as DbEntityValidationException;
@@ -339,7 +398,7 @@ namespace CashCenter.Dal
                     return;
                 }
                 
-                Log.ErrorWithException(message, exception);
+                Logger.Error(message, exception);
                 return;
             }
 
@@ -353,7 +412,7 @@ namespace CashCenter.Dal
                 }
             }
 
-            Log.ErrorWithException($"{message}\n{sbErrorContent}", exception);
+            Logger.Error($"{message}\n{sbErrorContent}", exception);
         }
     }
 }

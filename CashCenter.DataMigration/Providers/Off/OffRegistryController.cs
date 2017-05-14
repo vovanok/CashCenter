@@ -45,13 +45,13 @@ namespace CashCenter.DataMigration.Providers.Off
             }
             catch(Exception ex)
             {
-                Log.ErrorWithException("Ошибка записи информации о платеже в off файл.", ex);
+                throw new SystemException("Ошибка записи информации о платеже в off файл", ex);
             }
         }
 
         private string GetOffFileName(string departmentCode, DateTime date)
         {
-            return string.Format(Config.CustomerOutputFileFormat, departmentCode, date);
+            return string.Format(Config.EnergyCustomerOffOutputFileFormat, departmentCode, date);
         }
     }
 }

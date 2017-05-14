@@ -1,36 +1,25 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
+﻿using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Firebird;
-using System;
 
 namespace CashCenter.DataMigration
 {
-    public abstract class BaseRemoteImporter<TSource, TTarget> : BaseImporter<TSource, TTarget>, IRemoteImportiable
+    public abstract class BaseRemoteImporter<TSource, TTarget> : BaseImporter<TSource, TTarget>, IRemoteImporter
         where TSource : class
         where TTarget : class
     {
-        protected Department sourceDepartment;
         protected ZeusDbController db;
+        private Department sourceDepartment;
 
-        public ImportResult Import(Department department)
+        public Department SourceDepartment
         {
-            if (department == null)
+            get { return sourceDepartment; }
+            set
             {
-                Log.Error("Для импорта из БД не указано отделение.");
-                return new ImportResult();
-            }
+                sourceDepartment = value;
 
-            try
-            {
-                sourceDepartment = department;
-                db = new ZeusDbController(department.Code, department.Url, department.Path);
-
-                return Import();
-            }
-            catch (Exception ex)
-            {
-                Log.ErrorWithException("Ошибка импортирования данных из удаленной БД", ex);
-                return new ImportResult();
+                db = (sourceDepartment != null)
+                    ? new ZeusDbController(sourceDepartment.Code, sourceDepartment.Url, sourceDepartment.Path)
+                    : null;
             }
         }
     }

@@ -99,6 +99,37 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="WaterCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CounterNumber1" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CounterNumber2" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CounterNumber3" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CounterNumber4" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WaterCustomerPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="CounterValue1" Type="float" Nullable="false" />
+          <Property Name="CounterValue2" Type="float" Nullable="false" />
+          <Property Name="CounterValue3" Type="float" Nullable="false" />
+          <Property Name="CounterValue4" Type="float" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Penalty" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="FiscalNumber" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_ArticlePrice_To_Article">
           <End Role="Article" Type="Self.Article" Multiplicity="1" />
           <End Role="ArticlePrice" Type="Self.ArticlePrice" Multiplicity="*" />
@@ -183,6 +214,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_WaterCustomerPayment_ToWaterCustomer">
+          <End Role="WaterCustomer" Type="Self.WaterCustomer" Multiplicity="1" />
+          <End Role="WaterCustomerPayment" Type="Self.WaterCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WaterCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WaterCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CashCenterModelStoreContainer">
           <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticlePrice" EntityType="Self.ArticlePrice" Schema="dbo" store:Type="Tables" />
@@ -193,6 +236,8 @@
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentReason" EntityType="Self.PaymentReason" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WaterCustomer" EntityType="Self.WaterCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WaterCustomerPayment" EntityType="Self.WaterCustomerPayment" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ArticlePrice_To_Article" Association="Self.FK_ArticlePrice_To_Article">
             <End Role="Article" EntitySet="Article" />
             <End Role="ArticlePrice" EntitySet="ArticlePrice" />
@@ -220,6 +265,10 @@
           <AssociationSet Name="FK_Department_ToRegion" Association="Self.FK_Department_ToRegion">
             <End Role="Region" EntitySet="Region" />
             <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WaterCustomerPayment_ToWaterCustomer" Association="Self.FK_WaterCustomerPayment_ToWaterCustomer">
+            <End Role="WaterCustomer" EntitySet="WaterCustomer" />
+            <End Role="WaterCustomerPayment" EntitySet="WaterCustomerPayment" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -298,6 +347,12 @@
           <AssociationSet Name="FK_CustomerPayment_ToPaymentReason" Association="CashCenterModel.FK_CustomerPayment_ToPaymentReason">
             <End Role="PaymentReason" EntitySet="PaymentReasons" />
             <End Role="CustomerPayment" EntitySet="CustomerPayments" />
+          </AssociationSet>
+          <EntitySet Name="WaterCustomers" EntityType="CashCenterModel.WaterCustomer" />
+          <EntitySet Name="WaterCustomerPayments" EntityType="CashCenterModel.WaterCustomerPayment" />
+          <AssociationSet Name="FK_WaterCustomerPayment_ToWaterCustomer" Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer">
+            <End Role="WaterCustomer" EntitySet="WaterCustomers" />
+            <End Role="WaterCustomerPayment" EntitySet="WaterCustomerPayments" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PaymentReason">
@@ -457,6 +512,51 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="WaterCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CounterNumber1" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CounterNumber2" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CounterNumber3" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CounterNumber4" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="WaterCustomerPayments" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomer" ToRole="WaterCustomerPayment" />
+        </EntityType>
+        <EntityType Name="WaterCustomerPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CounterValue1" Type="Double" Nullable="false" />
+          <Property Name="CounterValue2" Type="Double" Nullable="false" />
+          <Property Name="CounterValue3" Type="Double" Nullable="false" />
+          <Property Name="CounterValue4" Type="Double" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WaterCustomer" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomerPayment" ToRole="WaterCustomer" />
+        </EntityType>
+        <Association Name="FK_WaterCustomerPayment_ToWaterCustomer">
+          <End Type="CashCenterModel.WaterCustomer" Role="WaterCustomer" Multiplicity="1" />
+          <End Type="CashCenterModel.WaterCustomerPayment" Role="WaterCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WaterCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WaterCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -562,6 +662,39 @@
                 <ScalarProperty Name="NewNightValue" ColumnName="NewNightValue" />
                 <ScalarProperty Name="NewDayValue" ColumnName="NewDayValue" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WaterCustomers">
+            <EntityTypeMapping TypeName="CashCenterModel.WaterCustomer">
+              <MappingFragment StoreEntitySet="WaterCustomer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CounterNumber4" ColumnName="CounterNumber4" />
+                <ScalarProperty Name="CounterNumber3" ColumnName="CounterNumber3" />
+                <ScalarProperty Name="CounterNumber2" ColumnName="CounterNumber2" />
+                <ScalarProperty Name="CounterNumber1" ColumnName="CounterNumber1" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WaterCustomerPayments">
+            <EntityTypeMapping TypeName="CashCenterModel.WaterCustomerPayment">
+              <MappingFragment StoreEntitySet="WaterCustomerPayment">
+                <ScalarProperty Name="FiscalNumber" ColumnName="FiscalNumber" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Penalty" ColumnName="Penalty" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CounterValue4" ColumnName="CounterValue4" />
+                <ScalarProperty Name="CounterValue3" ColumnName="CounterValue3" />
+                <ScalarProperty Name="CounterValue2" ColumnName="CounterValue2" />
+                <ScalarProperty Name="CounterValue1" ColumnName="CounterValue1" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

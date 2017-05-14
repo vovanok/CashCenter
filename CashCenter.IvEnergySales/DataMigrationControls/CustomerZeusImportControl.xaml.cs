@@ -11,23 +11,9 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
 {
     public partial class CustomerZeusImportControl : UserControl
     {
-        public class ImportTargetItem
+        private readonly List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
         {
-            public bool IsChecked { get; set; }
-            public string Name { get; private set; }
-            public IRemoteImportiable Importer { get; private set; }
-
-            public ImportTargetItem(string name, IRemoteImportiable importer)
-            {
-                IsChecked = false;
-                Name = name;
-                Importer = importer;
-            }
-        }
-
-        private List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
-        {
-            new ImportTargetItem("Физ. лица", new CustomersRemoteImporter()),
+            new ImportTargetItem("Потребители электроэнергии", new CustomersRemoteImporter()),
             new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter())
         };
 
@@ -44,44 +30,31 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             var department = controlDepartamentSelector.SelectedDepartment;
             if (department == null)
             {
-                Log.Error("Отделение не выбрано.");
+                Message.Error("Отделение не выбрано.");
                 return;
             }
 
-            if (MessageBox.Show($"Вы уверены что хотите произвести импорт из удаленной базы данных:\n{department.Url}",
-                "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
-            {
+            if (!Message.YesNoQuestion($"Вы уверены что хотите произвести импорт из удаленной базы данных:\n{department.Url}"))
                 return;
-            }
 
-            var resultMessage = new StringBuilder("Результат импортирования\n\n");
-            var waiter = new OperationWaiter();
-            using (waiter)
+            var resultMessage = new StringBuilder();
+
+            var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
+                .Where(item => item != null && item.IsChecked);
+
+            foreach (var importTarget in selectedImportTargets)
             {
-                var selectedImportTargets = lbImportTargets.Items.OfType<ImportTargetItem>()
-                    .Where(item => item != null && item.IsChecked);
+                var remoteImporter = importTarget.Importer as IRemoteImporter;
+                if (remoteImporter != null)
+                    remoteImporter.SourceDepartment = controlDepartamentSelector.SelectedDepartment;
 
-                foreach (var importTargetItem in selectedImportTargets)
-                {
-                    var importResult = importTargetItem.Importer.Import(controlDepartamentSelector.SelectedDepartment);
-
-                    resultMessage.AppendLine(importTargetItem.Name);
-                    if (importResult == null)
-                    {
-                        resultMessage.AppendLine("\tОшибка импортирования");
-                        continue;
-                    }
-
-                    resultMessage.AppendLine($"  Добавлено: {importResult.AddedCount}");
-                    resultMessage.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
-                    resultMessage.AppendLine($"  Удалено: {importResult.DeletedCount}");
-                }
-
-                RefreshArticlePriceTypes();
+                resultMessage.AppendLine(MigrationHelper.ImportItem(importTarget));
             }
 
-            resultMessage.AppendLine($"\nЗатрачено времени: {waiter.DeltaTime}");
-            Log.Info(resultMessage.ToString());
+            RefreshArticlePriceTypes();
+
+            Logger.Info(resultMessage.ToString());
+            Message.Info(resultMessage.ToString());
         }
 
         private void RefreshArticlePriceTypes()

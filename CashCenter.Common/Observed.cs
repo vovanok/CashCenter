@@ -26,5 +26,10 @@ namespace CashCenter.Common
         }
 
         public event Action<T> OnChange;
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 }

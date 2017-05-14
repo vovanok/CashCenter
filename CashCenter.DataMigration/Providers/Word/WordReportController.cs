@@ -1,5 +1,4 @@
-﻿using CashCenter.Common;
-using CashCenter.DataMigration.Providers.Word.Entities;
+﻿using CashCenter.DataMigration.Providers.Word.Entities;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,10 +18,7 @@ namespace CashCenter.DataMigration.Providers.Word
         {
             var templateFullpath = Path.Combine(Environment.CurrentDirectory, templateFilename);
             if (!File.Exists(templateFullpath))
-            {
-                Log.Error($"Файл-шаблон отчета не существует или не задан ({templateFullpath}).");
-                return;
-            }
+                throw new ApplicationException($"Файл-шаблон отчета не существует или не задан ({templateFullpath})");
 
             try
             {
@@ -35,10 +31,7 @@ namespace CashCenter.DataMigration.Providers.Word
 
                         var paymentsTable = document.Bookmarks["CustomerPayment"]?.Range?.Tables[1];
                         if (paymentsTable == null)
-                        {
-                            Log.Error("Не найдена таблица для выгрузки платежей в шаблоне отчета.");
-                            return;
-                        }
+                            throw new ApplicationException("Не найдена таблица для выгрузки платежей в шаблоне отчета");
 
                         foreach (var customerPayment in model.CustomerPayments)
                         {
@@ -58,7 +51,7 @@ namespace CashCenter.DataMigration.Providers.Word
             }
             catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка экспорта платежей физ.лиц в документ Word.", ex);
+                throw new SystemException("Ошибка экспорта платежей физ.лиц в документ Word", ex);
             }
         }
     }

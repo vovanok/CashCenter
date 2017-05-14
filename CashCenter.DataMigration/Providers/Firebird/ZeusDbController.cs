@@ -43,10 +43,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения оснований для оплаты.", e);
-                return new List<ZeusPaymentReason>();
+                throw new SystemException($"Ошибка получения оснований для оплаты", ex);
             }
             finally
             {
@@ -81,10 +80,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения физических лиц.", e);
-                return new List<ZeusCustomer>();
+                throw new SystemException("Ошибка получения физических лиц", ex);
             }
             finally
             {
@@ -125,10 +123,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка получения лицевого счета с номером {customerNumber}.", e);
-                return null;
+                throw new SystemException($"Ошибка получения лицевого счета с номером {customerNumber}", ex);
             }
             finally
             {
@@ -162,10 +159,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return debt;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка получения задолжности для плательщика {customerNumber}.", e);
-                return null;
+                throw new SystemException($"Ошибка получения задолжности для плательщика {customerNumber}", ex);
             }
             finally
             {
@@ -195,10 +191,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения счетчика плательщика.", e);
-                return -1;
+                throw new SystemException($"Ошибка получения счетчика плательщика {customerId}", ex);
             }
             finally
             {
@@ -232,10 +227,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return resultPayJournal;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения журнала платежа.", e);
-                return null;
+                throw new SystemException("Ошибка получения журнала платежа", ex);
             }
             finally
             {
@@ -258,9 +252,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
                 command.Transaction.Commit();
                 command.Dispose();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка обновления журнала платежа.", e);
+                throw new SystemException("Ошибка обновления журнала платежа", ex);
             }
             finally
             {
@@ -287,10 +281,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return new ZeusPayJournal(id, payJournal.Name, payJournal.CreateDate, payJournal.PaymentKindId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка добавления журнала платежа.", e);
-                return null;
+                throw new SystemException("Ошибка добавления журнала платежа", ex);
             }
             finally
             {
@@ -321,10 +314,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
                 return new ZeusPay(id, pay.CustomerNumber, pay.ReasonId, pay.MetersId, pay.JournalId,
                     pay.Cost, pay.PenaltyTotal, pay.Description);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка добавления платежа.", e);
-                return null;
+                throw new SystemException("Ошибка добавления платежа", ex);
             }
             finally
             {
@@ -354,10 +346,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
                     counterValues.CustomerCounterId, counterValues.Value1,
                     counterValues.Value2);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка добавления показаний счетчиков.", e);
-                return null;
+                throw new SystemException("Ошибка добавления показаний счетчиков", ex);
             }
             finally
             {
@@ -379,9 +370,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
                 command.Transaction.Commit();
                 command.Dispose();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка обновления контрольных значений.", e);
+                throw new SystemException("Ошибка обновления контрольных значений", ex);
             }
             finally
             {
@@ -410,10 +401,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
                 return new ZeusMeter(id, meter.CustomerNumber, meter.CustomerCounterId,
                     meter.Value1, meter.Value2, meter.CounterValuesId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка добавления показаний.", e);
-                return null;
+                throw new SystemException("Ошибка добавления показаний", ex);
             }
             finally
             {
@@ -447,10 +437,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения товаров.", e);
-                return new List<ZeusWarehouse>();
+                throw new SystemException("Ошибка получения товаров", ex);
             }
             finally
             {
@@ -484,10 +473,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения типов стоимостей товаров.", e);
-                return new List<ZeusWarehouseCategory>();
+                throw new SystemException("Ошибка получения типов стоимостей товаров", ex);
             }
             finally
             {
@@ -521,10 +509,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения стоимостей товаров.", e);
-                return new List<ZeusWarehousePrice>();
+                throw new SystemException("Ошибка получения стоимостей товаров", ex);
             }
             finally
             {
@@ -536,10 +523,7 @@ namespace CashCenter.DataMigration.Providers.Firebird
         private DbCommand GetDbCommandByQuery(string query)
         {
             if (dbConnection.State != ConnectionState.Open)
-            {
-                Log.Error("Ошибка получения комманды для текущего подключения к БД. Подключение не открыто.");
-                return null;
-            }
+                throw new SystemException("Ошибка получения комманды для текущего подключения к БД. Подключение не открыто");
 
             var command = dbConnection.CreateCommand();
             command.Transaction = dbConnection.BeginTransaction();
@@ -565,10 +549,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return new ZeusPaymentKind(id, kind.Name, kind.TypeId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка добавления вида платежа.", e);
-                return null;
+                throw new SystemException("Ошибка добавления вида платежа", ex);
             }
             finally
             {
@@ -600,10 +583,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return paymentKind;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка получения вида платежа с номером {paymentKindId}.", e);
-                return null;
+                throw new SystemException($"Ошибка получения вида платежа с номером {paymentKindId}", ex);
             }
             finally
             {
@@ -635,10 +617,9 @@ namespace CashCenter.DataMigration.Providers.Firebird
 
                 return result;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка получения видов платежа.", e);
-                return new List<ZeusPaymentKind>();
+                throw new SystemException("Ошибка получения видов платежа", ex);
             }
             finally
             {

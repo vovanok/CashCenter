@@ -22,7 +22,7 @@ namespace CashCenter.DataMigration
         protected override int DeleteAllTargetItems()
         {
             var customersForDelete = existingCustomers
-                .Where(item => item.Department.Code == sourceDepartment.Code);
+                .Where(item => item.Department.Code == SourceDepartment.Code);
 
             foreach (var customer in customersForDelete)
             {
@@ -47,7 +47,7 @@ namespace CashCenter.DataMigration
 
             return new Customer
             {
-                DepartmentId = sourceDepartment.Id,
+                DepartmentId = SourceDepartment.Id,
                 Number = zeusCustomer.Number,
                 Name = zeusCustomer.Name,
                 Address = zeusCustomer.Address,
@@ -66,7 +66,7 @@ namespace CashCenter.DataMigration
                 return true;
 
             var existingCustomer = existingCustomers.FirstOrDefault(customer =>
-                customer.Department.Id == sourceDepartment.Id &&
+                customer.Department.Id == SourceDepartment.Id &&
                 customer.Number == zeusCustomer.Number);
 
             if (existingCustomer == null)

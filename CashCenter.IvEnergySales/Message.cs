@@ -13,5 +13,11 @@ namespace CashCenter.IvEnergySales
         {
             MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        public static bool YesNoQuestion(string message)
+        {
+            return MessageBox.Show(message, "Подтверждение действия", MessageBoxButton.YesNo,
+                MessageBoxImage.Question) == MessageBoxResult.Yes;
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CashCenter.DataMigration
 {
-    public class CustomersDbfImporter : BaseDbfImporter<DbfCustomer, Customer>
+    public class CustomersDbfImporter : BaseDbfImporter<DbfEnergyCustomer, Customer>
     {
         protected override void CreateNewItems(IEnumerable<Customer> customers)
         {
@@ -17,15 +17,15 @@ namespace CashCenter.DataMigration
             return 0;
         }
 
-        protected override IEnumerable<DbfCustomer> GetSourceItems()
+        protected override IEnumerable<DbfEnergyCustomer> GetSourceItems()
         {
             if (dbfRegistry == null)
-                return new List<DbfCustomer>();
+                return new List<DbfEnergyCustomer>();
 
-            return dbfRegistry.GetCustomers();
+            return dbfRegistry.GetEnergyCustomers();
         }
 
-        protected override Customer GetTargetItemBySource(DbfCustomer dbfCustomer)
+        protected override Customer GetTargetItemBySource(DbfEnergyCustomer dbfCustomer)
         {
             var department = DalController.Instance.GetDepartmentByCode(dbfCustomer.DepartmentCode);
             if (department == null)
@@ -46,7 +46,7 @@ namespace CashCenter.DataMigration
             };
         }
 
-        protected override bool TryUpdateExistingItem(DbfCustomer dbfCustomer)
+        protected override bool TryUpdateExistingItem(DbfEnergyCustomer dbfCustomer)
         {
             var existingCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
                 customer.Department.Code == dbfCustomer.DepartmentCode &&

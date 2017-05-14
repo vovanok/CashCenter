@@ -6,9 +6,7 @@ namespace CashCenter.DataMigration.Providers.Word.Entities
     public class ReportCustomersModel
     {
         public DateTime StartDate { get; private set; }
-
         public DateTime EndDate { get; private set; }
-
         public IEnumerable<ReportCustomerPaymentModel> CustomerPayments { get; private set; }
 
         public ReportCustomersModel(

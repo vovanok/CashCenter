@@ -6,7 +6,6 @@ namespace CashCenter.DataMigration.Providers.Dbf.Entities
     public class DbfArticlesSet
     {
         public DateTime EntryDate { get; private set; }
-
         public List<DbfArticle> Articles { get; private set; }
 
         public DbfArticlesSet()

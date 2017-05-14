@@ -6,19 +6,23 @@ namespace CashCenter.IvEnergySales
 {
     public partial class FileSelectorControl : UserControl
     {
+        public static readonly DependencyProperty FilenameProperty =
+            DependencyProperty.Register("Filename", typeof(string),
+            typeof(FileSelectorControl), new FrameworkPropertyMetadata(string.Empty));
+
+        private OpenFileDialog openFileDialog;
+
         public string FilesFilter
         {
             get { return openFileDialog.Filter; }
             set { openFileDialog.Filter = value ?? string.Empty; }
         }
 
-        public string FileName
+        public string Filename
         {
-            get { return tbFileName.Text; }
-            set { tbFileName.Text = value ?? string.Empty; }
+            get { return (string)GetValue(FilenameProperty); }
+            set { SetValue(FilenameProperty, value); }
         }
-
-        private OpenFileDialog openFileDialog;
 
         public FileSelectorControl()
         {
@@ -31,8 +35,13 @@ namespace CashCenter.IvEnergySales
             var openFileDialogResult = openFileDialog.ShowDialog();
             if (openFileDialogResult != null && openFileDialogResult.Value)
             {
-                tbFileName.Text = openFileDialog.FileName ?? string.Empty;
+                tbFileName.Text = Filename = openFileDialog.FileName ?? string.Empty;
             }
+        }
+
+        private void On_tbFileName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Filename = tbFileName.Text;
         }
     }
 }

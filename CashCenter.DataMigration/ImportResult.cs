@@ -3,9 +3,7 @@
     public class ImportResult
     {
         public int AddedCount { get; private set; }
-
         public int UpdatedCount { get; private set; }
-
         public int DeletedCount { get; private set; }
 
         public ImportResult() : this(0, 0, 0)

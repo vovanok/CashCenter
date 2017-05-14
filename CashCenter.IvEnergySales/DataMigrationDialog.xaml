@@ -8,14 +8,14 @@
         Title="Импорт/экспорт данных" Width="500" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <StackPanel Margin="5,5,5,5">
         <TabControl>
-            <TabItem Header="Импорт физ.лиц из DBF">
+            <TabItem Header="Экспорт данных">
+                <local:CustomerPaymentsExportControl />
+            </TabItem>
+            <TabItem Header="Импорт из DBF">
                 <local:CustomerDbfImportControl />
             </TabItem>            
             <TabItem Header="Импорт из Зевса">
                 <local:CustomerZeusImportControl />
-            </TabItem>
-            <TabItem Header="Экспорт платежей физ. лиц">
-                <local:CustomerPaymentsExportControl />
             </TabItem>
         </TabControl>
         <Button x:Name="btnClose" Content="Закрыть" Width="100" Height="30" HorizontalAlignment="Right" Margin="0,5,5,0" Click="On_btnClose_Click"/>

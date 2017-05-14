@@ -4,16 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+             xmlns:migrationControls="clr-namespace:CashCenter.IvEnergySales.DataMigrationControls"
              mc:Ignorable="d">
+    <UserControl.DataContext>
+        <migrationControls:CustomerDbfImportViewModel />
+    </UserControl.DataContext>
     <StackPanel>
-        <Label Content="Путь к DBF файлу для импорта" />
-        <local:FileSelectorControl x:Name="fscCustomersDbfFileSelector" FilesFilter="*.DBF|*.DBF" />
-        <Button
-            x:Name="btnImportCustomersFromDbf"
-            Content="Импортировать"
-            Width="100" Height="30"
-            Margin="0,5,0,0"
-            HorizontalAlignment="Left"
-            Click="On_btnImportCustomersFromDbf_Click" />
+        <Label Content="Что импортировать?" />
+        <ComboBox ItemsSource="{Binding ImportTargets}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedImportTarget.Value}"/>
+        <Label Content="Откуда импортировать? (путь к DBF)" />
+        <local:FileSelectorControl Filename="{Binding DbfFilename.Value, Mode=TwoWay}" FilesFilter="*.DBF|*.DBF" />
+        <Button Content="Импортировать" Command="{Binding ImportCommand}" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" />
     </StackPanel>
 </UserControl>

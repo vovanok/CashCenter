@@ -108,18 +108,30 @@
     </Compile>
     <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\InfoForCheck.cs" />
-    <Compile Include="CustomerPaymentControl.xaml.cs">
-      <DependentUpon>CustomerPaymentControl.xaml</DependentUpon>
+    <Compile Include="BusinessLogic\WaterCustomerPaymentContext.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
+    <Compile Include="CustomerEnergyPaymentControl.xaml.cs">
+      <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomerWaterPaymentControl.xaml.cs">
+      <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerWaterPaymentControlViewModel.cs" />
+    <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
+    <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
+    <Compile Include="DataMigrationControls\MigrationHelper.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
       <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrationControls\CustomerDbfImportViewModel.cs" />
     <Compile Include="DataMigrationControls\CustomerPaymentsExportControl.xaml.cs">
       <DependentUpon>CustomerPaymentsExportControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataMigrationControls\CustomerZeusImportControl.xaml.cs">
       <DependentUpon>CustomerZeusImportControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DataMigrationControls\ImportTargetItem.cs" />
     <Compile Include="DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>
@@ -129,6 +141,9 @@
     <Compile Include="CommonControls\FileSelectorControl.xaml.cs">
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Exceptions\CustomerNotAppliedException.cs" />
+    <Compile Include="Exceptions\IncorrectDataException.cs" />
+    <Compile Include="Exceptions\UserException.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="OperationWaiter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -140,11 +155,17 @@
     <Compile Include="SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\TextBoxBehavior.cs" />
+    <Compile Include="ViewModel.cs" />
     <Page Include="ArticlesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomerPaymentControl.xaml">
+    <Page Include="CustomerEnergyPaymentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomerWaterPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,6 +267,23 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="DrvFRLib">
+      <Guid>{332C8050-469C-4B4D-A192-68CD3CB252BA}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\energy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Content\water.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

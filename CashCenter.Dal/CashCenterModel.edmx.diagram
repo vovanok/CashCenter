@@ -5,22 +5,25 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="eda829cd9637439b94745c4661261cae" Name="Diagram1" ZoomLevel="100">
-        <EntityTypeShape EntityType="CashCenterModel.ArticlePrice" Width="1.625" PointX="2.5" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CashCenterModel.ArticleSale" Width="1.5" PointX="4.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CashCenterModel.ArticlePrice" Width="1.625" PointX="2.5" PointY="0.5" IsExpanded="true" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="CashCenterModel.ArticleSale" Width="1.5" PointX="4.75" PointY="0.5" IsExpanded="true" FillColor="255, 128, 0" />
         <AssociationConnector Association="CashCenterModel.FK_ArticleSale_To_ArticlePrice" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="CashCenterModel.PaymentReason" Width="1.5" PointX="11.25" PointY="3.75" FillColor="Maroon" />
-        <EntityTypeShape EntityType="CashCenterModel.Article" Width="1.5" PointX="0.5" PointY="0.5" />
-        <EntityTypeShape EntityType="CashCenterModel.ArticlePriceType" Width="1.625" PointX="0.5" PointY="3.25" />
+        <EntityTypeShape EntityType="CashCenterModel.PaymentReason" Width="1.5" PointX="11.25" PointY="4.25" FillColor="Maroon" />
+        <EntityTypeShape EntityType="CashCenterModel.Article" Width="1.5" PointX="0.5" PointY="0.5" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="CashCenterModel.ArticlePriceType" Width="1.625" PointX="0.5" PointY="3.25" FillColor="255, 128, 0" />
         <AssociationConnector Association="CashCenterModel.FK_ArticlePrice_To_Article" />
         <AssociationConnector Association="CashCenterModel.FK_ArticlePrice_To_ArticlePriceType" />
-        <EntityTypeShape EntityType="CashCenterModel.Department" Width="1.5" PointX="5" PointY="3.75" FillColor="Maroon" />
-        <EntityTypeShape EntityType="CashCenterModel.Region" Width="1.5" PointX="3" PointY="3.75" FillColor="Maroon" />
+        <EntityTypeShape EntityType="CashCenterModel.Department" Width="1.5" PointX="5" PointY="4.25" FillColor="Maroon" />
+        <EntityTypeShape EntityType="CashCenterModel.Region" Width="1.5" PointX="2.875" PointY="4.25" FillColor="Maroon" />
         <AssociationConnector Association="CashCenterModel.FK_Department_ToRegion" />
-        <EntityTypeShape EntityType="CashCenterModel.Customer" Width="1.5" PointX="7" PointY="3.75" FillColor="Green" />
+        <EntityTypeShape EntityType="CashCenterModel.Customer" Width="1.5" PointX="7" PointY="4.25" FillColor="Green" />
         <AssociationConnector Association="CashCenterModel.FK_Customer_ToDepartment" />
-        <EntityTypeShape EntityType="CashCenterModel.CustomerPayment" Width="1.75" PointX="9" PointY="3.75" FillColor="Green" />
+        <EntityTypeShape EntityType="CashCenterModel.CustomerPayment" Width="1.75" PointX="9" PointY="4.25" FillColor="Green" />
         <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToCustomer" />
         <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToPaymentReason" />
+        <EntityTypeShape EntityType="CashCenterModel.WaterCustomer" Width="1.75" PointX="7.375" PointY="0.5" />
+        <EntityTypeShape EntityType="CashCenterModel.WaterCustomerPayment" Width="2" PointX="9.875" PointY="0.5" />
+        <AssociationConnector Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

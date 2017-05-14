@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 
 namespace CashCenter.DataMigration.Providers.Dbf
 {
@@ -11,77 +12,187 @@ namespace CashCenter.DataMigration.Providers.Dbf
     {
         private static class Sql
         {
-            public const string CUSTOMER_DEPARTMENT_CODE = "KO";
-            public const string CUSTOMER_ID = "LS";
-            public const string CUSTOMER_COUNTERS_END_DAY_VALUE = "CDAY";
-            public const string CUSTOMER_COUNTERS_END_NIGHT_VALUE = "CNIGHT";
-            public const string CUSTOMER_END_BALANCE = "SUMMA";
+            public const string ENERGY_CUSTOMER_DEPARTMENT_CODE = "KO";
+            public const string ENERGY_CUSTOMER_ID = "LS";
+            public const string ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE = "CDAY";
+            public const string ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE = "CNIGHT";
+            public const string ENERGY_CUSTOMER_END_BALANCE = "SUMMA";
+
+            public const string WATER_CUSTOMER_NUMBER = "SCHET";
+            public const string WATER_CUSTOMER_NAME = "FIO";
+            public const string WATER_CUSTOMER_ADDRESS = "ADRESS";
+            public const string WATER_CUSTOMER_COUNTER_NUMBER1 = "N_SHET1";
+            public const string WATER_CUSTOMER_COUNTER_NUMBER2 = "N_SHET2";
+            public const string WATER_CUSTOMER_COUNTER_NUMBER3 = "N_SHET3";
 
             public const string ARTICLES_DATA = "DATAN";
             public const string ARTICLES_CODE = "TOVARKOD";
             public const string ARTICLES_NAME = "TOVARNAME";
             public const string ARTICLES_BARCODE = "SHTRIHKOD";
             public const string ARTICLES_PRICE = "TOVARCENA";
-            
-            private static readonly string GET_CUSTOMERS =
-                $@"select {CUSTOMER_DEPARTMENT_CODE}, {CUSTOMER_ID}, {CUSTOMER_COUNTERS_END_DAY_VALUE}, {CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {CUSTOMER_END_BALANCE}
+
+            public const string WATER_CUSTOMER_PAYMENT_CREATION_DATE = "DATE";
+            public const string WATER_CUSTOMER_PAYMENT_CUSTOMER_NUMBER = "SCHET";
+            public const string WATER_CUSTOMER_PAYMENT_COST = "SUMZACH";
+            public const string WATER_CUSTOMER_PAYMENT_PERIODCODE = "PER_OPL";
+            public const string WATER_CUSTOMER_PAYMENT_PENALTY = "PENI";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER1 = "N_SCHET1";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST1 = "SUM_SH1";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE1 = "ZN1";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER2 = "N_SCHET2";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST2 = "SUM_SH2";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE2 = "ZN2";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER3 = "N_SCHET3";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST3 = "SUM_SH3";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE3 = "ZN3";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER4 = "N_SCHET4";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST4 = "SUM_SH4";
+            public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4 = "ZN4";
+
+            public const string TYPE_DATE = "Date";
+            public const string TYPE_CHARACTER13 = "Character(13)";
+            public const string TYPE_CHARACTER12 = "Character(12)";
+            public const string TYPE_CHARACTER6 = "Character(6)";
+            public const string TYPE_NUMERIC = "Numeric";
+
+            private static readonly string GET_ENERGY_CUSTOMERS =
+                $@"select {ENERGY_CUSTOMER_DEPARTMENT_CODE}, {ENERGY_CUSTOMER_ID}, {ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE}, {ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {ENERGY_CUSTOMER_END_BALANCE}
+                   from {{0}}";
+
+            private static readonly string GET_WATER_CUSTOMERS =
+                $@"select {WATER_CUSTOMER_NUMBER}, {WATER_CUSTOMER_NAME}, {WATER_CUSTOMER_ADDRESS}, {WATER_CUSTOMER_COUNTER_NUMBER1}, {WATER_CUSTOMER_COUNTER_NUMBER2}, {WATER_CUSTOMER_COUNTER_NUMBER3}
                    from {{0}}";
 
             private static readonly string GET_ARTICLES =
                 $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
                    form {{0}}";
 
-            public static string GetCustomersQuery(string tableName)
+            private static readonly string ADD_WATER_CUSTOMER_PAYMENTS_PRE =
+                $@"insert into {{0}} values";
+
+            private static readonly string CREATE_WATER_CUSTOMER_PAYMENTS =
+                $@"create table {{0}} (
+                    [{WATER_CUSTOMER_PAYMENT_CREATION_DATE}] {TYPE_DATE},
+                    [{WATER_CUSTOMER_PAYMENT_CUSTOMER_NUMBER}] {TYPE_CHARACTER12},
+                    [{WATER_CUSTOMER_PAYMENT_COST}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_PERIODCODE}] {TYPE_CHARACTER6},
+                    [{WATER_CUSTOMER_PAYMENT_PENALTY}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER1}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST1}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE1}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER2}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST2}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE2}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER3}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST3}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE3}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_NUMBER4}] {TYPE_CHARACTER13},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_COST4}] {TYPE_NUMERIC},
+                    [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4}] {TYPE_NUMERIC})";
+
+            public static string GetEnergyCustomersQuery(string tableName)
             {
-                return string.Format(GET_CUSTOMERS, tableName);
+                return string.Format(GET_ENERGY_CUSTOMERS, tableName);
+            }
+
+            public static string GetWaterCustomersQuery(string tableName)
+            {
+                return string.Format(GET_WATER_CUSTOMERS, tableName);
             }
 
             public static string GetArticlesQuery(string tableName)
             {
                 return string.Format(GET_ARTICLES, tableName);
             }
+
+            public static string GetAddWaterCustomerPaymentsPreQuery(string tableName)
+            {
+                return string.Format(ADD_WATER_CUSTOMER_PAYMENTS_PRE, tableName);
+            }
+
+            public static string GetCreateWaterCustomerPaymentsQuery(string tableName)
+            {
+                return string.Format(CREATE_WATER_CUSTOMER_PAYMENTS, tableName);
+            }
         }
 
         private OleDbConnection dbfConnection;
         private string dbfName;
+        private string filename;
 
-        public DbfRegistryController(string fileName)
+        public DbfRegistryController(string filename)
         {
-            var fileInfo = new FileInfo(fileName);
+            this.filename = filename;
+            var fileInfo = new FileInfo(filename);
             var connectionString = string.Format(Config.DbfConnectionStringFormat, fileInfo.Directory.FullName);
             dbfConnection = new OleDbConnection(connectionString);
             dbfName = fileInfo.Name;
         }
 
-        public List<DbfCustomer> GetCustomers()
+        public List<DbfEnergyCustomer> GetEnergyCustomers()
         {
             try
             {
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetCustomersQuery(dbfName);
+                command.CommandText = Sql.GetEnergyCustomersQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 
-                var customers = new List<DbfCustomer>();
+                var energyCustomers = new List<DbfEnergyCustomer>();
                 while (dataReader.Read())
                 {
-                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_ID);
-                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.CUSTOMER_DEPARTMENT_CODE);
-                    int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_DAY_VALUE);
-                    int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_COUNTERS_END_NIGHT_VALUE);
-                    decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.CUSTOMER_END_BALANCE);
+                    int number = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_ID);
+                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_DEPARTMENT_CODE);
+                    int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE);
+                    int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE);
+                    decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_END_BALANCE);
 
-                    customers.Add(new DbfCustomer(number, departamentCode, dayValue, nightValue, balance));
+                    energyCustomers.Add(new DbfEnergyCustomer(number, departamentCode, dayValue, nightValue, balance));
                 }
 
-                return customers;
+                return energyCustomers;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка получения физ.лиц из файла {dbfName}.", e);
-                return new List<DbfCustomer>();
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        public List<DbfWaterCustomer> GetWaterCustomers()
+        {
+            try
+            {
+                dbfConnection.Open();
+
+                var command = dbfConnection.CreateCommand();
+                command.CommandText = Sql.GetWaterCustomersQuery(dbfName);
+
+                var dataReader = command.ExecuteReader();
+
+                var waterCustomers = new List<DbfWaterCustomer>();
+                while (dataReader.Read())
+                {
+                    int number = int.Parse(dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_NUMBER));
+                    string name = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_NAME) ?? string.Empty;
+                    string address = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_ADDRESS) ?? string.Empty;
+                    string counterNumber1 = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_COUNTER_NUMBER1) ?? string.Empty;
+                    string counterNumber2 = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_COUNTER_NUMBER2) ?? string.Empty;
+                    string counterNumber3 = dataReader.GetFieldFromReader<string>(Sql.WATER_CUSTOMER_COUNTER_NUMBER3) ?? string.Empty;
+
+                    waterCustomers.Add(new DbfWaterCustomer(number, name, address, counterNumber1, counterNumber2, counterNumber3));
+                }
+
+                return waterCustomers;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
             }
             finally
             {
@@ -117,11 +228,113 @@ namespace CashCenter.DataMigration.Providers.Dbf
 
                 return new DbfArticlesSet(date, articles);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.ErrorWithException($"Ошибка загрузки товаров из DBF файла: {dbfName}", ex);
-                return new DbfArticlesSet();
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
             }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        public void StoreWaterCustomerPayments(IEnumerable<DbfWaterCustomerPayment> payments)
+        {
+            CreateDbf();
+            AddWaterCustomerPayments(payments);
+        }
+
+        private void CreateDbf()
+        {
+            if (File.Exists(filename))
+                File.Delete(filename);
+
+            try
+            {
+                dbfConnection.Open();
+
+                var command = dbfConnection.CreateCommand();
+                command.CommandText = Sql.GetCreateWaterCustomerPaymentsQuery(Path.GetFileNameWithoutExtension(dbfName));
+
+                command.ExecuteNonQuery();
+                command.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка создания DBF {filename}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        private void AddWaterCustomerPayments(IEnumerable<DbfWaterCustomerPayment> payments)
+        {
+            if (payments == null || payments.Count() == 0)
+                return;
+
+            try
+            {
+                dbfConnection.Open();
+
+                foreach (var payment in payments)
+                {
+                    var command = dbfConnection.CreateCommand();
+                
+                    var values = new[]
+                    {
+                        GetStringForQuery(payment.CreationDate.ToString("dd.MM.yyyy")),
+                        payment.CustomerNumber.ToString(),
+                        GetMoneyString(payment.Cost),
+                        GetStringForQuery(payment.PeriodCode),
+                        GetMoneyString(payment.Penalty),
+
+                        GetStringForQuery(payment.CounterNumber1),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue1),
+
+                        GetStringForQuery(payment.CounterNumber2),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue2),
+
+                        GetStringForQuery(payment.CounterNumber3),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue3),
+
+                        GetStringForQuery(payment.CounterNumber4),
+                        GetMoneyString(0),
+                        GetCounterValueString(payment.CounterValue4)
+                    };
+
+                    command.CommandText = $"{Sql.GetAddWaterCustomerPaymentsPreQuery(dbfName)} ({string.Join(", ", values)})";
+                    command.ExecuteNonQuery();
+                    command.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка записи в DBF {dbfName}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        private string GetMoneyString(decimal moneyValue)
+        {
+            return moneyValue.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private string GetCounterValueString(double counterValue)
+        {
+            return counterValue.ToString("0.000", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private string GetStringForQuery(string value)
+        {
+            return $"'{value}'";
         }
     }
 }
