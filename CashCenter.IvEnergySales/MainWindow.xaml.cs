@@ -1,4 +1,5 @@
 using CashCenter.Check;
+using CashCenter.Common;
 using System;
 using System.Windows;
 
@@ -6,6 +7,8 @@ namespace CashCenter.IvEnergySales
 {
     public partial class MainWindow : Window
 	{
+        private const string CHECK_PRINTER_NOTREADY_MESSAGE = "ÊÊÌ םו דמעמג";
+
         public MainWindow()
 		{
 			InitializeComponent();
@@ -26,7 +29,8 @@ namespace CashCenter.IvEnergySales
             }
             catch (Exception ex)
             {
-                Message.Error($"ÊÊÌ םו דמעמג.\n{ex.Message}");
+                Message.Error(CHECK_PRINTER_NOTREADY_MESSAGE);
+                Logger.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
             }
         }
 
@@ -43,6 +47,19 @@ namespace CashCenter.IvEnergySales
         {
             var dataMigrationDialog = new DataMigrationDialog();
             dataMigrationDialog.ShowDialog();
+        }
+
+        private void On_miCashPrinterCloseSession_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CheckPrinter.CloseSession();
+            }
+            catch (Exception ex)
+            {
+                Message.Error(CHECK_PRINTER_NOTREADY_MESSAGE);
+                Logger.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
+            }
         }
 
         #endregion
