@@ -15,7 +15,7 @@ namespace CashCenter.Check
             {
                 LogInfo("Создание драйвера");
                 Driver = new DrvFR();
-                Driver.Timeout = 1000;
+                Driver.Timeout = 4000;
                 Driver.Password = Config.CheckPrinterPassword;
                 Driver.LogOn = true;
                 Driver.LogFileMaxSize = 100;
@@ -77,7 +77,7 @@ namespace CashCenter.Check
 
         public void OpenSessionIfNot()
         {
-            Logger.Info("Открытие сессии");
+            LogInfo("Открытие сессии");
 
             if (Driver == null)
                 return;
@@ -101,6 +101,8 @@ namespace CashCenter.Check
 
         public void SendEmail(string email)
         {
+            LogInfo($"Отправка чека на email {email}");
+
             if (Driver == null)
                 return;
 
@@ -173,6 +175,13 @@ namespace CashCenter.Check
         {
             LogInfo("Отмена чека");
             Driver?.CancelCheck();
+            CheckError();
+        }
+
+        public void SysAdminCancelCheck()
+        {
+            LogInfo("Административная отмена чека");
+            Driver?.SysAdminCancelCheck();
             CheckError();
         }
 

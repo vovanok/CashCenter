@@ -23,6 +23,9 @@ namespace CashCenter.IvEnergySales
 
         private void On_miCashPrinterCancelCheck_Click(object sender, RoutedEventArgs e)
         {
+            if (!Message.YesNoQuestion("Вы уверены, что хотите аннулировать чек?"))
+                return;
+
             try
             {
                 CheckPrinter.CancelCheck();
@@ -51,9 +54,28 @@ namespace CashCenter.IvEnergySales
 
         private void On_miCashPrinterCloseSession_Click(object sender, RoutedEventArgs e)
         {
+            if (!Message.YesNoQuestion("Вы уверены, что хотите закрыть сессию?"))
+                return;
+
             try
             {
                 CheckPrinter.CloseSession();
+            }
+            catch (Exception ex)
+            {
+                Message.Error(CHECK_PRINTER_NOTREADY_MESSAGE);
+                Logger.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
+            }
+        }
+
+        private void On_miCashPrinterSysAdminCancelCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Message.YesNoQuestion("Вы уверены, что хотите выполнить административную отмену чека?"))
+                return;
+
+            try
+            {
+                CheckPrinter.SysAdminCancelCheck();
             }
             catch (Exception ex)
             {

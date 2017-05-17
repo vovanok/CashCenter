@@ -108,6 +108,7 @@
     </Compile>
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
+    <Compile Include="Check\WaterCustomerCheck.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
     <Compile Include="CustomerEnergyPaymentControl.xaml.cs">
@@ -200,7 +201,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Check\CustomerCheck.cs" />
+    <Compile Include="Check\EnergyCustomerCheck.cs" />
     <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,6 +1,6 @@
-﻿using CashCenter.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CashCenter.Common;
 
 namespace CashCenter.Check
 {
@@ -33,6 +33,11 @@ namespace CashCenter.Check
             cashMachine.CloseSession();
         }
 
+        public static void SysAdminCancelCheck()
+        {
+            cashMachine.SysAdminCancelCheck();
+        }
+
         public static void Print(Check check)
         {
             try
@@ -44,8 +49,17 @@ namespace CashCenter.Check
 
                 cashMachine.OpenCheck();
 
-                if (StringUtils.IsValidEmail(check.Email))
+                try
+                {
+                    if (!StringUtils.IsValidEmail(check.Email))
+                        throw new Exception($"Передан не валидный email {check.Email}");
+
                     cashMachine.SendEmail(check.Email);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Чек по email {check.Email} не отправлен", ex);
+                }
 
                 foreach (var commonLine in check.GetCommonLines())
                 {

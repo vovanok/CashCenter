@@ -1,8 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.IvEnergySales.BusinessLogic;
-using CashCenter.IvEnergySales.Exceptions;
+using CashCenter.Check;
 
 namespace CashCenter.IvEnergySales
 {
@@ -127,19 +128,33 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
+            var isWithoutCheck = false;
+            if (!CheckPrinter.IsReady)
+            {
+                if (!Message.YesNoQuestion("Кассовый аппарат не подключен. Продолжить без печати чека?"))
+                    return;
+
+                isWithoutCheck = true;
+            }
+
             try
             {
+                Logger.Info("Начало выполнения операции оплаты за воду");
+
                 using (new OperationWaiter())
                 {
-                    context.Pay(
-                        Email.Value, Counter1Value.Value, Counter2Value.Value, Counter3Value.Value,
-                        Counter4Value.Value, Penalty.Value, Cost.Value, Description.Value, 0); // TODO: Fiscal number
+                    context.Pay(Email.Value, Counter1Value.Value, Counter2Value.Value, Counter3Value.Value,
+                        Counter4Value.Value, Penalty.Value, Cost.Value, Description.Value, 0, isWithoutCheck); // TODO: Fiscal number
                     context.ClearCustomer();
                 }
+
+                Logger.Info("Операция оплаты за воду произведена успешно");
             }
-            catch (UserException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var message = "Ошибка выполнения операция оплаты за воду";
+                Message.Error($"{message}\n{ex.Message}");
+                Logger.Error(message, ex);
             }
         }
 

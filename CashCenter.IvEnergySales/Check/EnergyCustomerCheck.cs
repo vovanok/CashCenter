@@ -1,9 +1,8 @@
-using CashCenter.Common;
 using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.Check
 {
-    public class CustomerCheck : CashCenter.Check.Check
+    public class EnergyCustomerCheck : CashCenter.Check.Check
     {
         public string SalesDepartmentInfo { get; private set; }
         public string DepartmentCode { get; private set; }
@@ -12,7 +11,7 @@ namespace CashCenter.IvEnergySales.Check
         public string PaymentReason { get; private set; }
         public string CashierName { get; private set; }
 
-        public CustomerCheck(string departmentCode, int customerNumber, string customerName,
+        public EnergyCustomerCheck(string departmentCode, int customerNumber, string customerName,
             string paymentReason, string cashierName, decimal cost, string email)
             : base(
                   "EnergyCustomer", 

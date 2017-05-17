@@ -14,9 +14,9 @@ namespace CashCenter.IvEnergySales.Exceptions
         {
         }
 
-        public IncorrectDataException(IEnumerable<string> dataNames)
+        public IncorrectDataException(IEnumerable<string> errors)
         {
-            DataNames = dataNames?.Where(item => !string.IsNullOrEmpty(item)) ?? new string[] { };
+            DataNames = errors?.Where(item => !string.IsNullOrEmpty(item)) ?? new string[] { };
         }
 
         public override string Message

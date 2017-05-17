@@ -31,7 +31,7 @@ namespace CashCenter.Tests
                         Logger.Info($"Печать чека {i}");
                         Console.WriteLine($"Печать чека {i}");
 
-                        CheckPrinter.Print(new CustomerCheck(
+                        CheckPrinter.Print(new EnergyCustomerCheck(
                             "121212",
                             1212121,
                             "Вася Пупкин",

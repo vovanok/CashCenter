@@ -103,11 +103,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     return;
                 }
 
+                ChangeEmail(email);
+
                 var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
 
                 if (isWithoutCheck || TryPrintChecks(payment.Cost, Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email))
-                {
-                    ChangeEmail(email);
+                {   
                     DalController.Instance.AddCustomerPayment(payment);
                 }
             }
@@ -126,7 +127,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             {
                 using (var waiter = new OperationWaiter())
                 {
-                    var check = new CustomerCheck(departmentCode, customerNumber, customerName,
+                    var check = new EnergyCustomerCheck(departmentCode, customerNumber, customerName,
                         paymentReasonName, Properties.Settings.Default.CasherName, cost, customerEmail);
 
                     CheckPrinter.Print(check);
