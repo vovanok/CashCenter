@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
-    public class WaterCustomerPaymentContext
+    public class WaterCustomerSalesContext
     {
         public Observed<WaterCustomer> Customer { get; } = new Observed<WaterCustomer>();
 
@@ -36,22 +36,22 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             var incorrectParameters = new List<string>();
 
             if (counter1Value < 0)
-                incorrectParameters.Add("Показание счетчика 1");
+                incorrectParameters.Add("Показание счетчика 1 не должно быть меньше 0");
 
             if (counter2Value < 0)
-                incorrectParameters.Add("Показание счетчика 2");
+                incorrectParameters.Add("Показание счетчика 2 не должно быть меньше 0");
 
             if (counter3Value < 0)
-                incorrectParameters.Add("Показание счетчика 3");
+                incorrectParameters.Add("Показание счетчика 3 не должно быть меньше 0");
 
             if (counter4Value < 0)
-                incorrectParameters.Add("Показание счетчика 4");
+                incorrectParameters.Add("Показание счетчика 4 не должно быть меньше 0");
 
             var isEmailChange = !string.IsNullOrEmpty(email) && Customer.Value.Email != email;
             if (isEmailChange)
             {
                 if (!StringUtils.IsValidEmail(email))
-                    incorrectParameters.Add("Адрес электронной почты");
+                    incorrectParameters.Add("Адрес электронной почты имеет не верный формат");
             }
 
             if (incorrectParameters.Count > 0)

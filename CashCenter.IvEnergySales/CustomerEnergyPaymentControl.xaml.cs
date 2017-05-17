@@ -14,7 +14,7 @@ namespace CashCenter.IvEnergySales
 {
     public partial class CustomerEnergyPaymentControl : UserControl
     {
-        private Observed<CustomerSalesContext> customerSalesContext = new Observed<CustomerSalesContext>();
+        private Observed<EnergyCustomerSalesContext> customerSalesContext = new Observed<EnergyCustomerSalesContext>();
 
         private bool IsSalesContextReady
         {
@@ -57,7 +57,7 @@ namespace CashCenter.IvEnergySales
             customerSalesContext.Value = null;
         }
 
-        private void SalesContext_OnChange(CustomerSalesContext newCustomerSalesContext)
+        private void SalesContext_OnChange(EnergyCustomerSalesContext newCustomerSalesContext)
         {
             using (var waiter = new OperationWaiter())
             {
@@ -122,7 +122,7 @@ namespace CashCenter.IvEnergySales
 
             using (new OperationWaiter())
             {
-                customerSalesContext.Value = new CustomerSalesContext(controlDeparmentSelector.SelectedDepartment, customerNumber);
+                customerSalesContext.Value = new EnergyCustomerSalesContext(controlDeparmentSelector.SelectedDepartment, customerNumber);
             }
 
             if (!customerSalesContext.Value.IsCustomerFinded)

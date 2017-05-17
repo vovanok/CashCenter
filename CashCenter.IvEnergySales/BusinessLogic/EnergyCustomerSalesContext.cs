@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
-    public class CustomerSalesContext
+    public class EnergyCustomerSalesContext
     {
         protected const string PAY_ERROR_PREFIX = "Ошибка совершения платежа.";
 
@@ -17,7 +17,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public bool IsCustomerFinded => Customer != null;
 
-        public CustomerSalesContext(Department department, int customerNumber)
+        public EnergyCustomerSalesContext(Department department, int customerNumber)
         {
             if (department == null)
                 return;

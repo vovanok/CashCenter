@@ -106,9 +106,8 @@
     <Compile Include="ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BusinessLogic\CustomerSalesContext.cs" />
-    <Compile Include="BusinessLogic\InfoForCheck.cs" />
-    <Compile Include="BusinessLogic\WaterCustomerPaymentContext.cs" />
+    <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
+    <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
     <Compile Include="CustomerEnergyPaymentControl.xaml.cs">

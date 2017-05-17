@@ -8,7 +8,7 @@ namespace CashCenter.IvEnergySales
 {
     public class CustomerWaterPaymentControlViewModel : ViewModel
     {
-        private WaterCustomerPaymentContext context = new WaterCustomerPaymentContext();
+        private WaterCustomerSalesContext context = new WaterCustomerSalesContext();
 
         public Observed<bool> IsCustomerNumberFocused { get; } = new Observed<bool>();
         public Observed<bool> IsEmailFocused { get; } = new Observed<bool>();
