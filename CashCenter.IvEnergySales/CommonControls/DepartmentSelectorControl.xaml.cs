@@ -12,15 +12,14 @@ namespace CashCenter.IvEnergySales
     {
         public Region Region { get; private set; }
 
+        public static readonly DependencyProperty SelectedDepartmentProperty =
+            DependencyProperty.Register("SelectedDepartment", typeof(Department),
+            typeof(DepartmentSelectorControl), new FrameworkPropertyMetadata(null));
+
         public Department SelectedDepartment
         {
-            get
-            {
-                if (cbDepartmentSelector.Items.Count == 0)
-                    return null;
-
-                return cbDepartmentSelector.SelectedValue as Department;
-            }
+            get { return (Department)GetValue(SelectedDepartmentProperty); }
+            set { SetValue(SelectedDepartmentProperty, value); }
         }
 
         public event SelectionChangedEventHandler DepartmentChanged
@@ -60,6 +59,11 @@ namespace CashCenter.IvEnergySales
             {
                 Log.ErrorWithException("Ошибка загрузки департаметов.", ex);
             }
+        }
+
+        private void On_cbDepartmentSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedDepartment = cbDepartmentSelector.SelectedValue as Department;
         }
     }
 }

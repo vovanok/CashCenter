@@ -13,8 +13,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
     {
         private readonly List<ImportTargetItem> importTargetItems = new List<ImportTargetItem>
         {
-            new ImportTargetItem("Потребители электроэнергии", new CustomersRemoteImporter()),
-            new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter())
+            new ImportTargetItem("Потребители электроэнергии", new CustomersRemoteImporter(), false),
+            new ImportTargetItem("Основания для оплаты", new PaymentReasonsRemoteImporter(), false)
         };
 
         public CustomerZeusImportControl()

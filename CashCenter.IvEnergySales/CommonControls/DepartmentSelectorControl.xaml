@@ -16,6 +16,6 @@
         </Grid.RowDefinitions>
 
         <Label x:Name="lblRegionName" Grid.Column="0" Grid.Row="0"/>
-        <ComboBox x:Name="cbDepartmentSelector" Grid.Column="0" Grid.Row="1" IsReadOnly="True" DisplayMemberPath="DepartmentFullName" SelectedValuePath="Department" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+        <ComboBox x:Name="cbDepartmentSelector" Grid.Column="0" Grid.Row="1" IsReadOnly="True" DisplayMemberPath="DepartmentFullName" SelectedValuePath="Department" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" SelectionChanged="On_cbDepartmentSelector_SelectionChanged" />
     </Grid>
 </UserControl>

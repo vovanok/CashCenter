@@ -31,6 +31,7 @@ namespace CashCenter.Dal
         public bool IsActive { get; set; }
         public string Email { get; set; }
         public int Number { get; set; }
+        public bool IsClosed { get; set; }
     
         public virtual Department Department { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

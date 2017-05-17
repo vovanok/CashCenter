@@ -22,17 +22,18 @@ CREATE TABLE [dbo].[PaymentReason] (
 );
 
 CREATE TABLE [dbo].[Customer] (
-    [Id]           INT            IDENTITY (1, 1) NOT NULL,
-    [DepartmentId] INT            NOT NULL,
-    [Name]         NVARCHAR (MAX) NOT NULL,
-    [Address]      NVARCHAR (MAX) NOT NULL,
-    [DayValue]     INT            NOT NULL,
-    [NightValue]   INT            NOT NULL,
-    [Balance]      DECIMAL (18, 2)   NOT NULL,
-    [Penalty]      DECIMAL (18, 2)   NOT NULL,
-    [IsActive]     BIT            NOT NULL,
-    [Email]        NVARCHAR (MAX) NOT NULL,
-    [Number]       INT            NOT NULL,
+    [Id]           INT             IDENTITY (1, 1) NOT NULL,
+    [DepartmentId] INT             NOT NULL,
+    [Name]         NVARCHAR (MAX)  NOT NULL,
+    [Address]      NVARCHAR (MAX)  NOT NULL,
+    [DayValue]     INT             NOT NULL,
+    [NightValue]   INT             NOT NULL,
+    [Balance]      DECIMAL (18, 2) NOT NULL,
+    [Penalty]      DECIMAL (18, 2) NOT NULL,
+    [IsActive]     BIT             NOT NULL,
+    [Email]        NVARCHAR (MAX)  NOT NULL,
+    [Number]       INT             NOT NULL,
+    [IsClosed] BIT NOT NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Customer_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[Department] ([Id])
 );

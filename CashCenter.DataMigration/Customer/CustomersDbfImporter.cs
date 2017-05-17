@@ -7,6 +7,8 @@ namespace CashCenter.DataMigration
 {
     public class CustomersDbfImporter : BaseDbfImporter<DbfEnergyCustomer, Customer>
     {
+        public Department TargetDepartment { get; set; }
+
         protected override void CreateNewItems(IEnumerable<Customer> customers)
         {
             DalController.Instance.AddCustomersRange(customers);
@@ -42,15 +44,15 @@ namespace CashCenter.DataMigration
                 Balance = dbfCustomer.Balance,
                 Penalty = 0,
                 IsActive = true,
-                Email = string.Empty
+                Email = string.Empty,
+                IsClosed = dbfCustomer.IsClosed
             };
         }
 
         protected override bool TryUpdateExistingItem(DbfEnergyCustomer dbfCustomer)
         {
             var existingCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
-                customer.Department.Code == dbfCustomer.DepartmentCode &&
-                customer.Number == dbfCustomer.Number);
+                customer.Department.Id == TargetDepartment.Id && customer.Number == dbfCustomer.Number);
 
             if (existingCustomer == null)
                 return false;
@@ -59,6 +61,7 @@ namespace CashCenter.DataMigration
             existingCustomer.NightValue = dbfCustomer.NightValue;
             existingCustomer.Balance = dbfCustomer.Balance;
             existingCustomer.IsActive = true;
+            existingCustomer.IsClosed = dbfCustomer.IsClosed;
 
             return true;
         }

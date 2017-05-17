@@ -68,14 +68,7 @@ namespace CashCenter.IvEnergySales
                 }
 
                 tbCustomerEmail.IsEnabled = newCustomerSalesContext != null && newCustomerSalesContext.IsCustomerFinded;
-
-                tbCustomerEmail.Text =
-                    newCustomerSalesContext != null &&
-                    newCustomerSalesContext.Customer != null &&
-                    newCustomerSalesContext.Customer.Email != null
-                        ? newCustomerSalesContext.Customer.Email
-                        : string.Empty;
-
+                tbCustomerEmail.Text = newCustomerSalesContext?.Customer?.Email ?? string.Empty;
                 gbPaymentInfo.IsEnabled = newCustomerSalesContext != null && newCustomerSalesContext.IsCustomerFinded;
 
                 // Payment reasons

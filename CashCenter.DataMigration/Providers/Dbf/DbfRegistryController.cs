@@ -144,12 +144,15 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 while (dataReader.Read())
                 {
                     int number = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_ID);
+                    string name = string.Empty; // TODO
+                    string address = string.Empty; // TODO
                     string departamentCode = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_DEPARTMENT_CODE);
                     int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE);
                     int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE);
                     decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_END_BALANCE);
+                    bool isClosed = false; // TODO
 
-                    energyCustomers.Add(new DbfEnergyCustomer(number, departamentCode, dayValue, nightValue, balance));
+                    energyCustomers.Add(new DbfEnergyCustomer(number, name, address, departamentCode, dayValue, nightValue, balance, isClosed));
                 }
 
                 return energyCustomers;

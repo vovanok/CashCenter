@@ -22,7 +22,7 @@ namespace CashCenter.DataMigration
         protected override int DeleteAllTargetItems()
         {
             var customersForDelete = existingCustomers
-                .Where(item => item.Department.Code == SourceDepartment.Code);
+                .Where(item => item.Department.Id == SourceDepartment.Id);
 
             foreach (var customer in customersForDelete)
             {
@@ -56,7 +56,8 @@ namespace CashCenter.DataMigration
                 Balance = 0,
                 Penalty = 0,
                 IsActive = true,
-                Email = string.Empty
+                Email = string.Empty,
+                IsClosed = false // TODO: load from FB DB
             };
         }
 
@@ -66,8 +67,8 @@ namespace CashCenter.DataMigration
                 return true;
 
             var existingCustomer = existingCustomers.FirstOrDefault(customer =>
-                customer.Department.Id == SourceDepartment.Id &&
-                customer.Number == zeusCustomer.Number);
+                customer.Number == zeusCustomer.Number &&
+                customer.Department.Id == SourceDepartment.Id);
 
             if (existingCustomer == null)
                 return false;
