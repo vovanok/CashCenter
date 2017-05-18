@@ -10,15 +10,13 @@ namespace CashCenter.Common
         public static string EnergyCustomerOffOutputFileFormat => GetAppSettingByKey("EnergyCustomerOffOutputFileFormat", string.Empty);
         public static string WaterCustomerDbfOutputFileFormat => GetAppSettingByKey("WaterCustomerDbfOutputFileFormat", string.Empty);
         public static string EnergyCustomersReportTemplateFilename => GetAppSettingByKey("EnergyCustomersReportTemplateFilename", string.Empty);
-
         public static int CurrentRegionId => GetAppSettingByKeyAsInt("CurrentRegionId", 100);
 		public static int CheckPrinterPassword => GetAppSettingByKeyAsInt("CheckPrinterPassword", 0);
 		public static int CheckPrinterMaxLineLength => GetAppSettingByKeyAsInt("CheckPrinterMaxLineLength", 10);
 		public static int CheckPrinterCountEmptyLinesAfterCheck => GetAppSettingByKeyAsInt("CheckPrinterCountEmptyLinesAfterCheck", 0);
-
         public static int NdsPercent => GetAppSettingByKeyAsInt("NdsPercent", 0);
-
         public static string ChecksFilename => GetAppSettingByKey("ChecksFilename", string.Empty);
+        public static bool IsShowWaterPayments => GetAppSettingByKeyAsBool("IsShowWaterPayments", false);
 
         private static string GetAppSettingByKey(string key, string defaultValue)
 		{

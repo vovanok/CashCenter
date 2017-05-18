@@ -12,6 +12,8 @@ namespace CashCenter.IvEnergySales
         public MainWindow()
 		{
 			InitializeComponent();
+
+            tiWaterPayment.Visibility = Config.IsShowWaterPayments ? Visibility.Visible : Visibility.Hidden;
         }
 
         #region Menu events handlers
