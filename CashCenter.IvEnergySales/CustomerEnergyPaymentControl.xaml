@@ -15,7 +15,7 @@
         </Style>
     </UserControl.Resources>
     <StackPanel>
-        <GroupBox x:Name="gbPrivateInfo" Header="Лицевой счет" Height="203">
+        <GroupBox x:Name="gbPrivateInfo" Header="Лицевой счет" Height="237">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -28,12 +28,13 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Label Content="Отделение" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                 <local:DepartmentSelectorControl x:Name="controlDeparmentSelector" Grid.Column="1" Grid.Row="0" DepartmentChanged="On_controlDeparmentSelector_DepartmentChanged" />
 
-                <Label Content="Номер лицевого счета" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Номер лицевого счета" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
                 <Grid Grid.Column="1" Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
@@ -53,9 +54,12 @@
                 <Viewbox Grid.Column="1" Grid.Row="3" >
                     <Label x:Name="lblCustomerAddress" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
-
-                <Label Content="Адрес эл. почты плательщика" Grid.Column="0" Grid.Row="4" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                <TextBox x:Name="tbCustomerEmail" Grid.Column="1" Grid.Row="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                
+                <Label Content="Статус плательщика" Grid.Column="0" Grid.Row="4" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label x:Name="lblCustomerStatus" Grid.Column="1" Grid.Row="4" VerticalContentAlignment="Center"/>
+                
+                <Label Content="Адрес эл. почты плательщика" Grid.Column="0" Grid.Row="5" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="tbCustomerEmail" Grid.Column="1" Grid.Row="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             </Grid>
         </GroupBox>
         <GroupBox x:Name="gbPaymentInfo" Header="Оплата">

@@ -40,6 +40,11 @@ namespace CashCenter.Common
                     {
                         BufferFilename = GenerateBufferFilename();
                         DeleteFileIfExist(BufferFilename);
+
+                        var directory = Path.GetDirectoryName(BufferFilename);
+                        if (!Directory.Exists(directory))
+                            Directory.CreateDirectory(directory);
+
                         break;
                     }
             }

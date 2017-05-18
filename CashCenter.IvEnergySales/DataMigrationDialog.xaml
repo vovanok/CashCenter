@@ -14,7 +14,7 @@
             <TabItem Header="Импорт из DBF">
                 <local:CustomerDbfImportControl />
             </TabItem>            
-            <TabItem Header="Импорт из Зевса">
+            <TabItem Header="Импорт из Зевса" Visibility="Hidden">
                 <local:CustomerZeusImportControl />
             </TabItem>
         </TabControl>

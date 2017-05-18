@@ -17,6 +17,9 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE = "CDAY";
             public const string ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE = "CNIGHT";
             public const string ENERGY_CUSTOMER_END_BALANCE = "SUMMA";
+            public const string ENERGY_CUSTOMER_NAME = "NAME";
+            public const string ENERGY_CUSTOMER_ADDRESS = "ADDRESS";
+            public const string ENERGY_CUSTOMER_ISCLOSED = "ISCLOSED";
 
             public const string WATER_CUSTOMER_NUMBER = "SCHET";
             public const string WATER_CUSTOMER_NAME = "FIO";
@@ -55,20 +58,8 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string TYPE_CHARACTER6 = "Character(6)";
             public const string TYPE_NUMERIC = "Numeric";
 
-            private static readonly string GET_ENERGY_CUSTOMERS =
-                $@"select {ENERGY_CUSTOMER_DEPARTMENT_CODE}, {ENERGY_CUSTOMER_ID}, {ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE}, {ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE}, {ENERGY_CUSTOMER_END_BALANCE}
-                   from {{0}}";
-
-            private static readonly string GET_WATER_CUSTOMERS =
-                $@"select {WATER_CUSTOMER_NUMBER}, {WATER_CUSTOMER_NAME}, {WATER_CUSTOMER_ADDRESS}, {WATER_CUSTOMER_COUNTER_NUMBER1}, {WATER_CUSTOMER_COUNTER_NUMBER2}, {WATER_CUSTOMER_COUNTER_NUMBER3}
-                   from {{0}}";
-
-            private static readonly string GET_ARTICLES =
-                $@"select {ARTICLES_DATA}, {ARTICLES_CODE}, {ARTICLES_NAME}, {ARTICLES_BARCODE}, {ARTICLES_PRICE}
-                   form {{0}}";
-
-            private static readonly string ADD_WATER_CUSTOMER_PAYMENTS_PRE =
-                $@"insert into {{0}} values";
+            private const string GET_ITEMS = "select * from {0}";
+            private const string ADD_WATER_CUSTOMER_PAYMENTS_PRE = "insert into {0} values";
 
             private static readonly string CREATE_WATER_CUSTOMER_PAYMENTS =
                 $@"create table {{0}} (
@@ -90,19 +81,9 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     [{WATER_CUSTOMER_PAYMENT_COUNTER_COST4}] {TYPE_NUMERIC},
                     [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4}] {TYPE_NUMERIC})";
 
-            public static string GetEnergyCustomersQuery(string tableName)
+            public static string GetItemsQuery(string tableName)
             {
-                return string.Format(GET_ENERGY_CUSTOMERS, tableName);
-            }
-
-            public static string GetWaterCustomersQuery(string tableName)
-            {
-                return string.Format(GET_WATER_CUSTOMERS, tableName);
-            }
-
-            public static string GetArticlesQuery(string tableName)
-            {
-                return string.Format(GET_ARTICLES, tableName);
+                return string.Format(GET_ITEMS, tableName);
             }
 
             public static string GetAddWaterCustomerPaymentsPreQuery(string tableName)
@@ -136,7 +117,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetEnergyCustomersQuery(dbfName);
+                command.CommandText = Sql.GetItemsQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 
@@ -144,13 +125,13 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 while (dataReader.Read())
                 {
                     int number = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_ID);
-                    string name = string.Empty; // TODO
-                    string address = string.Empty; // TODO
-                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_DEPARTMENT_CODE);
+                    string name = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_NAME) ?? string.Empty;
+                    string address = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_ADDRESS) ?? string.Empty;
+                    string departamentCode = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_DEPARTMENT_CODE) ?? string.Empty;
                     int dayValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_DAY_VALUE);
                     int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE);
                     decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_END_BALANCE);
-                    bool isClosed = false; // TODO
+                    bool isClosed = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_ISCLOSED) == "1";
 
                     energyCustomers.Add(new DbfEnergyCustomer(number, name, address, departamentCode, dayValue, nightValue, balance, isClosed));
                 }
@@ -174,7 +155,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetWaterCustomersQuery(dbfName);
+                command.CommandText = Sql.GetItemsQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 
@@ -210,7 +191,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetArticlesQuery(dbfName);
+                command.CommandText = Sql.GetItemsQuery(dbfName);
 
                 var dataReader = command.ExecuteReader();
 

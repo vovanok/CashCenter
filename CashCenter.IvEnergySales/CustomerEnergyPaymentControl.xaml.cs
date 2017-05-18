@@ -76,8 +76,10 @@ namespace CashCenter.IvEnergySales
                 if (cbPaymentReasons.Items.Count > 0)
                     cbPaymentReasons.SelectedIndex = 0;
 
-                lblCustomerName.Content = customerSalesContext?.Value?.Customer?.Name ?? string.Empty;
-                lblCustomerAddress.Content = customerSalesContext?.Value?.Customer?.Address ?? string.Empty;
+                var customer = customerSalesContext?.Value?.Customer;
+                lblCustomerName.Content = customer?.Name ?? string.Empty;
+                lblCustomerAddress.Content = customer?.Address ?? string.Empty;
+                lblCustomerStatus.Content = customer != null ? (!customer.IsClosed ? "Открыт" : "Закрыт") : string.Empty;
                 lblDayPreviousCounterValue.Content = tbDayCurrentCounterValue.Text = (IsSalesContextReady ? PreviousDayCounterValue : 0).ToString();
                 lblNightPreviousCounterValue.Content = tbNightCurrentCounterValue.Text = (IsSalesContextReady ? PreviousNightCounterValue : 0).ToString();
                 tbCost.Text = IsSalesContextReady ? DebtBalance.ToString("0.00") : string.Empty;

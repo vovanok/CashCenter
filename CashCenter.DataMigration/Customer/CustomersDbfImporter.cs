@@ -35,10 +35,10 @@ namespace CashCenter.DataMigration
 
             return new Customer
             {
-                DepartmentId = department.Id,
+                DepartmentId = TargetDepartment.Id,
                 Number = dbfCustomer.Number,
-                Name = string.Empty,
-                Address = string.Empty,
+                Name = dbfCustomer.Name,
+                Address = dbfCustomer.Address,
                 DayValue = dbfCustomer.DayValue,
                 NightValue = dbfCustomer.NightValue,
                 Balance = dbfCustomer.Balance,
