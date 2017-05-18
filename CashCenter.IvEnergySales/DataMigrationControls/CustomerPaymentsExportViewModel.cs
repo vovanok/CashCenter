@@ -1,9 +1,10 @@
-﻿using CashCenter.Common;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using CashCenter.Common;
 using CashCenter.DataMigration;
 using CashCenter.DataMigration.WaterCustomers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
@@ -11,9 +12,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
     {
         public IEnumerable<ExportTargetItem> ExportTargets { get; } = new[]
             {
-                new ExportTargetItem("Платежи по электроэнергии -> OFF", new CustomerPaymentsOffExporter()),
-                new ExportTargetItem("Платежи по электроэнергии -> Word", new CustomerPaymentsWordReportExporter()),
-                //new ExportTargetItem("Платежи по электроэнергии -> Зевс", new CustomerPaymentsRemoteExporter()) // TODO: need debug
+                new ExportTargetItem("Платежи по электроэнергии -> OFF", new EnergyCustomerPaymentsOffExporter()),
+                new ExportTargetItem("Платежи по электроэнергии -> Word", new EnergyCustomerPaymentsWordExporter()),
                 new ExportTargetItem("Платежи за воду -> DBF", new WaterCustomerPaymentsDbfExporter())
             };
 
@@ -51,25 +51,25 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
 
             try
             {
-                Logger.Info($"Экспорт \"{SelectedExportTarget.Value.Name}\" с {beginDatetime} по {endDatetime}");
+                Log.Info($"Экспорт \"{SelectedExportTarget.Value.Name}\" с {beginDatetime} по {endDatetime}");
 
                 var exportResult = SelectedExportTarget.Value.Exporter.Export(beginDatetime, endDatetime);
                 if (exportResult.SuccessCount == 0 && exportResult.FailCount == 0)
                 {
                     var nothingToExportMessage = "Нет элементов для экспортирования";
-                    Logger.Info(nothingToExportMessage);
+                    Log.Info(nothingToExportMessage);
                     Message.Info(nothingToExportMessage);
                     return;
                 }
 
                 var successResultMessage = $"Экспортировано {exportResult.SuccessCount} из {exportResult.SuccessCount + exportResult.FailCount} элементов.";
-                Logger.Info(successResultMessage);
+                Log.Info(successResultMessage);
                 Message.Info(successResultMessage);
             }
             catch (Exception ex)
             {
                 var errorHeader = $"Ошибка экспорта \"{SelectedExportTarget.Value.Name}\"";
-                Logger.Error(errorHeader, ex);
+                Log.Error(errorHeader, ex);
                 Message.Error(errorHeader);
             }
         }

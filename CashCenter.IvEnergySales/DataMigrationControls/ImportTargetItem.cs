@@ -1,4 +1,4 @@
-﻿using CashCenter.DataMigration;
+﻿using CashCenter.DataMigration.Import;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {

@@ -29,15 +29,15 @@ namespace CashCenter.DataMigration.Providers.Dbf.Entities
             CreationDate = creationDate;
             CustomerNumber = customerNumber;
             Cost = cost;
-            PeriodCode = periodCode;
+            PeriodCode = periodCode ?? string.Empty;
             Penalty = penalty;
-            CounterNumber1 = counterNumber1;
+            CounterNumber1 = counterNumber1 ?? string.Empty;
             CounterValue1 = counterValue1;
-            CounterNumber2 = counterNumber2;
+            CounterNumber2 = counterNumber2 ?? string.Empty;
             CounterValue2 = counterValue2;
-            CounterNumber3 = counterNumber3;
+            CounterNumber3 = counterNumber3 ?? string.Empty;
             CounterValue3 = counterValue3;
-            CounterNumber4 = counterNumber4;
+            CounterNumber4 = counterNumber4 ?? string.Empty;
             CounterValue4 = counterValue4;
         }
     }

@@ -398,7 +398,7 @@ namespace CashCenter.Dal
                     return;
                 }
                 
-                Logger.Error(message, exception);
+                Log.Error(message, exception);
                 return;
             }
 
@@ -412,7 +412,7 @@ namespace CashCenter.Dal
                 }
             }
 
-            Logger.Error($"{message}\n{sbErrorContent}", exception);
+            Log.Error($"{message}\n{sbErrorContent}", exception);
         }
     }
 }

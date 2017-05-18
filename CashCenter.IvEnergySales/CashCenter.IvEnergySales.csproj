@@ -103,24 +103,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ArticlesControl.xaml.cs">
+    <Compile Include="BusinessLogicControls\ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\TextBoxBehavior.cs" />
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Check\WaterCustomerCheck.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="Common\Command.cs" />
+    <Compile Include="Common\ViewModel.cs" />
     <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
-    <Compile Include="CustomerEnergyPaymentControl.xaml.cs">
+    <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml.cs">
       <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomerWaterPaymentControl.xaml.cs">
+    <Compile Include="BusinessLogicControls\CustomerWaterPaymentControl.xaml.cs">
       <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomerWaterPaymentControlViewModel.cs" />
+    <Compile Include="BusinessLogicControls\CustomerWaterPaymentControlViewModel.cs" />
     <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
     <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
-    <Compile Include="DataMigrationControls\MigrationHelper.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
       <DependentUpon>CustomerDbfImportControl.xaml</DependentUpon>
     </Compile>
@@ -128,11 +129,8 @@
     <Compile Include="DataMigrationControls\CustomerPaymentsExportControl.xaml.cs">
       <DependentUpon>CustomerPaymentsExportControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataMigrationControls\CustomerZeusImportControl.xaml.cs">
-      <DependentUpon>CustomerZeusImportControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DataMigrationControls\ImportTargetItem.cs" />
-    <Compile Include="DataMigrationDialog.xaml.cs">
+    <Compile Include="Service\DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="CommonControls\DepartmentSelectorControl.xaml.cs">
@@ -141,31 +139,27 @@
     <Compile Include="CommonControls\FileSelectorControl.xaml.cs">
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\CustomerNotAppliedException.cs" />
     <Compile Include="Exceptions\IncorrectDataException.cs" />
-    <Compile Include="Exceptions\UserException.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="OperationWaiter.cs" />
+    <Compile Include="Common\Message.cs" />
+    <Compile Include="Common\OperationWaiter.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="SettingsDialog.xaml.cs">
+    <Compile Include="Service\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\TextBoxBehavior.cs" />
-    <Compile Include="ViewModel.cs" />
-    <Page Include="ArticlesControl.xaml">
+    <Page Include="BusinessLogicControls\ArticlesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomerEnergyPaymentControl.xaml">
+    <Page Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomerWaterPaymentControl.xaml">
+    <Page Include="BusinessLogicControls\CustomerWaterPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,11 +171,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DataMigrationControls\CustomerZeusImportControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DataMigrationDialog.xaml">
+    <Page Include="Service\DataMigrationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -202,12 +192,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Check\EnergyCustomerCheck.cs" />
-    <Compile Include="Logging\MessageBoxLog.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsDialog.xaml">
+    <Page Include="Service\SettingsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

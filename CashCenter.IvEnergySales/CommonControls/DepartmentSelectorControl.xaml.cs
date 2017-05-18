@@ -1,10 +1,12 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.ComponentModel;
+using CashCenter.Dal;
+using CashCenter.Common;
+using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales
 {
@@ -35,6 +37,10 @@ namespace CashCenter.IvEnergySales
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+#if DEBUG
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                return;
+#endif
             try
             {
                 Region = DalController.Instance.Regions.FirstOrDefault(region => region.Id == Config.CurrentRegionId);
@@ -57,7 +63,9 @@ namespace CashCenter.IvEnergySales
             }
             catch (Exception ex)
             {
-                Log.ErrorWithException("Ошибка загрузки департаметов.", ex);
+                var message = "Ошибка загрузки департаметов.";
+                Log.Error(message, ex);
+                Message.Error(message);
             }
         }
 

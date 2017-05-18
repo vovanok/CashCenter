@@ -46,17 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonExtensions.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="DataTimeExtension.cs" />
     <Compile Include="Exceptions\CustomerNotAppliedException.cs" />
     <Compile Include="Exceptions\IncorrectDataException.cs" />
     <Compile Include="FileBuffer.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Observed.cs" />
     <Compile Include="StringUtils.cs" />
-    <Compile Include="DbUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">

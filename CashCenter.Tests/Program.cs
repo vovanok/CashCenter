@@ -28,7 +28,7 @@ namespace CashCenter.Tests
                 {
                     try
                     {
-                        Logger.Info($"Печать чека {i}");
+                        Log.Info($"Печать чека {i}");
                         Console.WriteLine($"Печать чека {i}");
 
                         CheckPrinter.Print(new EnergyCustomerCheck(

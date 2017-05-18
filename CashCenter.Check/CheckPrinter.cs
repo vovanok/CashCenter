@@ -42,7 +42,7 @@ namespace CashCenter.Check
         {
             try
             {
-                Logger.Info(">>> НАЧАЛО ПЕЧАТИ ЧЕКА");
+                Log.Info(">>> НАЧАЛО ПЕЧАТИ ЧЕКА");
 
                 cashMachine.OpenSessionIfNot();
                 cashMachine.Connect();
@@ -58,7 +58,7 @@ namespace CashCenter.Check
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Чек по email {check.Email} не отправлен", ex);
+                    Log.Error($"Чек по email {check.Email} не отправлен", ex);
                 }
 
                 foreach (var commonLine in check.GetCommonLines())
@@ -85,11 +85,11 @@ namespace CashCenter.Check
 
                 cashMachine.Disconnect();
 
-                Logger.Info(">>> ПЕЧАТЬ ЧЕКА ЗАВЕРШЕНА");
+                Log.Info(">>> ПЕЧАТЬ ЧЕКА ЗАВЕРШЕНА");
             }
             catch(Exception ex)
             {
-                Logger.Error("Ошибка печати чека", ex);
+                Log.Error("Ошибка печати чека", ex);
                 throw ex;
             }
         }

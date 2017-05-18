@@ -32,18 +32,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=5.9.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
-      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.5.9.0\lib\net40-client\FirebirdSql.Data.FirebirdClient.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-    </Reference>
     <Reference Include="NetOffice, Version=1.7.3.0, Culture=neutral, PublicKeyToken=acf636d62c39f8f5, processorArchitecture=MSIL">
       <HintPath>..\packages\NetOffice.Core.1.7.3.0\lib\net45\NetOffice.dll</HintPath>
       <Private>True</Private>
@@ -75,18 +63,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseDbfImporter.cs" />
+    <Compile Include="Import\BaseDbfImporter.cs" />
     <Compile Include="BaseExporter.cs" />
-    <Compile Include="BaseImporter.cs" />
-    <Compile Include="BaseRemoteImporter.cs" />
-    <Compile Include="Customer\CustomerPaymentsOffExporter.cs" />
-    <Compile Include="Customer\CustomerPaymentsRemoteExporter.cs" />
-    <Compile Include="Customer\CustomerPaymentsWordReportExporter.cs" />
-    <Compile Include="Customer\CustomersDbfImporter.cs" />
-    <Compile Include="Customer\CustomersRemoteImporter.cs" />
+    <Compile Include="Import\BaseImporter.cs" />
+    <Compile Include="Customer\EnergyCustomerPaymentsOffExporter.cs" />
+    <Compile Include="Customer\EnergyCustomerPaymentsWordExporter.cs" />
+    <Compile Include="Customer\EnergyCustomersDbfImporter.cs" />
     <Compile Include="IExporter.cs" />
-    <Compile Include="IImporter.cs" />
-    <Compile Include="IRemoteImporter.cs" />
+    <Compile Include="Import\IImporter.cs" />
     <Compile Include="Providers\Dbf\DbfRegistryController.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticle.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticlesSet.cs" />
@@ -94,23 +78,8 @@
     <Compile Include="ExportResult.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfWaterCustomer.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfWaterCustomerPayment.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusCounterValues.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusCustomer.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusCustomerCounters.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusDebt.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusMeter.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusPay.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusPayJournal.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusPaymentKind.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusPaymentReason.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusWarehouse.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusWarehouseCategory.cs" />
-    <Compile Include="Providers\Firebird\Entities\ZeusWarehousePrice.cs" />
-    <Compile Include="Providers\Firebird\ZeusDbController.cs" />
-    <Compile Include="Providers\Firebird\ZeusDbController.Sql.cs" />
-    <Compile Include="IDbfImporter.cs" />
-    <Compile Include="ImportResult.cs" />
-    <Compile Include="Customer\PaymentReasonsRemoteImporter.cs" />
+    <Compile Include="Import\IDbfImporter.cs" />
+    <Compile Include="Import\ImportResult.cs" />
     <Compile Include="Providers\Off\Entities\OffCustomerPayment.cs" />
     <Compile Include="Providers\Off\OffRegistryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,14 +100,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
 </Project>

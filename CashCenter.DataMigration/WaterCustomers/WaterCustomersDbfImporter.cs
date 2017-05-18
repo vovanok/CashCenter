@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using CashCenter.Dal;
+using CashCenter.DataMigration.Import;
 using CashCenter.DataMigration.Providers.Dbf.Entities;
-using System.Linq;
 
 namespace CashCenter.DataMigration.WaterCustomers
 {

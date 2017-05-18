@@ -1,11 +1,12 @@
-﻿using CashCenter.Check;
-using CashCenter.Common;
-using CashCenter.Dal;
-using CashCenter.IvEnergySales.Check;
-using CashCenter.IvEnergySales.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using CashCenter.Dal;
+using CashCenter.Check;
+using CashCenter.Common;
+using CashCenter.IvEnergySales.Check;
+using CashCenter.IvEnergySales.Common;
+using CashCenter.IvEnergySales.Exceptions;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
@@ -33,7 +34,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             double counter4Value, decimal penalty, decimal cost, string description, int fiscalNumber, bool isWithoutCheck)
         {
             if (Customer == null)
-                throw new CustomerNotAppliedException();
+                throw new Exception("Отсутствует плательщик");
 
             var errors = new List<string>();
 
@@ -111,7 +112,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             catch (Exception ex)
             {
                 var errorMessage = "Ошибка печати чека";
-                Logger.Error(errorMessage, ex);
+                Log.Error(errorMessage, ex);
                 Message.Error(errorMessage);
                 return false;
             }

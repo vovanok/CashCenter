@@ -1,10 +1,10 @@
-﻿using CashCenter.Common;
-using CashCenter.DataMigration.Providers.Dbf.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using System.Linq;
+using CashCenter.Common;
+using CashCenter.DataMigration.Providers.Dbf.Entities;
 
 namespace CashCenter.DataMigration.Providers.Dbf
 {

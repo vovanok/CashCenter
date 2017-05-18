@@ -1,7 +1,7 @@
-﻿using CashCenter.DataMigration.Providers.Word.Entities;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using CashCenter.DataMigration.Providers.Word.Entities;
 
 namespace CashCenter.DataMigration.Providers.Word
 {

@@ -1,10 +1,14 @@
-﻿using CashCenter.Common;
-using CashCenter.DataMigration;
-using CashCenter.DataMigration.WaterCustomers;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.IO;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 using CashCenter.Dal;
+using CashCenter.Common;
+using CashCenter.DataMigration;
+using CashCenter.DataMigration.Import;
+using CashCenter.DataMigration.WaterCustomers;
+using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
@@ -12,7 +16,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
     {
         public IEnumerable<ImportTargetItem> ImportTargets { get; } = new[]
             {
-                new ImportTargetItem("Потребители электроэнергии", new CustomersDbfImporter(), true),
+                new ImportTargetItem("Потребители электроэнергии", new EnergyCustomersDbfImporter(), true),
                 new ImportTargetItem("Потребители воды", new WaterCustomersDbfImporter(), false)
             };
 
@@ -50,12 +54,10 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 return;
             }
 
-            var dbfImporter = SelectedImportTarget.Value.Importer as IDbfImporter;
-            if (dbfImporter != null)
+            if (SelectedImportTarget.Value.Importer is IDbfImporter dbfImporter)
                 dbfImporter.DbfFilename = DbfFilename.Value;
 
-            var energyCustomerDbfImporter = SelectedImportTarget.Value.Importer as CustomersDbfImporter;
-            if (energyCustomerDbfImporter != null)
+            if (SelectedImportTarget.Value.Importer is EnergyCustomersDbfImporter energyCustomerDbfImporter)
             {
                 if (SelectedDepartment.Value == null)
                 {
@@ -66,10 +68,42 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 energyCustomerDbfImporter.TargetDepartment = SelectedDepartment.Value;
             }
 
-            var resultStatistic = MigrationHelper.ImportItem(SelectedImportTarget.Value);
+            var resultStatistic = ImportItem(SelectedImportTarget.Value);
 
-            Logger.Info(resultStatistic);
+            Log.Info(resultStatistic);
             Message.Info(resultStatistic);
+        }
+
+        private string ImportItem(ImportTargetItem importTarget)
+        {
+            var resultStatistic = new StringBuilder();
+            var waiter = new OperationWaiter();
+            using (waiter)
+            {
+                try
+                {
+                    Log.Info($"Импорт \"{importTarget.Name}\"");
+
+                    var importResult = importTarget.Importer.Import();
+                    resultStatistic.AppendLine($"Результат импортирования \"{importTarget.Name}\"");
+                    resultStatistic.AppendLine($"  Добавлено: {importResult.AddedCount}");
+                    resultStatistic.AppendLine($"  Обновлено: {importResult.UpdatedCount}");
+                    resultStatistic.AppendLine($"  Удалено: {importResult.DeletedCount}");
+                }
+                catch (Exception ex)
+                {
+                    var errorHead = $"Ошибка импортирования \"{importTarget.Name}\"";
+
+                    Log.Error($"{errorHead}", ex);
+                    resultStatistic.AppendLine(errorHead);
+                }
+                finally
+                {
+                    resultStatistic.AppendLine($"Затрачено времени: {waiter.TimeFromStart}");
+                }
+            }
+
+            return resultStatistic.ToString();
         }
     }
 }

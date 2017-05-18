@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.Exceptions
 {
-    public class IncorrectDataException : UserException
+    public class IncorrectDataException : Exception
     {
         public IEnumerable<string> DataNames { get; private set; }
 

@@ -1,7 +1,8 @@
-﻿using DrvFRLib;
-using System;
-using CashCenter.Common;
+﻿using System;
 using System.IO;
+using DrvFRLib;
+using CashCenter.Common;
+
 
 namespace CashCenter.Check
 {
@@ -198,12 +199,12 @@ namespace CashCenter.Check
 
         private void LogInfo(string message)
         {
-            Logger.Info($"ККМ: {message}");
+            Log.Info($"ККМ: {message}");
         }
 
         private void LogError(string message)
         {
-            Logger.Error($"Ошибка ККМ: {message}");
+            Log.Error($"Ошибка ККМ: {message}");
         }
 	}
 }

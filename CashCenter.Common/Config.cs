@@ -4,7 +4,6 @@ namespace CashCenter.Common
 {
 	public static class Config
 	{
-        public static string DbConnectionStringFormat => GetAppSettingByKey("DbConnectionStringFormat", string.Empty);
         public static string DbfConnectionStringFormat => GetAppSettingByKey("DbfConnectionStringFormat", string.Empty);
         public static string OutputDirectory => GetAppSettingByKey("OutputDirectory", string.Empty);
         public static string EnergyCustomerOffOutputFileFormat => GetAppSettingByKey("EnergyCustomerOffOutputFileFormat", string.Empty);

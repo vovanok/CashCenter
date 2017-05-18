@@ -1,5 +1,6 @@
 using CashCenter.Check;
 using CashCenter.Common;
+using CashCenter.IvEnergySales.Common;
 using System;
 using System.Windows;
 
@@ -35,7 +36,7 @@ namespace CashCenter.IvEnergySales
             catch (Exception ex)
             {
                 Message.Error(CHECK_PRINTER_NOTREADY_MESSAGE);
-                Logger.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
+                Log.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
             }
         }
 
@@ -48,7 +49,7 @@ namespace CashCenter.IvEnergySales
                 customerControl.SettingsWereChanged();
         }
 
-        private void miDataMigration_Click(object sender, RoutedEventArgs e)
+        private void On_miDataMigration_Click(object sender, RoutedEventArgs e)
         {
             var dataMigrationDialog = new DataMigrationDialog();
             dataMigrationDialog.ShowDialog();
@@ -66,7 +67,7 @@ namespace CashCenter.IvEnergySales
             catch (Exception ex)
             {
                 Message.Error(CHECK_PRINTER_NOTREADY_MESSAGE);
-                Logger.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
+                Log.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
             }
         }
 
@@ -82,7 +83,7 @@ namespace CashCenter.IvEnergySales
             catch (Exception ex)
             {
                 Message.Error(CHECK_PRINTER_NOTREADY_MESSAGE);
-                Logger.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
+                Log.Error(CHECK_PRINTER_NOTREADY_MESSAGE, ex);
             }
         }
 

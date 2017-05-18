@@ -1,45 +1,31 @@
+﻿using log4net;
 using System;
+using System.IO;
 
 namespace CashCenter.Common
 {
-	public abstract class Log
-	{
-		protected enum LogMessageType
-		{
-			Info,
-			Warning,
-			Error
-		}
+    public class Log
+    {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Log));
 
-        private static Log instance;
-
-        public static void SetLogger(Log logger)
+        static Log()
         {
-            instance = logger;
+            log4net.Config.XmlConfigurator.Configure(new FileInfo("log4net.config"));
         }
 
-		public static void Info(string message)
-		{
-			instance?.InfoLog(message);
-		}
-
-		public static void Warning(string message)
-		{
-			instance?.WarningLog(message);
-		}
-
-		public static void Error(string message)
-		{
-			instance?.ErrorLog(message);
-		}
-
-        public static void ErrorWithException(string headerMessage, Exception exception)
+        public static void Info(string message)
         {
-            instance?.ErrorLog($"{headerMessage}\n\nИсключение: {exception.Message}\n\nТрассировка стека:\n{exception.StackTrace}");
+            log.Info(message);
         }
 
-		protected abstract void InfoLog(string message);
-		protected abstract void WarningLog(string message);
-		protected abstract void ErrorLog(string message);
-	}
+        public static void Error(string message)
+        {
+            log.Error(message);
+        }
+
+        public static void Error(string message, Exception exception)
+        {
+            log.Error(message, exception);
+        }
+    }
 }

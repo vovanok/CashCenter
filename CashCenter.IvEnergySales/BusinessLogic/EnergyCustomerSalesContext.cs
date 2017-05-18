@@ -1,10 +1,11 @@
-﻿using CashCenter.Check;
+﻿using CashCenter.Dal;
+using CashCenter.Check;
 using CashCenter.Common;
-using CashCenter.Dal;
 using CashCenter.IvEnergySales.Check;
+using CashCenter.IvEnergySales.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
@@ -37,7 +38,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             catch(Exception ex)
             {
                 var message = "Ошибка поиска плательщика за электроэнергию";
-                Logger.Error(message, ex);
+                Log.Error(message, ex);
                 Message.Error(message);
             }
         }
@@ -53,12 +54,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             if (Customer.Email == email)
                 return;
 
-            Logger.Info("Изменение email");
+            Log.Info("Изменение email");
 
             if (!StringUtils.IsValidEmail(email))
             {
                 var message = $"Адрес электронной почты имеет неверный формат ({email})";
-                Logger.Error(message);
+                Log.Error(message);
                 Message.Error(message);
                 return;
             }
@@ -66,19 +67,19 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             Customer.Email = email;
             DalController.Instance.Save();
 
-            Logger.Info("Изменение email успешно завершено");
+            Log.Info("Изменение email успешно завершено");
         }
 
         public void Pay(string email, int dayValue, int nightValue, decimal cost, int reasonId, string description, bool isWithoutCheck)
         {
             try
             {
-                Logger.Info($"Платеж за электроэнергию: email = {email}, dayValue = {dayValue}; nightValue = {nightValue}; cost = {cost}; reasonId = {reasonId}; description = {description}");
+                Log.Info($"Платеж за электроэнергию: email = {email}, dayValue = {dayValue}; nightValue = {nightValue}; cost = {cost}; reasonId = {reasonId}; description = {description}");
 
                 if (!IsCustomerFinded)
                 {
                     var message = $"{PAY_ERROR_PREFIX}\nОтсутствует плательщик.";
-                    Logger.Error(message);
+                    Log.Error(message);
                     Message.Error(message);
                     return;
                 }
@@ -98,7 +99,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 if (!payment.IsValid(Customer, out string validationErrorMessage))
                 {
                     var message = $"{PAY_ERROR_PREFIX}\n{validationErrorMessage}";
-                    Logger.Error(message);
+                    Log.Error(message);
                     Message.Error(message);
                     return;
                 }
@@ -115,7 +116,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             catch(Exception ex)
             {
                 var message = "Ошибка создание платежа за электроэнергию";
-                Logger.Error(message, ex);
+                Log.Error(message, ex);
                 Message.Error(message);
             }
         }
@@ -137,7 +138,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             catch (Exception ex)
             {
                 var errorMessage = "Ошибка печати чека";
-                Logger.Error(errorMessage, ex);
+                Log.Error(errorMessage, ex);
                 Message.Error(errorMessage);
                 return false;
             }

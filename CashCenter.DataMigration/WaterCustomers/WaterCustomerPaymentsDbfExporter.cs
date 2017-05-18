@@ -1,11 +1,11 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
-using CashCenter.DataMigration.Providers.Dbf;
-using CashCenter.DataMigration.Providers.Dbf.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CashCenter.Dal;
+using CashCenter.Common;
+using CashCenter.DataMigration.Providers.Dbf;
+using CashCenter.DataMigration.Providers.Dbf.Entities;
 
 namespace CashCenter.DataMigration.WaterCustomers
 {

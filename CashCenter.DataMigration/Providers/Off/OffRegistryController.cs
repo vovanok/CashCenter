@@ -1,8 +1,8 @@
-﻿using CashCenter.Common;
-using CashCenter.DataMigration.Providers.Off.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CashCenter.Common;
+using CashCenter.DataMigration.Providers.Off.Entities;
 
 namespace CashCenter.DataMigration.Providers.Off
 {
