@@ -30,10 +30,6 @@ namespace CashCenter.DataMigration
 
         protected override Customer GetTargetItemBySource(DbfEnergyCustomer dbfCustomer)
         {
-            var department = DalController.Instance.GetDepartmentByCode(dbfCustomer.DepartmentCode);
-            if (department == null)
-                return null;
-
             return new Customer
             {
                 DepartmentId = TargetDepartment.Id,

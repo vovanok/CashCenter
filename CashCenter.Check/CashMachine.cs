@@ -1,14 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using DrvFRLib;
 using CashCenter.Common;
-
 
 namespace CashCenter.Check
 {
     public class CashMachine
     {
         public DrvFR Driver { get; private set; }
+
+        private CheckLinesEncodingConverter encoder = new CheckLinesEncodingConverter(Encoding.UTF8);
 
         public CashMachine()
         {
@@ -126,7 +128,7 @@ namespace CashCenter.Check
 			if (Driver == null)
 				return;
 
-			Driver.StringForPrinting = line;
+            Driver.StringForPrinting = encoder.EncodeString(line);
 			Driver.PrintString();
 
 			CheckError();

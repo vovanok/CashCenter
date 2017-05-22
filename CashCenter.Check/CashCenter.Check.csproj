@@ -44,6 +44,7 @@
     <Compile Include="Check.cs" />
     <Compile Include="CashMachine.cs" />
     <Compile Include="CheckException.cs" />
+    <Compile Include="CheckLinesEncodingConverter.cs" />
     <Compile Include="CheckPrinter.cs" />
     <Compile Include="DescriptorModel\CheckDescriptor.cs" />
     <Compile Include="DescriptorModel\CheckLineDescriptor.cs" />
