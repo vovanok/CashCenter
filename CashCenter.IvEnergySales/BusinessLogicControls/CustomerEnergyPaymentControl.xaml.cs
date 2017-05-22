@@ -251,48 +251,6 @@ namespace CashCenter.IvEnergySales
 
         #region Text boxes focus manipulation
 
-        private void On_tbDayCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
-        {
-            tbDayCurrentCounterValue.SelectAll();
-        }
-
-        private void On_tbDayCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!tbDayCurrentCounterValue.IsKeyboardFocusWithin)
-            {
-                e.Handled = true;
-                tbDayCurrentCounterValue.Focus();
-            }
-        }
-
-        private void On_tbNightCurrentCounterValue_GotFocus(object sender, RoutedEventArgs e)
-        {
-            tbNightCurrentCounterValue.SelectAll();
-        }
-
-        private void On_tbNightCurrentCounterValue_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!tbNightCurrentCounterValue.IsKeyboardFocusWithin)
-            {
-                e.Handled = true;
-                tbNightCurrentCounterValue.Focus();
-            }
-        }
-
-        private void On_tbCost_GotFocus(object sender, RoutedEventArgs e)
-        {
-            tbCost.SelectAll();
-        }
-
-        private void On_tbCost_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!tbCost.IsKeyboardFocusWithin)
-            {
-                e.Handled = true;
-                tbCost.Focus();
-            }
-        }
-
         private void On_tbDayCurrentCounterValue_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)

@@ -4,8 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+             xmlns:behaviors="clr-namespace:CashCenter.IvEnergySales.Behaviors"
              mc:Ignorable="d" Loaded="UserControl_Loaded">
     <UserControl.Resources>
+        <Style TargetType="Label" x:Key="PropertyLabel">
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Grid.Column" Value="0"/>
+        </Style>
         <Style TargetType="Button" x:Key="MainButton">
             <Setter Property="Margin" Value="15,5,15,5"/>
             <Setter Property="Height" Value="30"/>
@@ -31,34 +37,36 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Отделение" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Отделение" Style="{StaticResource PropertyLabel}"/>
                 <local:DepartmentSelectorControl x:Name="controlDeparmentSelector" Grid.Column="1" Grid.Row="0" DepartmentChanged="On_controlDeparmentSelector_DepartmentChanged" />
 
-                <Label Content="Номер лицевого счета" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Номер лицевого счета" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                 <Grid Grid.Column="1" Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="tbCustomerNumber" KeyUp="On_tbCustomerNumber_KeyUp" Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="tbCustomerNumber" KeyUp="On_tbCustomerNumber_KeyUp" 
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
                     <Button x:Name="btnFindCustomer" Content="Поиск" Click="On_btnFindCustomer_Click" Grid.Column="1"/>
                 </Grid>
 
-                <Label Content="Имя плательщика" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Имя плательщика" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
                 <Viewbox Grid.Column="1" Grid.Row="2">
                     <Label x:Name="lblCustomerName" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
 
-                <Label Content="Адрес плательщика" Grid.Column="0" Grid.Row="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                <Label Content="Адрес плательщика" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
                 <Viewbox Grid.Column="1" Grid.Row="3" >
                     <Label x:Name="lblCustomerAddress" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
-                
-                <Label Content="Статус плательщика" Grid.Column="0" Grid.Row="4" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+
+                <Label Content="Статус плательщика" Grid.Row="4" Style="{StaticResource PropertyLabel}"/>
                 <Label x:Name="lblCustomerStatus" Grid.Column="1" Grid.Row="4" VerticalContentAlignment="Center"/>
-                
-                <Label Content="Адрес эл. почты плательщика" Grid.Column="0" Grid.Row="5" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+
+                <Label Content="Адрес эл. почты плательщика" Grid.Row="5" Style="{StaticResource PropertyLabel}"/>
                 <TextBox x:Name="tbCustomerEmail" Grid.Column="1" Grid.Row="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             </Grid>
         </GroupBox>
@@ -78,22 +86,30 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="День" Grid.Column="0" Grid.Row="1" FontWeight="Bold" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Label Content="Ночь" Grid.Column="0" Grid.Row="2" FontWeight="Bold" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
+                    <Label Content="День" Grid.Row="1" FontWeight="Bold" Style="{StaticResource PropertyLabel}"/>
+                    <Label Content="Ночь" Grid.Row="2" FontWeight="Bold" Style="{StaticResource PropertyLabel}"/>
 
-                    <Label FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <Label FontWeight="Bold" Grid.Column="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Предыдущие показания"/>
                     </Label>
                     <Label x:Name="lblDayPreviousCounterValue" Content="0" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                     <Label x:Name="lblNightPreviousCounterValue" Content="0" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
-                    <Label FontWeight="Bold" Grid.Column="2" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <Label FontWeight="Bold" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Текущие показания"/>
                     </Label>
-                    <TextBox x:Name="tbDayCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbDayCurrentCounterValue_TextChanged" GotFocus="On_tbDayCurrentCounterValue_GotFocus" PreviewMouseLeftButtonDown="On_tbDayCurrentCounterValue_PreviewMouseLeftButtonDown" KeyDown="On_tbDayCurrentCounterValue_KeyDown"/>
-                    <TextBox x:Name="tbNightCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="On_tbNightCurrentCounterValue_TextChanged" PreviewMouseLeftButtonDown="On_tbNightCurrentCounterValue_PreviewMouseLeftButtonDown" GotFocus="On_tbNightCurrentCounterValue_GotFocus" KeyDown="On_tbNightCurrentCounterValue_KeyDown"/>
+                    <TextBox x:Name="tbDayCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="1"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             TextChanged="On_tbDayCurrentCounterValue_TextChanged"
+                             KeyDown="On_tbDayCurrentCounterValue_KeyDown"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
+                    <TextBox x:Name="tbNightCurrentCounterValue" Text="0" Grid.Column="2" Grid.Row="2"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             TextChanged="On_tbNightCurrentCounterValue_TextChanged"
+                             KeyDown="On_tbNightCurrentCounterValue_KeyDown"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
 
-                    <Label FontWeight="Bold" Grid.Column="3" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                    <Label FontWeight="Bold" Grid.Column="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Разница"/>
                     </Label>
                     <Label x:Name="lblDayDeltaCounterValue" Content="0" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -114,13 +130,16 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="Основание для оплаты" Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Label Content="Сумма" Grid.Column="0" Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Label Content="Примечание" Grid.Column="0" Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"/>
-                    <Button x:Name="btnPay" Content="Оплатить" Grid.Column="0" Grid.Row="3" Click="On_btnPay_Click" Style="{StaticResource MainButton}"/>
+                    <Label Content="Основание для оплаты" Style="{StaticResource PropertyLabel}"/>
+                    <Label Content="Сумма" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
+                    <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
+                    <Button x:Name="btnPay" Content="Оплатить" Grid.Row="3" Click="On_btnPay_Click" Style="{StaticResource MainButton}"/>
 
                     <ComboBox x:Name="cbPaymentReasons" DisplayMemberPath="Name" SelectedValuePath="Id" Grid.Column="1" Grid.Row="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="tbCost" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" GotFocus="On_tbCost_GotFocus" PreviewMouseLeftButtonDown="On_tbCost_PreviewMouseLeftButtonDown" KeyDown="On_tbCost_KeyDown"/>
+                    <TextBox x:Name="tbCost" Grid.Column="1" Grid.Row="1"
+                             HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                             KeyDown="On_tbCost_KeyDown"
+                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"/>
                     <TextBox x:Name="tbDescription" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                     <Button x:Name="btnClear" Content="Очистить" Grid.Column="1" Grid.Row="3" Click="On_btnClear_Click" Style="{StaticResource MainButton}"/>
                 </Grid>
