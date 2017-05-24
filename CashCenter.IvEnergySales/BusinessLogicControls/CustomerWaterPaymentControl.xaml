@@ -72,7 +72,7 @@
                 </Viewbox>
 
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
-                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Email.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding CustomerEmail.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" behaviors:TextBoxBehavior.IsTabOnEnter="True"
                          behaviors:TextBoxBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
             </Grid>

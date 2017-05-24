@@ -17,7 +17,7 @@ namespace CashCenter.IvEnergySales
         public Observed<uint> CustomerNumber { get; } = new Observed<uint>();
         public Observed<string> CustomerName { get; } = new Observed<string>();
         public Observed<string> CustomerAddress { get; } = new Observed<string>();
-        public Observed<string> Email { get; } = new Observed<string>();
+        public Observed<string> CustomerEmail { get; } = new Observed<string>();
 
         public Observed<string> Counter1Number { get; } = new Observed<string>();
         public Observed<string> Counter2Number { get; } = new Observed<string>();
@@ -45,7 +45,7 @@ namespace CashCenter.IvEnergySales
             CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
             CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
             CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");
-            Email.OnChange += (newValue) => DispatchPropertyChanged("Email");
+            CustomerEmail.OnChange += (newValue) => DispatchPropertyChanged("CustomerEmail");
 
             Counter1Number.OnChange += (newValue) => DispatchPropertyChanged("Counter1Number");
             Counter2Number.OnChange += (newValue) => DispatchPropertyChanged("Counter2Number");
@@ -66,17 +66,17 @@ namespace CashCenter.IvEnergySales
             PayCommand = new Command(PayHandler);
             ClearCommand = new Command(ClearHandler);
 
-            context.OnCustomerChanged += WaterPaymentcontextCustomerChanged;
+            context.OnCustomerChanged += WaterPaymentContextCustomerChanged;
         }
 
-        private void WaterPaymentcontextCustomerChanged(WaterCustomer customer)
+        private void WaterPaymentContextCustomerChanged(WaterCustomer customer)
         {
             CustomerNumber.Value = customer != null ? (uint)customer.Number : 0;
             IsCustomerNumberFocused.Value = customer == null;
 
             CustomerName.Value = customer?.Name ?? string.Empty;
             CustomerAddress.Value = customer?.Address ?? string.Empty;
-            Email.Value = customer?.Email ?? string.Empty;
+            CustomerEmail.Value = customer?.Email ?? string.Empty;
 
             Counter1Number.Value = customer?.CounterNumber1 ?? string.Empty;
             Counter2Number.Value = customer?.CounterNumber2 ?? string.Empty;
@@ -106,7 +106,7 @@ namespace CashCenter.IvEnergySales
 
             if (context.Customer.Value == null)
             {
-                MessageBox.Show($"Плательщик с номером лицевого счета {targetCustomerNumber} не найден.");
+                Message.Info($"Плательщик с номером лицевого счета {targetCustomerNumber} не найден");
 
                 // Force customer number focus
                 IsCustomerNumberFocused.Value = false;
@@ -138,24 +138,24 @@ namespace CashCenter.IvEnergySales
                 isWithoutCheck = true;
             }
 
+            var operationName = "Оплата за воду";
             try
             {
-                Log.Info("Начало выполнения операции оплаты за воду");
+                Log.Info($"Старт -> {operationName}");
 
                 using (new OperationWaiter())
                 {
-                    context.Pay(Email.Value, Counter1Value.Value, Counter2Value.Value, Counter3Value.Value,
-                        Counter4Value.Value, Penalty.Value, Cost.Value, Description.Value, 0, isWithoutCheck); // TODO: Fiscal number
+                    context.Pay(CustomerEmail.Value, Counter1Value.Value, Counter2Value.Value, Counter3Value.Value,
+                        Counter4Value.Value, Penalty.Value, Cost.Value, Description.Value, isWithoutCheck);
                     context.ClearCustomer();
                 }
 
-                Log.Info("Операция оплаты за воду произведена успешно");
+                Log.Info($"Успешно -> {operationName}");
             }
             catch (Exception ex)
             {
-                var message = "Ошибка выполнения операция оплаты за воду";
-                Message.Error($"{message}\n{ex.Message}");
-                Log.Error(message, ex);
+                Message.Error($"Ошибка выполнения операция оплаты за воду");
+                Log.Error($"Ошибка -> {operationName}", ex);
             }
         }
 

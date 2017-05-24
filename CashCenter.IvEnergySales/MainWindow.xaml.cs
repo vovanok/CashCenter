@@ -45,8 +45,9 @@ namespace CashCenter.IvEnergySales
             var settings = new SettingsDialog();
             var settingsDialogResult = settings.ShowDialog();
 
-            if (settingsDialogResult != null && settingsDialogResult.Value)
-                customerControl.SettingsWereChanged();
+            // TODO
+            //if (settingsDialogResult != null && settingsDialogResult.Value)
+            //    customerControl.SettingsWereChanged();
         }
 
         private void On_miDataMigration_Click(object sender, RoutedEventArgs e)

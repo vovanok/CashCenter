@@ -12,7 +12,7 @@ namespace CashCenter.DataMigration
 
         protected override void CreateNewItems(IEnumerable<Customer> customers)
         {
-            DalController.Instance.AddCustomersRange(customers);
+            DalController.Instance.AddEnergyCustomersRange(customers);
         }
 
         protected override int DeleteAllTargetItems()
@@ -48,7 +48,7 @@ namespace CashCenter.DataMigration
 
         protected override bool TryUpdateExistingItem(DbfEnergyCustomer dbfCustomer)
         {
-            var existingCustomer = DalController.Instance.Customers.FirstOrDefault(customer =>
+            var existingCustomer = DalController.Instance.EnergyCustomers.FirstOrDefault(customer =>
                 customer.Department.Id == TargetDepartment.Id && customer.Number == dbfCustomer.Number);
 
             if (existingCustomer == null)

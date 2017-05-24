@@ -22,7 +22,15 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public void FindAndApplyCustomer(uint number)
         {
+            var operationName = $"Поиск плательщика за воду {number}";
+            Log.Info($"Запуск -> {operationName}");
+
             Customer.Value = DalController.Instance.WaterCustomers.FirstOrDefault(waterCustomer => waterCustomer.Number == number);
+
+            if (Customer.Value == null)
+                Log.Info($"Не найдено -> {operationName}");
+            else
+                Log.Info($"Найдено -> {operationName}");
         }
 
         public void ClearCustomer()
@@ -31,9 +39,9 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         }
 
         public void Pay(string email, double counter1Value, double counter2Value, double counter3Value,
-            double counter4Value, decimal penalty, decimal cost, string description, int fiscalNumber, bool isWithoutCheck)
+            double counter4Value, decimal penalty, decimal cost, string description, bool isWithoutCheck)
         {
-            if (Customer == null)
+            if (Customer.Value == null)
                 throw new Exception("Отсутствует плательщик");
 
             var errors = new List<string>();
@@ -67,31 +75,39 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 throw new IncorrectDataException(errors);
 
             if (isEmailChange)
+            {
+                Log.Info($"Изменение email плательщика за воду с {Customer.Value.Email} на {email}");
                 Customer.Value.Email = email;
+                DalController.Instance.Save();
+            }
 
-            DalController.Instance.Save();
-
-            var payment = new WaterCustomerPayment
-            {
-                CreateDate = DateTime.Now,
-                CustomerId = Customer.Value.Id,
-                CounterValue1 = counter1Value,
-                CounterValue2 = counter2Value,
-                CounterValue3 = counter3Value,
-                CounterValue4 = counter4Value,
-                Description = description ?? string.Empty,
-                Penalty = penalty,
-                Cost = cost,
-                FiscalNumber = fiscalNumber
-            };
+            var operationName = $"Платеж за воду: email={email}, counter1Value={counter1Value}, counter2Value={counter2Value}, counter3Value={counter3Value}, counter4Value={counter4Value}, penalty={penalty}, cost={cost}, description={description}, isWithoutCheck={isWithoutCheck}";
+            Log.Info($"Старт -> {operationName}");
             
-            if (isWithoutCheck || TryPrintChecks(payment.Cost, Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
+            if (isWithoutCheck || TryPrintChecks(cost, Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
             {
+                var payment = new WaterCustomerPayment
+                {
+                    CreateDate = DateTime.Now,
+                    CustomerId = Customer.Value.Id,
+                    CounterValue1 = counter1Value,
+                    CounterValue2 = counter2Value,
+                    CounterValue3 = counter3Value,
+                    CounterValue4 = counter4Value,
+                    Description = description ?? string.Empty,
+                    Penalty = penalty,
+                    Cost = cost,
+                    FiscalNumber = 0 // TODO: Fill fiscal
+                };
+
                 DalController.Instance.AddWaterCustomerPayment(payment);
+
+                Log.Info($"Успешно завершено -> {operationName}");
             }
             else
             {
-                throw new Exception("Платеж не произведен.");
+                Log.Info($"Не произведено -> {operationName}");
+                throw new Exception("Платеж не произведен");
             }
         }
 

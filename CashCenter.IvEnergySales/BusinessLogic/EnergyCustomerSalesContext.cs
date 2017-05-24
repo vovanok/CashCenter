@@ -1,6 +1,7 @@
 ﻿using CashCenter.Dal;
 using CashCenter.Check;
 using CashCenter.Common;
+using CashCenter.Common.Exceptions;
 using CashCenter.IvEnergySales.Check;
 using CashCenter.IvEnergySales.Common;
 using System;
@@ -11,113 +12,100 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class EnergyCustomerSalesContext
     {
-        protected const string PAY_ERROR_PREFIX = "Ошибка совершения платежа.";
+        public Observed<Customer> Customer { get; } = new Observed<Customer>();
 
-        public Customer Customer { get; protected set; }
-        public List<PaymentReason> PaymentReasons { get; protected set; }
+        public event Action<Customer> OnCustomerChanged
+        {
+            add { Customer.OnChange += value; }
+            remove { Customer.OnChange -= value; }
+        }
 
-        public bool IsCustomerFinded => Customer != null;
-
-        public EnergyCustomerSalesContext(Department department, int customerNumber)
+        public void FindAndApplyCustomer(uint number, Department department)
         {
             if (department == null)
-                return;
+                throw new Exception("Отделение для поиска не задано");
 
-            try
-            {
-                var customers = DalController.Instance.Customers.Where(customer => customer.Number == customerNumber && customer.IsActive);
+            var operationName = $"Поиск плательщика за электроэнергию {number}, отделение \"{department.Code} {department.Name}\"";
+            Log.Info($"Запуск -> {operationName}");
 
-                Customer = customers.FirstOrDefault(customer => customer.Department.Id == department.Id)
-                    ?? customers.FirstOrDefault(customer => customer.Department.Code == department.Code);
+            var potencialCustomers = DalController.Instance.EnergyCustomers.Where(customer => customer.Number == number && customer.IsActive);
 
-                if (Customer == null)
-                    return;
+            Customer.Value = potencialCustomers.FirstOrDefault(customer => customer.Department.Id == department.Id)
+                ?? potencialCustomers.FirstOrDefault(customer => customer.Department.Code == department.Code);
 
-                PaymentReasons = DalController.Instance.PaymentReasons.ToList();
-            }
-            catch(Exception ex)
-            {
-                var message = "Ошибка поиска плательщика за электроэнергию";
-                Log.Error(message, ex);
-                Message.Error(message);
-            }
+            if (Customer.Value == null)
+                Log.Info($"Не найдено -> {operationName}");
+            else
+                Log.Info($"Найдено -> {operationName}");
         }
 
-        private void ChangeEmail(string email)
+        public void ClearCustomer()
         {
-            if (string.IsNullOrEmpty(email))
-                return;
-
-            if (!IsCustomerFinded)
-                return;
-
-            if (Customer.Email == email)
-                return;
-
-            Log.Info("Изменение email");
-
-            if (!StringUtils.IsValidEmail(email))
-            {
-                var message = $"Адрес электронной почты имеет неверный формат ({email})";
-                Log.Error(message);
-                Message.Error(message);
-                return;
-            }
-
-            Customer.Email = email;
-            DalController.Instance.Save();
-
-            Log.Info("Изменение email успешно завершено");
+            Customer.Value = null;
         }
 
-        public void Pay(string email, int dayValue, int nightValue, decimal cost, int reasonId, string description, bool isWithoutCheck)
+        public void Pay(string email, int dayValue, int nightValue, decimal cost,
+            PaymentReason paymentReason, string description, bool isWithoutCheck)
         {
-            try
+            if (Customer.Value == null)
+                throw new Exception("Отсутствует плательщик");
+
+            var errors = new List<string>();
+
+            if (cost <= 0)
+                errors.Add($"Сумма платежа должна быть положительна ({cost})");
+
+            if (!Customer.Value.IsNormative() && dayValue < Customer.Value.DayValue)
+                errors.Add($"Новое показание дневного счетчика меньше предыдущего ({dayValue} < {Customer.Value.DayValue})");
+
+            if (!Customer.Value.IsNormative() && Customer.Value.IsTwoTariff() && nightValue < Customer.Value.NightValue)
+                errors.Add($"Новое показание ночного счетчика меньше меньше предыдущего ({nightValue} < {Customer.Value.NightValue})");
+
+            if (paymentReason == null)
+                errors.Add("Основание для оплаты не задано");
+
+            var isEmailChange = !string.IsNullOrEmpty(email) && Customer.Value.Email != email;
+            if (isEmailChange)
             {
-                Log.Info($"Платеж за электроэнергию: email = {email}, dayValue = {dayValue}; nightValue = {nightValue}; cost = {cost}; reasonId = {reasonId}; description = {description}");
+                if (!StringUtils.IsValidEmail(email))
+                    errors.Add("Адрес электронной почты имеет не верный формат");
+            }
 
-                if (!IsCustomerFinded)
-                {
-                    var message = $"{PAY_ERROR_PREFIX}\nОтсутствует плательщик.";
-                    Log.Error(message);
-                    Message.Error(message);
-                    return;
-                }
+            if (errors.Count > 0)
+                throw new IncorrectDataException(errors);
 
+            if (isEmailChange)
+            {
+                Log.Info($"Изменение email плательщика за электроэнергию с {Customer.Value.Email} на {email}");
+                Customer.Value.Email = email;
+                DalController.Instance.Save();
+            }
+
+            var operationName = $"Платеж за электроэнергию: email={email}, dayValue={dayValue}; nightValue={nightValue}; cost={cost}; paymentReason={paymentReason.Name}; description={description}, isWithoutCheck={isWithoutCheck}";
+            Log.Info($"Старт -> {operationName}");
+
+            if (isWithoutCheck || TryPrintChecks(cost, Customer.Value.Department.Code, Customer.Value.Number, Customer.Value.Name, paymentReason.Name, Customer.Value.Email))
+            {
                 var payment = new CustomerPayment
                 {
-                    CustomerId = Customer.Id,
+                    CustomerId = Customer.Value.Id,
                     NewDayValue = dayValue,
                     NewNightValue = nightValue,
                     Cost = cost,
-                    ReasonId = reasonId,
+                    ReasonId = paymentReason.Id,
                     CreateDate = DateTime.Now,
                     Description = description,
                     FiscalNumber = 0 // TODO: Fill fiscal
                 };
 
-                if (!payment.IsValid(Customer, out string validationErrorMessage))
-                {
-                    var message = $"{PAY_ERROR_PREFIX}\n{validationErrorMessage}";
-                    Log.Error(message);
-                    Message.Error(message);
-                    return;
-                }
+                DalController.Instance.AddEnergyCustomerPayment(payment);
 
-                ChangeEmail(email);
-
-                var paymentReasonName = PaymentReasons.FirstOrDefault(item => item.Id == payment.ReasonId)?.Name ?? string.Empty;
-
-                if (isWithoutCheck || TryPrintChecks(payment.Cost, Customer.Department.Code, Customer.Number, Customer.Name, paymentReasonName, Customer.Email))
-                {   
-                    DalController.Instance.AddCustomerPayment(payment);
-                }
+                Log.Info($"Успешно завершено -> {operationName}");
             }
-            catch(Exception ex)
+            else
             {
-                var message = "Ошибка создание платежа за электроэнергию";
-                Log.Error(message, ex);
-                Message.Error(message);
+                Log.Info($"Не произведено -> {operationName}");
+                throw new Exception("Платеж не произведен");
             }
         }
 

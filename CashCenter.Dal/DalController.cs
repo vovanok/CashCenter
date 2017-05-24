@@ -209,19 +209,19 @@ namespace CashCenter.Dal
 
         #endregion
 
-        #region Customer
+        #region Energy customer
 
-        public IEnumerable<Customer> Customers
+        public IEnumerable<Customer> EnergyCustomers
         {
             get { return context.Customers; }
         }
 
-        public IEnumerable<CustomerPayment> CustomerPayments
+        public IEnumerable<CustomerPayment> EnergyCustomerPayments
         {
             get { return context.CustomerPayments; }
         }
 
-        public Customer AddCustomer(Customer customer)
+        public Customer AddEnergyCustomer(Customer customer)
         {
             try
             {
@@ -231,12 +231,12 @@ namespace CashCenter.Dal
             }
             catch (Exception ex)
             {
-                HandleEntityFrameworkError("Ошибка добавления физ. лица", ex);
+                HandleEntityFrameworkError("Ошибка добавления плательщика за электроэнергию", ex);
                 return null;
             }
         }
 
-        public IEnumerable<Customer> AddCustomersRange(IEnumerable<Customer> customers)
+        public IEnumerable<Customer> AddEnergyCustomersRange(IEnumerable<Customer> customers)
         {
             try
             {
@@ -246,12 +246,12 @@ namespace CashCenter.Dal
             }
             catch (Exception ex)
             {
-                HandleEntityFrameworkError("Ошибка добавления физ. лиц", ex);
+                HandleEntityFrameworkError("Ошибка добавления плательщиков за электроэнергию", ex);
                 return null;
             }
         }
 
-        public CustomerPayment AddCustomerPayment(CustomerPayment customerPayment)
+        public CustomerPayment AddEnergyCustomerPayment(CustomerPayment customerPayment)
         {
             try
             {
@@ -261,7 +261,7 @@ namespace CashCenter.Dal
             }
             catch (Exception ex)
             {
-                HandleEntityFrameworkError("Ошибка добавления платежа физ. лица", ex);
+                HandleEntityFrameworkError("Ошибка добавления платежа за электроэнергию", ex);
                 return null;
             }
         }
