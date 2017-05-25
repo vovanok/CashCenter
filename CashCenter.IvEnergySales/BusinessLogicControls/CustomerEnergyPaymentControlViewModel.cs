@@ -36,7 +36,7 @@ namespace CashCenter.IvEnergySales
         public Observed<bool> IsNormative { get; } = new Observed<bool>();
         public Observed<bool> IsTwoTariff { get; } = new Observed<bool>();
 
-        public IEnumerable<PaymentReason> PaymentReasons { get; } = DalController.Instance.PaymentReasons;
+        public List<PaymentReason> PaymentReasons { get; } = DalController.Instance.PaymentReasons.ToList();
 
         public Command FindCustomerCommand { get; }
         public Command PayCommand { get; }
