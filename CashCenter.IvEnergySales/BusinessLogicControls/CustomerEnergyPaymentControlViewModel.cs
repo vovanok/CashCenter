@@ -8,9 +8,9 @@ using System.Linq;
 using CashCenter.Check;
 using System.Windows;
 
-namespace CashCenter.IvEnergySales.BusinessLogicControls
+namespace CashCenter.IvEnergySales
 {
-    public class CustomerEnergyPaymentViewModel : ViewModel
+    public class CustomerEnergyPaymentControlViewModel : ViewModel
     {
         private EnergyCustomerSalesContext context = new EnergyCustomerSalesContext();
 
@@ -42,7 +42,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
         public Command PayCommand { get; }
         public Command ClearCommand { get; }
 
-        public CustomerEnergyPaymentViewModel()
+        public CustomerEnergyPaymentControlViewModel()
         {
             SelectedDepartment.OnChange += (newValue) => DispatchPropertyChanged("SelectedDepartment");
             CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");

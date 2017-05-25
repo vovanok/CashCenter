@@ -107,12 +107,13 @@
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Behaviors\TextBoxBehavior.cs" />
-    <Compile Include="BusinessLogicControls\CustomerEnergyPaymentViewModel.cs" />
+    <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Check\WaterCustomerCheck.cs" />
     <Compile Include="Common\Command.cs" />
     <Compile Include="Common\ViewModel.cs" />
+    <Compile Include="Converters\CustomerIsClosedStatusConverter.cs" />
     <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml.cs">
       <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
