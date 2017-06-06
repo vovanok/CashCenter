@@ -50,8 +50,8 @@
 
                     <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding FindCustomerCommand}" Key="Return"/>
                         </TextBox.InputBindings>
@@ -73,8 +73,9 @@
 
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
                 <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding CustomerEmail.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
-                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" behaviors:TextBoxBehavior.IsTabOnEnter="True"
-                         behaviors:TextBoxBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                         behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
+                         behaviors:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Оплата">
@@ -104,23 +105,23 @@
                     <TextBox Text="{Binding Counter1Value.Value}" Grid.Column="1" Grid.Row="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter2Value.Value}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter3Value.Value}" Grid.Column="1" Grid.Row="3"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter4Value.Value}" Grid.Column="1" Grid.Row="4"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                 </Grid>
 
                 <Grid>
@@ -140,21 +141,21 @@
                     <TextBox Text="{Binding Cost.Value}" Grid.Column="1"
                              VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     
                     <Label Content="Пени" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Penalty.Value}" Grid.Column="1" Grid.Row="1"
                              VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     
                     <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
                     <Button Content="Оплатить" Grid.Row="3" Style="{StaticResource MainButton}"
                             Command="{Binding PayCommand}"

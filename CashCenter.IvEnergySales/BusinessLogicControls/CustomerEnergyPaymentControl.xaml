@@ -56,8 +56,8 @@
 
                     <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
-                             behaviors:TextBoxBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding FindCustomerCommand}" Key="Return"/>
                         </TextBox.InputBindings>
@@ -84,8 +84,8 @@
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="5" Style="{StaticResource PropertyLabel}"/>
                 <TextBox Text="{Binding CustomerEmail.Value}"
                          IsEnabled="{Binding IsPaymentEnable.Value}"
-                         behaviors:TextBoxBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"
-                         behaviors:TextBoxBehavior.IsTabOnEnter="True"
+                         behaviors:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"
+                         behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
                          Grid.Column="1" Grid.Row="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             </Grid>
         </GroupBox>
@@ -122,15 +122,15 @@
                     <TextBox Text="{Binding CurrentDayValue.Value}"
                              Grid.Column="2" Grid.Row="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding CurrentNightValue.Value}"
                              Grid.Column="2" Grid.Row="2"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
                     <Label FontWeight="Bold" Grid.Column="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Разница"/>
@@ -162,21 +162,22 @@
                     <ComboBox ItemsSource="{Binding PaymentReasons}"
                               SelectedItem="{Binding SelectedPaymentReason.Value}"
                               IsEnabled="{Binding IsPaymentEnable.Value}"
+                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
                               DisplayMemberPath="Name" Grid.Column="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
                     <Label Content="Сумма" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Cost.Value}"
                              Grid.Column="1" Grid.Row="1"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                             behaviors:TextBoxBehavior.SelectAllTextOnFocus="True"
+                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"/>
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     
                     <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:TextBoxBehavior.IsTabOnEnter="True"
+                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
                              />
 
                     <Button Content="Оплатить"

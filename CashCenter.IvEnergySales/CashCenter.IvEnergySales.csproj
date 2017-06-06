@@ -106,7 +106,7 @@
     <Compile Include="BusinessLogicControls\ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\TextBoxBehavior.cs" />
+    <Compile Include="Behaviors\DependencyObjectBehavior.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
