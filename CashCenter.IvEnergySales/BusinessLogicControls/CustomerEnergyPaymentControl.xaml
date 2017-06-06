@@ -20,6 +20,9 @@
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="30"/>
         </Style>
+        <converters:CustomerNumberToStringConverter x:Key="CustomerNumberToStringConverter"/>
+        <converters:CustomerIsClosedStatusConverter x:Key="CustomerIsClosedStatusConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <ivenergysales:CustomerEnergyPaymentControlViewModel />
@@ -138,7 +141,7 @@
                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
                     <Label Content="По нормативу"
-                           Visibility="{Binding IsNormative.Value, Converter={StaticResource BoolToVisibility}}"
+                           Visibility="{Binding IsNormative.Value, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Grid.ColumnSpan="4" Grid.RowSpan="3" HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center" FontSize="30" Foreground="DarkRed"/>
                 </Grid>
@@ -156,8 +159,10 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="Основание для оплаты" Style="{StaticResource PropertyLabel}"/>
-                    <ComboBox ItemsSource="{Binding PaymentReasons}" DisplayMemberPath="Name"
-                              Grid.Column="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
+                    <ComboBox ItemsSource="{Binding PaymentReasons}"
+                              SelectedItem="{Binding SelectedPaymentReason.Value}"
+                              IsEnabled="{Binding IsPaymentEnable.Value}"
+                              DisplayMemberPath="Name" Grid.Column="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
                     <Label Content="Сумма" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Cost.Value}"

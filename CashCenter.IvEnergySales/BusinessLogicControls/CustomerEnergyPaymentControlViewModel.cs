@@ -70,6 +70,7 @@ namespace CashCenter.IvEnergySales
             ClearCommand = new Command(ClearHandler);
 
             context.OnCustomerChanged += EnergyPaymentContextCustomerChanged;
+            context.ClearCustomer();
         }
 
         private void EnergyPaymentContextCustomerChanged(Customer customer)

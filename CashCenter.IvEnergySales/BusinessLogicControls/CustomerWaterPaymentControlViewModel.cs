@@ -67,6 +67,7 @@ namespace CashCenter.IvEnergySales
             ClearCommand = new Command(ClearHandler);
 
             context.OnCustomerChanged += WaterPaymentContextCustomerChanged;
+            context.ClearCustomer();
         }
 
         private void WaterPaymentContextCustomerChanged(WaterCustomer customer)
