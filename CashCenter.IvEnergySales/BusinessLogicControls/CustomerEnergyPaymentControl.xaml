@@ -119,19 +119,18 @@
                     <Label FontWeight="Bold" Grid.Column="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Текущие показания"/>
                     </Label>
-                    <TextBox Text="{Binding CurrentDayValue.Value}"
+                    <TextBox Text="{Binding CurrentDayValue.Value, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="2" Grid.Row="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             IsEnabled="{Binding IsDayValueActive.Value}"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
-                    <TextBox Text="{Binding CurrentNightValue.Value}"
+                    <TextBox Text="{Binding CurrentNightValue.Value, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="2" Grid.Row="2"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             IsEnabled="{Binding IsNightValueActive.Value}"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
-
                     <Label FontWeight="Bold" Grid.Column="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Разница"/>
                     </Label>

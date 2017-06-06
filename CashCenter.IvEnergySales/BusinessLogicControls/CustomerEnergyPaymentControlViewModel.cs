@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Collections.Generic;
-using CashCenter.Common;
 using CashCenter.Dal;
+using CashCenter.Check;
+using CashCenter.Common;
 using CashCenter.IvEnergySales.Common;
 using CashCenter.IvEnergySales.BusinessLogic;
-using System.Linq;
-using CashCenter.Check;
-using System.Windows;
 
 namespace CashCenter.IvEnergySales
 {
@@ -34,7 +34,8 @@ namespace CashCenter.IvEnergySales
         public Observed<bool> IsEmailFocused { get; } = new Observed<bool>();
         public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
         public Observed<bool> IsNormative { get; } = new Observed<bool>();
-        public Observed<bool> IsTwoTariff { get; } = new Observed<bool>();
+        public Observed<bool> IsDayValueActive { get; } = new Observed<bool>();
+        public Observed<bool> IsNightValueActive { get; } = new Observed<bool>();
 
         public List<PaymentReason> PaymentReasons { get; } = DalController.Instance.PaymentReasons.ToList();
 
@@ -52,18 +53,30 @@ namespace CashCenter.IvEnergySales
             CustomerEmail.OnChange += (newValue) => DispatchPropertyChanged("CustomerEmail");
             PreviousDayValue.OnChange += (newValue) => DispatchPropertyChanged("PreviousDayValue"); ;
             PreviousNightValue.OnChange += (newValue) => DispatchPropertyChanged("PreviousNightValue");
-            CurrentDayValue.OnChange += (newValue) => DispatchPropertyChanged("CurrentDayValue");
-            CurrentNightValue.OnChange += (newValue) => DispatchPropertyChanged("CurrentNightValue");
             DeltaDayValue.OnChange += (newValue) => DispatchPropertyChanged("DeltaDayValue");
             DeltaNightValue.OnChange += (newValue) => DispatchPropertyChanged("DeltaNightValue");
             SelectedPaymentReason.OnChange += (newValue) => DispatchPropertyChanged("SelectedPaymentReason");
             Cost.OnChange += (newValue) => DispatchPropertyChanged("Cost");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
 
+            CurrentDayValue.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("CurrentDayValue");
+                UpdateDayDeltaValue();
+            };
+
+            CurrentNightValue.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("CurrentNightValue");
+                UpdateNightDeltaValue();
+            };
+
             IsCustomerNumberFocused.OnChange += (newValue) => DispatchPropertyChanged("IsCustomerNumberFocused");
             IsEmailFocused.OnChange += (newValue) => DispatchPropertyChanged("IsEmailFocused");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
             IsNormative.OnChange += (newValue) => DispatchPropertyChanged("IsNormative");
+            IsDayValueActive.OnChange += (newValue) => DispatchPropertyChanged("IsDayValueActive");
+            IsNightValueActive.OnChange += (newValue) => DispatchPropertyChanged("IsNightValueActive");
 
             FindCustomerCommand = new Command(FindCustomerHandler);
             PayCommand = new Command(PayHandler);
@@ -96,9 +109,10 @@ namespace CashCenter.IvEnergySales
             Description.Value = string.Empty;
 
             IsNormative.Value = customer != null ? customer.IsNormative() : false;
-            IsTwoTariff.Value = customer != null ? customer.IsTwoTariff() : true;
-
             IsPaymentEnable.Value = customer != null;
+
+            IsDayValueActive.Value = !IsNormative.Value && IsPaymentEnable.Value;
+            IsNightValueActive.Value = (customer?.IsTwoTariff() ?? false) && IsPaymentEnable.Value;
         }
 
         private void FindCustomerHandler(object parameters)
