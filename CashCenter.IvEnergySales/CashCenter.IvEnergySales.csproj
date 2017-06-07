@@ -153,6 +153,7 @@
     <Compile Include="Service\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\SettingsDialogViewModel.cs" />
     <Page Include="BusinessLogicControls\ArticlesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

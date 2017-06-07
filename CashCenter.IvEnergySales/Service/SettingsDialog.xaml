@@ -3,9 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+        xmlns:ivenergysalesservice="clr-namespace:CashCenter.IvEnergySales.Service"
         mc:Ignorable="d"
-        Title="Настройки" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="Height" ResizeMode="NoResize">
+        x:Name="settingsWindow"
+        Title="Настройки" Width="500" WindowStartupLocation="CenterScreen"
+        SizeToContent="Height" ResizeMode="NoResize">
+    <Window.DataContext>
+        <ivenergysalesservice:SettingsDialogViewModel />
+    </Window.DataContext>
     <StackPanel Margin="5,5,5,0">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -16,16 +21,18 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Label Content="Имя кассира" Grid.Column="0" Grid.Row="0" />
-            <TextBox x:Name="tbCasherName" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Padding="0,5,0,5" />
+            <Label Content="Имя кассира"/>
+            <TextBox Text="{Binding CashierName.Value}" Grid.Column="1"
+                     VerticalAlignment="Center" Padding="0,5,0,5" />
         </Grid>
         <GroupBox Header="Отделения">
-            <DataGrid x:Name="dgDepartments" AutoGenerateColumns="False" RowHeaderWidth="0"
+            <DataGrid ItemsSource="{Binding Deparments}"
+                      AutoGenerateColumns="False" RowHeaderWidth="0"
                       CanUserResizeRows="False" Height="100" VerticalScrollBarVisibility="Visible"
                       ScrollViewer.CanContentScroll="True" SelectionMode="Single" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Код" Width="0.5*" Binding="{Binding Path = Code}"/>
-                    <DataGridTextColumn Header="Название" Width="0.5*" Binding="{Binding Path = Name}"/>
+                    <DataGridTextColumn Header="Код" Width="0.5*" Binding="{Binding Path=Code}"/>
+                    <DataGridTextColumn Header="Название" Width="0.5*" Binding="{Binding Path=Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
@@ -38,8 +45,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Button x:Name="btnSave" Content="Сохранить" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Click="On_btnSave_Click" Margin="0,5,0,5" Padding="15,5,15,5"/>
-            <Button x:Name="btnCancel" Content="Отменить" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Click="On_btnCancel_Click" Margin="0,5,0,5" Padding="15,5,15,5"/>
+            <Button Content="Сохранить"
+                    Command="{Binding SaveCommand}"
+                    CommandParameter="{Binding ElementName=settingsWindow}"
+                    HorizontalAlignment="Center" Margin="0,5,0,5" Padding="15,5,15,5"/>
+            <Button Content="Отменить"
+                    Command="{Binding CloseCommand}"
+                    CommandParameter="{Binding ElementName=settingsWindow}"
+                    Grid.Column="1" HorizontalAlignment="Center" Margin="0,5,0,5" Padding="15,5,15,5"/>
         </Grid>
     </StackPanel>
 </Window>

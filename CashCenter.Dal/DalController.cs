@@ -19,7 +19,7 @@ namespace CashCenter.Dal
             {
                 if (instance == null)
                     instance = new DalController();
-
+                
                 return instance;
             }
         }
@@ -53,6 +53,14 @@ namespace CashCenter.Dal
             {
                 HandleEntityFrameworkError("Ошибка добавления оснований оплаты", ex);
                 return null;
+            }
+        }
+
+        public void DetachDepartmentsChanges()
+        {
+            foreach (var entry in context.ChangeTracker.Entries<Department>().Where(entry => entry != null))
+            {
+                entry.State = System.Data.Entity.EntityState.Detached;
             }
         }
 
