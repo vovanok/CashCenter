@@ -48,11 +48,8 @@ namespace CashCenter.IvEnergySales
                 {
                     lblRegionName.Content = Region.Name ?? string.Empty;
 
-                    cbDepartmentSelector.ItemsSource = Region.Departments
-                        .Select(department => new { Department = department, DepartmentFullName = $"{department.Code} {department.Name}" });
-
-                    if (cbDepartmentSelector.Items.Count > 0)
-                        cbDepartmentSelector.SelectedIndex = 0;
+                    UpdateDepartments();
+                    GlobalEvents.OnDepartmentsChanged += UpdateDepartments;
                 }
                 else
                 {
@@ -72,6 +69,19 @@ namespace CashCenter.IvEnergySales
         private void On_cbDepartmentSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedDepartment = cbDepartmentSelector.SelectedValue as Department;
+        }
+
+        private void UpdateDepartments()
+        {
+            var lastSelectedIndex = cbDepartmentSelector.SelectedIndex;
+
+            cbDepartmentSelector.ItemsSource = Region.Departments
+                .Select(department => new { Department = department, DepartmentFullName = $"{department.Code} {department.Name}" });
+
+            if (lastSelectedIndex > 0)
+                cbDepartmentSelector.SelectedIndex = lastSelectedIndex;
+            else if (cbDepartmentSelector.Items.Count > 0)
+                cbDepartmentSelector.SelectedIndex = 0;
         }
     }
 }

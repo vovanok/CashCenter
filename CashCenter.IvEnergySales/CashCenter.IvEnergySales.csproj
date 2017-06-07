@@ -112,6 +112,7 @@
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Check\WaterCustomerCheck.cs" />
     <Compile Include="Common\Command.cs" />
+    <Compile Include="Common\GlobalEvents.cs" />
     <Compile Include="Common\ViewModel.cs" />
     <Compile Include="Converters\CustomerIsClosedStatusConverter.cs" />
     <Compile Include="Converters\CustomerNumberToStringConverter.cs" />

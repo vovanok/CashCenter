@@ -34,6 +34,7 @@ namespace CashCenter.IvEnergySales.Service
             Properties.Settings.Default.Save();
 
             DalController.Instance.Save();
+            GlobalEvents.DispatchDepartmentsChanged();
 
             var window = data as Window;
             if (window != null)
