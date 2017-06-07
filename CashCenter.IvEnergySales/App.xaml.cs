@@ -9,9 +9,12 @@ namespace CashCenter.IvEnergySales
 	{
         private App()
         {
-            DispatcherUnhandledException += App_DispatcherUnhandledException;
-        }
+            Log.Info(">>> ПРИЛОЖЕНИЕ ОТКРЫТО <<<");
 
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
+            Exit += App_Exit;
+        }
+        
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             var errorHeader = "Неизвестная ошибка";
@@ -19,6 +22,13 @@ namespace CashCenter.IvEnergySales
             Message.Error(errorHeader);
 
             e.Handled = false;
+        }
+
+        private void App_Exit(object sender, ExitEventArgs e)
+        {
+            Exit -= App_Exit;
+
+            Log.Info(">>> ПРИЛОЖЕНИЕ ЗАКРЫТО <<<");
         }
     }
 }
