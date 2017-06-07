@@ -132,6 +132,7 @@
       <DependentUpon>CustomerPaymentsExportControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataMigrationControls\ImportTargetItem.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Service\DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>
