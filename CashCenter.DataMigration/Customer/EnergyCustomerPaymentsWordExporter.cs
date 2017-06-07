@@ -8,18 +8,18 @@ using CashCenter.DataMigration.Providers.Word.Entities;
 
 namespace CashCenter.DataMigration
 {
-    public class EnergyCustomerPaymentsWordExporter : BaseExporter<CustomerPayment>
+    public class EnergyCustomerPaymentsWordExporter : BaseExporter<EnergyCustomerPayment>
     {
-        protected override List<CustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
+        protected override List<EnergyCustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
             return DalController.Instance.EnergyCustomerPayments.Where(customerPayment =>
                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        protected override int TryExportItems(IEnumerable<CustomerPayment> items)
+        protected override int TryExportItems(IEnumerable<EnergyCustomerPayment> items)
         {
             var customerPaymentModels = items.Select(item =>
-                new ReportCustomerPaymentModel(item.Customer.Number, item.NewDayValue, item.NewNightValue, item.Cost, item.CreateDate));
+                new ReportCustomerPaymentModel(item.EnergyCustomer.Number, item.NewDayValue, item.NewNightValue, item.Cost, item.CreateDate));
 
             var customerPaymentModelsCount = customerPaymentModels.Count();
             if (customerPaymentModelsCount == 0)

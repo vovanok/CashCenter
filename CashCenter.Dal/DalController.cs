@@ -211,21 +211,21 @@ namespace CashCenter.Dal
 
         #region Energy customer
 
-        public IEnumerable<Customer> EnergyCustomers
+        public IEnumerable<EnergyCustomer> EnergyCustomers
         {
-            get { return context.Customers; }
+            get { return context.EnergyCustomers; }
         }
 
-        public IEnumerable<CustomerPayment> EnergyCustomerPayments
+        public IEnumerable<EnergyCustomerPayment> EnergyCustomerPayments
         {
-            get { return context.CustomerPayments; }
+            get { return context.EnergyCustomerPayments; }
         }
 
-        public Customer AddEnergyCustomer(Customer customer)
+        public EnergyCustomer AddEnergyCustomer(EnergyCustomer customer)
         {
             try
             {
-                var resultCustomer = context.Customers.Add(customer);
+                var resultCustomer = context.EnergyCustomers.Add(customer);
                 Save();
                 return resultCustomer;
             }
@@ -236,11 +236,11 @@ namespace CashCenter.Dal
             }
         }
 
-        public IEnumerable<Customer> AddEnergyCustomersRange(IEnumerable<Customer> customers)
+        public IEnumerable<EnergyCustomer> AddEnergyCustomersRange(IEnumerable<EnergyCustomer> customers)
         {
             try
             {
-                var resultCustomers = context.Customers.AddRange(customers);
+                var resultCustomers = context.EnergyCustomers.AddRange(customers);
                 Save();
                 return resultCustomers;
             }
@@ -251,11 +251,11 @@ namespace CashCenter.Dal
             }
         }
 
-        public CustomerPayment AddEnergyCustomerPayment(CustomerPayment customerPayment)
+        public EnergyCustomerPayment AddEnergyCustomerPayment(EnergyCustomerPayment customerPayment)
         {
             try
             {
-                var newCustomerPayment = context.CustomerPayments.Add(customerPayment);
+                var newCustomerPayment = context.EnergyCustomerPayments.Add(customerPayment);
                 Save();
                 return newCustomerPayment;
             }
@@ -290,7 +290,7 @@ namespace CashCenter.Dal
         {
             try
             {
-                context.Customers.RemoveRange(context.Customers);
+                context.EnergyCustomers.RemoveRange(context.EnergyCustomers);
                 Save();
             }
             catch (Exception ex)

@@ -95,7 +95,7 @@ namespace CashCenter.IvEnergySales
             context.ClearCustomer();
         }
 
-        private void EnergyPaymentContextCustomerChanged(Customer customer)
+        private void EnergyPaymentContextCustomerChanged(EnergyCustomer customer)
         {
             CustomerNumber.Value = customer != null ? (uint)customer.Number : 0;
             IsCustomerNumberFocused.Value = customer == null;

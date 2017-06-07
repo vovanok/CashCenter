@@ -7,17 +7,17 @@ using CashCenter.DataMigration.Providers.Off.Entities;
 
 namespace CashCenter.DataMigration
 {
-    public class EnergyCustomerPaymentsOffExporter : BaseExporter<CustomerPayment>
+    public class EnergyCustomerPaymentsOffExporter : BaseExporter<EnergyCustomerPayment>
     {
         private OffRegistryController outputController = new OffRegistryController();
 
-        protected override List<CustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
+        protected override List<EnergyCustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
             return DalController.Instance.EnergyCustomerPayments.Where(customerPayment =>
                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
         
-        protected override int TryExportItems(IEnumerable<CustomerPayment> customerPayments)
+        protected override int TryExportItems(IEnumerable<EnergyCustomerPayment> customerPayments)
         {
             if (customerPayments == null)
                 return 0;
@@ -27,13 +27,13 @@ namespace CashCenter.DataMigration
                 .Select(customerPayment => 
                     new OffCustomerPayment(
                         Guid.NewGuid().ToString(),
-                        customerPayment.Customer.Number,
+                        customerPayment.EnergyCustomer.Number,
                         customerPayment.NewDayValue,
                         customerPayment.NewNightValue,
                         customerPayment.ReasonId,
                         customerPayment.Cost,
                         customerPayment.CreateDate,
-                        customerPayment.Customer.Department.Code));
+                        customerPayment.EnergyCustomer.Department.Code));
 
             outputController.StorePayments(paymentForStore);
             return paymentForStore.Count();

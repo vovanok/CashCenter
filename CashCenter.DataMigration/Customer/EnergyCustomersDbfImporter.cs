@@ -6,11 +6,11 @@ using CashCenter.DataMigration.Providers.Dbf.Entities;
 
 namespace CashCenter.DataMigration
 {
-    public class EnergyCustomersDbfImporter : BaseDbfImporter<DbfEnergyCustomer, Customer>
+    public class EnergyCustomersDbfImporter : BaseDbfImporter<DbfEnergyCustomer, EnergyCustomer>
     {
         public Department TargetDepartment { get; set; }
 
-        protected override void CreateNewItems(IEnumerable<Customer> customers)
+        protected override void CreateNewItems(IEnumerable<EnergyCustomer> customers)
         {
             DalController.Instance.AddEnergyCustomersRange(customers);
         }
@@ -28,9 +28,9 @@ namespace CashCenter.DataMigration
             return dbfRegistry.GetEnergyCustomers();
         }
 
-        protected override Customer GetTargetItemBySource(DbfEnergyCustomer dbfCustomer)
+        protected override EnergyCustomer GetTargetItemBySource(DbfEnergyCustomer dbfCustomer)
         {
-            return new Customer
+            return new EnergyCustomer
             {
                 DepartmentId = TargetDepartment.Id,
                 Number = dbfCustomer.Number,

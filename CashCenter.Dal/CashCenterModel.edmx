@@ -45,7 +45,16 @@
           <Property Name="Quantity" Type="float" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="Customer">
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="RegionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnergyCustomer">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -62,7 +71,7 @@
           <Property Name="Number" Type="int" Nullable="false" />
           <Property Name="IsClosed" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="CustomerPayment">
+        <EntityType Name="EnergyCustomerPayment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -75,15 +84,6 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="FiscalNumber" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="RegionId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentReason">
           <Key>
@@ -166,42 +166,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Customer_ToDepartment">
-          <End Role="Department" Type="Self.Department" Multiplicity="1" />
-          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CustomerPayment_ToCustomer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
-          <End Role="CustomerPayment" Type="Self.CustomerPayment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CustomerPayment">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CustomerPayment_ToPaymentReason">
-          <End Role="PaymentReason" Type="Self.PaymentReason" Multiplicity="1" />
-          <End Role="CustomerPayment" Type="Self.CustomerPayment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PaymentReason">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CustomerPayment">
-              <PropertyRef Name="ReasonId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Department_ToRegion">
           <End Role="Region" Type="Self.Region" Multiplicity="1" />
           <End Role="Department" Type="Self.Department" Multiplicity="*" />
@@ -211,6 +175,42 @@
             </Principal>
             <Dependent Role="Department">
               <PropertyRef Name="RegionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnergyCustomer_ToDepartment">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="EnergyCustomer" Type="Self.EnergyCustomer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomer">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnergyCustomerPayment_ToCustomer">
+          <End Role="EnergyCustomer" Type="Self.EnergyCustomer" Multiplicity="1" />
+          <End Role="EnergyCustomerPayment" Type="Self.EnergyCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnergyCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnergyCustomerPayment_ToPaymentReason">
+          <End Role="PaymentReason" Type="Self.PaymentReason" Multiplicity="1" />
+          <End Role="EnergyCustomerPayment" Type="Self.EnergyCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentReason">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomerPayment">
+              <PropertyRef Name="ReasonId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -231,9 +231,9 @@
           <EntitySet Name="ArticlePrice" EntityType="Self.ArticlePrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticlePriceType" EntityType="Self.ArticlePriceType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticleSale" EntityType="Self.ArticleSale" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CustomerPayment" EntityType="Self.CustomerPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnergyCustomer" EntityType="Self.EnergyCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnergyCustomerPayment" EntityType="Self.EnergyCustomerPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentReason" EntityType="Self.PaymentReason" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WaterCustomer" EntityType="Self.WaterCustomer" Schema="dbo" store:Type="Tables" />
@@ -250,21 +250,21 @@
             <End Role="ArticlePrice" EntitySet="ArticlePrice" />
             <End Role="ArticleSale" EntitySet="ArticleSale" />
           </AssociationSet>
-          <AssociationSet Name="FK_Customer_ToDepartment" Association="Self.FK_Customer_ToDepartment">
-            <End Role="Department" EntitySet="Department" />
-            <End Role="Customer" EntitySet="Customer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CustomerPayment_ToCustomer" Association="Self.FK_CustomerPayment_ToCustomer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="CustomerPayment" EntitySet="CustomerPayment" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CustomerPayment_ToPaymentReason" Association="Self.FK_CustomerPayment_ToPaymentReason">
-            <End Role="PaymentReason" EntitySet="PaymentReason" />
-            <End Role="CustomerPayment" EntitySet="CustomerPayment" />
-          </AssociationSet>
           <AssociationSet Name="FK_Department_ToRegion" Association="Self.FK_Department_ToRegion">
             <End Role="Region" EntitySet="Region" />
             <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomer_ToDepartment" Association="Self.FK_EnergyCustomer_ToDepartment">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomerPayment_ToCustomer" Association="Self.FK_EnergyCustomerPayment_ToCustomer">
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomer" />
+            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomerPayment_ToPaymentReason" Association="Self.FK_EnergyCustomerPayment_ToPaymentReason">
+            <End Role="PaymentReason" EntitySet="PaymentReason" />
+            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayment" />
           </AssociationSet>
           <AssociationSet Name="FK_WaterCustomerPayment_ToWaterCustomer" Association="Self.FK_WaterCustomerPayment_ToWaterCustomer">
             <End Role="WaterCustomer" EntitySet="WaterCustomer" />
@@ -335,24 +335,24 @@
             <End Role="WaterCustomer" EntitySet="WaterCustomers" />
             <End Role="WaterCustomerPayment" EntitySet="WaterCustomerPayments" />
           </AssociationSet>
-          <EntitySet Name="CustomerPayments" EntityType="CashCenterModel.CustomerPayment" />
-          <AssociationSet Name="FK_CustomerPayment_ToPaymentReason" Association="CashCenterModel.FK_CustomerPayment_ToPaymentReason">
-            <End Role="PaymentReason" EntitySet="PaymentReasons" />
-            <End Role="CustomerPayment" EntitySet="CustomerPayments" />
-          </AssociationSet>
-          <EntitySet Name="Customers" EntityType="CashCenterModel.Customer" />
-          <AssociationSet Name="FK_CustomerPayment_ToCustomer" Association="CashCenterModel.FK_CustomerPayment_ToCustomer">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="CustomerPayment" EntitySet="CustomerPayments" />
-          </AssociationSet>
           <EntitySet Name="Departments" EntityType="CashCenterModel.Department" />
-          <AssociationSet Name="FK_Customer_ToDepartment" Association="CashCenterModel.FK_Customer_ToDepartment">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="Customer" EntitySet="Customers" />
-          </AssociationSet>
           <AssociationSet Name="FK_Department_ToRegion" Association="CashCenterModel.FK_Department_ToRegion">
             <End Role="Region" EntitySet="Regions" />
             <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <EntitySet Name="EnergyCustomers" EntityType="CashCenterModel.EnergyCustomer" />
+          <EntitySet Name="EnergyCustomerPayments" EntityType="CashCenterModel.EnergyCustomerPayment" />
+          <AssociationSet Name="FK_EnergyCustomer_ToDepartment" Association="CashCenterModel.FK_EnergyCustomer_ToDepartment">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomerPayment_ToCustomer" Association="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer">
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomers" />
+            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomerPayment_ToPaymentReason" Association="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason">
+            <End Role="PaymentReason" EntitySet="PaymentReasons" />
+            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayments" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PaymentReason">
@@ -361,7 +361,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CustomerPayments" Relationship="CashCenterModel.FK_CustomerPayment_ToPaymentReason" FromRole="PaymentReason" ToRole="CustomerPayment" />
+          <NavigationProperty Name="EnergyCustomerPayments" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason" FromRole="PaymentReason" ToRole="EnergyCustomerPayment" />
         </EntityType>
         <EntityType Name="Article">
           <Key>
@@ -463,35 +463,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="CustomerPayment">
+        <EntityType Name="Department">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="NewDayValue" Type="Int32" Nullable="false" />
-          <Property Name="NewNightValue" Type="Int32" Nullable="false" />
-          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="ReasonId" Type="Int32" Nullable="false" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="PaymentReason" Relationship="CashCenterModel.FK_CustomerPayment_ToPaymentReason" FromRole="CustomerPayment" ToRole="PaymentReason" />
-          <NavigationProperty Name="Customer" Relationship="CashCenterModel.FK_CustomerPayment_ToCustomer" FromRole="CustomerPayment" ToRole="Customer" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RegionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Region" Relationship="CashCenterModel.FK_Department_ToRegion" FromRole="Department" ToRole="Region" />
+          <NavigationProperty Name="EnergyCustomers" Relationship="CashCenterModel.FK_EnergyCustomer_ToDepartment" FromRole="Department" ToRole="EnergyCustomer" />
         </EntityType>
-        <Association Name="FK_CustomerPayment_ToPaymentReason">
-          <End Type="CashCenterModel.PaymentReason" Role="PaymentReason" Multiplicity="1" />
-          <End Type="CashCenterModel.CustomerPayment" Role="CustomerPayment" Multiplicity="*" />
+        <Association Name="FK_Department_ToRegion">
+          <End Type="CashCenterModel.Region" Role="Region" Multiplicity="1" />
+          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PaymentReason">
+            <Principal Role="Region">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CustomerPayment">
-              <PropertyRef Name="ReasonId" />
+            <Dependent Role="Department">
+              <PropertyRef Name="RegionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Customer">
+        <EntityType Name="EnergyCustomer">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -507,53 +502,58 @@
           <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="IsClosed" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CustomerPayments" Relationship="CashCenterModel.FK_CustomerPayment_ToCustomer" FromRole="Customer" ToRole="CustomerPayment" />
-          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_Customer_ToDepartment" FromRole="Customer" ToRole="Department" />
+          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_EnergyCustomer_ToDepartment" FromRole="EnergyCustomer" ToRole="Department" />
+          <NavigationProperty Name="EnergyCustomerPayments" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" FromRole="EnergyCustomer" ToRole="EnergyCustomerPayment" />
         </EntityType>
-        <Association Name="FK_CustomerPayment_ToCustomer">
-          <End Type="CashCenterModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="CashCenterModel.CustomerPayment" Role="CustomerPayment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CustomerPayment">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Department">
+        <EntityType Name="EnergyCustomerPayment">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RegionId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Customers" Relationship="CashCenterModel.FK_Customer_ToDepartment" FromRole="Department" ToRole="Customer" />
-          <NavigationProperty Name="Region" Relationship="CashCenterModel.FK_Department_ToRegion" FromRole="Department" ToRole="Region" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="NewDayValue" Type="Int32" Nullable="false" />
+          <Property Name="NewNightValue" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ReasonId" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EnergyCustomer" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" FromRole="EnergyCustomerPayment" ToRole="EnergyCustomer" />
+          <NavigationProperty Name="PaymentReason" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason" FromRole="EnergyCustomerPayment" ToRole="PaymentReason" />
         </EntityType>
-        <Association Name="FK_Customer_ToDepartment">
+        <Association Name="FK_EnergyCustomer_ToDepartment">
           <End Type="CashCenterModel.Department" Role="Department" Multiplicity="1" />
-          <End Type="CashCenterModel.Customer" Role="Customer" Multiplicity="*" />
+          <End Type="CashCenterModel.EnergyCustomer" Role="EnergyCustomer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Department">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Customer">
+            <Dependent Role="EnergyCustomer">
               <PropertyRef Name="DepartmentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Department_ToRegion">
-          <End Type="CashCenterModel.Region" Role="Region" Multiplicity="1" />
-          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="*" />
+        <Association Name="FK_EnergyCustomerPayment_ToCustomer">
+          <End Type="CashCenterModel.EnergyCustomer" Role="EnergyCustomer" Multiplicity="1" />
+          <End Type="CashCenterModel.EnergyCustomerPayment" Role="EnergyCustomerPayment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Region">
+            <Principal Role="EnergyCustomer">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Department">
-              <PropertyRef Name="RegionId" />
+            <Dependent Role="EnergyCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnergyCustomerPayment_ToPaymentReason">
+          <End Type="CashCenterModel.PaymentReason" Role="PaymentReason" Multiplicity="1" />
+          <End Type="CashCenterModel.EnergyCustomerPayment" Role="EnergyCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PaymentReason">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomerPayment">
+              <PropertyRef Name="ReasonId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -656,24 +656,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerPayments">
-            <EntityTypeMapping TypeName="CashCenterModel.CustomerPayment">
-              <MappingFragment StoreEntitySet="CustomerPayment">
-                <ScalarProperty Name="FiscalNumber" ColumnName="FiscalNumber" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="ReasonId" ColumnName="ReasonId" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="NewNightValue" ColumnName="NewNightValue" />
-                <ScalarProperty Name="NewDayValue" ColumnName="NewDayValue" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="CashCenterModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="CashCenterModel.Customer">
-              <MappingFragment StoreEntitySet="Customer">
+          <EntitySetMapping Name="EnergyCustomers">
+            <EntityTypeMapping TypeName="CashCenterModel.EnergyCustomer">
+              <MappingFragment StoreEntitySet="EnergyCustomer">
                 <ScalarProperty Name="IsClosed" ColumnName="IsClosed" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -689,12 +684,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="CashCenterModel.Department">
-              <MappingFragment StoreEntitySet="Department">
-                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
+          <EntitySetMapping Name="EnergyCustomerPayments">
+            <EntityTypeMapping TypeName="CashCenterModel.EnergyCustomerPayment">
+              <MappingFragment StoreEntitySet="EnergyCustomerPayment">
+                <ScalarProperty Name="FiscalNumber" ColumnName="FiscalNumber" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="ReasonId" ColumnName="ReasonId" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="NewNightValue" ColumnName="NewNightValue" />
+                <ScalarProperty Name="NewDayValue" ColumnName="NewDayValue" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -17,13 +17,13 @@ namespace CashCenter.Dal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PaymentReason()
         {
-            this.CustomerPayments = new HashSet<CustomerPayment>();
+            this.EnergyCustomerPayments = new HashSet<EnergyCustomerPayment>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerPayment> CustomerPayments { get; set; }
+        public virtual ICollection<EnergyCustomerPayment> EnergyCustomerPayments { get; set; }
     }
 }

@@ -12,12 +12,12 @@ namespace CashCenter.Dal
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class EnergyCustomer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Customer()
+        public EnergyCustomer()
         {
-            this.CustomerPayments = new HashSet<CustomerPayment>();
+            this.EnergyCustomerPayments = new HashSet<EnergyCustomerPayment>();
         }
     
         public int Id { get; set; }
@@ -33,8 +33,8 @@ namespace CashCenter.Dal
         public int Number { get; set; }
         public bool IsClosed { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerPayment> CustomerPayments { get; set; }
         public virtual Department Department { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EnergyCustomerPayment> EnergyCustomerPayments { get; set; }
     }
 }

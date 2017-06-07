@@ -12,9 +12,9 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class EnergyCustomerSalesContext
     {
-        public Observed<Customer> Customer { get; } = new Observed<Customer>();
+        public Observed<EnergyCustomer> Customer { get; } = new Observed<EnergyCustomer>();
 
-        public event Action<Customer> OnCustomerChanged
+        public event Action<EnergyCustomer> OnCustomerChanged
         {
             add { Customer.OnChange += value; }
             remove { Customer.OnChange -= value; }
@@ -86,7 +86,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
             if (isWithoutCheck || TryPrintChecks(cost, Customer.Value.Department.Code, Customer.Value.Number, Customer.Value.Name, paymentReason.Name, Customer.Value.Email))
             {
-                var payment = new CustomerPayment
+                var payment = new EnergyCustomerPayment
                 {
                     CustomerId = Customer.Value.Id,
                     NewDayValue = dayValue,

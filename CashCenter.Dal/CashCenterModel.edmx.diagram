@@ -17,13 +17,13 @@
         <EntityTypeShape EntityType="CashCenterModel.WaterCustomer" Width="1.75" PointX="7.375" PointY="0.5" />
         <EntityTypeShape EntityType="CashCenterModel.WaterCustomerPayment" Width="2" PointX="9.875" PointY="0.5" />
         <AssociationConnector Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" />
-        <EntityTypeShape EntityType="CashCenterModel.CustomerPayment" Width="1.75" PointX="9" PointY="4.25" FillColor="Green" />
-        <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToPaymentReason" />
-        <EntityTypeShape EntityType="CashCenterModel.Customer" Width="1.5" PointX="7" PointY="4.25" FillColor="Green" />
-        <AssociationConnector Association="CashCenterModel.FK_CustomerPayment_ToCustomer" />
         <EntityTypeShape EntityType="CashCenterModel.Department" Width="1.5" PointX="4.875" PointY="4.25" FillColor="Maroon" />
-        <AssociationConnector Association="CashCenterModel.FK_Customer_ToDepartment" />
         <AssociationConnector Association="CashCenterModel.FK_Department_ToRegion" />
+        <EntityTypeShape EntityType="CashCenterModel.EnergyCustomer" Width="1.625" PointX="6.75" PointY="4.25" FillColor="Green" />
+        <EntityTypeShape EntityType="CashCenterModel.EnergyCustomerPayment" Width="2" PointX="8.875" PointY="4.25" FillColor="Green" />
+        <AssociationConnector Association="CashCenterModel.FK_EnergyCustomer_ToDepartment" />
+        <AssociationConnector Association="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" />
+        <AssociationConnector Association="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

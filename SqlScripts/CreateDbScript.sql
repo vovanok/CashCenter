@@ -19,7 +19,7 @@ CREATE TABLE [dbo].[PaymentReason] (
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
-CREATE TABLE [dbo].[Customer] (
+CREATE TABLE [dbo].[EnergyCustomer] (
     [Id]           INT             IDENTITY (1, 1) NOT NULL,
     [DepartmentId] INT             NOT NULL,
     [Name]         NVARCHAR (MAX)  NOT NULL,
@@ -33,10 +33,10 @@ CREATE TABLE [dbo].[Customer] (
     [Number]       INT             NOT NULL,
     [IsClosed] BIT NOT NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Customer_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[Department] ([Id])
+    CONSTRAINT [FK_EnergyCustomer_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[Department] ([Id])
 );
 
-CREATE TABLE [dbo].[CustomerPayment] (
+CREATE TABLE [dbo].[EnergyCustomerPayment] (
     [Id]            INT             IDENTITY (1, 1) NOT NULL,
     [CustomerId]    INT             NOT NULL,
     [NewDayValue]   INT             NOT NULL,
@@ -47,8 +47,8 @@ CREATE TABLE [dbo].[CustomerPayment] (
     [Description]   NVARCHAR (MAX)  NOT NULL,
     [FiscalNumber]  INT             NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_CustomerPayment_ToPaymentReason] FOREIGN KEY ([ReasonId]) REFERENCES [dbo].[PaymentReason] ([Id]),
-    CONSTRAINT [FK_CustomerPayment_ToCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[Customer] ([Id])
+    CONSTRAINT [FK_EnergyCustomerPayment_ToPaymentReason] FOREIGN KEY ([ReasonId]) REFERENCES [dbo].[PaymentReason] ([Id]),
+    CONSTRAINT [FK_EnergyCustomerPayment_ToCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[EnergyCustomer] ([Id])
 );
 
 CREATE TABLE [dbo].[ArticlePriceType] (
