@@ -5,6 +5,7 @@ using CashCenter.Dal;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.Check;
 using CashCenter.IvEnergySales.Common;
+using CashCenter.Common.Exceptions;
 
 namespace CashCenter.IvEnergySales
 {
@@ -152,6 +153,10 @@ namespace CashCenter.IvEnergySales
                 }
 
                 Log.Info($"Успешно -> {operationName}");
+            }
+            catch (IncorrectDataException ex)
+            {
+                Message.Error(ex.Message);
             }
             catch (Exception ex)
             {
