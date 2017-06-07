@@ -38,17 +38,8 @@ namespace CashCenter.Check
         {
             get
             {
-                try
-                {
-                    LogInfo("Проверка готовности");
-                    PrintLine(string.Empty);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    LogError($"ККМ не готов ({ex.Message}).");
-                    return false;
-                }
+                LogInfo("Проверка готовности");
+                return Driver.CheckConnection() == 0;
             }
         }
 
@@ -62,6 +53,11 @@ namespace CashCenter.Check
                 Driver.GetECRStatus();
                 return Driver.ECRMode != 4;
             }
+        }
+
+        public int BufferLineNumber
+        {
+            get { return Driver.ReadPrintBufferLineNumber(); }
         }
 
         public void Connect()
@@ -185,6 +181,13 @@ namespace CashCenter.Check
         {
             LogInfo("Административная отмена чека");
             Driver?.SysAdminCancelCheck();
+            CheckError();
+        }
+
+        public void ClearPrintBuffer()
+        {
+            LogInfo($"Очистка буфера печати (было: {BufferLineNumber})");
+            Driver?.ClearPrintBuffer();
             CheckError();
         }
 

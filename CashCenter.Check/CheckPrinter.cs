@@ -47,6 +47,8 @@ namespace CashCenter.Check
                 cashMachine.OpenSessionIfNot();
                 cashMachine.Connect();
 
+                cashMachine.ClearPrintBuffer();
+
                 cashMachine.OpenCheck();
 
                 try
@@ -87,9 +89,9 @@ namespace CashCenter.Check
 
                 Log.Info(">>> ПЕЧАТЬ ЧЕКА ЗАВЕРШЕНА");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.Error("Ошибка печати чека", ex);
+                Log.Error($"Ошибка печати чека (буфер строк: {cashMachine.BufferLineNumber})", ex);
                 throw ex;
             }
         }
