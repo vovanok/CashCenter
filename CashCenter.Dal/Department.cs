@@ -24,11 +24,9 @@ namespace CashCenter.Dal
         public string Code { get; set; }
         public string Name { get; set; }
         public int RegionId { get; set; }
-        public string Url { get; set; }
-        public string Path { get; set; }
     
-        public virtual Region Region { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers { get; set; }
+        public virtual Region Region { get; set; }
     }
 }

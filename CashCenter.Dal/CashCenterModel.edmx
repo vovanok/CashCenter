@@ -84,8 +84,6 @@
           <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="RegionId" Type="int" Nullable="false" />
-          <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Path" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentReason">
           <Key>
@@ -330,12 +328,7 @@
             <End Role="ArticlePriceType" EntitySet="ArticlePriceTypes" />
             <End Role="ArticlePrice" EntitySet="ArticlePrices" />
           </AssociationSet>
-          <EntitySet Name="Departments" EntityType="CashCenterModel.Department" />
           <EntitySet Name="Regions" EntityType="CashCenterModel.Region" />
-          <AssociationSet Name="FK_Department_ToRegion" Association="CashCenterModel.FK_Department_ToRegion">
-            <End Role="Region" EntitySet="Regions" />
-            <End Role="Department" EntitySet="Departments" />
-          </AssociationSet>
           <EntitySet Name="WaterCustomers" EntityType="CashCenterModel.WaterCustomer" />
           <EntitySet Name="WaterCustomerPayments" EntityType="CashCenterModel.WaterCustomerPayment" />
           <AssociationSet Name="FK_WaterCustomerPayment_ToWaterCustomer" Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer">
@@ -348,13 +341,18 @@
             <End Role="CustomerPayment" EntitySet="CustomerPayments" />
           </AssociationSet>
           <EntitySet Name="Customers" EntityType="CashCenterModel.Customer" />
+          <AssociationSet Name="FK_CustomerPayment_ToCustomer" Association="CashCenterModel.FK_CustomerPayment_ToCustomer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CustomerPayment" EntitySet="CustomerPayments" />
+          </AssociationSet>
+          <EntitySet Name="Departments" EntityType="CashCenterModel.Department" />
           <AssociationSet Name="FK_Customer_ToDepartment" Association="CashCenterModel.FK_Customer_ToDepartment">
             <End Role="Department" EntitySet="Departments" />
             <End Role="Customer" EntitySet="Customers" />
           </AssociationSet>
-          <AssociationSet Name="FK_CustomerPayment_ToCustomer" Association="CashCenterModel.FK_CustomerPayment_ToCustomer">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="CustomerPayment" EntitySet="CustomerPayments" />
+          <AssociationSet Name="FK_Department_ToRegion" Association="CashCenterModel.FK_Department_ToRegion">
+            <End Role="Region" EntitySet="Regions" />
+            <End Role="Department" EntitySet="Departments" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PaymentReason">
@@ -412,19 +410,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Department">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RegionId" Type="Int32" Nullable="false" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Path" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Region" Relationship="CashCenterModel.FK_Department_ToRegion" FromRole="Department" ToRole="Region" />
-          <NavigationProperty Name="Customers" Relationship="CashCenterModel.FK_Customer_ToDepartment" FromRole="Department" ToRole="Customer" />
-        </EntityType>
         <EntityType Name="Region">
           <Key>
             <PropertyRef Name="Id" />
@@ -433,18 +418,6 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Departments" Relationship="CashCenterModel.FK_Department_ToRegion" FromRole="Region" ToRole="Department" />
         </EntityType>
-        <Association Name="FK_Department_ToRegion">
-          <End Type="CashCenterModel.Region" Role="Region" Multiplicity="1" />
-          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Region">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Department">
-              <PropertyRef Name="RegionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="WaterCustomer">
           <Key>
             <PropertyRef Name="Id" />
@@ -534,8 +507,31 @@
           <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Number" Type="Int32" Nullable="false" />
           <Property Name="IsClosed" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_Customer_ToDepartment" FromRole="Customer" ToRole="Department" />
           <NavigationProperty Name="CustomerPayments" Relationship="CashCenterModel.FK_CustomerPayment_ToCustomer" FromRole="Customer" ToRole="CustomerPayment" />
+          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_Customer_ToDepartment" FromRole="Customer" ToRole="Department" />
+        </EntityType>
+        <Association Name="FK_CustomerPayment_ToCustomer">
+          <End Type="CashCenterModel.Customer" Role="Customer" Multiplicity="1" />
+          <End Type="CashCenterModel.CustomerPayment" Role="CustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RegionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Customers" Relationship="CashCenterModel.FK_Customer_ToDepartment" FromRole="Department" ToRole="Customer" />
+          <NavigationProperty Name="Region" Relationship="CashCenterModel.FK_Department_ToRegion" FromRole="Department" ToRole="Region" />
         </EntityType>
         <Association Name="FK_Customer_ToDepartment">
           <End Type="CashCenterModel.Department" Role="Department" Multiplicity="1" />
@@ -549,15 +545,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CustomerPayment_ToCustomer">
-          <End Type="CashCenterModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="CashCenterModel.CustomerPayment" Role="CustomerPayment" Multiplicity="*" />
+        <Association Name="FK_Department_ToRegion">
+          <End Type="CashCenterModel.Region" Role="Region" Multiplicity="1" />
+          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Customer">
+            <Principal Role="Region">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CustomerPayment">
-              <PropertyRef Name="CustomerId" />
+            <Dependent Role="Department">
+              <PropertyRef Name="RegionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -615,18 +611,6 @@
                 <ScalarProperty Name="IsWholesale" ColumnName="IsWholesale" />
                 <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Departments">
-            <EntityTypeMapping TypeName="CashCenterModel.Department">
-              <MappingFragment StoreEntitySet="Department">
-                <ScalarProperty Name="Path" ColumnName="Path" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -701,6 +685,16 @@
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="CashCenterModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

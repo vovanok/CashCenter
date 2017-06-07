@@ -46,7 +46,15 @@ namespace CashCenter.IvEnergySales
 
         public CustomerEnergyPaymentControlViewModel()
         {
-            SelectedDepartment.OnChange += (newValue) => DispatchPropertyChanged("SelectedDepartment");
+            SelectedDepartment.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("SelectedDepartment");
+                
+                // Force customer number focus
+                IsCustomerNumberFocused.Value = false;
+                IsCustomerNumberFocused.Value = true;
+            };
+            
             CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
             CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
             CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");

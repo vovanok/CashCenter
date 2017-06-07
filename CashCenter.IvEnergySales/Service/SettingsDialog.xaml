@@ -24,10 +24,8 @@
                       CanUserResizeRows="False" Height="100" VerticalScrollBarVisibility="Visible"
                       ScrollViewer.CanContentScroll="True" SelectionMode="Single" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Код" Width="0.6*" Binding="{Binding Path = Code}"/>
-                    <DataGridTextColumn Header="Название" Width="1.1*" Binding="{Binding Path = Name}"/>
-                    <DataGridTextColumn Header="Url" Width="1.2*" Binding="{Binding Path = Url}"/>
-                    <DataGridTextColumn Header="Путь" Width="2*" Binding="{Binding Path = Path}"/>
+                    <DataGridTextColumn Header="Код" Width="0.5*" Binding="{Binding Path = Code}"/>
+                    <DataGridTextColumn Header="Название" Width="0.5*" Binding="{Binding Path = Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
