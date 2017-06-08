@@ -16,6 +16,7 @@ namespace CashCenter.Common
         public static int NdsPercent => GetAppSettingByKeyAsInt("NdsPercent", 0);
         public static string ChecksFilename => GetAppSettingByKey("ChecksFilename", string.Empty);
         public static bool IsShowWaterPayments => GetAppSettingByKeyAsBool("IsShowWaterPayments", false);
+        public static bool IsShowArticles => GetAppSettingByKeyAsBool("IsShowArticles", false);
 
         private static string GetAppSettingByKey(string key, string defaultValue)
 		{
