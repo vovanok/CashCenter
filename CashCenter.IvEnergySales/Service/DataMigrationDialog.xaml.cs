@@ -8,10 +8,5 @@ namespace CashCenter.IvEnergySales
         {
             InitializeComponent();
         }
-
-        private void On_btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
     }
 }
