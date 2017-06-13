@@ -47,7 +47,14 @@ namespace CashCenter.Check
                 cashMachine.OpenSessionIfNot();
                 cashMachine.Connect();
 
-                cashMachine.ClearPrintBuffer();
+                try
+                {
+                    cashMachine.ClearPrintBuffer();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Очистка буфера не произведена (размер буфера: {cashMachine.BufferLineNumber})", ex);
+                }
 
                 cashMachine.OpenCheck();
 
