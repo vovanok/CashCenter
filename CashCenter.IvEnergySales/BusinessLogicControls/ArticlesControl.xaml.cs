@@ -167,7 +167,7 @@ namespace CashCenter.IvEnergySales
                 new ArticleSale
                 {
                     ArticlePriceId = selectedArticlePriceWithTypeItem.Price.Id,
-                    Date = DateTime.Now,
+                    CreateDate = DateTime.Now,
                     Quantity = quantity
                 });
 

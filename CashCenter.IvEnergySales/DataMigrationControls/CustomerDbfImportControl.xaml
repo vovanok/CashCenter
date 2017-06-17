@@ -18,6 +18,9 @@
         <GroupBox Header="Для какого отделения?" Visibility="{Binding Converter={StaticResource BoolToVisibility}, ElementName=cbImportTargets, Path=SelectedItem.IsNeedDepartmentInfo}">
             <local:DepartmentSelectorControl SelectedDepartment="{Binding SelectedDepartment.Value, Mode=TwoWay}" />
         </GroupBox>
+        <GroupBox Header="Какой тип цены использовать при импорте?" Visibility="{Binding Converter={StaticResource BoolToVisibility}, ElementName=cbImportTargets, Path=SelectedItem.IsNeedArticlePriceType}">
+            <ComboBox ItemsSource="{Binding ArticlePriceTypes}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedArticlePriceType.Value}"/>
+        </GroupBox>
         <Label Content="Откуда импортировать? (путь к DBF)" />
         <local:FileSelectorControl Filename="{Binding DbfFilename.Value, Mode=TwoWay}" FilesFilter="*.DBF|*.DBF" />
         <Button Content="Импортировать" Command="{Binding ImportCommand}" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" />

@@ -18,7 +18,7 @@
             </TabItem>
             <TabItem Header="Импорт из DBF">
                 <local:CustomerDbfImportControl />
-            </TabItem>            
+            </TabItem>
         </TabControl>
         <Button Content="Закрыть" Command="{Binding Close}" CommandParameter="{Binding ElementName=dataMigrationWindow}"
             Width="100" Height="30" HorizontalAlignment="Right" Margin="0,5,5,0"/>

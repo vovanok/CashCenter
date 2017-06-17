@@ -52,14 +52,33 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string WATER_CUSTOMER_PAYMENT_COUNTER_COST4 = "SUM_SH4";
             public const string WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4 = "ZN4";
 
+            public const string ARTICLE_SALE_DOCUMENT_DATE = "DATADOC";
+            public const string ARTICLE_SALE_DOCUMENT_NUMBER = "NOMERDOC";
+            public const string ARTICLE_SALE_WAREHOUSE_CODE = "SKLADKOD";
+            public const string ARTICLE_SALE_WAREHOUSE_NAME = "SKLADNAME";
+            public const string ARTICLE_SALE_ARTICLE_CODE = "TOVARKOD";
+            public const string ARTICLE_SALE_ARTICLE_NAME = "TOVARNAME";
+            public const string ARTICLE_SALE_ARTICLE_QUANTITY = "TOVARKOL";
+            public const string ARTICLE_SALE_ARTICLE_PRICE = "TOVARCENA";
+            public const string ARTICLE_SALE_ARTICLE_TOTAL_PRICE = "TOVARSUMMA";
+            public const string ARTICLE_SALE_CHECK_NUMBER = "NOMERCHEKA";
+            public const string ARTICLE_SALE_SERIAL_NUMBER = "SERNOMER";
+            public const string ARTICLE_SALE_COMMENT = "KOMMENT";
+
             public const string TYPE_DATE = "Date";
-            public const string TYPE_CHARACTER13 = "Character(13)";
-            public const string TYPE_CHARACTER12 = "Character(12)";
+            public const string TYPE_CHARACTER5 = "Character(5)";
             public const string TYPE_CHARACTER6 = "Character(6)";
+            public const string TYPE_CHARACTER8 = "Character(8)";
+            public const string TYPE_CHARACTER10 = "Character(10)";
+            public const string TYPE_CHARACTER12 = "Character(12)";
+            public const string TYPE_CHARACTER13 = "Character(13)";
+            public const string TYPE_CHARACTER25 = "Character(25)";
+            public const string TYPE_CHARACTER50 = "Character(50)";
+            public const string TYPE_CHARACTER100 = "Character(100)";
             public const string TYPE_NUMERIC = "Numeric";
 
             private const string GET_ITEMS = "select * from {0}";
-            private const string ADD_WATER_CUSTOMER_PAYMENTS_PRE = "insert into {0} values";
+            private const string INSERT_SOMETHING_PRE = "insert into {0} values";
 
             private static readonly string CREATE_WATER_CUSTOMER_PAYMENTS =
                 $@"create table {{0}} (
@@ -81,19 +100,39 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     [{WATER_CUSTOMER_PAYMENT_COUNTER_COST4}] {TYPE_NUMERIC},
                     [{WATER_CUSTOMER_PAYMENT_COUNTER_VALUE4}] {TYPE_NUMERIC})";
 
+            private static readonly string CREATE_ARTICLE_SALES =
+                $@"create table {{0}} (
+                    [{ARTICLE_SALE_DOCUMENT_DATE}] {TYPE_DATE},
+                    [{ARTICLE_SALE_DOCUMENT_NUMBER}] {TYPE_CHARACTER8},
+                    [{ARTICLE_SALE_WAREHOUSE_CODE}] {TYPE_CHARACTER5},
+                    [{ARTICLE_SALE_WAREHOUSE_NAME}] {TYPE_CHARACTER25},
+                    [{ARTICLE_SALE_ARTICLE_CODE}] {TYPE_CHARACTER10},
+                    [{ARTICLE_SALE_ARTICLE_NAME}] {TYPE_CHARACTER50},
+                    [{ARTICLE_SALE_ARTICLE_QUANTITY}] {TYPE_NUMERIC},
+                    [{ARTICLE_SALE_ARTICLE_PRICE}] {TYPE_NUMERIC},
+                    [{ARTICLE_SALE_ARTICLE_TOTAL_PRICE}] {TYPE_NUMERIC},
+                    [{ARTICLE_SALE_CHECK_NUMBER}] {TYPE_NUMERIC},
+                    [{ARTICLE_SALE_SERIAL_NUMBER}] {TYPE_CHARACTER50},
+                    [{ARTICLE_SALE_COMMENT}] {TYPE_CHARACTER100})";
+
             public static string GetItemsQuery(string tableName)
             {
                 return string.Format(GET_ITEMS, tableName);
             }
 
-            public static string GetAddWaterCustomerPaymentsPreQuery(string tableName)
+            public static string GetAddSomethingPreQuery(string tableName)
             {
-                return string.Format(ADD_WATER_CUSTOMER_PAYMENTS_PRE, tableName);
+                return string.Format(INSERT_SOMETHING_PRE, tableName);
             }
 
             public static string GetCreateWaterCustomerPaymentsQuery(string tableName)
             {
                 return string.Format(CREATE_WATER_CUSTOMER_PAYMENTS, tableName);
+            }
+
+            public static string GetCreateArticleSalesQuery(string tableName)
+            {
+                return string.Format(CREATE_ARTICLE_SALES, tableName);
             }
         }
 
@@ -184,7 +223,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             }
         }
 
-        public DbfArticlesSet GetArticles()
+        public List<DbfArticle> GetArticles()
         {
             try
             {
@@ -195,9 +234,9 @@ namespace CashCenter.DataMigration.Providers.Dbf
 
                 var dataReader = command.ExecuteReader();
 
-                DateTime date = default(DateTime);
+                DateTime entryDate = default(DateTime);
                 if (dataReader.Read())
-                    date = dataReader.GetFieldFromReader<DateTime>(Sql.ARTICLES_DATA);
+                    entryDate = dataReader.GetFieldFromReader<DateTime>(Sql.ARTICLES_DATA);
 
                 var articles = new List<DbfArticle>();
                 while (dataReader.Read())
@@ -205,12 +244,12 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     var code = dataReader.GetFieldFromReader<string>(Sql.ARTICLES_CODE);
                     var name = dataReader.GetFieldFromReader<string>(Sql.ARTICLES_NAME);
                     var barcode = dataReader.GetFieldFromReader<string>(Sql.ARTICLES_BARCODE);
-                    var price = dataReader.GetFieldFromReader<decimal>(Sql.ARTICLES_PRICE);
+                    var price = dataReader.GetFieldFromReader<double>(Sql.ARTICLES_PRICE);
 
-                    articles.Add(new DbfArticle(code, name, barcode, price));
+                    articles.Add(new DbfArticle(code, name, barcode, (decimal)price, entryDate));
                 }
 
-                return new DbfArticlesSet(date, articles);
+                return articles;
             }
             catch (Exception ex)
             {
@@ -224,11 +263,11 @@ namespace CashCenter.DataMigration.Providers.Dbf
 
         public void StoreWaterCustomerPayments(IEnumerable<DbfWaterCustomerPayment> payments)
         {
-            CreateDbf();
+            CreateDbf(Sql.GetCreateWaterCustomerPaymentsQuery(Path.GetFileNameWithoutExtension(dbfName)));
             AddWaterCustomerPayments(payments);
         }
 
-        private void CreateDbf()
+        private void CreateDbf(string query)
         {
             if (File.Exists(filename))
                 File.Delete(filename);
@@ -238,7 +277,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 dbfConnection.Open();
 
                 var command = dbfConnection.CreateCommand();
-                command.CommandText = Sql.GetCreateWaterCustomerPaymentsQuery(Path.GetFileNameWithoutExtension(dbfName));
+                command.CommandText = query;
 
                 command.ExecuteNonQuery();
                 command.Dispose();
@@ -291,7 +330,57 @@ namespace CashCenter.DataMigration.Providers.Dbf
                         GetCounterValueString(payment.CounterValue4)
                     };
 
-                    command.CommandText = $"{Sql.GetAddWaterCustomerPaymentsPreQuery(dbfName)} ({string.Join(", ", values)})";
+                    command.CommandText = $"{Sql.GetAddSomethingPreQuery(dbfName)} ({string.Join(", ", values)})";
+                    command.ExecuteNonQuery();
+                    command.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка записи в DBF {dbfName}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        public void StoreArticleSales(IEnumerable<DbfArticleSale> sales)
+        {
+            CreateDbf(Sql.GetCreateArticleSalesQuery(Path.GetFileNameWithoutExtension(dbfName)));
+            AddArticleSales(sales);
+        }
+
+        private void AddArticleSales(IEnumerable<DbfArticleSale> sales)
+        {
+            if (sales == null || sales.Count() == 0)
+                return;
+
+            try
+            {
+                dbfConnection.Open();
+
+                foreach (var sale in sales)
+                {
+                    var command = dbfConnection.CreateCommand();
+
+                    var values = new[]
+                    {
+                        sale.DocumentDateTime != DateTime.MinValue ? GetStringForQuery(sale.DocumentDateTime.ToString("dd.MM.yyyy")) : "NULL",
+                        GetStringForQuery(sale.DocumentNumber),
+                        GetStringForQuery(sale.WarehouseCode),
+                        GetStringForQuery(sale.WarehouseName),
+                        GetStringForQuery(sale.ArticleCode),
+                        GetStringForQuery(sale.ArticleName),
+                        GetCounterValueString(sale.ArticleQuantity),
+                        GetMoneyString(sale.ArticlePrice),
+                        GetMoneyString(sale.ArticleTotalPrice),
+                        sale.CheckNumber.ToString(),
+                        GetStringForQuery(sale.SerialNumber),
+                        GetStringForQuery(sale.Comment)
+                    };
+
+                    command.CommandText = $"{Sql.GetAddSomethingPreQuery(dbfName)} ({string.Join(", ", values)})";
                     command.ExecuteNonQuery();
                     command.Dispose();
                 }

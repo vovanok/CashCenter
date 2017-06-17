@@ -15,6 +15,7 @@
           <Property Name="Measure" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Barcode" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ArticlePrice">
           <Key>
@@ -43,7 +44,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ArticlePriceId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="float" Nullable="false" />
-          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -284,46 +285,14 @@
           <Property Name="ArticlePriceTypeId" Type="Int32" Nullable="false" />
           <Property Name="EntryDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Value" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <NavigationProperty Name="ArticleSales" Relationship="Self.FK_ArticleSale_To_ArticlePrice" FromRole="ArticlePrice" ToRole="ArticleSale" />
-          <NavigationProperty Name="Article" Relationship="CashCenterModel.FK_ArticlePrice_To_Article" FromRole="ArticlePrice" ToRole="Article" />
           <NavigationProperty Name="ArticlePriceType" Relationship="CashCenterModel.FK_ArticlePrice_To_ArticlePriceType" FromRole="ArticlePrice" ToRole="ArticlePriceType" />
+          <NavigationProperty Name="Article" Relationship="CashCenterModel.FK_ArticlePrice_To_Article" FromRole="ArticlePrice" ToRole="Article" />
+          <NavigationProperty Name="ArticleSales" Relationship="CashCenterModel.FK_ArticleSale_To_ArticlePrice" FromRole="ArticlePrice" ToRole="ArticleSale" />
           </EntityType>
-        <EntityType Name="ArticleSale">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ArticlePriceId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Double" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ArticlePrice" Relationship="Self.FK_ArticleSale_To_ArticlePrice" FromRole="ArticleSale" ToRole="ArticlePrice" />
-        </EntityType>
-        <Association Name="FK_ArticleSale_To_ArticlePrice">
-          <End Role="ArticlePrice" Type="Self.ArticlePrice" Multiplicity="1" />
-          <End Role="ArticleSale" Type="Self.ArticleSale" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ArticlePrice">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ArticleSale">
-              <PropertyRef Name="ArticlePriceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="CashCenterContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ArticlePrices" EntityType="Self.ArticlePrice" />
-          <EntitySet Name="ArticleSales" EntityType="Self.ArticleSale" />
-          <AssociationSet Name="FK_ArticleSale_To_ArticlePrice" Association="Self.FK_ArticleSale_To_ArticlePrice">
-            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
-            <End Role="ArticleSale" EntitySet="ArticleSales" />
-          </AssociationSet>
           <EntitySet Name="PaymentReasons" EntityType="CashCenterModel.PaymentReason" />
-          <EntitySet Name="Articles" EntityType="CashCenterModel.Article" />
           <EntitySet Name="ArticlePriceTypes" EntityType="CashCenterModel.ArticlePriceType" />
-          <AssociationSet Name="FK_ArticlePrice_To_Article" Association="CashCenterModel.FK_ArticlePrice_To_Article">
-            <End Role="Article" EntitySet="Articles" />
-            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
-          </AssociationSet>
           <AssociationSet Name="FK_ArticlePrice_To_ArticlePriceType" Association="CashCenterModel.FK_ArticlePrice_To_ArticlePriceType">
             <End Role="ArticlePriceType" EntitySet="ArticlePriceTypes" />
             <End Role="ArticlePrice" EntitySet="ArticlePrices" />
@@ -354,6 +323,16 @@
             <End Role="PaymentReason" EntitySet="PaymentReasons" />
             <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayments" />
           </AssociationSet>
+          <EntitySet Name="Articles" EntityType="CashCenterModel.Article" />
+          <AssociationSet Name="FK_ArticlePrice_To_Article" Association="CashCenterModel.FK_ArticlePrice_To_Article">
+            <End Role="Article" EntitySet="Articles" />
+            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
+          </AssociationSet>
+          <EntitySet Name="ArticleSales" EntityType="CashCenterModel.ArticleSale" />
+          <AssociationSet Name="FK_ArticleSale_To_ArticlePrice" Association="CashCenterModel.FK_ArticleSale_To_ArticlePrice">
+            <End Role="ArticlePrice" EntitySet="ArticlePrices" />
+            <End Role="ArticleSale" EntitySet="ArticleSales" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="PaymentReason">
           <Key>
@@ -362,18 +341,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EnergyCustomerPayments" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason" FromRole="PaymentReason" ToRole="EnergyCustomerPayment" />
-        </EntityType>
-        <EntityType Name="Article">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Double" Nullable="false" />
-          <Property Name="Measure" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Barcode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ArticlePrices" Relationship="CashCenterModel.FK_ArticlePrice_To_Article" FromRole="Article" ToRole="ArticlePrice" />
         </EntityType>
         <EntityType Name="ArticlePriceType">
           <Key>
@@ -386,18 +353,6 @@
           <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ArticlePrices" Relationship="CashCenterModel.FK_ArticlePrice_To_ArticlePriceType" FromRole="ArticlePriceType" ToRole="ArticlePrice" />
         </EntityType>
-        <Association Name="FK_ArticlePrice_To_Article">
-          <End Type="CashCenterModel.Article" Role="Article" Multiplicity="1" />
-          <End Type="CashCenterModel.ArticlePrice" Role="ArticlePrice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Article">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ArticlePrice">
-              <PropertyRef Name="ArticleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ArticlePrice_To_ArticlePriceType">
           <End Type="CashCenterModel.ArticlePriceType" Role="ArticlePriceType" Multiplicity="1" />
           <End Type="CashCenterModel.ArticlePrice" Role="ArticlePrice" Multiplicity="*" />
@@ -557,6 +512,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="Measure" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Barcode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ArticlePrices" Relationship="CashCenterModel.FK_ArticlePrice_To_Article" FromRole="Article" ToRole="ArticlePrice" />
+        </EntityType>
+        <Association Name="FK_ArticlePrice_To_Article">
+          <End Type="CashCenterModel.Article" Role="Article" Multiplicity="1" />
+          <End Type="CashCenterModel.ArticlePrice" Role="ArticlePrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArticlePrice">
+              <PropertyRef Name="ArticleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ArticleSale">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticlePriceId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ArticlePrice" Relationship="CashCenterModel.FK_ArticleSale_To_ArticlePrice" FromRole="ArticleSale" ToRole="ArticlePrice" />
+        </EntityType>
+        <Association Name="FK_ArticleSale_To_ArticlePrice">
+          <End Type="CashCenterModel.ArticlePrice" Role="ArticlePrice" Multiplicity="1" />
+          <End Type="CashCenterModel.ArticleSale" Role="ArticleSale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ArticlePrice">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArticleSale">
+              <PropertyRef Name="ArticlePriceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -574,31 +576,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ArticleSales">
-            <EntityTypeMapping TypeName="CashCenterModel.ArticleSale">
-              <MappingFragment StoreEntitySet="ArticleSale">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ArticlePriceId" ColumnName="ArticlePriceId" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PaymentReasons">
             <EntityTypeMapping TypeName="CashCenterModel.PaymentReason">
               <MappingFragment StoreEntitySet="PaymentReason">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Articles">
-            <EntityTypeMapping TypeName="CashCenterModel.Article">
-              <MappingFragment StoreEntitySet="Article">
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
-                <ScalarProperty Name="Measure" ColumnName="Measure" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -695,6 +675,29 @@
                 <ScalarProperty Name="NewNightValue" ColumnName="NewNightValue" />
                 <ScalarProperty Name="NewDayValue" ColumnName="NewDayValue" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Articles">
+            <EntityTypeMapping TypeName="CashCenterModel.Article">
+              <MappingFragment StoreEntitySet="Article">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+                <ScalarProperty Name="Measure" ColumnName="Measure" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticleSales">
+            <EntityTypeMapping TypeName="CashCenterModel.ArticleSale">
+              <MappingFragment StoreEntitySet="ArticleSale">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ArticlePriceId" ColumnName="ArticlePriceId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

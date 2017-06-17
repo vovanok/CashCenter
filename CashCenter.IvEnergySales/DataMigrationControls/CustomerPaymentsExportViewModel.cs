@@ -5,6 +5,7 @@ using CashCenter.Common;
 using CashCenter.DataMigration;
 using CashCenter.DataMigration.WaterCustomers;
 using CashCenter.IvEnergySales.Common;
+using CashCenter.DataMigration.Articles;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
@@ -14,7 +15,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             {
                 new ExportTargetItem("Платежи по электроэнергии -> OFF", new EnergyCustomerPaymentsOffExporter()),
                 new ExportTargetItem("Платежи по электроэнергии -> Word", new EnergyCustomerPaymentsWordExporter()),
-                new ExportTargetItem("Платежи за воду -> DBF", new WaterCustomerPaymentsDbfExporter())
+                new ExportTargetItem("Платежи за воду -> DBF", new WaterCustomerPaymentsDbfExporter()),
+                new ExportTargetItem("Покупки товаров -> DBF", new ArticleSalesDbfExporter())
             };
 
         public Observed<ExportTargetItem> SelectedExportTarget { get; } = new Observed<ExportTargetItem>();

@@ -200,6 +200,11 @@ namespace CashCenter.Dal
 
         #region Article sales
 
+        public IEnumerable<ArticleSale> ArticleSales
+        {
+            get { return context.ArticleSales; }
+        }
+
         public ArticleSale AddArticleSale(ArticleSale artilceSale)
         {
             try
