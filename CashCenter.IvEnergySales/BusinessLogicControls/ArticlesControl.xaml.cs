@@ -106,14 +106,7 @@ namespace CashCenter.IvEnergySales
 
         private void On_dgPricesTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedArticlePriceWithTypeItem = dgPricesTypes.SelectedItem as ArticlePriceWithType;
-            if (selectedArticlePriceWithTypeItem == null)
-            {
-                lblPrice.Content = "0";
-                return;
-            }
-
-            lblPrice.Content = string.Format("{0} руб.", selectedArticlePriceWithTypeItem.Price?.Value ?? 0);
+            UpdatePrice();
         }
 
         private void On_dgPricesTypes_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
@@ -180,17 +173,26 @@ namespace CashCenter.IvEnergySales
             tbArticleNameFilter.Text = string.Empty;
             tbArticleBarcodeFilter.Text = string.Empty;
 
-            tbQuantity.Text = 0.ToString();
+            tbQuantity.Text = "0 руб.";
         }
 
         private void On_tbQuantity_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!double.TryParse(tbQuantity.Text, out double quantity))
+            UpdatePrice();
+        }
+
+        private void UpdatePrice()
+        {
+            if (lblPrice == null)
                 return;
 
             var selectedArticlePriceWithTypeItem = dgPricesTypes.SelectedItem as ArticlePriceWithType;
-            if (selectedArticlePriceWithTypeItem == null)
+
+            if (selectedArticlePriceWithTypeItem == null || !double.TryParse(tbQuantity.Text, out double quantity))
+            {
+                lblPrice.Content = "0 руб.";
                 return;
+            }
 
             lblPrice.Content = (selectedArticlePriceWithTypeItem.Price.Value * (decimal)quantity).ToString("0.00");
         }
