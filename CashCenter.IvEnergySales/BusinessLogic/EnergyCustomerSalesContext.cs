@@ -117,7 +117,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 using (var waiter = new OperationWaiter())
                 {
                     var check = new EnergyCustomerCheck(departmentCode, customerNumber, customerName,
-                        paymentReasonName, Properties.Settings.Default.CasherName, cost, customerEmail);
+                        paymentReasonName, Settings.CasherName, cost, customerEmail);
 
                     CheckPrinter.Print(check);
                     return true;

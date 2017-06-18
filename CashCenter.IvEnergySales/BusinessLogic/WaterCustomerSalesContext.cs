@@ -119,7 +119,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 using (var waiter = new OperationWaiter())
                 {
                     var check = new WaterCustomerCheck(customerNumber, customerName,
-                        Properties.Settings.Default.CasherName, cost, customerEmail);
+                        Settings.CasherName, cost, customerEmail);
 
                     CheckPrinter.Print(check);
                     return true;

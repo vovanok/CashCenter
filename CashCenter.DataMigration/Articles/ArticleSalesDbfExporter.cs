@@ -25,9 +25,9 @@ namespace CashCenter.DataMigration.Articles
             var salesForExport = new List<DbfArticleSale>();
             salesForExport.Add(new DbfArticleSale(
                 DateTime.Now,
-                "Doc N", // TODO
-                "WCode", // TODO
-                "Wh Name", // TODO
+                Settings.ArticlesDocumentNumber,
+                Settings.ArticlesWarehouseCode,
+                Settings.ArticlesWarehouseName,
                 string.Empty,
                 string.Empty,
                 0,
