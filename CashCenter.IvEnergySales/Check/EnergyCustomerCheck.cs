@@ -24,6 +24,8 @@ namespace CashCenter.IvEnergySales.Check
                       { "cashierName", cashierName }
                   },
                   cost,
+                  cost,
+                  1,
                   email)
         {
         }

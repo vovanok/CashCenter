@@ -13,13 +13,18 @@ namespace CashCenter.Check
         public CheckDescriptor Descriptor { get; private set; }
         public Dictionary<string, string> Parameters { get; private set; }
         public decimal Cost { get; private set; }
+        public decimal TotalCost { get; private set; }
+        public double Quantity { get; private set; }
         public string Email { get; private set; }
 
-        public Check(string descriptorId, Dictionary<string, string> parameters, decimal cost, string email)
+        public Check(string descriptorId, Dictionary<string, string> parameters,
+            decimal cost, decimal totalCost, double quantity, string email)
         {
             Descriptor = GetCheckDescriptorById(descriptorId);
             Parameters = parameters;
             Cost = cost;
+            TotalCost = totalCost;
+            Quantity = quantity;
             Email = email;
         }
 

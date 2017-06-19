@@ -168,9 +168,10 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            decimal totalCost = (decimal)quantity * selectedArticlePriceWithTypeItem.Price.Value;
+            decimal cost = selectedArticlePriceWithTypeItem.Price.Value;
+            decimal totalCost = (decimal)quantity * cost;
 
-            if (isWithoutCheck || TryPrintChecks(totalCost))
+            if (isWithoutCheck || TryPrintChecks(cost, totalCost, quantity, selectedArticleItem.Article.Name))
 
                 DalController.Instance.AddArticleSale(
                 new ArticleSale
@@ -183,13 +184,13 @@ namespace CashCenter.IvEnergySales
             ClearForm();
         }
 
-        private bool TryPrintChecks(decimal totalCost)
+        private bool TryPrintChecks(decimal cost, decimal totalCost, double quantity, string articleName)
         {
             try
             {
                 using (var waiter = new OperationWaiter())
                 {
-                    var check = new ArticleSaleCheck(totalCost);
+                    var check = new ArticleSaleCheck(cost, totalCost, quantity, Settings.CasherName, articleName);
 
                     CheckPrinter.Print(check);
                     return true;
@@ -210,7 +211,7 @@ namespace CashCenter.IvEnergySales
             tbArticleNameFilter.Text = string.Empty;
             tbArticleBarcodeFilter.Text = string.Empty;
 
-            tbQuantity.Text = "0 руб.";
+            tbQuantity.Text = 0.ToString();
         }
 
         private void On_tbQuantity_TextChanged(object sender, TextChangedEventArgs e)

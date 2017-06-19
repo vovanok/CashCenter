@@ -75,8 +75,10 @@ namespace CashCenter.Check
                     cashMachine.PrintLine(commonLine);
                 }
 
+                cashMachine.PrintLine(" ");
+
                 cashMachine.Driver.CheckType = 0;
-                cashMachine.Driver.Quantity = 1;
+                cashMachine.Driver.Quantity = check.Quantity;
                 cashMachine.Driver.Price = check.Cost;
                 cashMachine.Driver.Department = 1;
 
@@ -89,7 +91,7 @@ namespace CashCenter.Check
 
                 cashMachine.Sale();
 
-                cashMachine.Driver.Summ1 = check.Cost;
+                cashMachine.Driver.Summ1 = check.TotalCost;
                 cashMachine.CloseCheck();
 
                 cashMachine.Disconnect();
