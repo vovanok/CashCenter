@@ -1,4 +1,7 @@
-﻿using CashCenter.Dal;
+﻿using CashCenter.Check;
+using CashCenter.Common;
+using CashCenter.Dal;
+using CashCenter.IvEnergySales.Check;
 using CashCenter.IvEnergySales.Common;
 using System;
 using System.Linq;
@@ -130,6 +133,15 @@ namespace CashCenter.IvEnergySales
 
         private void On_btnPay_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            var isWithoutCheck = false;
+            if (!CheckPrinter.IsReady)
+            {
+                if (!Message.YesNoQuestion("Кассовый аппарат не подключен. Продолжить без печати чека?"))
+                    return;
+
+                isWithoutCheck = true;
+            }
+
             var selectedArticleItem = dgArticles.SelectedItem as ArticleItem;
             if (selectedArticleItem == null)
             {
@@ -156,7 +168,11 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            DalController.Instance.AddArticleSale(
+            decimal totalCost = (decimal)quantity * selectedArticlePriceWithTypeItem.Price.Value;
+
+            if (isWithoutCheck || TryPrintChecks(totalCost))
+
+                DalController.Instance.AddArticleSale(
                 new ArticleSale
                 {
                     ArticlePriceId = selectedArticlePriceWithTypeItem.Price.Id,
@@ -165,6 +181,27 @@ namespace CashCenter.IvEnergySales
                 });
 
             ClearForm();
+        }
+
+        private bool TryPrintChecks(decimal totalCost)
+        {
+            try
+            {
+                using (var waiter = new OperationWaiter())
+                {
+                    var check = new ArticleSaleCheck(totalCost);
+
+                    CheckPrinter.Print(check);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "Ошибка печати чека";
+                Log.Error(errorMessage, ex);
+                Message.Error(errorMessage);
+                return false;
+            }
         }
 
         private void ClearForm()

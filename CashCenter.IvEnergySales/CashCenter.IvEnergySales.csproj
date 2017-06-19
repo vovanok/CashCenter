@@ -110,6 +110,7 @@
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
+    <Compile Include="Check\ArticleSaleCheck.cs" />
     <Compile Include="Check\WaterCustomerCheck.cs" />
     <Compile Include="Common\Command.cs" />
     <Compile Include="Common\GlobalEvents.cs" />
