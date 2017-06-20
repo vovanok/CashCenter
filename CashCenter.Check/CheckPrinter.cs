@@ -58,6 +58,11 @@ namespace CashCenter.Check
 
                 cashMachine.OpenCheck();
 
+                if (1 <= check.PaySection && check.PaySection <= 16)
+                {
+                    cashMachine.Driver.PayDepartment = check.PaySection;
+                }
+
                 try
                 {
                     if (!StringUtils.IsValidEmail(check.Email))

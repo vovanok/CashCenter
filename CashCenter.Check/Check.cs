@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace CashCenter.Check
 {
-	public class Check
+	public abstract class Check
 	{
         public CheckDescriptor Descriptor { get; private set; }
         public Dictionary<string, string> Parameters { get; private set; }
@@ -16,9 +16,10 @@ namespace CashCenter.Check
         public decimal TotalCost { get; private set; }
         public double Quantity { get; private set; }
         public string Email { get; private set; }
+        public int PaySection { get; private set; }
 
         public Check(string descriptorId, Dictionary<string, string> parameters,
-            decimal cost, decimal totalCost, double quantity, string email)
+            decimal cost, decimal totalCost, double quantity, string email, int paySection)
         {
             Descriptor = GetCheckDescriptorById(descriptorId);
             Parameters = parameters;

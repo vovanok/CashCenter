@@ -15,7 +15,8 @@ namespace CashCenter.IvEnergySales.Check
                 cost,
                 totalCost,
                 quantity,
-                string.Empty)
+                string.Empty,
+                3)
         {
         }
     }

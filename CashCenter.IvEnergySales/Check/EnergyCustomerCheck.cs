@@ -26,7 +26,8 @@ namespace CashCenter.IvEnergySales.Check
                   cost,
                   cost,
                   1,
-                  email)
+                  email,
+                  1)
         {
         }
     }
