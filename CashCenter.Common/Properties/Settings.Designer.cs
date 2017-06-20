@@ -38,18 +38,6 @@ namespace CashCenter.Common.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ArticlesDocumentNumber {
-            get {
-                return ((string)(this["ArticlesDocumentNumber"]));
-            }
-            set {
-                this["ArticlesDocumentNumber"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ArticlesWarehouseCode {
             get {
                 return ((string)(this["ArticlesWarehouseCode"]));
@@ -68,6 +56,18 @@ namespace CashCenter.Common.Properties {
             }
             set {
                 this["ArticlesWarehouseName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ArticlesDocumentNumberCurrentValue {
+            get {
+                return ((int)(this["ArticlesDocumentNumberCurrentValue"]));
+            }
+            set {
+                this["ArticlesDocumentNumberCurrentValue"] = value;
             }
         }
     }

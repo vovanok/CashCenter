@@ -25,7 +25,7 @@ namespace CashCenter.DataMigration.Articles
             var salesForExport = new List<DbfArticleSale>();
             salesForExport.Add(new DbfArticleSale(
                 DateTime.Now,
-                Settings.ArticlesDocumentNumber,
+                Settings.ArticlesWarehouseCode + Settings.ArticlesDocumentNumberCurrentValue.ToString("D7"),
                 Settings.ArticlesWarehouseCode,
                 Settings.ArticlesWarehouseName,
                 string.Empty,
@@ -83,6 +83,8 @@ namespace CashCenter.DataMigration.Articles
                 if (exportException != null)
                     throw exportException;
             }
+
+            Settings.ArticlesDocumentNumberCurrentValue++;
 
             return countItemsForExport;
         }

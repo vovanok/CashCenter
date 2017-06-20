@@ -8,10 +8,10 @@
             set { Properties.Settings.Default.CasherName = value; }
         }
 
-        public static string ArticlesDocumentNumber
+        public static int ArticlesDocumentNumberCurrentValue
         {
-            get { return Properties.Settings.Default.ArticlesDocumentNumber; }
-            set { Properties.Settings.Default.ArticlesDocumentNumber = value; }
+            get { return Properties.Settings.Default.ArticlesDocumentNumberCurrentValue; }
+            set { Properties.Settings.Default.ArticlesDocumentNumberCurrentValue = value; }
         }
 
         public static string ArticlesWarehouseCode

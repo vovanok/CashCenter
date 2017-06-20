@@ -1,11 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Text;
+using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
 using CashCenter.Common;
 using CashCenter.IvEnergySales.Common;
 using CashCenter.Dal;
-using System.Text;
-using System;
 
 namespace CashCenter.IvEnergySales.Service
 {
@@ -13,7 +13,7 @@ namespace CashCenter.IvEnergySales.Service
     {
         public Observed<string> CashierName { get; } = new Observed<string>();
         public List<Department> Deparments { get; }
-        public Observed<string> ArticlesDocumentNumber { get; } = new Observed<string>();
+        public Observed<int> ArticlesDocumentNumberCurrentValue { get; } = new Observed<int>();
         public Observed<string> ArticlesWarehouseCode { get; } = new Observed<string>();
         public Observed<string> ArticlesWarehouseName { get; } = new Observed<string>();
 
@@ -23,12 +23,12 @@ namespace CashCenter.IvEnergySales.Service
         public SettingsDialogViewModel()
         {
             CashierName.OnChange += (newValue) => DispatchPropertyChanged("CashierName");
-            ArticlesDocumentNumber.OnChange += (newValue) => DispatchPropertyChanged("ArticlesDocumentNumber");
+            ArticlesDocumentNumberCurrentValue.OnChange += (newValue) => DispatchPropertyChanged("ArticlesDocumentNumberCurrentValue");
             ArticlesWarehouseCode.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseCode");
             ArticlesWarehouseName.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseName");
 
             CashierName.Value = Settings.CasherName;
-            ArticlesDocumentNumber.Value = Settings.ArticlesDocumentNumber;
+            ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
             ArticlesWarehouseCode.Value = Settings.ArticlesWarehouseCode;
             ArticlesWarehouseName.Value = Settings.ArticlesWarehouseName;
 
@@ -39,29 +39,45 @@ namespace CashCenter.IvEnergySales.Service
             CloseCommand = new Command(CloseHandler);
         }
 
-        private void SaveHandler(object data)
+        private void SaveHandler(object parameters)
         {
+            var controlForValidate = parameters as DependencyObject;
+            if (!IsValid(controlForValidate))
+            {
+                Message.Error("При вводе были допущены ошибки. Исправьте их и попробуйте снова.\nОшибочные поля обведены красным.");
+                return;
+            }
+
+            // Имя кассира
             Settings.CasherName = CashierName.Value;
 
-            var warnindMessage = new StringBuilder();
-            HandleLengthLimitedSetting((value) => Settings.ArticlesDocumentNumber = value,
-                ArticlesDocumentNumber.Value, "Номер документа (для экспорта товаров)", 8, warnindMessage);
+            // Текущий номер документа для эксорта товаров
+            Settings.ArticlesDocumentNumberCurrentValue = ArticlesDocumentNumberCurrentValue.Value;
 
-            HandleLengthLimitedSetting((value) => Settings.ArticlesWarehouseCode = value,
-                ArticlesWarehouseCode.Value, "Код склада (для экспорта товаров)", 5, warnindMessage);
+            // Код склада
+            if (ArticlesWarehouseCode.Value.Length > 3)
+            {
+                Message.Error("Длина поля \"Код склада (для экспорта товаров)\" не должна превышать 3 символов");
+                return;
+            }
 
-            HandleLengthLimitedSetting((value) => Settings.ArticlesWarehouseName = value,
-                ArticlesWarehouseName.Value, "Название склада (для экспорта товаров)", 25, warnindMessage);
+            Settings.ArticlesWarehouseCode = ArticlesWarehouseCode.Value;
 
-            if (warnindMessage.Length > 0)
-                Message.Info(warnindMessage.ToString());
+            // Название склада
+            if (ArticlesWarehouseName.Value.Length > 25)
+            {
+                Message.Error("Длина поля \"Название склада (для экспорта товаров)\" не должна превышать 25 символов");
+                return;
+            }
+
+            Settings.ArticlesWarehouseName = ArticlesWarehouseName.Value;
 
             Settings.Save();
 
             DalController.Instance.Save();
             GlobalEvents.DispatchDepartmentsChanged();
 
-            var window = data as Window;
+            var window = parameters as Window;
             if (window != null)
             {
                 window.DialogResult = true;

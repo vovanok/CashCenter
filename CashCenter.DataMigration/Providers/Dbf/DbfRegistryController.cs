@@ -66,6 +66,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ARTICLE_SALE_COMMENT = "KOMMENT";
 
             public const string TYPE_DATE = "Date";
+            public const string TYPE_CHARACTER3 = "Character(3)";
             public const string TYPE_CHARACTER5 = "Character(5)";
             public const string TYPE_CHARACTER6 = "Character(6)";
             public const string TYPE_CHARACTER8 = "Character(8)";
@@ -103,8 +104,8 @@ namespace CashCenter.DataMigration.Providers.Dbf
             private static readonly string CREATE_ARTICLE_SALES =
                 $@"create table {{0}} (
                     [{ARTICLE_SALE_DOCUMENT_DATE}] {TYPE_DATE},
-                    [{ARTICLE_SALE_DOCUMENT_NUMBER}] {TYPE_CHARACTER8},
-                    [{ARTICLE_SALE_WAREHOUSE_CODE}] {TYPE_CHARACTER5},
+                    [{ARTICLE_SALE_DOCUMENT_NUMBER}] {TYPE_CHARACTER10},
+                    [{ARTICLE_SALE_WAREHOUSE_CODE}] {TYPE_CHARACTER3},
                     [{ARTICLE_SALE_WAREHOUSE_NAME}] {TYPE_CHARACTER25},
                     [{ARTICLE_SALE_ARTICLE_CODE}] {TYPE_CHARACTER10},
                     [{ARTICLE_SALE_ARTICLE_NAME}] {TYPE_CHARACTER50},
