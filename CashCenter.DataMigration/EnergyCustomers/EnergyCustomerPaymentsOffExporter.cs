@@ -5,7 +5,7 @@ using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Off;
 using CashCenter.DataMigration.Providers.Off.Entities;
 
-namespace CashCenter.DataMigration
+namespace CashCenter.DataMigration.EnergyCustomers
 {
     public class EnergyCustomerPaymentsOffExporter : BaseExporter<EnergyCustomerPayment>
     {

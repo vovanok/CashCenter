@@ -6,7 +6,7 @@ using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
 using CashCenter.DataMigration.Providers.Word.Entities;
 
-namespace CashCenter.DataMigration
+namespace CashCenter.DataMigration.EnergyCustomers
 {
     public class EnergyCustomerPaymentsWordExporter : BaseExporter<EnergyCustomerPayment>
     {

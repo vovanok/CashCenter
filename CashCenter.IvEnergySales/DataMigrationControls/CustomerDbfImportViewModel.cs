@@ -5,9 +5,10 @@ using System.Linq;
 using System.Collections.Generic;
 using CashCenter.Dal;
 using CashCenter.Common;
-using CashCenter.DataMigration;
 using CashCenter.DataMigration.Import;
+using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.WaterCustomers;
+using CashCenter.DataMigration.Articles;
 using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
@@ -18,7 +19,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             {
                 new ImportTargetItem("Потребители электроэнергии", new EnergyCustomersDbfImporter(), true, false),
                 new ImportTargetItem("Потребители воды", new WaterCustomersDbfImporter(), false, false),
-                new ImportTargetItem("Товары", new ArticlesDbfImporter(), false, true)
+                new ImportTargetItem("Товары", new ArticlesDbfImporter(), false, true),
+                new ImportTargetItem("Пополнения товаров", new ArticlesCountsDbfImporter(), false, false)
             };
 
         public List<ArticlePriceType> ArticlePriceTypes { get; } = DalController.Instance.ArticlePriceTypes.ToList();
@@ -86,6 +88,11 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             }
 
             var resultStatistic = ImportItem(SelectedImportTarget.Value);
+
+            if (SelectedImportTarget.Value.Importer is ArticlesCountsDbfImporter)
+            {
+                GlobalEvents.DispatchArticlesUpdated();
+            }
 
             Log.Info(resultStatistic);
             Message.Info(resultStatistic);

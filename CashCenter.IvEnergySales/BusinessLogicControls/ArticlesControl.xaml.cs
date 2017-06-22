@@ -37,6 +37,8 @@ namespace CashCenter.IvEnergySales
         public ArticlesControl()
         {
             InitializeComponent();
+
+            GlobalEvents.OnArticlesUpdated += UpdateArticles;
         }
 
         private void UpdateArticles()
@@ -168,18 +170,27 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
+            if (quantity > selectedArticleItem.Article.Quantity)
+            {
+                Message.Error("Заданное количество товара отсутствует на складе");
+                return;
+            }
+
             decimal cost = selectedArticlePriceWithTypeItem.Price.Value;
             decimal totalCost = (decimal)quantity * cost;
 
             if (isWithoutCheck || TryPrintChecks(cost, totalCost, quantity, selectedArticleItem.Article.Name))
+            {
+                selectedArticleItem.Article.Quantity -= quantity;
 
                 DalController.Instance.AddArticleSale(
-                new ArticleSale
-                {
-                    ArticlePriceId = selectedArticlePriceWithTypeItem.Price.Id,
-                    CreateDate = DateTime.Now,
-                    Quantity = quantity
-                });
+                    new ArticleSale
+                    {
+                        ArticlePriceId = selectedArticlePriceWithTypeItem.Price.Id,
+                        CreateDate = DateTime.Now,
+                        Quantity = quantity
+                    });
+            }
 
             ClearForm();
         }

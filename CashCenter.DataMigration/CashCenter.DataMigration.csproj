@@ -64,17 +64,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Articles\ArticleSalesDbfExporter.cs" />
+    <Compile Include="Articles\ArticlesCountsDbfImporter.cs" />
     <Compile Include="Articles\ArticlesDbfImporter.cs" />
     <Compile Include="Import\BaseDbfImporter.cs" />
     <Compile Include="BaseExporter.cs" />
     <Compile Include="Import\BaseImporter.cs" />
-    <Compile Include="Customer\EnergyCustomerPaymentsOffExporter.cs" />
-    <Compile Include="Customer\EnergyCustomerPaymentsWordExporter.cs" />
-    <Compile Include="Customer\EnergyCustomersDbfImporter.cs" />
+    <Compile Include="EnergyCustomers\EnergyCustomerPaymentsOffExporter.cs" />
+    <Compile Include="EnergyCustomers\EnergyCustomerPaymentsWordExporter.cs" />
+    <Compile Include="EnergyCustomers\EnergyCustomersDbfImporter.cs" />
     <Compile Include="IExporter.cs" />
     <Compile Include="Import\IImporter.cs" />
     <Compile Include="Providers\Dbf\DbfRegistryController.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticle.cs" />
+    <Compile Include="Providers\Dbf\Entities\DbfArticleQuantity.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticleSale.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfCustomer.cs" />
     <Compile Include="ExportResult.cs" />

@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Collections.Generic;
 using CashCenter.Common;
-using CashCenter.DataMigration;
+using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.WaterCustomers;
-using CashCenter.IvEnergySales.Common;
 using CashCenter.DataMigration.Articles;
+using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {

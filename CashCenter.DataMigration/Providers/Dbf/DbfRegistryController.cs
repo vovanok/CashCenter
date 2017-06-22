@@ -34,6 +34,10 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ARTICLES_BARCODE = "SHTRIHKOD";
             public const string ARTICLES_PRICE = "TOVARCENA";
 
+            public const string ARTICLEQUANTITY_ARTICLECODE = "TOVARKOD";
+            public const string ARTICLEQUANTITY_QUANTITY = "TOVARKOL";
+            public const string ARTICLEQUANTITY_MEASURE = "EDIZMNAME";
+
             public const string WATER_CUSTOMER_PAYMENT_CREATION_DATE = "DATE";
             public const string WATER_CUSTOMER_PAYMENT_CUSTOMER_NUMBER = "SCHET";
             public const string WATER_CUSTOMER_PAYMENT_COST = "SUMZACH";
@@ -251,6 +255,42 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 }
 
                 return articles;
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка чтения DBF {dbfName}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        public List<DbfArticleQuantity> GetArticlePrices()
+        {
+            try
+            {
+                dbfConnection.Open();
+
+                var command = dbfConnection.CreateCommand();
+                command.CommandText = Sql.GetItemsQuery(dbfName);
+
+                var dataReader = command.ExecuteReader();
+
+                // Пропускаем первую строку с дополнительной информацией
+                dataReader.Read();
+
+                var articlesQuantities = new List<DbfArticleQuantity>();
+                while (dataReader.Read())
+                {
+                    var articleCode = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_ARTICLECODE);
+                    var quantity = dataReader.GetFieldFromReader<double>(Sql.ARTICLEQUANTITY_QUANTITY);
+                    var measure = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_MEASURE);
+
+                    articlesQuantities.Add(new DbfArticleQuantity(articleCode, quantity, measure));
+                }
+
+                return articlesQuantities;
             }
             catch (Exception ex)
             {

@@ -4,7 +4,7 @@ using CashCenter.Dal;
 using CashCenter.DataMigration.Import;
 using CashCenter.DataMigration.Providers.Dbf.Entities;
 
-namespace CashCenter.DataMigration
+namespace CashCenter.DataMigration.Articles
 {
     public class ArticlesDbfImporter : BaseDbfImporter<DbfArticle, Article>
     {

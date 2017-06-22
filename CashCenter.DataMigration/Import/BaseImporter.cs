@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CashCenter.Dal;
 
 namespace CashCenter.DataMigration.Import
@@ -15,26 +14,28 @@ namespace CashCenter.DataMigration.Import
             if (sourceItems == null)
                 return new ImportResult();
 
-            var addedCount = 0;
             var updatedCount = 0;
             var deletedCount = DeleteAllTargetItems();
 
-            var itemsForCreation = sourceItems.Select(sourceItem =>
+            var itemsForCreation = new List<TTarget>();
+            foreach (var sourceItem in sourceItems)
+            {
+                if (TryUpdateExistingItem(sourceItem))
                 {
-                    if (TryUpdateExistingItem(sourceItem))
-                    {
-                        updatedCount++;
-                        if (deletedCount > 0)
-                            deletedCount--;
-                        return null;
-                    }
+                    updatedCount++;
+                    if (deletedCount > 0)
+                        deletedCount--;
+                    continue;
+                }
 
-                    addedCount++;
-                    return GetTargetItemBySource(sourceItem);
-                }).Where(targetItem => targetItem != null);
+                var targetItem = GetTargetItemBySource(sourceItem);
+                if (targetItem != null)
+                    itemsForCreation.Add(targetItem);
+            }
+
+            var addedCount = itemsForCreation.Count;
 
             CreateNewItems(itemsForCreation);
-
             DalController.Instance.Save();
 
             return new ImportResult(addedCount, updatedCount, deletedCount);
