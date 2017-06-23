@@ -27,6 +27,7 @@ namespace CashCenter.Check
             TotalCost = totalCost;
             Quantity = quantity;
             Email = email;
+            PaySection = paySection;
         }
 
         public IEnumerable<string> GetCommonLines()

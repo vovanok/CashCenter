@@ -58,11 +58,6 @@ namespace CashCenter.Check
 
                 cashMachine.OpenCheck();
 
-                if (1 <= check.PaySection && check.PaySection <= 16)
-                {
-                    cashMachine.Driver.PayDepartment = check.PaySection;
-                }
-
                 try
                 {
                     if (!StringUtils.IsValidEmail(check.Email))
@@ -85,7 +80,14 @@ namespace CashCenter.Check
                 cashMachine.Driver.CheckType = 0;
                 cashMachine.Driver.Quantity = check.Quantity;
                 cashMachine.Driver.Price = check.Cost;
-                cashMachine.Driver.Department = 1;
+
+                var payDepartment =
+                    (1 <= check.PaySection && check.PaySection <= 16)
+                        ? check.PaySection
+                        : 1;
+
+                cashMachine.Driver.Department = payDepartment;
+                Log.Info($"Установлена секция чека {check.PaySection}");
 
                 cashMachine.Driver.Tax1 =
                     ndsTypeToTax1Map.ContainsKey((NdsPercent)Config.NdsPercent)
