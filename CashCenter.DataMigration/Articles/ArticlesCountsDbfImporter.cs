@@ -26,7 +26,7 @@ namespace CashCenter.DataMigration.Articles
             if (dbfRegistry == null)
                 return new List<DbfArticleQuantity>();
 
-            return dbfRegistry.GetArticlePrices();
+            return dbfRegistry.GetArticleQuantities();
         }
 
         protected override Article GetTargetItemBySource(DbfArticleQuantity sourceItem)

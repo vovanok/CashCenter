@@ -266,7 +266,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             }
         }
 
-        public List<DbfArticleQuantity> GetArticlePrices()
+        public List<DbfArticleQuantity> GetArticleQuantities()
         {
             try
             {
@@ -277,14 +277,23 @@ namespace CashCenter.DataMigration.Providers.Dbf
 
                 var dataReader = command.ExecuteReader();
 
-                // Пропускаем первую строку с дополнительной информацией
-                dataReader.Read();
-
                 var articlesQuantities = new List<DbfArticleQuantity>();
                 while (dataReader.Read())
                 {
                     var articleCode = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_ARTICLECODE);
-                    var quantity = dataReader.GetFieldFromReader<double>(Sql.ARTICLEQUANTITY_QUANTITY);
+                    if (articleCode == null)
+                        continue;
+
+                    double quantity;
+                    try
+                    {
+                        quantity = dataReader.GetFieldFromReader<double>(Sql.ARTICLEQUANTITY_QUANTITY);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        quantity = double.Parse(dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_QUANTITY).Replace('.', ','));
+                    }
+                    
                     var measure = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_MEASURE);
 
                     articlesQuantities.Add(new DbfArticleQuantity(articleCode, quantity, measure));
