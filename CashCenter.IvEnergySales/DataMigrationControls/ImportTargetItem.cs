@@ -9,14 +9,16 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
         public IImporter Importer { get; private set; }
         public bool IsNeedDepartmentInfo { get; private set; }
         public bool IsNeedArticlePriceType { get; private set; }
+        public bool IsNeedAddOrReplaceDecision { get; private set; }
 
-        public ImportTargetItem(string name, IImporter importer, bool isNeedDepartmentInfo, bool isNeedArticlePriceType)
+        public ImportTargetItem(string name, IImporter importer, bool isNeedDepartmentInfo, bool isNeedArticlePriceType, bool isNeedAddOrReplaceDecision)
         {
             IsChecked = false;
             Name = name;
             Importer = importer;
             IsNeedDepartmentInfo = isNeedDepartmentInfo;
             IsNeedArticlePriceType = isNeedArticlePriceType;
+            IsNeedAddOrReplaceDecision = isNeedAddOrReplaceDecision;
         }
     }
 }

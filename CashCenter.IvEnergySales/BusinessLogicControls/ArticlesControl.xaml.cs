@@ -48,9 +48,9 @@ namespace CashCenter.IvEnergySales
             var barcode = tbArticleBarcodeFilter.Text;
 
             var filteredArticles = DalController.Instance.Articles.Where(article =>
-                    (!string.IsNullOrEmpty(code) && article.Code.IndexOf(code, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
-                    (!string.IsNullOrEmpty(name) && article.Name.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) >= 0) ||
-                    (!string.IsNullOrEmpty(barcode) && article.Barcode.IndexOf(barcode, StringComparison.CurrentCultureIgnoreCase) >= 0));
+                    (string.IsNullOrEmpty(code) || article.Code.IndexOf(code, StringComparison.CurrentCultureIgnoreCase) >= 0) &&
+                    (string.IsNullOrEmpty(name) || article.Name.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) >= 0) &&
+                    (string.IsNullOrEmpty(barcode) || article.Barcode.IndexOf(barcode, StringComparison.CurrentCultureIgnoreCase) >= 0));
 
             var articlesInfo = filteredArticles.Select(article => new ArticleItem(article));
 
@@ -90,10 +90,10 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            var prices = DalController.Instance.GetArticlePrices()
+            var prices = DalController.Instance.ArticlePrices
                 .Where(price => price.ArticleId == selectedArticleItem.Article.Id).ToList();
 
-            var articlePriceWithTypeItems = DalController.Instance.GetArticlePrices()
+            var articlePriceWithTypeItems = DalController.Instance.ArticlePrices
                 .Where(price => price.ArticleId == selectedArticleItem.Article.Id)
                 .GroupBy(price => price.ArticlePriceTypeId)
                 .Select(pricesByType => pricesByType.FirstOrDefault(g => g.EntryDate == pricesByType.Max(item => item.EntryDate)))

@@ -161,9 +161,9 @@ namespace CashCenter.Dal
 
         #region Article prices
 
-        public IEnumerable<ArticlePrice> GetArticlePrices()
+        public IEnumerable<ArticlePrice> ArticlePrices
         {
-            return context.ArticlePrices;
+            get { return context.ArticlePrices; }
         }
 
         public ArticlePrice AddArticlePrice(ArticlePrice articlePrice)

@@ -17,10 +17,10 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
     {
         public IEnumerable<ImportTargetItem> ImportTargets { get; } = new[]
             {
-                new ImportTargetItem("Потребители электроэнергии", new EnergyCustomersDbfImporter(), true, false),
-                new ImportTargetItem("Потребители воды", new WaterCustomersDbfImporter(), false, false),
-                new ImportTargetItem("Товары", new ArticlesDbfImporter(), false, true),
-                new ImportTargetItem("Пополнения товаров", new ArticlesCountsDbfImporter(), false, false)
+                new ImportTargetItem("Потребители электроэнергии", new EnergyCustomersDbfImporter(), true, false, false),
+                new ImportTargetItem("Потребители воды", new WaterCustomersDbfImporter(), false, false, false),
+                new ImportTargetItem("Товары", new ArticlesDbfImporter(), false, true, false),
+                new ImportTargetItem("Пополнения товаров", new ArticlesCountsDbfImporter(), false, false, true)
             };
 
         public List<ArticlePriceType> ArticlePriceTypes { get; } = DalController.Instance.ArticlePriceTypes.ToList();
@@ -29,6 +29,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
         public Observed<string> DbfFilename { get; } = new Observed<string>();
         public Observed<Department> SelectedDepartment { get; } = new Observed<Department>();
         public Observed<ArticlePriceType> SelectedArticlePriceType { get; } = new Observed<ArticlePriceType>();
+        public Observed<bool> IsAddArticleQuantities { get; } = new Observed<bool>();
 
         public Command ImportCommand { get; }
 
@@ -38,6 +39,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             DbfFilename.OnChange += (newValue) => DispatchPropertyChanged("DbfFilename");
             SelectedDepartment.OnChange += (newValue) => DispatchPropertyChanged("SelectedDepartment");
             SelectedArticlePriceType.OnChange += (newValue) => DispatchPropertyChanged("SelectedArticlePriceType");
+            IsAddArticleQuantities.OnChange += (newValue) => DispatchPropertyChanged("IsAddArticleQuantities");
 
             ImportCommand = new Command(DoImport);
 
@@ -85,6 +87,11 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 }
 
                 articlesDbfImporter.PriceType = SelectedArticlePriceType.Value;
+            }
+
+            if (SelectedImportTarget.Value.Importer is ArticlesCountsDbfImporter articlesCountsDbfImporter)
+            {
+                articlesCountsDbfImporter.IsAddQuantities = IsAddArticleQuantities.Value;
             }
 
             var resultStatistic = ImportItem(SelectedImportTarget.Value);

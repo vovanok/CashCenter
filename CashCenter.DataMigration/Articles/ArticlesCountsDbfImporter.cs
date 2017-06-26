@@ -8,6 +8,8 @@ namespace CashCenter.DataMigration.Articles
 {
     public class ArticlesCountsDbfImporter : BaseDbfImporter<DbfArticleQuantity, Article>
     {
+        public bool IsAddQuantities { get; set; }
+
         protected override void CreateNewItems(IEnumerable<Article> itemsForCreation)
         {
             // Новые позиции не создаются, только обновляется количество товара
@@ -40,7 +42,15 @@ namespace CashCenter.DataMigration.Articles
             if (existingArticle == null)
                 return false;
 
-            existingArticle.Quantity = dbfArticleQuantity.Quantity;
+            if (IsAddQuantities)
+            {
+                existingArticle.Quantity += dbfArticleQuantity.Quantity;
+            }
+            else
+            {
+                existingArticle.Quantity = dbfArticleQuantity.Quantity;
+            }
+
             existingArticle.Measure = dbfArticleQuantity.Measure;
             return true;
         }

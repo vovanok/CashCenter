@@ -30,7 +30,14 @@
                   SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Код" Width="1*" Binding="{Binding Path = Article.Code}" IsReadOnly="True" />
-                <DataGridTextColumn Header="Название" Width="2*" Binding="{Binding Path = Article.Name}" />
+                <DataGridTextColumn Header="Название" Width="2*" Binding="{Binding Path=Article.Name}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <!--<DataGridTextColumn Header="Название" Width="2*" Binding="{Binding Path = Article.Name}" />-->
                 <DataGridTextColumn Header="Штрихкод" Width="2*" Binding="{Binding Path = Article.Barcode}"/>
                 <DataGridTextColumn Header="В наличии" Width="2*" Binding="{Binding Path = QuantityMeasure}"/>
             </DataGrid.Columns>
