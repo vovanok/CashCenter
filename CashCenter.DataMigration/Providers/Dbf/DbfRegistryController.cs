@@ -281,7 +281,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                 while (dataReader.Read())
                 {
                     var articleCode = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_ARTICLECODE);
-                    if (articleCode == null)
+                    if (string.IsNullOrEmpty(articleCode))
                         continue;
 
                     double quantity;
@@ -291,7 +291,12 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     }
                     catch (InvalidCastException)
                     {
-                        quantity = double.Parse(dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_QUANTITY).Replace('.', ','));
+                        string quantityStr = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_QUANTITY);
+
+                        if (!double.TryParse(quantityStr, out quantity))
+                        {
+                            quantity = double.Parse(quantityStr.Replace('.', ','));
+                        }
                     }
                     
                     var measure = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_MEASURE);
