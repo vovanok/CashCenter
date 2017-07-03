@@ -85,5 +85,41 @@ namespace CashCenter.Common
                 return false;
             }
         }
+
+        public static decimal ForseDecimalParse(string strValue)
+        {
+            decimal result;
+            if (decimal.TryParse(strValue.Replace(',', '.'), out result))
+                return result;
+
+            if (decimal.TryParse(strValue.Replace('.', ','), out result))
+                return result;
+
+            return 0;
+        }
+
+        public static double ForseDoubleParse(string strValue)
+        {
+            double result;
+            if (double.TryParse(strValue.Replace(',', '.'), out result))
+                return result;
+
+            if (double.TryParse(strValue.Replace('.', ','), out result))
+                return result;
+
+            return 0;
+        }
+
+        public static float ForseFloatParse(string strValue)
+        {
+            float result;
+            if (float.TryParse(strValue.Replace(',', '.'), out result))
+                return result;
+
+            if (float.TryParse(strValue.Replace('.', ','), out result))
+                return result;
+
+            return 0;
+        }
     }
 }

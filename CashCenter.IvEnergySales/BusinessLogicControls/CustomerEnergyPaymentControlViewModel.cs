@@ -181,7 +181,6 @@ namespace CashCenter.IvEnergySales
 
                 using (new OperationWaiter())
                 {
-
                     context.Pay(CustomerEmail.Value, (int)CurrentDayValue.Value, (int)CurrentNightValue.Value,
                         Cost.Value, SelectedPaymentReason.Value, Description.Value, isWithoutCheck);
 

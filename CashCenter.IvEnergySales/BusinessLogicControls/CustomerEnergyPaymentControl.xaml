@@ -22,6 +22,7 @@
         </Style>
         <converters:CustomerNumberToStringConverter x:Key="CustomerNumberToStringConverter"/>
         <converters:CustomerIsClosedStatusConverter x:Key="CustomerIsClosedStatusConverter"/>
+        <converters:FractionalNumberConverter x:Key="FractionalNumberConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
@@ -165,7 +166,7 @@
                               DisplayMemberPath="Name" Grid.Column="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
                     <Label Content="Сумма" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Cost.Value}"
+                    <TextBox Text="{Binding Cost.Value, Converter={StaticResource FractionalNumberConverter}}"
                              Grid.Column="1" Grid.Row="1"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"

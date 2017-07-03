@@ -124,6 +124,7 @@
       <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="BusinessLogicControls\CustomerWaterPaymentControlViewModel.cs" />
+    <Compile Include="Converters\FractionalNumberConverter.cs" />
     <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
     <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">

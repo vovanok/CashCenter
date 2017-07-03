@@ -291,12 +291,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     }
                     catch (InvalidCastException)
                     {
-                        string quantityStr = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_QUANTITY);
-
-                        if (!double.TryParse(quantityStr, out quantity))
-                        {
-                            quantity = double.Parse(quantityStr.Replace('.', ','));
-                        }
+                        quantity = StringUtils.ForseDoubleParse(dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_QUANTITY));
                     }
                     
                     var measure = dataReader.GetFieldFromReader<string>(Sql.ARTICLEQUANTITY_MEASURE);
