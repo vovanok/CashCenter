@@ -158,15 +158,10 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            if (!double.TryParse(tbQuantity.Text, out double quantity))
-            {
-                Message.Error("Количество товара должно быть числом");
-                return;
-            }
-
+            double quantity = StringUtils.ForseDoubleParse(tbQuantity.Text);
             if (quantity <= 0)
             {
-                Message.Error("Количество товара должно быть положительно");
+                Message.Error("Количество товара должно быть положительным числом");
                 return;
             }
 
