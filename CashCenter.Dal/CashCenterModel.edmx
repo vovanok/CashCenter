@@ -130,6 +130,7 @@
           <Property Name="Penalty" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="FiscalNumber" Type="int" Nullable="false" />
+          <Property Name="ComissionPercent" Type="float" Nullable="false" />
         </EntityType>
         <Association Name="FK_ArticlePrice_To_Article">
           <End Role="Article" Type="Self.Article" Multiplicity="1" />
@@ -299,11 +300,6 @@
           </AssociationSet>
           <EntitySet Name="Regions" EntityType="CashCenterModel.Region" />
           <EntitySet Name="WaterCustomers" EntityType="CashCenterModel.WaterCustomer" />
-          <EntitySet Name="WaterCustomerPayments" EntityType="CashCenterModel.WaterCustomerPayment" />
-          <AssociationSet Name="FK_WaterCustomerPayment_ToWaterCustomer" Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer">
-            <End Role="WaterCustomer" EntitySet="WaterCustomers" />
-            <End Role="WaterCustomerPayment" EntitySet="WaterCustomerPayments" />
-          </AssociationSet>
           <EntitySet Name="Departments" EntityType="CashCenterModel.Department" />
           <AssociationSet Name="FK_Department_ToRegion" Association="CashCenterModel.FK_Department_ToRegion">
             <End Role="Region" EntitySet="Regions" />
@@ -332,6 +328,11 @@
           <AssociationSet Name="FK_ArticleSale_To_ArticlePrice" Association="CashCenterModel.FK_ArticleSale_To_ArticlePrice">
             <End Role="ArticlePrice" EntitySet="ArticlePrices" />
             <End Role="ArticleSale" EntitySet="ArticleSales" />
+          </AssociationSet>
+          <EntitySet Name="WaterCustomerPayments" EntityType="CashCenterModel.WaterCustomerPayment" />
+          <AssociationSet Name="FK_WaterCustomerPayment_ToWaterCustomer" Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer">
+            <End Role="WaterCustomer" EntitySet="WaterCustomers" />
+            <End Role="WaterCustomerPayment" EntitySet="WaterCustomerPayments" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="PaymentReason">
@@ -389,35 +390,6 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="WaterCustomerPayments" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomer" ToRole="WaterCustomerPayment" />
         </EntityType>
-        <EntityType Name="WaterCustomerPayment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CounterValue1" Type="Double" Nullable="false" />
-          <Property Name="CounterValue2" Type="Double" Nullable="false" />
-          <Property Name="CounterValue3" Type="Double" Nullable="false" />
-          <Property Name="CounterValue4" Type="Double" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="WaterCustomer" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomerPayment" ToRole="WaterCustomer" />
-        </EntityType>
-        <Association Name="FK_WaterCustomerPayment_ToWaterCustomer">
-          <End Type="CashCenterModel.WaterCustomer" Role="WaterCustomer" Multiplicity="1" />
-          <End Type="CashCenterModel.WaterCustomerPayment" Role="WaterCustomerPayment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="WaterCustomer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="WaterCustomerPayment">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Department">
           <Key>
             <PropertyRef Name="Id" />
@@ -559,6 +531,36 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="WaterCustomerPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CounterValue1" Type="Double" Nullable="false" />
+          <Property Name="CounterValue2" Type="Double" Nullable="false" />
+          <Property Name="CounterValue3" Type="Double" Nullable="false" />
+          <Property Name="CounterValue4" Type="Double" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
+          <Property Name="ComissionPercent" Type="Double" Nullable="false" />
+          <NavigationProperty Name="WaterCustomer" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomerPayment" ToRole="WaterCustomer" />
+        </EntityType>
+        <Association Name="FK_WaterCustomerPayment_ToWaterCustomer">
+          <End Type="CashCenterModel.WaterCustomer" Role="WaterCustomer" Multiplicity="1" />
+          <End Type="CashCenterModel.WaterCustomerPayment" Role="WaterCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WaterCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WaterCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -615,23 +617,6 @@
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="WaterCustomerPayments">
-            <EntityTypeMapping TypeName="CashCenterModel.WaterCustomerPayment">
-              <MappingFragment StoreEntitySet="WaterCustomerPayment">
-                <ScalarProperty Name="FiscalNumber" ColumnName="FiscalNumber" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="Penalty" ColumnName="Penalty" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="CounterValue4" ColumnName="CounterValue4" />
-                <ScalarProperty Name="CounterValue3" ColumnName="CounterValue3" />
-                <ScalarProperty Name="CounterValue2" ColumnName="CounterValue2" />
-                <ScalarProperty Name="CounterValue1" ColumnName="CounterValue1" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -698,6 +683,24 @@
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ArticlePriceId" ColumnName="ArticlePriceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WaterCustomerPayments">
+            <EntityTypeMapping TypeName="CashCenterModel.WaterCustomerPayment">
+              <MappingFragment StoreEntitySet="WaterCustomerPayment">
+                <ScalarProperty Name="ComissionPercent" ColumnName="ComissionPercent" />
+                <ScalarProperty Name="FiscalNumber" ColumnName="FiscalNumber" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Penalty" ColumnName="Penalty" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CounterValue4" ColumnName="CounterValue4" />
+                <ScalarProperty Name="CounterValue3" ColumnName="CounterValue3" />
+                <ScalarProperty Name="CounterValue2" ColumnName="CounterValue2" />
+                <ScalarProperty Name="CounterValue1" ColumnName="CounterValue1" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

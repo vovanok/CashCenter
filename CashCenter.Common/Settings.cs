@@ -26,6 +26,12 @@
             set { Properties.Settings.Default.ArticlesWarehouseName = value; }
         }
 
+        public static float WaterСommissionPercent
+        {
+            get { return Properties.Settings.Default.WaterСommissionPercent; }
+            set { Properties.Settings.Default.WaterСommissionPercent = value; }
+        }
+
         public static void Save()
         {
             Properties.Settings.Default.Save();

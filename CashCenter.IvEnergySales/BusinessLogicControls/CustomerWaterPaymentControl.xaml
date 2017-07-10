@@ -136,34 +136,44 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
 
                     <Label Content="Сумма" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Cost.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1"
-                             VerticalContentAlignment="Center"
+                    <TextBox Text="{Binding Cost.Value, Converter={StaticResource FractionalNumberConverter}, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
-                    
+
                     <Label Content="Пени" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Penalty.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1" Grid.Row="1"
+                    <TextBox Text="{Binding Penalty.Value, Converter={StaticResource FractionalNumberConverter}, UpdateSourceTrigger=PropertyChanged}"
+                             Grid.Column="1" Grid.Row="1"
                              VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
-                    
-                    <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="2"
+
+                    <WrapPanel Grid.Row="2" HorizontalAlignment="Right">
+                        <Label Content="Сумма с комиссией"/>
+                        <Label Content="{Binding СommissionPercent}"/>
+                        <Label Content="%"/>
+                    </WrapPanel>
+                    <Label Content="{Binding TotalCost.Value, Converter={StaticResource FractionalNumberConverter}}"
+                           Grid.Column="1" Grid.Row="2" VerticalContentAlignment="Center"/>
+
+                    <Label Content="Примечание" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
+                    <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="3"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
-                    <Button Content="Оплатить" Grid.Row="3" Style="{StaticResource MainButton}"
+                    <Button Content="Оплатить" Grid.Row="4" Style="{StaticResource MainButton}"
                             Command="{Binding PayCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                             IsEnabled="{Binding IsPaymentEnable.Value}"/>
                     <Button Content="Очистить" Command="{Binding ClearCommand}"
-                            Grid.Column="1" Grid.Row="3" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                            Grid.Column="1" Grid.Row="4" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
                 </Grid>
             </StackPanel>
         </GroupBox>

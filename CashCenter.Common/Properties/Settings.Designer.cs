@@ -70,5 +70,17 @@ namespace CashCenter.Common.Properties {
                 this["ArticlesDocumentNumberCurrentValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public float WaterСommissionPercent {
+            get {
+                return ((float)(this["WaterСommissionPercent"]));
+            }
+            set {
+                this["WaterСommissionPercent"] = value;
+            }
+        }
     }
 }

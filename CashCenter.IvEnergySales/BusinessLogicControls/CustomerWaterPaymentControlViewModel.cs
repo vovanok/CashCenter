@@ -32,9 +32,15 @@ namespace CashCenter.IvEnergySales
 
         public Observed<decimal> Penalty { get; } = new Observed<decimal>();
         public Observed<decimal> Cost { get; } = new Observed<decimal>();
+        public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
         public Observed<string> Description { get; } = new Observed<string>();
         public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
 
+        public float СommissionPercent
+        {
+            get { return Settings.WaterСommissionPercent; }
+        }
+            
         public Command FindCustomerCommand { get; }
         public Command PayCommand { get; }
         public Command ClearCommand { get; }
@@ -58,17 +64,39 @@ namespace CashCenter.IvEnergySales
             Counter3Value.OnChange += (newValue) => DispatchPropertyChanged("Counter3Value");
             Counter4Value.OnChange += (newValue) => DispatchPropertyChanged("Counter4Value");
 
-            Penalty.OnChange += (newValue) => DispatchPropertyChanged("Penalty");
-            Cost.OnChange += (newValue) => DispatchPropertyChanged("Cost");
+            Penalty.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("Penalty");
+                UpdateTotalCost();
+            };
+
+            Cost.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("Cost");
+                UpdateTotalCost();
+            };
+
+            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
+
+            GlobalEvents.OnWaterComissionPercentChanged += () =>
+            {
+                DispatchPropertyChanged("СommissionPercent");
+                UpdateTotalCost();
+            };
 
             FindCustomerCommand = new Command(FindCustomerHandler);
             PayCommand = new Command(PayHandler);
             ClearCommand = new Command(ClearHandler);
-
+            
             context.OnCustomerChanged += WaterPaymentContextCustomerChanged;
             context.ClearCustomer();
+        }
+
+        private void UpdateTotalCost()
+        {
+            TotalCost.Value = context.GetCostWithComission(Cost.Value + Penalty.Value);
         }
 
         private void WaterPaymentContextCustomerChanged(WaterCustomer customer)

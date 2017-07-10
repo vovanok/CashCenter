@@ -83,8 +83,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
             var operationName = $"Платеж за воду: email={email}, counter1Value={counter1Value}, counter2Value={counter2Value}, counter3Value={counter3Value}, counter4Value={counter4Value}, penalty={penalty}, cost={cost}, description={description}, isWithoutCheck={isWithoutCheck}";
             Log.Info($"Старт -> {operationName}");
-            
-            if (isWithoutCheck || TryPrintChecks(cost, Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
+
+            var costWithComission = GetCostWithComission(cost + penalty);
+
+            if (isWithoutCheck || TryPrintChecks(costWithComission, Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
             {
                 var payment = new WaterCustomerPayment
                 {
@@ -97,7 +99,8 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     Description = description ?? string.Empty,
                     Penalty = penalty,
                     Cost = cost,
-                    FiscalNumber = 0 // TODO: Fill fiscal
+                    FiscalNumber = 0, // TODO: Fill fiscal
+                    ComissionPercent = Settings.WaterСommissionPercent
                 };
 
                 DalController.Instance.AddWaterCustomerPayment(payment);
@@ -111,7 +114,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             }
         }
 
-        private bool TryPrintChecks(decimal cost, int customerNumber,
+        public decimal GetCostWithComission(decimal costWithoutComission)
+        {
+            return costWithoutComission + costWithoutComission * (decimal)(Settings.WaterСommissionPercent / 100f);
+        }
+
+        private bool TryPrintChecks(decimal totalCost, int customerNumber,
             string customerName, string customerEmail)
         {
             try
@@ -119,7 +127,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 using (var waiter = new OperationWaiter())
                 {
                     var check = new WaterCustomerCheck(customerNumber, customerName,
-                        Settings.CasherName, cost, customerEmail);
+                        Settings.CasherName, totalCost, customerEmail);
 
                     CheckPrinter.Print(check);
                     return true;

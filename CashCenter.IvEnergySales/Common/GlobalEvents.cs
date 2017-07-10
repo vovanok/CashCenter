@@ -6,6 +6,7 @@ namespace CashCenter.IvEnergySales.Common
     {
         public static event Action OnDepartmentsChanged;
         public static event Action OnArticlesUpdated;
+        public static event Action OnWaterComissionPercentChanged;
 
         public static void DispatchDepartmentsChanged()
         {
@@ -17,6 +18,12 @@ namespace CashCenter.IvEnergySales.Common
         {
             if (OnArticlesUpdated != null)
                 OnArticlesUpdated();
+        }
+
+        public static void DispatchWaterComissionPercentChanged()
+        {
+            if (OnWaterComissionPercentChanged != null)
+                OnWaterComissionPercentChanged();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<int> ArticlesDocumentNumberCurrentValue { get; } = new Observed<int>();
         public Observed<string> ArticlesWarehouseCode { get; } = new Observed<string>();
         public Observed<string> ArticlesWarehouseName { get; } = new Observed<string>();
+        public Observed<float> СommissionPercent { get; } = new Observed<float>();
 
         public Command SaveCommand { get; }
         public Command CloseCommand { get; }
@@ -26,11 +27,13 @@ namespace CashCenter.IvEnergySales.Service
             ArticlesDocumentNumberCurrentValue.OnChange += (newValue) => DispatchPropertyChanged("ArticlesDocumentNumberCurrentValue");
             ArticlesWarehouseCode.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseCode");
             ArticlesWarehouseName.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseName");
+            СommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("СommissionPercent");
 
             CashierName.Value = Settings.CasherName;
             ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
             ArticlesWarehouseCode.Value = Settings.ArticlesWarehouseCode;
             ArticlesWarehouseName.Value = Settings.ArticlesWarehouseName;
+            СommissionPercent.Value = Settings.WaterСommissionPercent;
 
             Deparments = DalController.Instance.Departments
                 .Where(department => department.RegionId == Config.CurrentRegionId).ToList();
@@ -72,7 +75,16 @@ namespace CashCenter.IvEnergySales.Service
 
             Settings.ArticlesWarehouseName = ArticlesWarehouseName.Value;
 
+            if (СommissionPercent.Value < 0 || СommissionPercent.Value > 100)
+            {
+                Message.Error("% комиссии должен быть от 0 до 100");
+                return;
+            }
+
+            Settings.WaterСommissionPercent = СommissionPercent.Value;
             Settings.Save();
+
+            GlobalEvents.DispatchWaterComissionPercentChanged();
 
             DalController.Instance.Save();
             GlobalEvents.DispatchDepartmentsChanged();
@@ -99,8 +111,7 @@ namespace CashCenter.IvEnergySales.Service
                 settingSetter(newValue);
             }
         }
-
-
+        
         private void CloseHandler(object data)
         {
             DalController.Instance.DetachDepartmentsChanges();

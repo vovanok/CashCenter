@@ -50,6 +50,20 @@
                          VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
         </GroupBox>
+        <GroupBox Header="Оплата за воду">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="% комиссии"/>
+                <TextBox Text="{Binding СommissionPercent.Value}" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+            </Grid>
+        </GroupBox>
         <GroupBox Header="Отделения">
             <DataGrid ItemsSource="{Binding Deparments}"
                       AutoGenerateColumns="False" RowHeaderWidth="0"
