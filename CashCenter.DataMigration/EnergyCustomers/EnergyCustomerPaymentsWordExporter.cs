@@ -19,13 +19,13 @@ namespace CashCenter.DataMigration.EnergyCustomers
         protected override int TryExportItems(IEnumerable<EnergyCustomerPayment> items)
         {
             var customerPaymentModels = items.Select(item =>
-                new ReportCustomerPaymentModel(item.EnergyCustomer.Number, item.NewDayValue, item.NewNightValue, item.Cost, item.CreateDate));
+                new ReportEnergyCustomerPaymentModel(item.EnergyCustomer.Number, item.NewDayValue, item.NewNightValue, item.Cost, item.CreateDate));
 
             var customerPaymentModelsCount = customerPaymentModels.Count();
             if (customerPaymentModelsCount == 0)
                 return 0;
 
-            var reportModel = new ReportCustomersModel(beginDatetime, endDatetime, customerPaymentModels);
+            var reportModel = new ReportEnergyCustomersModel(beginDatetime, endDatetime, customerPaymentModels);
 
             var wordReport = new WordReportController(Config.EnergyCustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);

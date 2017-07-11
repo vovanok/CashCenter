@@ -208,6 +208,9 @@
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <None Include="Templates\ArticlesReportTemplate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Templates\CustomersReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

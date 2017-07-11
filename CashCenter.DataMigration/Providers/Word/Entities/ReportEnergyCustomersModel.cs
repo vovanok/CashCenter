@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace CashCenter.DataMigration.Providers.Word.Entities
 {
-    public class ReportCustomersModel
+    public class ReportEnergyCustomersModel
     {
         public DateTime StartDate { get; private set; }
         public DateTime EndDate { get; private set; }
-        public IEnumerable<ReportCustomerPaymentModel> CustomerPayments { get; private set; }
+        public IEnumerable<ReportEnergyCustomerPaymentModel> CustomerPayments { get; private set; }
 
-        public ReportCustomersModel(
+        public ReportEnergyCustomersModel(
             DateTime startDate, DateTime endDate,
-            IEnumerable<ReportCustomerPaymentModel> customerPayments)
+            IEnumerable<ReportEnergyCustomerPaymentModel> customerPayments)
         {
             StartDate = startDate;
             EndDate = endDate;
-            CustomerPayments = customerPayments ?? new List<ReportCustomerPaymentModel>();
+            CustomerPayments = customerPayments ?? new List<ReportEnergyCustomerPaymentModel>();
         }
     }
 }
