@@ -140,14 +140,14 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="Сумма" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Cost.Value, Converter={StaticResource FractionalNumberConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Cost.Value, Converter={StaticResource FractionalNumberConverter}}"
                              Grid.Column="1" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
                     <Label Content="Пени" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Penalty.Value, Converter={StaticResource FractionalNumberConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding Penalty.Value, Converter={StaticResource FractionalNumberConverter}}"
                              Grid.Column="1" Grid.Row="1"
                              VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"

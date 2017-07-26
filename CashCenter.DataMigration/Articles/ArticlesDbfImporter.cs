@@ -39,8 +39,8 @@ namespace CashCenter.DataMigration.Articles
             var newArticle = new Article
             {
                 Name = dbfArticle.Name ?? string.Empty,
-                Quantity = 1f, // TODO: базовое количество товара при импорте
-                Measure = "ед", // TODO: базовая мера количества товара
+                Quantity = 0f,
+                Measure = "ед",
                 Barcode = dbfArticle.Barcode ?? string.Empty,
                 Code = dbfArticle.Code ?? string.Empty,
                 IsActive = true
