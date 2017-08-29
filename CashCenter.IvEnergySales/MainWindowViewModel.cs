@@ -19,8 +19,8 @@ namespace CashCenter.IvEnergySales
         public Command Settings { get; }
         public Command DataMigration { get; }
 
-        public bool IsWaterPaymentVisible { get { return Config.IsShowWaterPayments; } }
-        public bool IsArticlesVisible { get { return Config.IsShowArticles; } }
+        public bool IsWaterPaymentVisible { get { return Config.IsShowWaterPayments && !(DateTime.Now > Config.DeathDate); } }
+        public bool IsArticlesVisible { get { return Config.IsShowArticles && !(DateTime.Now > Config.DeathDate); } }
 
         public MainWindowViewModel()
         {

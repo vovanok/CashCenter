@@ -1,5 +1,6 @@
 ﻿using CashCenter.Common;
 using CashCenter.IvEnergySales.Common;
+using System;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -13,8 +14,11 @@ namespace CashCenter.IvEnergySales
 
             DispatcherUnhandledException += App_DispatcherUnhandledException;
             Exit += App_Exit;
+
+            if (DateTime.Now > Config.DeathDate)
+                throw new Exception();
         }
-        
+
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             var errorHeader = "Неизвестная ошибка";
