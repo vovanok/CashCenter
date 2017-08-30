@@ -92,8 +92,11 @@
     <Compile Include="Providers\Word\Entities\ReportArticlesSalesModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportEnergyCustomerPaymentModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportEnergyCustomersModel.cs" />
+    <Compile Include="Providers\Word\Entities\ReportWaterCustomerPaymentModel.cs" />
+    <Compile Include="Providers\Word\Entities\ReportWaterCustomersModel.cs" />
     <Compile Include="Providers\Word\WordReportController.cs" />
     <Compile Include="WaterCustomers\WaterCustomerPaymentsDbfExporter.cs" />
+    <Compile Include="WaterCustomers\WaterCustomerPaymentsWordExporter.cs" />
     <Compile Include="WaterCustomers\WaterCustomersDbfImporter.cs" />
   </ItemGroup>
   <ItemGroup>
