@@ -7,6 +7,7 @@ namespace CashCenter.Check.DescriptorModel
         public enum Align
         {
             Left,
+            LeftAndRight,
             Center,
             Repeated
         }

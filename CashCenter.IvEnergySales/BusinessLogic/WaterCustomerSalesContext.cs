@@ -84,9 +84,12 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             var operationName = $"Платеж за воду: email={email}, counter1Value={counter1Value}, counter2Value={counter2Value}, counter3Value={counter3Value}, counter4Value={counter4Value}, penalty={penalty}, cost={cost}, description={description}, isWithoutCheck={isWithoutCheck}";
             Log.Info($"Старт -> {operationName}");
 
-            var costWithComission = GetCostWithComission(cost + penalty);
+            decimal costWithoutCommission = cost + penalty;
+            decimal costWithComission = GetCostWithComission(costWithoutCommission);
+            decimal comissionValue = costWithComission - costWithoutCommission;
 
-            if (isWithoutCheck || TryPrintChecks(costWithComission, Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
+            if (isWithoutCheck || TryPrintChecks(costWithoutCommission, comissionValue, costWithComission,
+                Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
             {
                 var payment = new WaterCustomerPayment
                 {
@@ -119,15 +122,15 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             return costWithoutComission + costWithoutComission * (decimal)(Settings.WaterСommissionPercent / 100f);
         }
 
-        private bool TryPrintChecks(decimal totalCost, int customerNumber,
-            string customerName, string customerEmail)
+        private bool TryPrintChecks(decimal costWithoutCommision, decimal comissionValue,
+            decimal totalCost, int customerNumber, string customerName, string customerEmail)
         {
             try
             {
                 using (var waiter = new OperationWaiter())
                 {
                     var check = new WaterCustomerCheck(customerNumber, customerName,
-                        Settings.CasherName, totalCost, customerEmail);
+                        Settings.CasherName, costWithoutCommision, comissionValue, totalCost, customerEmail);
 
                     CheckPrinter.Print(check);
                     return true;

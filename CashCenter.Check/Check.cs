@@ -56,6 +56,8 @@ namespace CashCenter.Check
             {
                 case CheckLineDescriptor.Align.Left:
                     return StringUtils.SplitStringByLines(lineContent, lineLength);
+                case CheckLineDescriptor.Align.LeftAndRight:
+                    return StringUtils.SplitStringByLines(StringUtils.SeparatedLeftAndRight(lineContent, '|', lineLength), lineLength);
                 case CheckLineDescriptor.Align.Center:
                     return StringUtils.StringInCenter(lineContent, lineLength);
                 case CheckLineDescriptor.Align.Repeated:

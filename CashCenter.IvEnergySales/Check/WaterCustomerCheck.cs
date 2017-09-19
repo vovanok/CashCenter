@@ -12,14 +12,16 @@ namespace CashCenter.IvEnergySales.Check
         public string CashierName { get; private set; }
 
         public WaterCustomerCheck(int customerNumber, string customerName,
-            string cashierName, decimal cost, string email)
+            string cashierName, decimal costWithoutComission, decimal comissionValue, decimal cost, string email)
             : base(
                   "WaterCustomer",
                   new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },
                       { "customerName", customerName },
-                      { "cashierName", cashierName }
+                      { "cashierName", cashierName },
+                      { "costWithoutComission", costWithoutComission.ToString("0.00") },
+                      { "comissionValue", comissionValue.ToString("0.00") }
                   },
                   cost,
                   cost,

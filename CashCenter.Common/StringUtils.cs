@@ -55,6 +55,22 @@ namespace CashCenter.Common
             return result;
         }
 
+        public static string SeparatedLeftAndRight(string stringValue, char separator, int lineLength)
+        {
+            if (string.IsNullOrEmpty(stringValue) || lineLength <= 0)
+                return string.Empty;
+
+            var stringParts = stringValue.Split(separator);
+            if (stringParts.Length != 2)
+                return stringValue;
+
+            int countSpaces = lineLength - stringParts[0].Length - stringParts[1].Length;
+            if (countSpaces < 0)
+                countSpaces = 0;
+
+            return stringParts[0] + new string(' ', countSpaces) + stringParts[1];
+        }
+
         public static IList<string> SplitStringWithSeparators(string stringValue)
         {
             var lines = stringValue.Split('|');
