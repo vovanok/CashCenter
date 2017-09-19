@@ -35,7 +35,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
 
             ExportCommand = new Command(DoExport);
 
-            BeginDatetime.Value = EndDatetime.Value = DateTime.Now;
+            BeginDatetime.Value = DateTime.Now.DayBegin();
+            EndDatetime.Value = DateTime.Now.DayEnd();
             SelectedExportTarget.Value = ExportTargets.FirstOrDefault();
         }
 
@@ -50,8 +51,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             if (!Message.YesNoQuestion($"Вы уверены, что хотите произвести экспорт \"{SelectedExportTarget.Value.Name}\"?"))
                 return;
 
-            var beginDatetime = BeginDatetime.Value.DayBegin();
-            var endDatetime = EndDatetime.Value.DayEnd();
+            var beginDatetime = BeginDatetime.Value;
+            var endDatetime = EndDatetime.Value;
 
             try
             {
