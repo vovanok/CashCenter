@@ -19,7 +19,9 @@ namespace CashCenter.Common
 		public static int CheckPrinterPassword => GetAppSettingByKeyAsInt("CheckPrinterPassword", 0);
 		public static int CheckPrinterMaxLineLength => GetAppSettingByKeyAsInt("CheckPrinterMaxLineLength", 10);
 		public static int CheckPrinterCountEmptyLinesAfterCheck => GetAppSettingByKeyAsInt("CheckPrinterCountEmptyLinesAfterCheck", 0);
-        public static int NdsPercent => GetAppSettingByKeyAsInt("NdsPercent", 0);
+        public static NdsPercent EnergyNdsPercent => GetAppSettingByKeyAsNdsPercent("EnergyNdsPercent", NdsPercent.Nds18);
+        public static NdsPercent WaterNdsPercent => GetAppSettingByKeyAsNdsPercent("WaterNdsPercent", NdsPercent.Nds18);
+        public static NdsPercent ArticlesNdsPercent => GetAppSettingByKeyAsNdsPercent("ArticlesNdsPercent", NdsPercent.Nds18);
         public static string ChecksFilename => GetAppSettingByKey("ChecksFilename", string.Empty);
         public static bool IsShowWaterPayments => GetAppSettingByKeyAsBool("IsShowWaterPayments", false);
         public static bool IsShowArticles => GetAppSettingByKeyAsBool("IsShowArticles", false);
@@ -47,6 +49,17 @@ namespace CashCenter.Common
                 result = defaultValue;
 
             return result;
+        }
+
+        private static NdsPercent GetAppSettingByKeyAsNdsPercent(string key, NdsPercent defaultValue)
+        {
+            var stringValue = GetAppSettingByKey(key, ((int)defaultValue).ToString());
+
+            if (!Enum.TryParse<NdsPercent>(stringValue, out NdsPercent result))
+                result = defaultValue;
+
+            return result;
+
         }
     }
 }

@@ -1,3 +1,4 @@
+using CashCenter.Common;
 using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.Check
@@ -14,8 +15,8 @@ namespace CashCenter.IvEnergySales.Check
         public EnergyCustomerCheck(string departmentCode, int customerNumber, string customerName,
             string paymentReason, string cashierName, decimal cost, string email)
             : base(
-                  "EnergyCustomer", 
-                  new Dictionary<string, string>
+                  descriptorId: "EnergyCustomer",
+                  parameters: new Dictionary<string, string>
                   {
                       { "departmentCode", departmentCode },
                       { "customerNumber", customerNumber.ToString() },
@@ -23,11 +24,12 @@ namespace CashCenter.IvEnergySales.Check
                       { "paymentReason", paymentReason.ToUpper() },
                       { "cashierName", cashierName }
                   },
-                  cost,
-                  cost,
-                  1,
-                  email,
-                  1)
+                  cost: cost,
+                  totalCost: cost,
+                  quantity: 1,
+                  email: email,
+                  paySection: 1,
+                  ndsPercent: Config.EnergyNdsPercent)
         {
         }
     }

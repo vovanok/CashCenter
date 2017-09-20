@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CashCenter.Common;
+using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.Check
 {
@@ -14,8 +15,8 @@ namespace CashCenter.IvEnergySales.Check
         public WaterCustomerCheck(int customerNumber, string customerName,
             string cashierName, decimal costWithoutComission, decimal comissionValue, decimal cost, string email)
             : base(
-                  "WaterCustomer",
-                  new Dictionary<string, string>
+                  descriptorId: "WaterCustomer",
+                  parameters: new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },
                       { "customerName", customerName },
@@ -23,11 +24,12 @@ namespace CashCenter.IvEnergySales.Check
                       { "costWithoutComission", costWithoutComission.ToString("0.00") },
                       { "comissionValue", comissionValue.ToString("0.00") }
                   },
-                  cost,
-                  cost,
-                  1,
-                  email,
-                  2)
+                  cost: cost,
+                  totalCost: cost,
+                  quantity: 1,
+                  email: email,
+                  paySection: 2,
+                  ndsPercent: Config.WaterNdsPercent)
         {
         }
     }

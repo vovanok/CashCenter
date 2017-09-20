@@ -11,6 +11,7 @@ namespace CashCenter.Check
         private static readonly Dictionary<NdsPercent, int> ndsTypeToTax1Map =
             new Dictionary<NdsPercent, int>
             {
+                { NdsPercent.NdsNone, 0 },
                 { NdsPercent.Nds10, 2 },
                 { NdsPercent.Nds18, 1 },
                 { NdsPercent.Nds20, 3 }
@@ -89,9 +90,7 @@ namespace CashCenter.Check
                 cashMachine.Driver.Department = payDepartment;
                 Log.Info($"Установлена секция чека {check.PaySection}");
 
-                cashMachine.Driver.Tax1 =
-                    ndsTypeToTax1Map.ContainsKey((NdsPercent)Config.NdsPercent)
-                        ? ndsTypeToTax1Map[(NdsPercent)Config.NdsPercent] : 0;
+                cashMachine.Driver.Tax1 = ndsTypeToTax1Map.ContainsKey(check.NdsPercent) ? ndsTypeToTax1Map[check.NdsPercent] : 0;
                 cashMachine.Driver.Tax2 = 0;
                 cashMachine.Driver.Tax3 = 0;
                 cashMachine.Driver.Tax4 = 0;
