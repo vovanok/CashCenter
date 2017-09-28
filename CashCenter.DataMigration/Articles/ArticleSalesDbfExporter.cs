@@ -17,10 +17,10 @@ namespace CashCenter.DataMigration.Articles
                 beginDatetime <= articleSale.CreateDate && articleSale.CreateDate <= endDatetime).ToList();
         }
 
-        protected override int TryExportItems(IEnumerable<ArticleSale> articleSales)
+        protected override ExportResult TryExportItems(IEnumerable<ArticleSale> articleSales)
         {
             if (articleSales == null)
-                return 0;
+                return new ExportResult();
 
             var salesForExport = new List<DbfArticleSale>();
             salesForExport.Add(new DbfArticleSale(
@@ -58,7 +58,7 @@ namespace CashCenter.DataMigration.Articles
 
             var countItemsForExport = salesForExport.Count() - 1;
             if (countItemsForExport <= 0)
-                return 0;
+                return new ExportResult();
 
             var dbfFilename = Path.Combine(Config.OutputDirectory, string.Format(Config.ArticlesDbfOutputFileFormat, DateTime.Now));
 
@@ -86,7 +86,7 @@ namespace CashCenter.DataMigration.Articles
 
             Settings.ArticlesDocumentNumberCurrentValue++;
 
-            return countItemsForExport;
+            return new ExportResult(countItemsForExport, articleSales.Count() - countItemsForExport);
         }
     }
 }

@@ -156,5 +156,51 @@ namespace CashCenter.DataMigration.Providers.Word
                 throw new SystemException("Ошибка экспорта продаж товаров в документ Word", ex);
             }
         }
+
+        public void CreateReport(ReportWaterAndEnergyCustomersPaymentsModel model)
+        {
+            var templateFullpath = Path.Combine(Environment.CurrentDirectory, templateFilename);
+            if (!File.Exists(templateFullpath))
+                throw new ApplicationException($"Файл-шаблон отчета не существует или не задан ({templateFullpath})");
+
+            try
+            {
+                using (var application = new NetOffice.WordApi.Application { Visible = true })
+                {
+                    using (var document = application.Documents.Add(templateFullpath))
+                    {
+                        document.Bookmarks["StartDate"].Range.Text = model.StartDate.ToString("dd MMMM yyyy г.");
+                        document.Bookmarks["EndDate"].Range.Text = model.EndDate.ToString("dd MMMM yyyy г.");
+
+                        var itemsTable = document.Bookmarks["WaterAndEnergyPayments"]?.Range?.Tables[1];
+                        if (itemsTable == null)
+                            throw new ApplicationException("Не найдена таблица для выгрузки платежей в шаблоне отчета");
+
+                        int acticleSaleNumber = 1;
+                        foreach (var modelItem in model.Items)
+                        {
+                            var row = itemsTable.Rows.Add(itemsTable.Rows[acticleSaleNumber + 1]);
+                            row.Cells[1].Range.Text = modelItem.Date.ToString("dd.MM.yyyy");
+                            row.Cells[2].Range.Text = modelItem.EnergyCost.ToString("0.00");
+                            row.Cells[3].Range.Text = modelItem.WaterWithoutComissionCost.ToString("0.00");
+                            row.Cells[4].Range.Text = modelItem.WaterComissionCost.ToString("0.00");
+                            acticleSaleNumber++;
+                        }
+
+                        itemsTable.Rows[acticleSaleNumber + 1].Delete();
+
+                        document.Bookmarks["TotalEnergyCost"].Range.Text = model.TotalEnergyCost.ToString("0.00");
+                        document.Bookmarks["TotalWaterWithoutComissionCost"].Range.Text = model.TotalWaterWithoutComissionCost.ToString("0.00");
+                        document.Bookmarks["TotalWaterComissionCost"].Range.Text = model.TotalWaterComissionCost.ToString("0.00");
+                    }
+
+                    application.Activate();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException("Ошибка экспорта платежей за воду и электроэнергию в документ Word", ex);
+            }
+        }
     }
 }

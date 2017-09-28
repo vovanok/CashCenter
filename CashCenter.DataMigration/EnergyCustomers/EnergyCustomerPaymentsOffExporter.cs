@@ -17,10 +17,10 @@ namespace CashCenter.DataMigration.EnergyCustomers
                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
         
-        protected override int TryExportItems(IEnumerable<EnergyCustomerPayment> customerPayments)
+        protected override ExportResult TryExportItems(IEnumerable<EnergyCustomerPayment> customerPayments)
         {
             if (customerPayments == null)
-                return 0;
+                return new ExportResult();
 
             var paymentForStore = customerPayments
                 .Where(customerPayment => customerPayment != null)
@@ -36,7 +36,9 @@ namespace CashCenter.DataMigration.EnergyCustomers
                         customerPayment.EnergyCustomer.Department.Code));
 
             outputController.StorePayments(paymentForStore);
-            return paymentForStore.Count();
+            int paymentsCount = paymentForStore.Count();
+            return new ExportResult(paymentsCount, customerPayments.Count() - paymentsCount);
+
         }
     }
 }

@@ -15,14 +15,11 @@ namespace CashCenter.DataMigration
 
             var itemsForExport = GetSourceItems(beginDatetime, endDatetime);
 
-            var successCount = TryExportItems(itemsForExport);
-            var failCount = itemsForExport.Count - successCount;
-
-            return new ExportResult(successCount, failCount);
+            return TryExportItems(itemsForExport);
         }
 
         protected abstract List<TSource> GetSourceItems(DateTime beginDatetime, DateTime endDatetime);
 
-        protected abstract int TryExportItems(IEnumerable<TSource> items);
+        protected abstract ExportResult TryExportItems(IEnumerable<TSource> items);
     }
 }

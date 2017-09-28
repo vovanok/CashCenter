@@ -5,6 +5,7 @@ using CashCenter.Common;
 using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.WaterCustomers;
 using CashCenter.DataMigration.Articles;
+using CashCenter.DataMigration.WaterAndEnergyCustomers;
 using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
@@ -13,12 +14,13 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
     {
         public IEnumerable<ExportTargetItem> ExportTargets { get; } = new[]
             {
-                new ExportTargetItem("Платежи по электроэнергии -> OFF", new EnergyCustomerPaymentsOffExporter()),
-                new ExportTargetItem("Платежи по электроэнергии -> Word", new EnergyCustomerPaymentsWordExporter()),
+                new ExportTargetItem("Платежи за электроэнергию -> OFF", new EnergyCustomerPaymentsOffExporter()),
+                new ExportTargetItem("Платежи за электроэнергию -> Word", new EnergyCustomerPaymentsWordExporter()),
                 new ExportTargetItem("Платежи за воду -> DBF", new WaterCustomerPaymentsDbfExporter()),
                 new ExportTargetItem("Платежи за воду -> Word", new WaterCustomerPaymentsWordExporter()),
                 new ExportTargetItem("Покупки товаров -> DBF", new ArticleSalesDbfExporter()),
-                new ExportTargetItem("Покупки товаров -> Word", new ArticleSalesWordExporter())
+                new ExportTargetItem("Покупки товаров -> Word", new ArticleSalesWordExporter()),
+                new ExportTargetItem("Платежи за электроэнергию и воду -> Word", new WaterAndEnergyCustomerPaymentsWordExporter())
             };
 
         public Observed<ExportTargetItem> SelectedExportTarget { get; } = new Observed<ExportTargetItem>();

@@ -16,21 +16,31 @@ namespace CashCenter.DataMigration.EnergyCustomers
                 beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        protected override int TryExportItems(IEnumerable<EnergyCustomerPayment> items)
+        protected override ExportResult TryExportItems(IEnumerable<EnergyCustomerPayment> energyPayments)
         {
-            var customerPaymentModels = items.Select(item =>
-                new ReportEnergyCustomerPaymentModel(item.EnergyCustomer.Number, item.NewDayValue, item.NewNightValue, item.Cost, item.CreateDate));
+            if (energyPayments == null)
+                return new ExportResult();
+
+            var customerPaymentModels = energyPayments
+                .Where(item => item != null)
+                .Select(item =>
+                    new ReportEnergyCustomerPaymentModel(
+                        item.EnergyCustomer.Number,
+                        item.NewDayValue,
+                        item.NewNightValue,
+                        item.Cost,
+                        item.CreateDate));
 
             var customerPaymentModelsCount = customerPaymentModels.Count();
             if (customerPaymentModelsCount == 0)
-                return 0;
+                return new ExportResult();
 
             var reportModel = new ReportEnergyCustomersModel(beginDatetime, endDatetime, customerPaymentModels);
 
             var wordReport = new WordReportController(Config.EnergyCustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
-            return customerPaymentModelsCount;
+            return new ExportResult(customerPaymentModelsCount, energyPayments.Count() - customerPaymentModelsCount);
         }
     }
 }

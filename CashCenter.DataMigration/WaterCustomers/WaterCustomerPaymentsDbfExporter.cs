@@ -17,10 +17,10 @@ namespace CashCenter.DataMigration.WaterCustomers
                 beginDatetime <= waterCustomerPayment.CreateDate && waterCustomerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        protected override int TryExportItems(IEnumerable<WaterCustomerPayment> waterCustomerPayments)
+        protected override ExportResult TryExportItems(IEnumerable<WaterCustomerPayment> waterCustomerPayments)
         {
             if (waterCustomerPayments == null)
-                return 0;
+                return new ExportResult();
 
             var paymentsForExport = waterCustomerPayments
                 .Where(waterCustomerPayment => waterCustomerPayment != null)
@@ -42,7 +42,7 @@ namespace CashCenter.DataMigration.WaterCustomers
 
             var countItemsForExport = paymentsForExport.Count();
             if (countItemsForExport == 0)
-                return 0;
+                return new ExportResult();
 
             var dbfFilename = Path.Combine(Config.OutputDirectory, string.Format(Config.WaterCustomerDbfOutputFileFormat, DateTime.Now));
 
@@ -68,7 +68,7 @@ namespace CashCenter.DataMigration.WaterCustomers
                     throw exportException;
             }
 
-            return countItemsForExport;
+            return new ExportResult(countItemsForExport, waterCustomerPayments.Count() - countItemsForExport);
         }
     }
 }

@@ -16,15 +16,24 @@ namespace CashCenter.DataMigration.Articles
                 beginDatetime <= articleSale.CreateDate && articleSale.CreateDate <= endDatetime).ToList();
         }
 
-        protected override int TryExportItems(IEnumerable<ArticleSale> items)
+        protected override ExportResult TryExportItems(IEnumerable<ArticleSale> articleSales)
         {
-            var articleSalesModels = items.Select(item =>
-                new ReportArticleSaleModel(item.ArticlePrice.Article.Name, item.ArticlePrice.Article.Code,
-                    item.Quantity, item.ArticlePrice.Value, item.ArticlePrice.Value * (decimal)item.Quantity));
+            if (articleSales == null)
+                return new ExportResult();
+
+            var articleSalesModels = articleSales
+                .Where(item => item != null)
+                .Select(item =>
+                    new ReportArticleSaleModel(
+                        item.ArticlePrice.Article.Name,
+                        item.ArticlePrice.Article.Code,
+                        item.Quantity,
+                        item.ArticlePrice.Value,
+                        item.ArticlePrice.Value * (decimal)item.Quantity));
 
             var articleSalesModelsCount = articleSalesModels.Count();
             if (articleSalesModelsCount == 0)
-                return 0;
+                return new ExportResult();
 
             var totalCost = articleSalesModels.Sum(item => item.ArticleCost);
             var reportModel = new ReportArticlesSalesModel(beginDatetime, endDatetime, totalCost, totalCost * (decimal)0.18, articleSalesModels);
@@ -32,7 +41,7 @@ namespace CashCenter.DataMigration.Articles
             var wordReport = new WordReportController(Config.ArticlesSalesReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
-            return articleSalesModelsCount;
+            return new ExportResult(articleSalesModelsCount, articleSales.Count() - articleSalesModelsCount);
         }
     }
 }

@@ -5,6 +5,10 @@
         public int SuccessCount { get; private set; }
         public int FailCount { get; private set; }
 
+        public ExportResult()
+        {
+        }
+
         public ExportResult(int successCount, int failCount)
         {
             SuccessCount = successCount;

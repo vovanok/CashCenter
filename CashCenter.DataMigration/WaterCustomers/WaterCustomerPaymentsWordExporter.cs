@@ -1,10 +1,10 @@
-﻿using CashCenter.Common;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
 using CashCenter.DataMigration.Providers.Word.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CashCenter.DataMigration.WaterCustomers
 {
@@ -16,10 +16,10 @@ namespace CashCenter.DataMigration.WaterCustomers
                 beginDatetime <= waterCustomerPayment.CreateDate && waterCustomerPayment.CreateDate <= endDatetime).ToList();
         }
 
-        protected override int TryExportItems(IEnumerable<WaterCustomerPayment> waterCustomerPayments)
+        protected override ExportResult TryExportItems(IEnumerable<WaterCustomerPayment> waterCustomerPayments)
         {
             if (waterCustomerPayments == null)
-                return 0;
+                return new ExportResult();
 
             var customerPaymentModels = waterCustomerPayments
                 .Where(waterCustomerPayment => waterCustomerPayment != null)
@@ -43,14 +43,14 @@ namespace CashCenter.DataMigration.WaterCustomers
 
             int customerPaymentModelsCount = customerPaymentModels.Count();
             if (customerPaymentModelsCount == 0)
-                return 0;
+                return new ExportResult();
 
             var reportModel = new ReportWaterCustomersModel(Settings.WaterСommissionPercent, customerPaymentModels); //TODO: коммисия от платежа к платежу может быть разная
 
             var wordReport = new WordReportController(Config.WaterCustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
-            return customerPaymentModelsCount;
+            return new ExportResult(customerPaymentModelsCount, waterCustomerPayments.Count() - customerPaymentModelsCount);
         }
     }
 }
