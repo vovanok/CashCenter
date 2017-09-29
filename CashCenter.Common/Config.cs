@@ -5,7 +5,7 @@ namespace CashCenter.Common
 {
 	public static class Config
 	{
-        public static readonly DateTime DeathDate = new DateTime(2017, 10, 1);
+        public static readonly DateTime DeathDate = new DateTime(2017, 12, 1);
 
         public static string DbfConnectionStringFormat => GetAppSettingByKey("DbfConnectionStringFormat", string.Empty);
         public static string OutputDirectory => GetAppSettingByKey("OutputDirectory", string.Empty);
