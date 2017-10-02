@@ -86,6 +86,18 @@
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="FiscalNumber" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="GarbageCollectionPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FinancialPeriodCode" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="OrganizationCode" Type="int" Nullable="false" />
+          <Property Name="FilialCode" Type="int" Nullable="false" />
+          <Property Name="CustomerNumber" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
         <EntityType Name="PaymentReason">
           <Key>
             <PropertyRef Name="Id" />
@@ -192,18 +204,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_EnergyCustomerPayment_ToCustomer">
-          <End Role="EnergyCustomer" Type="Self.EnergyCustomer" Multiplicity="1" />
-          <End Role="EnergyCustomerPayment" Type="Self.EnergyCustomerPayment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EnergyCustomer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EnergyCustomerPayment">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_EnergyCustomerPayment_ToPaymentReason">
           <End Role="PaymentReason" Type="Self.PaymentReason" Multiplicity="1" />
           <End Role="EnergyCustomerPayment" Type="Self.EnergyCustomerPayment" Multiplicity="*" />
@@ -236,6 +236,7 @@
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnergyCustomer" EntityType="Self.EnergyCustomer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EnergyCustomerPayment" EntityType="Self.EnergyCustomerPayment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GarbageCollectionPayment" EntityType="Self.GarbageCollectionPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PaymentReason" EntityType="Self.PaymentReason" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Region" EntityType="Self.Region" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WaterCustomer" EntityType="Self.WaterCustomer" Schema="dbo" store:Type="Tables" />
@@ -259,10 +260,6 @@
           <AssociationSet Name="FK_EnergyCustomer_ToDepartment" Association="Self.FK_EnergyCustomer_ToDepartment">
             <End Role="Department" EntitySet="Department" />
             <End Role="EnergyCustomer" EntitySet="EnergyCustomer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EnergyCustomerPayment_ToCustomer" Association="Self.FK_EnergyCustomerPayment_ToCustomer">
-            <End Role="EnergyCustomer" EntitySet="EnergyCustomer" />
-            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayment" />
           </AssociationSet>
           <AssociationSet Name="FK_EnergyCustomerPayment_ToPaymentReason" Association="Self.FK_EnergyCustomerPayment_ToPaymentReason">
             <End Role="PaymentReason" EntitySet="PaymentReason" />
@@ -334,6 +331,7 @@
             <End Role="WaterCustomer" EntitySet="WaterCustomers" />
             <End Role="WaterCustomerPayment" EntitySet="WaterCustomerPayments" />
           </AssociationSet>
+          <EntitySet Name="GarbageCollectionPayments" EntityType="CashCenterModel.GarbageCollectionPayment" />
           </EntityContainer>
         <EntityType Name="PaymentReason">
           <Key>
@@ -561,6 +559,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="GarbageCollectionPayment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FinancialPeriodCode" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OrganizationCode" Type="Int32" Nullable="false" />
+          <Property Name="FilialCode" Type="Int32" Nullable="false" />
+          <Property Name="CustomerNumber" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -701,6 +711,19 @@
                 <ScalarProperty Name="CounterValue1" ColumnName="CounterValue1" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GarbageCollectionPayments">
+            <EntityTypeMapping TypeName="CashCenterModel.GarbageCollectionPayment">
+              <MappingFragment StoreEntitySet="GarbageCollectionPayment">
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
+                <ScalarProperty Name="FilialCode" ColumnName="FilialCode" />
+                <ScalarProperty Name="OrganizationCode" ColumnName="OrganizationCode" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="FinancialPeriodCode" ColumnName="FinancialPeriodCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

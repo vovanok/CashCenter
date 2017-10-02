@@ -36,5 +36,6 @@ namespace CashCenter.Dal
         public virtual DbSet<Article> Articles { get; set; }
         public virtual DbSet<ArticleSale> ArticleSales { get; set; }
         public virtual DbSet<WaterCustomerPayment> WaterCustomerPayments { get; set; }
+        public virtual DbSet<GarbageCollectionPayment> GarbageCollectionPayments { get; set; }
     }
 }

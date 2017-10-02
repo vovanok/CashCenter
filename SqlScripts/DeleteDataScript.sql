@@ -7,3 +7,5 @@ delete from EnergyCustomer
 
 delete from WaterCustomerPayment
 delete from WaterCustomer
+
+delete from GarbageCollectionPayment

@@ -400,6 +400,30 @@ namespace CashCenter.Dal
 
         #endregion
 
+        #region Garbage сollection
+
+        public IEnumerable<GarbageCollectionPayment> GarbageCollectionPayments
+        {
+            get { return context.GarbageCollectionPayments; }
+        }
+
+        public GarbageCollectionPayment AddGarbageCollectionPayment(GarbageCollectionPayment payment)
+        {
+            try
+            {
+                var newPayment = context.GarbageCollectionPayments.Add(payment);
+                Save();
+                return payment;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления платежа за вывоз ТКО", ex);
+                return null;
+            }
+        }
+
+        #endregion
+
         private void HandleEntityFrameworkError(string message, Exception exception)
         {
             var entityValidationException = exception as DbEntityValidationException;

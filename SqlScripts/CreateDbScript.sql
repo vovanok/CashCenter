@@ -119,3 +119,14 @@ CREATE TABLE [dbo].[WaterCustomerPayment] (
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_WaterCustomerPayment_ToWaterCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[WaterCustomer] ([Id])
 );
+
+CREATE TABLE [dbo].[GarbageCollectionPayment]
+(
+    [Id] INT NOT NULL PRIMARY KEY, 
+    [FinancialPeriodCode] INT NOT NULL, 
+    [CreateDate] DATETIME NOT NULL, 
+    [OrganizationCode] INT NOT NULL, 
+    [FilialCode] INT NOT NULL, 
+    [CustomerNumber] INT NOT NULL, 
+    [Cost] DECIMAL(18, 2) NOT NULL
+);
