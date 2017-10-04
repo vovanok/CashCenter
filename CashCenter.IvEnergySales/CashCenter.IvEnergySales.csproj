@@ -126,9 +126,15 @@
     </Compile>
     <Compile Include="Behaviors\DependencyObjectBehavior.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControlViewModel.cs" />
+    <Compile Include="BusinessLogicControls\GarbageCollectionPaymentControl.xaml.cs">
+      <DependentUpon>GarbageCollectionPaymentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BusinessLogicControls\GarbageCollectionPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
+    <Compile Include="BusinessLogic\GarbageCollectionPaymentContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Check\ArticleSaleCheck.cs" />
+    <Compile Include="Check\GarbageCollectionCheck.cs" />
     <Compile Include="Check\WaterCustomerCheck.cs" />
     <Compile Include="Common\Command.cs" />
     <Compile Include="Common\GlobalEvents.cs" />
@@ -180,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BusinessLogicControls\CustomerWaterPaymentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BusinessLogicControls\GarbageCollectionPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
