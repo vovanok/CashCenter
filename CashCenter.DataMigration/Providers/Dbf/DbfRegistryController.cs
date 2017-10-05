@@ -69,12 +69,21 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ARTICLE_SALE_SERIAL_NUMBER = "SERNOMER";
             public const string ARTICLE_SALE_COMMENT = "KOMMENT";
 
+            public const string GC_PAYMENT_FINANCIALPERIODCODE = "CODFIN";
+            public const string GC_PAYMENT_CREATEDATE = "DATEPAY";
+            public const string GC_PAYMENT_CREATETIME = "TIMEPAY";
+            public const string GC_PAYMENT_FILIALCODE = "NUMCASH";
+            public const string GC_PAYMENT_ORGANIZATIONCODE = "CODORG";
+            public const string GC_PAYMENT_CUSTOMERNUMBER = "NUMAB";
+            public const string GC_PAYMENT_COST = "SUMMA";
+
             public const string TYPE_DATE = "Date";
             public const string TYPE_CHARACTER3 = "Character(3)";
             public const string TYPE_CHARACTER5 = "Character(5)";
             public const string TYPE_CHARACTER6 = "Character(6)";
             public const string TYPE_CHARACTER8 = "Character(8)";
             public const string TYPE_CHARACTER10 = "Character(10)";
+            public const string TYPE_CHARACTER11 = "Character(11)";
             public const string TYPE_CHARACTER12 = "Character(12)";
             public const string TYPE_CHARACTER13 = "Character(13)";
             public const string TYPE_CHARACTER25 = "Character(25)";
@@ -120,6 +129,16 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     [{ARTICLE_SALE_SERIAL_NUMBER}] {TYPE_CHARACTER50},
                     [{ARTICLE_SALE_COMMENT}] {TYPE_CHARACTER100})";
 
+            private static readonly string CREATE_GARBAGE_COLLECTION_PAYMENTS =
+                $@"create table {{0}} (
+                    [{GC_PAYMENT_FINANCIALPERIODCODE}] {TYPE_NUMERIC},
+                    [{GC_PAYMENT_CREATEDATE}] {TYPE_CHARACTER10},
+                    [{GC_PAYMENT_CREATETIME}] {TYPE_CHARACTER8},
+                    [{GC_PAYMENT_FILIALCODE}] {TYPE_CHARACTER5},
+                    [{GC_PAYMENT_ORGANIZATIONCODE}] {TYPE_NUMERIC},
+                    [{GC_PAYMENT_CUSTOMERNUMBER}] {TYPE_NUMERIC},
+                    [{GC_PAYMENT_COST}] {TYPE_CHARACTER11})";
+
             public static string GetItemsQuery(string tableName)
             {
                 return string.Format(GET_ITEMS, tableName);
@@ -138,6 +157,11 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public static string GetCreateArticleSalesQuery(string tableName)
             {
                 return string.Format(CREATE_ARTICLE_SALES, tableName);
+            }
+
+            public static string GetCreatGarbageCollectionPaymentsQuery(string tableName)
+            {
+                return string.Format(CREATE_GARBAGE_COLLECTION_PAYMENTS, tableName);
             }
         }
 
@@ -317,6 +341,12 @@ namespace CashCenter.DataMigration.Providers.Dbf
             AddWaterCustomerPayments(payments);
         }
 
+        public void StoreGarbageCollectionPayments(IEnumerable<DbfGarbageCollectionPayment> payments)
+        {
+            CreateDbf(Sql.GetCreatGarbageCollectionPaymentsQuery(Path.GetFileNameWithoutExtension(dbfName)));
+            AddGarbageCollectionPayments(payments);
+        }
+
         private void CreateDbf(string query)
         {
             if (File.Exists(filename))
@@ -428,6 +458,45 @@ namespace CashCenter.DataMigration.Providers.Dbf
                         sale.CheckNumber.ToString(),
                         GetStringForQuery(sale.SerialNumber),
                         GetStringForQuery(sale.Comment)
+                    };
+
+                    command.CommandText = $"{Sql.GetAddSomethingPreQuery(dbfName)} ({string.Join(", ", values)})";
+                    command.ExecuteNonQuery();
+                    command.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Ошибка записи в DBF {dbfName}", ex);
+            }
+            finally
+            {
+                dbfConnection?.Close();
+            }
+        }
+
+        private void AddGarbageCollectionPayments(IEnumerable<DbfGarbageCollectionPayment> payments)
+        {
+            if (payments == null || payments.Count() == 0)
+                return;
+
+            try
+            {
+                dbfConnection.Open();
+
+                foreach (var payment in payments)
+                {
+                    var command = dbfConnection.CreateCommand();
+
+                    var values = new[]
+                    {
+                        payment.FinancialPeriodCode.ToString(),
+                        GetStringForQuery(payment.CreateDate.ToString("dd.MM.yyyy")),
+                        GetStringForQuery(payment.CreateDate.ToString("HH:mm")),
+                        GetStringForQuery(payment.FilialCode.ToString()),
+                        payment.OrganizationCode.ToString(),
+                        payment.CustomerNumber.ToString(),
+                        GetMoneyString(payment.Cost)
                     };
 
                     command.CommandText = $"{Sql.GetAddSomethingPreQuery(dbfName)} ({string.Join(", ", values)})";

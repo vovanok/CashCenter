@@ -20,7 +20,7 @@
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="30"/>
         </Style>
-        <converters:CustomerNumberToStringConverter x:Key="CustomerNumberToStringConverter"/>
+        <converters:PositiveIntToStringConverter x:Key="PositiveIntToStringConverter"/>
         <converters:CustomerIsClosedStatusConverter x:Key="CustomerIsClosedStatusConverter"/>
         <converters:FractionalNumberConverter x:Key="FractionalNumberConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -55,7 +55,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource CustomerNumberToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource PositiveIntToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              behaviors:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">

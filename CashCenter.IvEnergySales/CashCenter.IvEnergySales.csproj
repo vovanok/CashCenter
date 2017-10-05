@@ -140,7 +140,7 @@
     <Compile Include="Common\GlobalEvents.cs" />
     <Compile Include="Common\ViewModel.cs" />
     <Compile Include="Converters\CustomerIsClosedStatusConverter.cs" />
-    <Compile Include="Converters\CustomerNumberToStringConverter.cs" />
+    <Compile Include="Converters\PositiveIntToStringConverter.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml.cs">
       <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
     </Compile>
@@ -304,6 +304,7 @@
     <Content Include="Checks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Content\garbage_collection.png" />
     <Resource Include="Content\articles.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

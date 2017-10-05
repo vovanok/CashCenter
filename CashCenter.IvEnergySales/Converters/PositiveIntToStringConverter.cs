@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace CashCenter.IvEnergySales.Converters
 {
-    public class CustomerNumberToStringConverter : IValueConverter
+    public class PositiveIntToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -12,6 +12,7 @@ namespace CashCenter.Common
         public static string EnergyCustomerOffOutputFileFormat => GetAppSettingByKey("EnergyCustomerOffOutputFileFormat", string.Empty);
         public static string WaterCustomerDbfOutputFileFormat => GetAppSettingByKey("WaterCustomerDbfOutputFileFormat", string.Empty);
         public static string ArticlesDbfOutputFileFormat => GetAppSettingByKey("ArticlesDbfOutputFileFormat", string.Empty);
+        public static string GarbageCollectionPaymentsDbfOutputFileFormat => GetAppSettingByKey("GarbageCollectionPaymentsDbfOutputFileFormat", string.Empty);
         public static string EnergyCustomersReportTemplateFilename => GetAppSettingByKey("EnergyCustomersReportTemplateFilename", string.Empty);
         public static string WaterCustomersReportTemplateFilename => GetAppSettingByKey("WaterCustomersReportTemplateFilename", string.Empty);
         public static string ArticlesSalesReportTemplateFilename => GetAppSettingByKey("ArticlesSalesReportTemplateFilename", string.Empty);
@@ -26,6 +27,7 @@ namespace CashCenter.Common
         public static string ChecksFilename => GetAppSettingByKey("ChecksFilename", string.Empty);
         public static bool IsShowWaterPayments => GetAppSettingByKeyAsBool("IsShowWaterPayments", false);
         public static bool IsShowArticles => GetAppSettingByKeyAsBool("IsShowArticles", false);
+        public static bool IsShowGarbageCollection => GetAppSettingByKeyAsBool("IsShowGarbageCollection", false);
 
         private static string GetAppSettingByKey(string key, string defaultValue)
 		{
