@@ -21,6 +21,7 @@
             <Setter Property="Height" Value="30"/>
         </Style>
         <converters:PositiveIntToStringConverter x:Key="PositiveIntToStringConverter"/>
+        <converters:FinancialPeriodConverter x:Key="FinancialPeriodConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <ivenergysales:GarbageCollectionPaymentControlViewModel />
@@ -50,7 +51,7 @@
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
         <Label Content="Финансовый период" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
-        <Label Grid.Column="1" Grid.Row="2" Content="{Binding FinacialPeriod.Value, Converter={StaticResource PositiveIntToStringConverter}}"
+        <Label Grid.Column="1" Grid.Row="2" Content="{Binding FinacialPeriod.Value, Converter={StaticResource FinancialPeriodConverter}}"
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
         <Label Content="Код организации" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
