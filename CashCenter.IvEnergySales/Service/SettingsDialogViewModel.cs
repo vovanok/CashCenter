@@ -17,6 +17,7 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<string> ArticlesWarehouseCode { get; } = new Observed<string>();
         public Observed<string> ArticlesWarehouseName { get; } = new Observed<string>();
         public Observed<float> СommissionPercent { get; } = new Observed<float>();
+        public Observed<int> GarbageCollectionFilialCode { get; } = new Observed<int>();
 
         public Command SaveCommand { get; }
         public Command CloseCommand { get; }
@@ -28,12 +29,14 @@ namespace CashCenter.IvEnergySales.Service
             ArticlesWarehouseCode.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseCode");
             ArticlesWarehouseName.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseName");
             СommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("СommissionPercent");
+            GarbageCollectionFilialCode.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionFilialCode");
 
             CashierName.Value = Settings.CasherName;
             ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
             ArticlesWarehouseCode.Value = Settings.ArticlesWarehouseCode;
             ArticlesWarehouseName.Value = Settings.ArticlesWarehouseName;
             СommissionPercent.Value = Settings.WaterСommissionPercent;
+            GarbageCollectionFilialCode.Value = Settings.GarbageCollectionFilialCode;
 
             Deparments = DalController.Instance.Departments
                 .Where(department => department.RegionId == Config.CurrentRegionId).ToList();
@@ -82,6 +85,15 @@ namespace CashCenter.IvEnergySales.Service
             }
 
             Settings.WaterСommissionPercent = СommissionPercent.Value;
+
+            if (GarbageCollectionFilialCode.Value <= 0)
+            {
+                Message.Error("Код филиала для приема оплаты за вывоз ТКО должен быть положительным числом");
+                return;
+            }
+
+            Settings.GarbageCollectionFilialCode = GarbageCollectionFilialCode.Value;
+
             Settings.Save();
 
             GlobalEvents.DispatchWaterComissionPercentChanged();

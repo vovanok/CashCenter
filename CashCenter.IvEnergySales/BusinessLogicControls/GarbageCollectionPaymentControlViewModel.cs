@@ -89,7 +89,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
             CustomerNumber.Value = customerNumber;
             Cost.Value = cost;
             OrganizationCode.Value = organizationCode; ;
-            FilialCode.Value = 0; //?? TODO: from settings
+            FilialCode.Value = Settings.GarbageCollectionFilialCode;
         }
 
         private void PayHandler(object parameters)
