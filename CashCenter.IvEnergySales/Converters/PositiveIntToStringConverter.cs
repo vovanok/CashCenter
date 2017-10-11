@@ -8,15 +8,26 @@ namespace CashCenter.IvEnergySales.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is uint))
-                return string.Empty;
+            if (value is uint)
+            {
+                uint uintValue = (uint)value;
 
-            uint uintValue = (uint)value;
+                if (uintValue == 0)
+                    return string.Empty;
 
-            if (uintValue == 0)
-                return string.Empty;
+                return uintValue.ToString();
+            }
 
-            return uintValue.ToString();
+            if (value is int)
+            {
+                int intValue = (int)value;
+                if (intValue == 0)
+                    return string.Empty;
+
+                return intValue.ToString();
+            }
+
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -25,8 +36,11 @@ namespace CashCenter.IvEnergySales.Converters
             if (strValue == null)
                 return 0;
 
-            if (uint.TryParse(strValue, out uint result))
-                return result;
+            if (uint.TryParse(strValue, out uint uintResult))
+                return uintResult;
+
+            if (int.TryParse(strValue, out int intResult))
+                return intResult;
 
             return 0;
         }

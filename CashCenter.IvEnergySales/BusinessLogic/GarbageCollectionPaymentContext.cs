@@ -11,22 +11,74 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 {
     public class GarbageCollectionPaymentContext
     {
-        public void Pay(int financialPeriodCode, DateTime createDate, int organizationCode,
-            int filialCode, int customerNumber, decimal cost, bool isWithoutCheck)
+        private const int ORGANIZATION_CODE = 1600;
+
+        public Observed<int> CustomerNumber { get; } = new Observed<int>();
+        public Observed<int> RegionCode { get; } = new Observed<int>();
+        public Observed<int> FinancialPeriodCode { get; } = new Observed<int>();
+        public Observed<int> OrganizationCode { get; } = new Observed<int>();
+        public Observed<int> FilialCode { get; } = new Observed<int>();
+        public Observed<decimal> Cost { get; } = new Observed<decimal>();
+
+        public void ApplyBarcode(string barcode)
+        {
+            Log.Info(string.Format("Garbage collection payments. Apply barcode: {0}", barcode));
+
+            if (string.IsNullOrEmpty(barcode) || barcode.Length != 30)
+            {
+                string errorMessage = "Штрих код не задан или имееет неверный формат";
+                Log.Error(string.Format("{0} ({1}; is null = {2})", errorMessage, barcode, barcode == null));
+                Message.Error(errorMessage);
+                return;
+            }
+
+            var errors = new List<string>();
+
+            string financialPeriodStr = barcode.Substring(0, 3);
+            if (!int.TryParse(barcode.Substring(0, 3), out int financialPeriod))
+                errors.Add($"Код финансового периода не корректен ({financialPeriodStr})");
+
+            string regionCodeStr = barcode.Substring(5, 2);
+            if (!int.TryParse(regionCodeStr, out int regionCode))
+                errors.Add($"Код региона не корректен ({regionCodeStr})");
+
+            string customerNumberStr = barcode.Substring(7, 10);
+            if (!int.TryParse(customerNumberStr, out int customerNumber))
+                errors.Add($"Лицевой счет не корректен ({customerNumberStr})");
+
+            string costStr = barcode.Substring(17, 9);
+            if (!int.TryParse(costStr, out int cost))
+                errors.Add($"Сумма не корректна ({costStr})");
+
+            string organizationCodeStr = barcode.Substring(26, 4);
+            if (!int.TryParse(organizationCodeStr, out int organizationCode))
+                errors.Add($"Код организации не корректен ({organizationCodeStr})");
+            else if (organizationCode != ORGANIZATION_CODE)
+                errors.Add($"Код организации для данного вида платежа должен быть равен {ORGANIZATION_CODE}, а не {organizationCode})");
+
+            if (errors.Count > 0)
+                throw new IncorrectDataException(errors);
+
+            FinancialPeriodCode.Value = financialPeriod;
+            RegionCode.Value = regionCode;
+            CustomerNumber.Value = customerNumber;
+            Cost.Value = (decimal)cost / 100; // Копейки -> рубли
+            OrganizationCode.Value = organizationCode; ;
+            FilialCode.Value = Settings.GarbageCollectionFilialCode;
+        }
+
+        public void Pay(decimal cost, bool isWithoutCheck)
         {
             var errors = new List<string>();
 
-            if (customerNumber <= 0)
+            if (CustomerNumber.Value <= 0)
                 errors.Add("Номер лицевого счета должен быть положителен");
 
-            if (financialPeriodCode <= 0)
+            if (FinancialPeriodCode.Value <= 0)
                 errors.Add("Код финансового периода должен быть положителен");
 
-            if (organizationCode <= 0)
+            if (OrganizationCode.Value <= 0)
                 errors.Add("Код организации должен быть положителен");
-
-            if (filialCode <= 0)
-                errors.Add("Код филиала должен быть положителен");
 
             if (cost <= 0)
                 errors.Add("Сумма должна быть положительна");
@@ -34,28 +86,36 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             if (errors.Count > 0)
                 throw new IncorrectDataException(errors);
 
-            var operationName = $"Платеж за вывоз ТКО: financialPeriodCode = {financialPeriodCode}, createDate = {createDate}, organizationCode = {organizationCode}, filialCode = {filialCode}, customerNumber = {customerNumber}, cost = {cost}";
-            Log.Info($"Старт -> {operationName}");
+            var createDate = DateTime.Now;
 
-            if (isWithoutCheck || TryPrintChecks(customerNumber, cost))
+            var operationInfo = $"Платеж за вывоз ТКО:\n" +
+                $"\tfinancialPeriodCode = {FinancialPeriodCode.Value},\n" +
+                $"\tcreateDate = {createDate},\n" +
+                $"\torganizationCode = {OrganizationCode.Value},\n" +
+                $"\tfilialCode = {FilialCode.Value},\n" +
+                $"\tcustomerNumber = {CustomerNumber.Value},\n" +
+                $"\tcost = {Cost.Value}";
+            Log.Info($"Старт -> {operationInfo}");
+
+            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost))
             {
                 var payment = new GarbageCollectionPayment
                 {
-                    FinancialPeriodCode = financialPeriodCode,
+                    FinancialPeriodCode = FinancialPeriodCode.Value,
                     CreateDate = createDate,
-                    OrganizationCode = organizationCode,
-                    FilialCode = filialCode,
-                    CustomerNumber = customerNumber,
+                    OrganizationCode = OrganizationCode.Value,
+                    FilialCode = FilialCode.Value,
+                    CustomerNumber = CustomerNumber.Value,
                     Cost = cost
                 };
 
                 DalController.Instance.AddGarbageCollectionPayment(payment);
 
-                Log.Info($"Успешно завершено -> {operationName}");
+                Log.Info($"Успешно завершено -> {operationInfo}");
             }
             else
             {
-                Log.Info($"Не произведено -> {operationName}");
+                Log.Info($"Не произведено -> {operationInfo}");
                 throw new Exception("Платеж не произведен");
             }
         }
@@ -78,6 +138,16 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 Message.Error(errorMessage);
                 return false;
             }
+        }
+
+        public void Clear()
+        {
+            CustomerNumber.Value = 0;
+            RegionCode.Value = 0;
+            FinancialPeriodCode.Value = 0;
+            OrganizationCode.Value = 0;
+            FilialCode.Value = 0;
+            Cost.Value = 0;
         }
     }
 }

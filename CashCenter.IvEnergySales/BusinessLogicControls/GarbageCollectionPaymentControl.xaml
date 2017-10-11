@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales.BusinessLogicControls"
              xmlns:converters="clr-namespace:CashCenter.IvEnergySales.Converters"
+             xmlns:behaviors="clr-namespace:CashCenter.IvEnergySales.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -22,6 +23,7 @@
         </Style>
         <converters:PositiveIntToStringConverter x:Key="PositiveIntToStringConverter"/>
         <converters:FinancialPeriodConverter x:Key="FinancialPeriodConverter"/>
+        <converters:FractionalNumberConverter x:Key="FractionalNumberConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <ivenergysales:GarbageCollectionPaymentControlViewModel />
@@ -40,37 +42,50 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label Content="Номер лицевого счета" Style="{StaticResource PropertyLabel}"/>
-        <Label Grid.Column="1" Content="{Binding CustomerNumber.Value, Converter={StaticResource PositiveIntToStringConverter}}"
+        <Label Content="Штрих-код" Style="{StaticResource PropertyLabel}"/>
+        <TextBox Grid.Column="1" Text="{Binding Barcode.Value, UpdateSourceTrigger=PropertyChanged}"
+            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+            behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+            behaviors:DependencyObjectBehavior.IsFocused="{Binding IsBarcodeFocused.Value, Mode=TwoWay}">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding ApplyBarcodeCommand}" Key="Return"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <Label Content="Номер лицевого счета" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
+        <Label Grid.Column="1" Grid.Row="1" Content="{Binding CustomerNumber, Converter={StaticResource PositiveIntToStringConverter}}"
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
-        <Label Content="Код региона" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
-        <Label Grid.Column="1" Grid.Row="1" Content="{Binding RegionCode.Value, Converter={StaticResource PositiveIntToStringConverter}}"
+        <Label Content="Код региона" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
+        <Label Grid.Column="1" Grid.Row="2" Content="{Binding RegionCode, Converter={StaticResource PositiveIntToStringConverter}}"
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
-        <Label Content="Финансовый период" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
-        <Label Grid.Column="1" Grid.Row="2" Content="{Binding FinacialPeriod.Value, Converter={StaticResource FinancialPeriodConverter}}"
+        <Label Content="Финансовый период" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
+        <Label Grid.Column="1" Grid.Row="3" Content="{Binding FinancialPeriodCode, Converter={StaticResource FinancialPeriodConverter}}"
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
-        <Label Content="Код организации" Grid.Row="3" Style="{StaticResource PropertyLabel}"/>
-        <Label Grid.Column="1" Grid.Row="3" Content="{Binding OrganizationCode.Value, Converter={StaticResource PositiveIntToStringConverter}}"
+        <Label Content="Код организации" Grid.Row="4" Style="{StaticResource PropertyLabel}"/>
+        <Label Grid.Column="1" Grid.Row="4" Content="{Binding OrganizationCode, Converter={StaticResource PositiveIntToStringConverter}}"
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
-        <Label Content="Код филиала" Grid.Row="4" Style="{StaticResource PropertyLabel}"/>
-        <Label Grid.Column="1" Grid.Row="4" Content="{Binding FilialCode.Value, Converter={StaticResource PositiveIntToStringConverter}}"
+        <Label Content="Код филиала" Grid.Row="5" Style="{StaticResource PropertyLabel}"/>
+        <Label Grid.Column="1" Grid.Row="5" Content="{Binding FilialCode, Converter={StaticResource PositiveIntToStringConverter}}"
                FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
-        <Label Content="Сумма" Grid.Row="5" Style="{StaticResource PropertyLabel}"/>
-        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding Cost.Value}"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                 IsEnabled="{Binding IsPaymentEnable.Value}"/>
+        <Label Content="Сумма" Grid.Row="6" Style="{StaticResource PropertyLabel}"/>
+        <TextBox Grid.Column="1" Grid.Row="6"
+                 Text="{Binding OverridedCost.Value, Converter={StaticResource FractionalNumberConverter}}"
+                 VerticalContentAlignment="Center"
+                 IsEnabled="{Binding IsPaymentEnable.Value}"
+                 behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"/>
 
-        <Button Content="Оплатить" Grid.Row="6" Style="{StaticResource MainButton}" Command="{Binding PayCommand}"
+        <Button Content="Оплатить" Grid.Row="7" Style="{StaticResource MainButton}" Command="{Binding PayCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                 IsEnabled="{Binding IsPaymentEnable.Value}"/>
         <Button Content="Очистить" Command="{Binding ClearCommand}"
-                Grid.Column="1" Grid.Row="6" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                Grid.Column="1" Grid.Row="7" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
     </Grid>
 </UserControl>
