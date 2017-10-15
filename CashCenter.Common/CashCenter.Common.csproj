@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="StringUtils.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="log4net.config">

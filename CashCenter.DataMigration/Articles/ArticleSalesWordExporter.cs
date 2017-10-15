@@ -36,7 +36,12 @@ namespace CashCenter.DataMigration.Articles
                 return new ExportResult();
 
             var totalCost = articleSalesModels.Sum(item => item.ArticleCost);
-            var reportModel = new ReportArticlesSalesModel(beginDatetime, endDatetime, totalCost, totalCost * (decimal)0.18, articleSalesModels);
+            var reportModel = new ReportArticlesSalesModel(
+                beginDatetime,
+                endDatetime,
+                totalCost,
+                Utils.GetNdsPart(totalCost, Config.ArticlesNdsPercent),
+                articleSalesModels);
 
             var wordReport = new WordReportController(Config.ArticlesSalesReportTemplateFilename);
             wordReport.CreateReport(reportModel);
