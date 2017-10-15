@@ -105,17 +105,18 @@ CREATE TABLE [dbo].[WaterCustomer] (
 );
 
 CREATE TABLE [dbo].[WaterCustomerPayment] (
-    [Id]            INT             IDENTITY (1, 1) NOT NULL,
-    [CreateDate]    DATETIME        NOT NULL,
-    [CustomerId]    INT             NOT NULL,
-    [CounterValue1] FLOAT           NOT NULL,
-    [CounterValue2] FLOAT           NOT NULL,
-    [CounterValue3] FLOAT           NOT NULL,
-    [CounterValue4] FLOAT           NOT NULL,
-    [Description]   NVARCHAR (MAX)  NOT NULL,
-    [Penalty]       DECIMAL (18, 2) NOT NULL,
-    [Cost]          DECIMAL (18, 2) NOT NULL,
-    [FiscalNumber]  INT             NOT NULL,
+    [Id]               INT             IDENTITY (1, 1) NOT NULL,
+    [CreateDate]       DATETIME        NOT NULL,
+    [CustomerId]       INT             NOT NULL,
+    [CounterValue1]    FLOAT (53)      NOT NULL,
+    [CounterValue2]    FLOAT (53)      NOT NULL,
+    [CounterValue3]    FLOAT (53)      NOT NULL,
+    [CounterValue4]    FLOAT (53)      NOT NULL,
+    [Description]      NVARCHAR (MAX)  NOT NULL,
+    [Penalty]          DECIMAL (18, 2) NOT NULL,
+    [Cost]             DECIMAL (18, 2) NOT NULL,
+    [FiscalNumber]     INT             NOT NULL,
+    [ComissionPercent] FLOAT (53)      NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_WaterCustomerPayment_ToWaterCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[WaterCustomer] ([Id])
 );
@@ -128,5 +129,6 @@ CREATE TABLE [dbo].[GarbageCollectionPayment] (
     [FilialCode]          INT             NOT NULL,
     [CustomerNumber]      INT             NOT NULL,
     [Cost]                DECIMAL (18, 2) NOT NULL,
+    [CommissionPercent]   FLOAT           NOT NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );

@@ -97,6 +97,7 @@
           <Property Name="FilialCode" Type="int" Nullable="false" />
           <Property Name="CustomerNumber" Type="int" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="CommissionPercent" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentReason">
           <Key>
@@ -204,6 +205,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EnergyCustomerPayment_ToCustomer">
+          <End Role="EnergyCustomer" Type="Self.EnergyCustomer" Multiplicity="1" />
+          <End Role="EnergyCustomerPayment" Type="Self.EnergyCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnergyCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_EnergyCustomerPayment_ToPaymentReason">
           <End Role="PaymentReason" Type="Self.PaymentReason" Multiplicity="1" />
           <End Role="EnergyCustomerPayment" Type="Self.EnergyCustomerPayment" Multiplicity="*" />
@@ -260,6 +273,10 @@
           <AssociationSet Name="FK_EnergyCustomer_ToDepartment" Association="Self.FK_EnergyCustomer_ToDepartment">
             <End Role="Department" EntitySet="Department" />
             <End Role="EnergyCustomer" EntitySet="EnergyCustomer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomerPayment_ToCustomer" Association="Self.FK_EnergyCustomerPayment_ToCustomer">
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomer" />
+            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayment" />
           </AssociationSet>
           <AssociationSet Name="FK_EnergyCustomerPayment_ToPaymentReason" Association="Self.FK_EnergyCustomerPayment_ToPaymentReason">
             <End Role="PaymentReason" EntitySet="PaymentReason" />
@@ -570,6 +587,7 @@
           <Property Name="FilialCode" Type="Int32" Nullable="false" />
           <Property Name="CustomerNumber" Type="Int32" Nullable="false" />
           <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CommissionPercent" Type="Double" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -718,6 +736,7 @@
           <EntitySetMapping Name="GarbageCollectionPayments">
             <EntityTypeMapping TypeName="CashCenterModel.GarbageCollectionPayment">
               <MappingFragment StoreEntitySet="GarbageCollectionPayment">
+                <ScalarProperty Name="CommissionPercent" ColumnName="CommissionPercent" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
                 <ScalarProperty Name="FilialCode" ColumnName="FilialCode" />

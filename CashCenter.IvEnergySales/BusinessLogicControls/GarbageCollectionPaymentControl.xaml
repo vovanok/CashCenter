@@ -43,6 +43,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Label Content="Штрих-код" Style="{StaticResource PropertyLabel}"/>
@@ -82,10 +83,18 @@
                  IsEnabled="{Binding IsPaymentEnable.Value}"
                  behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"/>
 
-        <Button Content="Оплатить" Grid.Row="7" Style="{StaticResource MainButton}" Command="{Binding PayCommand}"
+        <WrapPanel Grid.Row="7" HorizontalAlignment="Right">
+            <Label Content="Сумма с комиссией"/>
+            <Label Content="{Binding СommissionPercent}"/>
+            <Label Content="%"/>
+        </WrapPanel>
+        <Label Content="{Binding TotalCost.Value, Converter={StaticResource FractionalNumberConverter}}"
+            Grid.Column="1" Grid.Row="7" VerticalContentAlignment="Center"/>
+
+        <Button Content="Оплатить" Grid.Row="8" Style="{StaticResource MainButton}" Command="{Binding PayCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                 IsEnabled="{Binding IsPaymentEnable.Value}"/>
         <Button Content="Очистить" Command="{Binding ClearCommand}"
-                Grid.Column="1" Grid.Row="7" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
+                Grid.Column="1" Grid.Row="8" Style="{StaticResource MainButton}" IsEnabled="{Binding IsPaymentEnable.Value}"/>
     </Grid>
 </UserControl>

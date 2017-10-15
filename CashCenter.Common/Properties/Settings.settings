@@ -20,5 +20,8 @@
     <Setting Name="GarbageCollectionFilialCode" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="GarbageCollectionComissionPercent" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -21,5 +21,6 @@ namespace CashCenter.Dal
         public int FilialCode { get; set; }
         public int CustomerNumber { get; set; }
         public decimal Cost { get; set; }
+        public double CommissionPercent { get; set; }
     }
 }

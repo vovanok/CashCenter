@@ -16,8 +16,9 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<int> ArticlesDocumentNumberCurrentValue { get; } = new Observed<int>();
         public Observed<string> ArticlesWarehouseCode { get; } = new Observed<string>();
         public Observed<string> ArticlesWarehouseName { get; } = new Observed<string>();
-        public Observed<float> СommissionPercent { get; } = new Observed<float>();
+        public Observed<float> WaterСommissionPercent { get; } = new Observed<float>();
         public Observed<int> GarbageCollectionFilialCode { get; } = new Observed<int>();
+        public Observed<float> GarbageCollectionComissionPercent { get; } = new Observed<float>();
 
         public Command SaveCommand { get; }
         public Command CloseCommand { get; }
@@ -28,15 +29,17 @@ namespace CashCenter.IvEnergySales.Service
             ArticlesDocumentNumberCurrentValue.OnChange += (newValue) => DispatchPropertyChanged("ArticlesDocumentNumberCurrentValue");
             ArticlesWarehouseCode.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseCode");
             ArticlesWarehouseName.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseName");
-            СommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("СommissionPercent");
+            WaterСommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("WaterСommissionPercent");
             GarbageCollectionFilialCode.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionFilialCode");
+            GarbageCollectionComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionComissionPercent");
 
             CashierName.Value = Settings.CasherName;
             ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
             ArticlesWarehouseCode.Value = Settings.ArticlesWarehouseCode;
             ArticlesWarehouseName.Value = Settings.ArticlesWarehouseName;
-            СommissionPercent.Value = Settings.WaterСommissionPercent;
+            WaterСommissionPercent.Value = Settings.WaterСommissionPercent;
             GarbageCollectionFilialCode.Value = Settings.GarbageCollectionFilialCode;
+            GarbageCollectionComissionPercent.Value = Settings.GarbageCollectionCommissionPercent;
 
             Deparments = DalController.Instance.Departments
                 .Where(department => department.RegionId == Config.CurrentRegionId).ToList();
@@ -78,14 +81,16 @@ namespace CashCenter.IvEnergySales.Service
 
             Settings.ArticlesWarehouseName = ArticlesWarehouseName.Value;
 
-            if (СommissionPercent.Value < 0 || СommissionPercent.Value > 100)
+            //
+            if (WaterСommissionPercent.Value < 0 || WaterСommissionPercent.Value > 100)
             {
-                Message.Error("% комиссии должен быть от 0 до 100");
+                Message.Error("% комиссии за оплату воды должен быть от 0 до 100");
                 return;
             }
 
-            Settings.WaterСommissionPercent = СommissionPercent.Value;
+            Settings.WaterСommissionPercent = WaterСommissionPercent.Value;
 
+            //
             if (GarbageCollectionFilialCode.Value <= 0)
             {
                 Message.Error("Код филиала для приема оплаты за вывоз ТКО должен быть положительным числом");
@@ -93,6 +98,15 @@ namespace CashCenter.IvEnergySales.Service
             }
 
             Settings.GarbageCollectionFilialCode = GarbageCollectionFilialCode.Value;
+
+            //
+            if (GarbageCollectionComissionPercent.Value < 0 || GarbageCollectionComissionPercent.Value > 100)
+            {
+                Message.Error("% комиссии за оплату вывоза ТКО должен быть от 0 до 100");
+                return;
+            }
+
+            Settings.GarbageCollectionCommissionPercent = GarbageCollectionComissionPercent.Value;
 
             Settings.Save();
 

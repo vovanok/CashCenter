@@ -32,6 +32,12 @@
             set { Properties.Settings.Default.WaterСommissionPercent = value; }
         }
 
+        public static float GarbageCollectionCommissionPercent
+        {
+            get { return Properties.Settings.Default.GarbageCollectionComissionPercent; }
+            set { Properties.Settings.Default.GarbageCollectionComissionPercent = value; }
+        }
+
         public static int GarbageCollectionFilialCode
         {
             get { return Properties.Settings.Default.GarbageCollectionFilialCode; }

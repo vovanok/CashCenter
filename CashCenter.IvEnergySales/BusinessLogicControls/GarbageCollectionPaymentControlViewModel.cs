@@ -14,6 +14,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
 
         public Observed<string> Barcode { get; } = new Observed<string>();
         public Observed<decimal> OverridedCost { get; } = new Observed<decimal>();
+        public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
 
         public int CustomerNumber => context.CustomerNumber.Value;
         public int RegionCode => context.RegionCode.Value;
@@ -23,6 +24,11 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
 
         public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
         public Observed<bool> IsBarcodeFocused { get; } = new Observed<bool>();
+
+        public float СommissionPercent
+        {
+            get { return Settings.GarbageCollectionCommissionPercent; }
+        }
 
         public Command PayCommand { get; }
         public Command ClearCommand { get; }
@@ -41,6 +47,14 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
                 OverridedCost.Value = newValue;
                 DispatchPropertyChanged("OverridedCost");
             };
+
+            OverridedCost.OnChange += (newValue) =>
+            {
+                DispatchPropertyChanged("OverridedCost");
+                TotalCost.Value = context.GetCostWithComission(newValue);
+            };
+
+            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
 
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
             IsBarcodeFocused.OnChange += (newValue) => DispatchPropertyChanged("IsBarcodeFocused");

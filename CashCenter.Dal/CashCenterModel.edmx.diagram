@@ -24,7 +24,7 @@
         <AssociationConnector Association="CashCenterModel.FK_ArticleSale_To_ArticlePrice" />
         <EntityTypeShape EntityType="CashCenterModel.WaterCustomerPayment" Width="2" PointX="9.625" PointY="0.5" />
         <AssociationConnector Association="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" />
-        <EntityTypeShape EntityType="CashCenterModel.GarbageCollectionPayment" Width="2.25" PointX="12.125" PointY="0.5" FillColor="255, 255, 128" />
+        <EntityTypeShape EntityType="CashCenterModel.GarbageCollectionPayment" Width="2.25" PointX="12.125" PointY="0.5" FillColor="Yellow" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

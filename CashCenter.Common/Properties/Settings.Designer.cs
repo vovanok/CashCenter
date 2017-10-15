@@ -94,5 +94,17 @@ namespace CashCenter.Common.Properties {
                 this["GarbageCollectionFilialCode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public float GarbageCollectionComissionPercent {
+            get {
+                return ((float)(this["GarbageCollectionComissionPercent"]));
+            }
+            set {
+                this["GarbageCollectionComissionPercent"] = value;
+            }
+        }
     }
 }

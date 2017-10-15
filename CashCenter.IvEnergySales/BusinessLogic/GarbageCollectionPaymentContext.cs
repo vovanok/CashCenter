@@ -20,6 +20,11 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public Observed<int> FilialCode { get; } = new Observed<int>();
         public Observed<decimal> Cost { get; } = new Observed<decimal>();
 
+        public decimal GetCostWithComission(decimal costWithoutComission)
+        {
+            return costWithoutComission + costWithoutComission * (decimal)(Settings.GarbageCollectionCommissionPercent / 100f);
+        }
+
         public void ApplyBarcode(string barcode)
         {
             Log.Info(string.Format("Garbage collection payments. Apply barcode: {0}", barcode));
@@ -106,7 +111,8 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     OrganizationCode = OrganizationCode.Value,
                     FilialCode = FilialCode.Value,
                     CustomerNumber = CustomerNumber.Value,
-                    Cost = cost
+                    Cost = cost,
+                    CommissionPercent = Settings.GarbageCollectionCommissionPercent
                 };
 
                 DalController.Instance.AddGarbageCollectionPayment(payment);
