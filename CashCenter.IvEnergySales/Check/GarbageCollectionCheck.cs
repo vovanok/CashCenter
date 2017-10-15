@@ -4,13 +4,16 @@ namespace CashCenter.IvEnergySales.Check
 {
     public class GarbageCollectionCheck : CashCenter.Check.Check
     {
-        public GarbageCollectionCheck(int customerNumber, string cashierName, decimal cost)
+        public GarbageCollectionCheck(int customerNumber, string cashierName,
+            decimal costWithoutComission, decimal comissionValue, decimal cost)
             : base(
                  descriptorId: "GarbageCollection",
                   parameters: new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },
-                      { "cashierName", cashierName }
+                      { "cashierName", cashierName },
+                      { "costWithoutComission", costWithoutComission.ToString("0.00") },
+                      { "comissionValue", comissionValue.ToString("0.00") }
                   },
                   cost: cost,
                   totalCost: cost,

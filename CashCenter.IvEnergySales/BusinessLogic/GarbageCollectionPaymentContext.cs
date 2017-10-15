@@ -102,7 +102,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 $"\tcost = {Cost.Value}";
             Log.Info($"Старт -> {operationInfo}");
 
-            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost))
+            var costWithCommission = GetCostWithComission(cost);
+            decimal comissionValue = costWithCommission - cost;
+
+            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost, comissionValue, costWithCommission))
             {
                 var payment = new GarbageCollectionPayment
                 {
@@ -126,13 +129,14 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             }
         }
 
-        private bool TryPrintChecks(int customerNumber, decimal cost)
+        private bool TryPrintChecks(int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost)
         {
             try
             {
                 using (var waiter = new OperationWaiter())
                 {
-                    var check = new GarbageCollectionCheck(customerNumber, Settings.CasherName, cost);
+                    var check = new GarbageCollectionCheck(customerNumber, Settings.CasherName,
+                        costWithoutCommission, commissionValue, cost);
                     CheckPrinter.Print(check);
                     return true;
                 }
