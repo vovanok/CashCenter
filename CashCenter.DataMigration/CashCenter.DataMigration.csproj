@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Articles\ArticleSalesDbfExporter.cs" />
+    <Compile Include="Articles\ArticleSalesSeparatedDbfExporter.cs" />
     <Compile Include="Articles\ArticleSalesWordExporter.cs" />
     <Compile Include="Articles\ArticlesCountsDbfImporter.cs" />
     <Compile Include="Articles\ArticlesDbfImporter.cs" />
