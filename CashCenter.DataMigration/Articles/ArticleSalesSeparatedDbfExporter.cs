@@ -36,7 +36,7 @@ namespace CashCenter.DataMigration.Articles
 
                 var salesForExport = new List<DbfArticleSale>();
                 salesForExport.Add(new DbfArticleSale(
-                    DateTime.Now,
+                    articleSale.CreateDate,
                     Settings.ArticlesWarehouseCode + Settings.ArticlesDocumentNumberCurrentValue.ToString("D7"),
                     Settings.ArticlesWarehouseCode,
                     Settings.ArticlesWarehouseName,
@@ -66,7 +66,7 @@ namespace CashCenter.DataMigration.Articles
                     ));
 
                 var dbfFilename = Path.Combine(targetExportDirectory, string.Format(
-                    Config.ArticlesSeparatedDbfOutputFileFormat, articleSale.ArticlePrice.ArticleId, articleSale.CreateDate));
+                    Config.ArticlesSeparatedDbfOutputFileFormat, Settings.ArticlesWarehouseCode, Settings.ArticlesDocumentNumberCurrentValue.ToString("D5")));
 
                 Exception exportException = null;
                 try
@@ -91,6 +91,7 @@ namespace CashCenter.DataMigration.Articles
                 }
 
                 Settings.ArticlesDocumentNumberCurrentValue++;
+                Settings.Save();
 
                 exportedArticleSalesCount++;
             }
