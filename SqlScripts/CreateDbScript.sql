@@ -132,3 +132,15 @@ CREATE TABLE [dbo].[GarbageCollectionPayment] (
     [CommissionPercent]   FLOAT           NOT NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+CREATE TABLE [dbo].[RepairPayment] (
+    [Id]                  INT             IDENTITY (1, 1) NOT NULL,
+    [FinancialPeriodCode] INT             NOT NULL,
+    [CreateDate]          DATETIME        NOT NULL,
+    [OrganizationCode]    INT             NOT NULL,
+    [FilialCode]          INT             NOT NULL,
+    [CustomerNumber]      INT             NOT NULL,
+    [Cost]                DECIMAL (18, 2) NOT NULL,
+    [CommissionPercent]   FLOAT           NOT NULL, 
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);

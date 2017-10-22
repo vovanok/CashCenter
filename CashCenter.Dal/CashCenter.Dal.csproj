@@ -116,6 +116,9 @@
     <Compile Include="Region.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RepairPayment.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="WaterCustomer.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>

@@ -424,6 +424,30 @@ namespace CashCenter.Dal
 
         #endregion
 
+        #region Repair
+
+        public IEnumerable<RepairPayment> RepairPayments
+        {
+            get { return context.RepairPayments; }
+        }
+
+        public RepairPayment AddRepairPayment(RepairPayment payment)
+        {
+            try
+            {
+                var newPayment = context.RepairPayments.Add(payment);
+                Save();
+                return payment;
+            }
+            catch (Exception ex)
+            {
+                HandleEntityFrameworkError("Ошибка добавления платежа за ремонт", ex);
+                return null;
+            }
+        }
+
+        #endregion
+
         private void HandleEntityFrameworkError(string message, Exception exception)
         {
             var entityValidationException = exception as DbEntityValidationException;
