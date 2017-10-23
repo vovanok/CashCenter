@@ -20,7 +20,13 @@
     <Setting Name="GarbageCollectionFilialCode" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="GarbageCollectionComissionPercent" Type="System.Single" Scope="User">
+    <Setting Name="GarbageCollectionCommissionPercent" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="RepairFilialCode" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="RepairCommissionPercent" Type="System.Single" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>

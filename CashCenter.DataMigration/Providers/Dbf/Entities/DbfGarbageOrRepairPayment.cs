@@ -2,7 +2,7 @@
 
 namespace CashCenter.DataMigration.Providers.Dbf.Entities
 {
-    public class DbfGarbageCollectionPayment
+    public class DbfGarbageOrRepairPayment
     {
         public int FinancialPeriodCode { get; private set; }
         public DateTime CreateDate { get; private set; }
@@ -11,7 +11,7 @@ namespace CashCenter.DataMigration.Providers.Dbf.Entities
         public int CustomerNumber { get; private set; }
         public decimal Cost { get; private set; }
 
-        public DbfGarbageCollectionPayment(int financialPeriodCode, DateTime createDate,
+        public DbfGarbageOrRepairPayment(int financialPeriodCode, DateTime createDate,
             int filialCode, int organizationCode, int customerNumber, decimal cost)
         {
             FinancialPeriodCode = financialPeriodCode;

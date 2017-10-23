@@ -7,14 +7,14 @@ using System.IO;
 using CashCenter.Common;
 using CashCenter.DataMigration.Providers.Dbf;
 
-namespace CashCenter.DataMigration.GarbageCollection
+namespace CashCenter.DataMigration.GarbageAndRepair
 {
     public class GarbageCollectionPaymentsDbfExporter : BaseExporter<GarbageCollectionPayment>
     {
         protected override List<GarbageCollectionPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            return DalController.Instance.GarbageCollectionPayments.Where(waterCustomerPayment =>
-                beginDatetime <= waterCustomerPayment.CreateDate && waterCustomerPayment.CreateDate <= endDatetime).ToList();
+            return DalController.Instance.GarbageCollectionPayments.Where(garbagePayment =>
+                beginDatetime <= garbagePayment.CreateDate && garbagePayment.CreateDate <= endDatetime).ToList();
         }
 
         protected override ExportResult TryExportItems(IEnumerable<GarbageCollectionPayment> garbageCollectionPayments)
@@ -25,7 +25,7 @@ namespace CashCenter.DataMigration.GarbageCollection
             var paymentsForExport = garbageCollectionPayments
                 .Where(garbageCollectionPayment => garbageCollectionPayment != null)
                 .Select(garbageCollectionPayment =>
-                    new DbfGarbageCollectionPayment(
+                    new DbfGarbageOrRepairPayment(
                         garbageCollectionPayment.FinancialPeriodCode,
                         garbageCollectionPayment.CreateDate,
                         garbageCollectionPayment.FilialCode,
@@ -62,7 +62,6 @@ namespace CashCenter.DataMigration.GarbageCollection
             }
 
             return new ExportResult(countItemsForExport, garbageCollectionPayments.Count() - countItemsForExport);
-
         }
     }
 }

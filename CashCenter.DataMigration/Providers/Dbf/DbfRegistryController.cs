@@ -341,7 +341,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             AddWaterCustomerPayments(payments);
         }
 
-        public void StoreGarbageCollectionPayments(IEnumerable<DbfGarbageCollectionPayment> payments)
+        public void StoreGarbageCollectionPayments(IEnumerable<DbfGarbageOrRepairPayment> payments)
         {
             CreateDbf(Sql.GetCreatGarbageCollectionPaymentsQuery(Path.GetFileNameWithoutExtension(dbfName)));
             AddGarbageCollectionPayments(payments);
@@ -475,7 +475,7 @@ namespace CashCenter.DataMigration.Providers.Dbf
             }
         }
 
-        private void AddGarbageCollectionPayments(IEnumerable<DbfGarbageCollectionPayment> payments)
+        private void AddGarbageCollectionPayments(IEnumerable<DbfGarbageOrRepairPayment> payments)
         {
             if (payments == null || payments.Count() == 0)
                 return;

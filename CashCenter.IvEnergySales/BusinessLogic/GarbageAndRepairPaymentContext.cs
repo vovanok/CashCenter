@@ -6,12 +6,70 @@ using CashCenter.IvEnergySales.Common;
 using CashCenter.IvEnergySales.Exceptions;
 using CashCenter.IvEnergySales.Check;
 using CashCenter.Check;
+using System.Linq;
 
+// TODO: переписать этот ужас
 namespace CashCenter.IvEnergySales.BusinessLogic
 {
-    public class GarbageCollectionPaymentContext
+    public class GarbageAndRepairPaymentContext
     {
-        private const int ORGANIZATION_CODE = 1600;
+        private class PaymentSubcontext
+        {
+            public int Code { get; private set; }
+            public string Name { get; private set; }
+            public Action<int, DateTime, int, int, int, decimal> StorePaymentToDb { get; private set; }
+            public Func<int> GetFilialCode { get; private set; }
+            public Func<float> GetCommissionPercent { get; private set; }
+
+            public PaymentSubcontext(int code, string name, Action<int, DateTime, int, int, int, decimal> storePaymentToDb, Func<int> getFilialCode, Func<float> getCommissionPercent)
+            {
+                Code = code;
+                Name = name;
+                StorePaymentToDb = storePaymentToDb;
+                GetFilialCode = getFilialCode;
+                GetCommissionPercent = getCommissionPercent;
+            }
+        }
+
+        private readonly List<PaymentSubcontext> PaymentContextInfos = new List<PaymentSubcontext>
+        {
+            new PaymentSubcontext(1600, "Вывоз ТКО",
+                (int financialPeriodCode, DateTime createDate, int organizationCode, int filialCode, int customerNumber, decimal cost) =>
+                {
+                    var payment = new GarbageCollectionPayment
+                    {
+                        FinancialPeriodCode = financialPeriodCode,
+                        CreateDate = createDate,
+                        OrganizationCode = organizationCode,
+                        FilialCode = filialCode,
+                        CustomerNumber = customerNumber,
+                        Cost = cost,
+                        CommissionPercent = Settings.GarbageCollectionCommissionPercent
+                    };
+
+                    DalController.Instance.AddGarbageCollectionPayment(payment);
+                },
+                () => Settings.GarbageCollectionFilialCode, 
+                () => Settings.GarbageCollectionCommissionPercent),
+            new PaymentSubcontext(1500, "Кап. ремонт",
+                (int financialPeriodCode, DateTime createDate, int organizationCode, int filialCode, int customerNumber, decimal cost) =>
+                {
+                    var payment = new RepairPayment
+                    {
+                        FinancialPeriodCode = financialPeriodCode,
+                        CreateDate = createDate,
+                        OrganizationCode = organizationCode,
+                        FilialCode = filialCode,
+                        CustomerNumber = customerNumber,
+                        Cost = cost,
+                        CommissionPercent = Settings.RepairCommissionPercent
+                    };
+
+                    DalController.Instance.AddRepairPayment(payment);
+                },
+                () => Settings.RepairFilialCode,
+                () => Settings.RepairCommissionPercent)
+        };
 
         public Observed<int> CustomerNumber { get; } = new Observed<int>();
         public Observed<int> RegionCode { get; } = new Observed<int>();
@@ -19,19 +77,25 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public Observed<int> OrganizationCode { get; } = new Observed<int>();
         public Observed<int> FilialCode { get; } = new Observed<int>();
         public Observed<decimal> Cost { get; } = new Observed<decimal>();
+        public Observed<float> CommissionPercent { get; } = new Observed<float>();
 
-        public decimal GetCostWithComission(decimal costWithoutComission)
+        private PaymentSubcontext currentPaymentSubcontext;
+
+        public decimal GetCostWithComission(decimal costWithoutCommission)
         {
-            return costWithoutComission + costWithoutComission * (decimal)(Settings.GarbageCollectionCommissionPercent / 100f);
+            if (currentPaymentSubcontext == null)
+                return 0;
+
+            return Utils.GetCostWithComission(costWithoutCommission, currentPaymentSubcontext.GetCommissionPercent());
         }
 
         public void ApplyBarcode(string barcode)
         {
-            Log.Info(string.Format("Garbage collection payments. Apply barcode: {0}", barcode));
+            Log.Info(string.Format("{0}. Apply barcode: {1}", string.Join(", ", PaymentContextInfos.Select(item => item.Name)), barcode));
 
             if (string.IsNullOrEmpty(barcode) || barcode.Length != 30)
             {
-                string errorMessage = "Штрих код не задан или имееет неверный формат";
+                string errorMessage = "Штрих код не задан или имеет неверный формат";
                 Log.Error(string.Format("{0} ({1}; is null = {2})", errorMessage, barcode, barcode == null));
                 Message.Error(errorMessage);
                 return;
@@ -58,8 +122,15 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             string organizationCodeStr = barcode.Substring(26, 4);
             if (!int.TryParse(organizationCodeStr, out int organizationCode))
                 errors.Add($"Код организации не корректен ({organizationCodeStr})");
-            else if (organizationCode != ORGANIZATION_CODE)
-                errors.Add($"Код организации для данного вида платежа должен быть равен {ORGANIZATION_CODE}, а не {organizationCode})");
+            else
+            {
+                currentPaymentSubcontext = PaymentContextInfos.FirstOrDefault(item => item.Code == organizationCode);
+                if (currentPaymentSubcontext == null)
+                {
+                    string possibleOrganizationCodeValues = string.Join("; ", PaymentContextInfos.Select(item => $"{item.Code} ({item.Name})"));
+                    errors.Add($"Код организации не корректен ({organizationCode}). Возможные значения: {possibleOrganizationCodeValues}");
+                }
+            }
 
             if (errors.Count > 0)
                 throw new IncorrectDataException(errors);
@@ -68,13 +139,17 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             RegionCode.Value = regionCode;
             CustomerNumber.Value = customerNumber;
             Cost.Value = (decimal)cost / 100; // Копейки -> рубли
-            OrganizationCode.Value = organizationCode; ;
-            FilialCode.Value = Settings.GarbageCollectionFilialCode;
+            OrganizationCode.Value = organizationCode;
+            FilialCode.Value = currentPaymentSubcontext.GetFilialCode();
+            CommissionPercent.Value = currentPaymentSubcontext.GetCommissionPercent();
         }
 
         public void Pay(decimal cost, bool isWithoutCheck)
         {
             var errors = new List<string>();
+
+            if (currentPaymentSubcontext == null)
+                errors.Add("Некорректно распознан код организации");
 
             if (CustomerNumber.Value <= 0)
                 errors.Add("Номер лицевого счета должен быть положителен");
@@ -93,7 +168,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
             var createDate = DateTime.Now;
 
-            var operationInfo = $"Платеж за вывоз ТКО:\n" +
+            var operationInfo = $"Платеж за {currentPaymentSubcontext.Name}:\n" +
                 $"\tfinancialPeriodCode = {FinancialPeriodCode.Value},\n" +
                 $"\tcreateDate = {createDate},\n" +
                 $"\torganizationCode = {OrganizationCode.Value},\n" +
@@ -107,19 +182,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
             if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost, comissionValue, costWithCommission))
             {
-                var payment = new GarbageCollectionPayment
-                {
-                    FinancialPeriodCode = FinancialPeriodCode.Value,
-                    CreateDate = createDate,
-                    OrganizationCode = OrganizationCode.Value,
-                    FilialCode = FilialCode.Value,
-                    CustomerNumber = CustomerNumber.Value,
-                    Cost = cost,
-                    CommissionPercent = Settings.GarbageCollectionCommissionPercent
-                };
-
-                DalController.Instance.AddGarbageCollectionPayment(payment);
-
+                currentPaymentSubcontext.StorePaymentToDb(FinancialPeriodCode.Value, createDate, OrganizationCode.Value, FilialCode.Value, CustomerNumber.Value, cost);
                 Log.Info($"Успешно завершено -> {operationInfo}");
             }
             else
@@ -135,7 +198,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             {
                 using (var waiter = new OperationWaiter())
                 {
-                    var check = new GarbageCollectionCheck(customerNumber, Settings.CasherName,
+                    var check = new GarbageAndRepairCheck(customerNumber, Settings.CasherName,
                         costWithoutCommission, commissionValue, cost);
                     CheckPrinter.Print(check);
                     return true;
@@ -152,12 +215,14 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public void Clear()
         {
+            currentPaymentSubcontext = null;
             CustomerNumber.Value = 0;
             RegionCode.Value = 0;
             FinancialPeriodCode.Value = 0;
             OrganizationCode.Value = 0;
             FilialCode.Value = 0;
             Cost.Value = 0;
+            CommissionPercent.Value = 0;
         }
     }
 }

@@ -2,12 +2,12 @@
 
 namespace CashCenter.IvEnergySales.Check
 {
-    public class GarbageCollectionCheck : CashCenter.Check.Check
+    public class GarbageAndRepairCheck : CashCenter.Check.Check
     {
-        public GarbageCollectionCheck(int customerNumber, string cashierName,
+        public GarbageAndRepairCheck(int customerNumber, string cashierName,
             decimal costWithoutComission, decimal comissionValue, decimal cost)
             : base(
-                 descriptorId: "GarbageCollection",
+                 descriptorId: "GarbageAndRepair",
                   parameters: new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },

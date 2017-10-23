@@ -32,16 +32,28 @@
             set { Properties.Settings.Default.WaterСommissionPercent = value; }
         }
 
-        public static float GarbageCollectionCommissionPercent
-        {
-            get { return Properties.Settings.Default.GarbageCollectionComissionPercent; }
-            set { Properties.Settings.Default.GarbageCollectionComissionPercent = value; }
-        }
-
         public static int GarbageCollectionFilialCode
         {
             get { return Properties.Settings.Default.GarbageCollectionFilialCode; }
             set { Properties.Settings.Default.GarbageCollectionFilialCode = value; }
+        }
+
+        public static float GarbageCollectionCommissionPercent
+        {
+            get { return Properties.Settings.Default.GarbageCollectionCommissionPercent; }
+            set { Properties.Settings.Default.GarbageCollectionCommissionPercent = value; }
+        }
+
+        public static int RepairFilialCode
+        {
+            get { return Properties.Settings.Default.RepairFilialCode; }
+            set { Properties.Settings.Default.RepairFilialCode = value; }
+        }
+
+        public static float RepairCommissionPercent
+        {
+            get { return Properties.Settings.Default.RepairCommissionPercent; }
+            set { Properties.Settings.Default.RepairCommissionPercent = value; }
         }
 
         public static void Save()

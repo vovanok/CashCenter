@@ -98,12 +98,36 @@ namespace CashCenter.Common.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public float GarbageCollectionComissionPercent {
+        public float GarbageCollectionCommissionPercent {
             get {
-                return ((float)(this["GarbageCollectionComissionPercent"]));
+                return ((float)(this["GarbageCollectionCommissionPercent"]));
             }
             set {
-                this["GarbageCollectionComissionPercent"] = value;
+                this["GarbageCollectionCommissionPercent"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int RepairFilialCode {
+            get {
+                return ((int)(this["RepairFilialCode"]));
+            }
+            set {
+                this["RepairFilialCode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public float RepairCommissionPercent {
+            get {
+                return ((float)(this["RepairCommissionPercent"]));
+            }
+            set {
+                this["RepairCommissionPercent"] = value;
             }
         }
     }

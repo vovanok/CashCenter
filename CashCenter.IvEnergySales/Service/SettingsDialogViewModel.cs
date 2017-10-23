@@ -19,6 +19,8 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<float> WaterСommissionPercent { get; } = new Observed<float>();
         public Observed<int> GarbageCollectionFilialCode { get; } = new Observed<int>();
         public Observed<float> GarbageCollectionComissionPercent { get; } = new Observed<float>();
+        public Observed<int> RepairFilialCode { get; } = new Observed<int>();
+        public Observed<float> RepairComissionPercent { get; } = new Observed<float>();
 
         public Command SaveCommand { get; }
         public Command CloseCommand { get; }
@@ -32,6 +34,8 @@ namespace CashCenter.IvEnergySales.Service
             WaterСommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("WaterСommissionPercent");
             GarbageCollectionFilialCode.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionFilialCode");
             GarbageCollectionComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionComissionPercent");
+            RepairFilialCode.OnChange += (newValue) => DispatchPropertyChanged("RepairFilialCode");
+            RepairComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("RepairComissionPercent");
 
             CashierName.Value = Settings.CasherName;
             ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
@@ -40,6 +44,8 @@ namespace CashCenter.IvEnergySales.Service
             WaterСommissionPercent.Value = Settings.WaterСommissionPercent;
             GarbageCollectionFilialCode.Value = Settings.GarbageCollectionFilialCode;
             GarbageCollectionComissionPercent.Value = Settings.GarbageCollectionCommissionPercent;
+            RepairFilialCode.Value = Settings.RepairFilialCode;
+            RepairComissionPercent.Value = Settings.RepairCommissionPercent;
 
             Deparments = DalController.Instance.Departments
                 .Where(department => department.RegionId == Config.CurrentRegionId).ToList();
@@ -107,6 +113,24 @@ namespace CashCenter.IvEnergySales.Service
             }
 
             Settings.GarbageCollectionCommissionPercent = GarbageCollectionComissionPercent.Value;
+
+            //
+            if (RepairFilialCode.Value <= 0)
+            {
+                Message.Error("Код филиала для приема оплаты за кап. ремонт должен быть положительным числом");
+                return;
+            }
+
+            Settings.RepairFilialCode = RepairFilialCode.Value;
+
+            //
+            if (RepairComissionPercent.Value < 0 || RepairComissionPercent.Value > 100)
+            {
+                Message.Error("% комиссии за оплату за кап. ремонт должен быть от 0 до 100");
+                return;
+            }
+
+            Settings.RepairCommissionPercent = RepairComissionPercent.Value;
 
             Settings.Save();
 

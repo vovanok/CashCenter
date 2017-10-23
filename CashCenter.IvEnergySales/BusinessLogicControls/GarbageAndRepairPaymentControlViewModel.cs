@@ -8,9 +8,9 @@ using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.BusinessLogicControls
 {
-    public class GarbageCollectionPaymentControlViewModel : ViewModel
+    public class GarbageAndRepairPaymentControlViewModel : ViewModel
     {
-        private GarbageCollectionPaymentContext context = new GarbageCollectionPaymentContext();
+        private GarbageAndRepairPaymentContext context = new GarbageAndRepairPaymentContext();
 
         public Observed<string> Barcode { get; } = new Observed<string>();
         public Observed<decimal> OverridedCost { get; } = new Observed<decimal>();
@@ -21,20 +21,16 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
         public int FinancialPeriodCode => context.FinancialPeriodCode.Value;
         public int OrganizationCode => context.OrganizationCode.Value;
         public int FilialCode => context.FilialCode.Value;
-
+        public float CommissionPercent => context.CommissionPercent.Value;
+            
         public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
         public Observed<bool> IsBarcodeFocused { get; } = new Observed<bool>();
-
-        public float СommissionPercent
-        {
-            get { return Settings.GarbageCollectionCommissionPercent; }
-        }
 
         public Command PayCommand { get; }
         public Command ClearCommand { get; }
         public Command ApplyBarcodeCommand { get; }
 
-        public GarbageCollectionPaymentControlViewModel()
+        public GarbageAndRepairPaymentControlViewModel()
         {
             Barcode.OnChange += (newValue) => DispatchPropertyChanged("Barcode");
             context.CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
@@ -42,6 +38,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
             context.FinancialPeriodCode.OnChange += (newValue) => DispatchPropertyChanged("FinancialPeriodCode");
             context.OrganizationCode.OnChange += (newValue) => DispatchPropertyChanged("OrganizationCode");
             context.FilialCode.OnChange += (newValue) => DispatchPropertyChanged("FilialCode");
+            context.CommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("CommissionPercent");
             context.Cost.OnChange += (newValue) =>
             {
                 OverridedCost.Value = newValue;
@@ -53,7 +50,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
                 DispatchPropertyChanged("OverridedCost");
                 TotalCost.Value = context.GetCostWithComission(newValue);
             };
-
+            
             TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
 
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
