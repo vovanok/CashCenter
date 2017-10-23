@@ -16,6 +16,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
         public Observed<decimal> OverridedCost { get; } = new Observed<decimal>();
         public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
 
+        public string PaymentName => context.PaymentName.Value;
         public int CustomerNumber => context.CustomerNumber.Value;
         public int RegionCode => context.RegionCode.Value;
         public int FinancialPeriodCode => context.FinancialPeriodCode.Value;
@@ -33,6 +34,7 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
         public GarbageAndRepairPaymentControlViewModel()
         {
             Barcode.OnChange += (newValue) => DispatchPropertyChanged("Barcode");
+            context.PaymentName.OnChange += (newValue) => DispatchPropertyChanged("PaymentName");
             context.CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
             context.RegionCode.OnChange += (newValue) => DispatchPropertyChanged("RegionCode");
             context.FinancialPeriodCode.OnChange += (newValue) => DispatchPropertyChanged("FinancialPeriodCode");

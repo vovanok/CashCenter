@@ -71,6 +71,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 () => Settings.RepairCommissionPercent)
         };
 
+        public Observed<string> PaymentName { get; } = new Observed<string>();
         public Observed<int> CustomerNumber { get; } = new Observed<int>();
         public Observed<int> RegionCode { get; } = new Observed<int>();
         public Observed<int> FinancialPeriodCode { get; } = new Observed<int>();
@@ -135,6 +136,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             if (errors.Count > 0)
                 throw new IncorrectDataException(errors);
 
+            PaymentName.Value = currentPaymentSubcontext.Name;
             FinancialPeriodCode.Value = financialPeriod;
             RegionCode.Value = regionCode;
             CustomerNumber.Value = customerNumber;
@@ -216,6 +218,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         public void Clear()
         {
             currentPaymentSubcontext = null;
+            PaymentName.Value = string.Empty;
             CustomerNumber.Value = 0;
             RegionCode.Value = 0;
             FinancialPeriodCode.Value = 0;
