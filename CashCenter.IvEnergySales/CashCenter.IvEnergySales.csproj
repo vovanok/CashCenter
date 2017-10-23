@@ -305,7 +305,7 @@
     <Content Include="Checks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Content\garbage_collection.png" />
+    <Resource Include="Content\garbage_and_repair.png" />
     <Resource Include="Content\articles.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
