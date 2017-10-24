@@ -17,14 +17,16 @@ namespace CashCenter.IvEnergySales.BusinessLogic
         {
             public int Code { get; private set; }
             public string Name { get; private set; }
+            public int PaySection { get; private set; }
             public Action<int, DateTime, int, int, int, decimal> StorePaymentToDb { get; private set; }
             public Func<int> GetFilialCode { get; private set; }
             public Func<float> GetCommissionPercent { get; private set; }
 
-            public PaymentSubcontext(int code, string name, Action<int, DateTime, int, int, int, decimal> storePaymentToDb, Func<int> getFilialCode, Func<float> getCommissionPercent)
+            public PaymentSubcontext(int code, string name, int paySection, Action<int, DateTime, int, int, int, decimal> storePaymentToDb, Func<int> getFilialCode, Func<float> getCommissionPercent)
             {
                 Code = code;
                 Name = name;
+                PaySection = paySection;
                 StorePaymentToDb = storePaymentToDb;
                 GetFilialCode = getFilialCode;
                 GetCommissionPercent = getCommissionPercent;
@@ -33,7 +35,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         private readonly List<PaymentSubcontext> PaymentContextInfos = new List<PaymentSubcontext>
         {
-            new PaymentSubcontext(1600, "Вывоз ТКО",
+            new PaymentSubcontext(1600, "Вывоз ТКО", 4,
                 (int financialPeriodCode, DateTime createDate, int organizationCode, int filialCode, int customerNumber, decimal cost) =>
                 {
                     var payment = new GarbageCollectionPayment
@@ -51,7 +53,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 },
                 () => Settings.GarbageCollectionFilialCode, 
                 () => Settings.GarbageCollectionCommissionPercent),
-            new PaymentSubcontext(1500, "Кап. ремонт",
+            new PaymentSubcontext(1500, "Кап. ремонт", 5,
                 (int financialPeriodCode, DateTime createDate, int organizationCode, int filialCode, int customerNumber, decimal cost) =>
                 {
                     var payment = new RepairPayment
@@ -182,7 +184,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             var costWithCommission = GetCostWithComission(cost);
             decimal comissionValue = costWithCommission - cost;
 
-            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost, comissionValue, costWithCommission))
+            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost, comissionValue, costWithCommission, currentPaymentSubcontext.PaySection))
             {
                 currentPaymentSubcontext.StorePaymentToDb(FinancialPeriodCode.Value, createDate, OrganizationCode.Value, FilialCode.Value, CustomerNumber.Value, cost);
                 Log.Info($"Успешно завершено -> {operationInfo}");
@@ -194,14 +196,14 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             }
         }
 
-        private bool TryPrintChecks(int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost)
+        private bool TryPrintChecks(int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost, int paySection)
         {
             try
             {
                 using (var waiter = new OperationWaiter())
                 {
                     var check = new GarbageAndRepairCheck(customerNumber, Settings.CasherName,
-                        costWithoutCommission, commissionValue, cost);
+                        costWithoutCommission, commissionValue, cost, paySection);
                     CheckPrinter.Print(check);
                     return true;
                 }
