@@ -132,6 +132,8 @@
     <Compile Include="BusinessLogicControls\GarbageAndRepairPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\GarbageAndRepairPaymentContext.cs" />
+    <Compile Include="BusinessLogic\GarbagePaymentContext.cs" />
+    <Compile Include="BusinessLogic\RepairPaymentContext.cs" />
     <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Check\ArticleSaleCheck.cs" />
     <Compile Include="Check\GarbageCheck.cs" />

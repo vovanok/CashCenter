@@ -5,24 +5,37 @@ using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.IvEnergySales.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CashCenter.IvEnergySales.BusinessLogicControls
 {
     public class GarbageAndRepairPaymentControlViewModel : ViewModel
     {
-        private GarbageAndRepairPaymentContext context = new GarbageAndRepairPaymentContext();
+        private readonly List<GarbageAndRepairPaymentContext> contexts = new List<GarbageAndRepairPaymentContext>
+        {
+            new GarbagePaymentContext(),
+            new RepairPaymentContext()
+        };
 
-        public Observed<string> Barcode { get; } = new Observed<string>();
+        private readonly List<string> updateablePropsNames = new List<string>
+        {
+            "PaymentName", "CustomerNumber", "RegionCode", "FinancialPeriodCode", "OrganizationCode", "FilialCode", "CommissionPercent"
+        };
+
+        private Observed<GarbageAndRepairPaymentContext> currentContext { get; } = new Observed<GarbageAndRepairPaymentContext>();
+
+        public Observed<string> BarcodeString { get; } = new Observed<string>();
         public Observed<decimal> OverridedCost { get; } = new Observed<decimal>();
         public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
 
-        public string PaymentName => context.PaymentName.Value;
-        public int CustomerNumber => context.CustomerNumber.Value;
-        public int RegionCode => context.RegionCode.Value;
-        public int FinancialPeriodCode => context.FinancialPeriodCode.Value;
-        public int OrganizationCode => context.OrganizationCode.Value;
-        public int FilialCode => context.FilialCode.Value;
-        public float CommissionPercent => context.CommissionPercent.Value;
+        public string PaymentName => currentContext.Value?.PaymentName ?? string.Empty;
+        public int CustomerNumber => currentContext.Value?.Barcode?.CustomerNumber ?? 0;
+        public int RegionCode => currentContext.Value?.Barcode?.RegionCode ?? 0;
+        public int FinancialPeriodCode => currentContext.Value?.Barcode?.FinancialPeriod ?? 0;
+        public int OrganizationCode => currentContext.Value?.OrganizationCode ?? 0;
+        public int FilialCode => currentContext.Value?.FilialCode ?? 0;
+        public float CommissionPercent => currentContext.Value?.CommissionPercent ?? 0;
             
         public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
         public Observed<bool> IsBarcodeFocused { get; } = new Observed<bool>();
@@ -33,28 +46,15 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
 
         public GarbageAndRepairPaymentControlViewModel()
         {
-            Barcode.OnChange += (newValue) => DispatchPropertyChanged("Barcode");
-            context.PaymentName.OnChange += (newValue) => DispatchPropertyChanged("PaymentName");
-            context.CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
-            context.RegionCode.OnChange += (newValue) => DispatchPropertyChanged("RegionCode");
-            context.FinancialPeriodCode.OnChange += (newValue) => DispatchPropertyChanged("FinancialPeriodCode");
-            context.OrganizationCode.OnChange += (newValue) => DispatchPropertyChanged("OrganizationCode");
-            context.FilialCode.OnChange += (newValue) => DispatchPropertyChanged("FilialCode");
-            context.CommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("CommissionPercent");
-            context.Cost.OnChange += (newValue) =>
-            {
-                OverridedCost.Value = newValue;
-                DispatchPropertyChanged("OverridedCost");
-            };
-
+            currentContext.OnChange += (newValue) => UpdateAllProperties();
+            BarcodeString.OnChange += (newValue) => DispatchPropertyChanged("BarcodeString");
             OverridedCost.OnChange += (newValue) =>
             {
                 DispatchPropertyChanged("OverridedCost");
-                TotalCost.Value = context.GetCostWithComission(newValue);
+                TotalCost.Value = currentContext.Value?.GetCostWithComission(newValue) ?? 0;
             };
-            
-            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
 
+            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
             IsBarcodeFocused.OnChange += (newValue) => DispatchPropertyChanged("IsBarcodeFocused");
 
@@ -69,13 +69,25 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
         {
             try
             {
-                context.ApplyBarcode(Barcode.Value);
+                var barcode = Barcode.Parse(BarcodeString.Value);
+                currentContext.Value = contexts.FirstOrDefault(item => item.OrganizationCode == barcode.OrganizationCode);
+
+                if (currentContext.Value == null)
+                {
+                    string possibleOrganizationCodeValues = string.Join("; ", contexts.Select(item => $"{item.OrganizationCode} ({item.PaymentName})"));
+                    Message.Error($"Код организации не корректен ({barcode.OrganizationCode}). Возможные значения: {possibleOrganizationCodeValues}");
+                    Log.Error($"Код организации не корректен ({barcode.OrganizationCode}).");
+                    return;
+                }
+
+                currentContext.Value.ApplyBarcode(barcode);
+                UpdateAllProperties();
                 IsPaymentEnable.Value = true;
             }
             catch (Exception ex)
             {
                 Message.Error(ex.Message);
-                Log.Error("Ошибка применения штрих-кода. " + ex.Message);
+                Log.Error(ex.Message);
             }
         }
 
@@ -97,14 +109,21 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
                 isWithoutCheck = true;
             }
 
-            var operationName = "Оплата за вывоз ТКО";
+            if (currentContext.Value == null)
+            {
+                Message.Error("Штрих-код не отсканирован");
+                Log.Error("currentContext == null");
+                return;
+            }
+
+            var operationName = $"Оплата за {currentContext.Value.PaymentName}";
             try
             {
                 Log.Info($"Старт -> {operationName}");
 
                 using (new OperationWaiter())
                 {
-                    context.Pay(OverridedCost.Value, isWithoutCheck);
+                    currentContext.Value.Pay(OverridedCost.Value, isWithoutCheck);
                     ClearHandler(null);
                 }
 
@@ -116,16 +135,16 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
             }
             catch (Exception ex)
             {
-                Message.Error($"Ошибка выполнения операция оплаты за воду");
+                Message.Error($"Ошибка выполнения операции \"{operationName}\"");
                 Log.Error($"Ошибка -> {operationName}", ex);
             }
         }
 
         private void ClearHandler(object parameters)
         {
-            context.Clear();
+            currentContext.Value = null;
 
-            Barcode.Value = string.Empty;
+            BarcodeString.Value = string.Empty;
             OverridedCost.Value = 0;
 
             IsPaymentEnable.Value = false;
@@ -133,6 +152,16 @@ namespace CashCenter.IvEnergySales.BusinessLogicControls
             // Force barcode focus
             IsBarcodeFocused.Value = false;
             IsBarcodeFocused.Value = true;
+        }
+
+        private void UpdateAllProperties()
+        {
+            foreach (var propName in updateablePropsNames)
+            {
+                DispatchPropertyChanged(propName);
+            }
+
+            OverridedCost.Value = currentContext.Value?.Cost ?? 0;
         }
     }
 }

@@ -48,7 +48,7 @@
         </Grid.RowDefinitions>
 
         <Label Content="Штрих-код" Style="{StaticResource PropertyLabel}"/>
-        <TextBox Grid.Column="1" Text="{Binding Barcode.Value, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Grid.Column="1" Text="{Binding BarcodeString.Value, UpdateSourceTrigger=PropertyChanged}"
             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
             behaviors:DependencyObjectBehavior.IsFocused="{Binding IsBarcodeFocused.Value, Mode=TwoWay}">
