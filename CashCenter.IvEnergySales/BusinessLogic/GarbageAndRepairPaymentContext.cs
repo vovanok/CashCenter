@@ -21,8 +21,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             public Action<int, DateTime, int, int, int, decimal> StorePaymentToDb { get; private set; }
             public Func<int> GetFilialCode { get; private set; }
             public Func<float> GetCommissionPercent { get; private set; }
+            public Func<int, decimal, decimal, decimal, CashCenter.Check.Check> GetCheck { get; private set; }
 
-            public PaymentSubcontext(int code, string name, int paySection, Action<int, DateTime, int, int, int, decimal> storePaymentToDb, Func<int> getFilialCode, Func<float> getCommissionPercent)
+            public PaymentSubcontext(int code, string name, int paySection, Action<int, DateTime, int, int, int, decimal> storePaymentToDb,
+                Func<int> getFilialCode, Func<float> getCommissionPercent, Func<int, decimal, decimal, decimal, CashCenter.Check.Check> getCheck)
             {
                 Code = code;
                 Name = name;
@@ -30,6 +32,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 StorePaymentToDb = storePaymentToDb;
                 GetFilialCode = getFilialCode;
                 GetCommissionPercent = getCommissionPercent;
+                GetCheck = getCheck;
             }
         }
 
@@ -51,8 +54,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
                     DalController.Instance.AddGarbageCollectionPayment(payment);
                 },
-                () => Settings.GarbageCollectionFilialCode, 
-                () => Settings.GarbageCollectionCommissionPercent),
+                () => Settings.GarbageCollectionFilialCode,
+                () => Settings.GarbageCollectionCommissionPercent,
+                (int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost) =>
+                    new GarbageCheck(customerNumber, Settings.CasherName, costWithoutCommission, commissionValue, cost)),
             new PaymentSubcontext(1500, "Кап. ремонт", 5,
                 (int financialPeriodCode, DateTime createDate, int organizationCode, int filialCode, int customerNumber, decimal cost) =>
                 {
@@ -70,7 +75,9 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     DalController.Instance.AddRepairPayment(payment);
                 },
                 () => Settings.RepairFilialCode,
-                () => Settings.RepairCommissionPercent)
+                () => Settings.RepairCommissionPercent,
+                (int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost) =>
+                    new RepairCheck(customerNumber, Settings.CasherName, costWithoutCommission, commissionValue, cost)),
         };
 
         public Observed<string> PaymentName { get; } = new Observed<string>();
@@ -184,7 +191,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             var costWithCommission = GetCostWithComission(cost);
             decimal comissionValue = costWithCommission - cost;
 
-            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost, comissionValue, costWithCommission, currentPaymentSubcontext.PaySection))
+            if (isWithoutCheck || TryPrintChecks(CustomerNumber.Value, cost, comissionValue, costWithCommission))
             {
                 currentPaymentSubcontext.StorePaymentToDb(FinancialPeriodCode.Value, createDate, OrganizationCode.Value, FilialCode.Value, CustomerNumber.Value, cost);
                 Log.Info($"Успешно завершено -> {operationInfo}");
@@ -196,14 +203,13 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             }
         }
 
-        private bool TryPrintChecks(int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost, int paySection)
+        private bool TryPrintChecks(int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost)
         {
             try
             {
                 using (var waiter = new OperationWaiter())
                 {
-                    var check = new GarbageAndRepairCheck(customerNumber, Settings.CasherName,
-                        costWithoutCommission, commissionValue, cost, paySection);
+                    var check = currentPaymentSubcontext.GetCheck(customerNumber, costWithoutCommission, commissionValue, cost);
                     CheckPrinter.Print(check);
                     return true;
                 }

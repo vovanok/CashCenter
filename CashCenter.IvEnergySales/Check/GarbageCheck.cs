@@ -2,10 +2,10 @@
 
 namespace CashCenter.IvEnergySales.Check
 {
-    public class GarbageAndRepairCheck : CashCenter.Check.Check
+    public class GarbageCheck : CashCenter.Check.Check
     {
-        public GarbageAndRepairCheck(int customerNumber, string cashierName,
-            decimal costWithoutComission, decimal comissionValue, decimal cost, int paySection)
+        public GarbageCheck(int customerNumber, string cashierName,
+            decimal costWithoutComission, decimal comissionValue, decimal cost)
             : base(
                  descriptorId: "GarbageAndRepair",
                   parameters: new Dictionary<string, string>
@@ -19,7 +19,7 @@ namespace CashCenter.IvEnergySales.Check
                   totalCost: cost,
                   quantity: 1,
                   email: string.Empty,
-                  paySection: paySection,
+                  paySection: 4,
                   ndsPercent: CashCenter.Common.NdsPercent.NdsNone)
         {
         }
