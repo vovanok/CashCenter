@@ -96,8 +96,8 @@
     <Compile Include="Providers\Word\Entities\ReportArticlesSalesModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportEnergyCustomerPaymentModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportEnergyCustomersModel.cs" />
-    <Compile Include="Providers\Word\Entities\ReportWaterAndEnergyCustomersPaymentsItemModel.cs" />
-    <Compile Include="Providers\Word\Entities\ReportWaterAndEnergyCustomersPaymentsModel.cs" />
+    <Compile Include="Providers\Word\Entities\CommonPaymentsItemModel.cs" />
+    <Compile Include="Providers\Word\Entities\CommonPaymentsModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportWaterCustomerPaymentModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportWaterCustomersModel.cs" />
     <Compile Include="Providers\Word\WordReportController.cs" />

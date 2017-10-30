@@ -19,77 +19,130 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             var energyCustomersPayments = DalController.Instance.EnergyCustomerPayments.Where(energyCustomerPayment =>
                 beginDatetime <= energyCustomerPayment.CreateDate && energyCustomerPayment.CreateDate <= endDatetime).ToList();
 
+            var garbagePayments = DalController.Instance.GarbageCollectionPayments.Where(garbagePayment =>
+                beginDatetime <= garbagePayment.CreateDate && garbagePayment.CreateDate <= endDatetime).ToList();
+
+            var repairPayments = DalController.Instance.RepairPayments.Where(repairPayment =>
+                beginDatetime <= repairPayment.CreateDate && repairPayment.CreateDate <= endDatetime).ToList();
+
             return new List<CommonPaymentsDataSource>
-                { new CommonPaymentsDataSource(waterCustomersPayments, energyCustomersPayments) };
+                { new CommonPaymentsDataSource(waterCustomersPayments, energyCustomersPayments, garbagePayments, repairPayments) };
         }
 
-        protected override ExportResult TryExportItems(IEnumerable<CommonPaymentsDataSource> waterAndEnergyCustomerPaymentsDataSources)
+        protected override ExportResult TryExportItems(IEnumerable<CommonPaymentsDataSource> commonPaymentsDataSources)
         {
-            if (waterAndEnergyCustomerPaymentsDataSources == null)
+            if (commonPaymentsDataSources == null)
                 return new ExportResult();
 
-            var waterAndEnergyCustomerPayments = waterAndEnergyCustomerPaymentsDataSources.FirstOrDefault();
-            if (waterAndEnergyCustomerPayments == null)
+            var commonPayments = commonPaymentsDataSources.FirstOrDefault();
+            if (commonPayments == null)
                 return new ExportResult();
 
-            var waterAndEnergyCustomersPaymentsItemModels = new List<ReportWaterAndEnergyCustomersPaymentsItemModel>();
+            var commonPaymentsItemModels = new List<CommonPaymentsItemModel>();
             for (DateTime currentDate = beginDatetime.DayBegin(); currentDate <= endDatetime; currentDate = currentDate.AddDays(1))
             {
-                waterAndEnergyCustomersPaymentsItemModels.Add(
-                    new ReportWaterAndEnergyCustomersPaymentsItemModel(currentDate, 0, 0, 0));
+                commonPaymentsItemModels.Add(
+                    new CommonPaymentsItemModel(currentDate));
             }
 
             int countItems = 0;
-            decimal totalEnergyCost = 0;
-            decimal totalWaterWithoutComissionCost = 0;
-            decimal totalWaterComissionCost = 0;
+            decimal finalEnergyTotal = 0;
+            decimal finalWaterWithoutCommissionTotal = 0;
+            decimal finalWaterCommissionTotal = 0;
+            decimal finalGarbageWithoutComissionTotal = 0;
+            decimal finalGarbageCommissionTotal = 0;
+            decimal finalRepairWithoutCommissionTotal = 0;
+            decimal finalRepairCommissionTotal = 0;
 
-            foreach (var waterCustomerPayment in waterAndEnergyCustomerPayments.WaterCustomersPayments)
-            {
-                if (waterCustomerPayment == null)
-                    continue;
-
-                var targetModelItem = waterAndEnergyCustomersPaymentsItemModels
-                    .FirstOrDefault(itemModel => itemModel.Date == waterCustomerPayment.CreateDate.DayBegin());
-                if (targetModelItem == null)
-                    continue;
-
-                targetModelItem.WaterWithoutComissionCost += waterCustomerPayment.Cost;
-                totalWaterWithoutComissionCost += waterCustomerPayment.Cost;
-
-                decimal comissionCost = waterCustomerPayment.Cost * (decimal)(waterCustomerPayment.ComissionPercent / 100);
-                targetModelItem.WaterComissionCost += comissionCost;
-                totalWaterComissionCost += comissionCost;
-
-                countItems++;
-            }
-
-            foreach (var energyCustomerPayment in waterAndEnergyCustomerPayments.EnergyCustomersPayments)
+            foreach (var energyCustomerPayment in commonPayments.EnergyCustomersPayments)
             {
                 if (energyCustomerPayment == null)
                     continue;
-                
-                var targetModelItem = waterAndEnergyCustomersPaymentsItemModels
+
+                var targetModelItem = commonPaymentsItemModels
                     .FirstOrDefault(itemModel => itemModel.Date == energyCustomerPayment.CreateDate.DayBegin());
                 if (targetModelItem == null)
                     continue;
 
-                targetModelItem.EnergyCost += energyCustomerPayment.Cost;
-                totalEnergyCost += energyCustomerPayment.Cost;
+                targetModelItem.EnergyTotal += energyCustomerPayment.Cost;
+                finalEnergyTotal += energyCustomerPayment.Cost;
+
+                countItems++;
+            }
+
+            foreach (var waterCustomerPayment in commonPayments.WaterCustomersPayments)
+            {
+                if (waterCustomerPayment == null)
+                    continue;
+
+                var targetModelItem = commonPaymentsItemModels
+                    .FirstOrDefault(itemModel => itemModel.Date == waterCustomerPayment.CreateDate.DayBegin());
+                if (targetModelItem == null)
+                    continue;
+
+                targetModelItem.WaterWithoutCommissionTotal += waterCustomerPayment.Cost;
+                finalWaterWithoutCommissionTotal += waterCustomerPayment.Cost;
+
+                decimal commissionCost = Utils.GetCommission(waterCustomerPayment.Cost, (float)waterCustomerPayment.ComissionPercent);
+                targetModelItem.WaterCommissionTotal += commissionCost;
+                finalWaterCommissionTotal += commissionCost;
+
+                countItems++;
+            }
+            
+            foreach (var garbagePayment in commonPayments.GarbagePayments)
+            {
+                if (garbagePayment == null)
+                    continue;
+
+                var targetModelItem = commonPaymentsItemModels
+                    .FirstOrDefault(itemModel => itemModel.Date == garbagePayment.CreateDate.DayBegin());
+                if (targetModelItem == null)
+                    continue;
+
+                targetModelItem.GarbageWithoutCommissionTotal += garbagePayment.Cost;
+                finalGarbageWithoutComissionTotal += garbagePayment.Cost;
+
+                decimal commissionTotal = Utils.GetCommission(garbagePayment.Cost, (float)garbagePayment.CommissionPercent);
+                targetModelItem.GarbageCommissionTotal += commissionTotal;
+                finalGarbageCommissionTotal += commissionTotal;
+
+                countItems++;
+            }
+
+            foreach (var repairPayment in commonPayments.RepairPayments)
+            {
+                if (repairPayment == null)
+                    continue;
+
+                var targetModelItem = commonPaymentsItemModels
+                    .FirstOrDefault(itemModel => itemModel.Date == repairPayment.CreateDate.DayBegin());
+                if (repairPayment == null)
+                    continue;
+
+                targetModelItem.RepairWithoutCommissionTotal += repairPayment.Cost;
+                finalRepairWithoutCommissionTotal += repairPayment.Cost;
+
+                decimal commissionTotal = Utils.GetCommission(repairPayment.Cost, (float)repairPayment.CommissionPercent);
+                targetModelItem.RepairCommissionTotal += commissionTotal;
+                finalRepairCommissionTotal += commissionTotal;
 
                 countItems++;
             }
 
             if (countItems == 0)
-                return new ExportResult(0, waterAndEnergyCustomerPayments.AllPaymentsCount);
+                return new ExportResult(0, commonPayments.AllPaymentsCount);
 
-            var reportModel = new ReportWaterAndEnergyCustomersPaymentsModel(beginDatetime, endDatetime,
-                waterAndEnergyCustomersPaymentsItemModels, totalEnergyCost, totalWaterWithoutComissionCost, totalWaterComissionCost);
+            var reportModel = new CommonPaymentsModel(beginDatetime, endDatetime, commonPaymentsItemModels,
+                finalEnergyTotal,
+                finalWaterWithoutCommissionTotal, finalWaterCommissionTotal,
+                finalGarbageWithoutComissionTotal, finalGarbageCommissionTotal,
+                finalRepairWithoutCommissionTotal, finalRepairCommissionTotal);
 
             var wordReport = new WordReportController(Config.CommonPaymentsReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
-            return new ExportResult(countItems, waterAndEnergyCustomerPayments.AllPaymentsCount - countItems);
+            return new ExportResult(countItems, commonPayments.AllPaymentsCount - countItems);
         }
     }
 }

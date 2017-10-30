@@ -7,12 +7,21 @@ namespace CashCenter.DataMigration.CommonPayments
     {
         public List<WaterCustomerPayment> WaterCustomersPayments { get; private set; }
         public List<EnergyCustomerPayment> EnergyCustomersPayments { get; private set; }
-        public int AllPaymentsCount { get { return WaterCustomersPayments.Count + EnergyCustomersPayments.Count; } }
+        public List<GarbageCollectionPayment> GarbagePayments { get; private set; }
+        public List<RepairPayment> RepairPayments { get; private set; }
+        public int AllPaymentsCount
+        {
+            get { return WaterCustomersPayments.Count + EnergyCustomersPayments.Count + GarbagePayments.Count + RepairPayments.Count; }
+        }
 
-        public CommonPaymentsDataSource(List<WaterCustomerPayment> waterCustomersPayments, List<EnergyCustomerPayment> energyCustomersPayments)
+        public CommonPaymentsDataSource(
+            List<WaterCustomerPayment> waterCustomersPayments, List<EnergyCustomerPayment> energyCustomersPayments,
+            List<GarbageCollectionPayment> garbagePayments, List<RepairPayment> repairPayments)
         {
             WaterCustomersPayments = waterCustomersPayments;
             EnergyCustomersPayments = energyCustomersPayments;
+            GarbagePayments = garbagePayments;
+            RepairPayments = repairPayments;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public decimal GetCostWithComission(decimal costWithoutCommission)
         {
-            return Utils.GetCostWithComission(costWithoutCommission, CommissionPercent);
+            return Utils.GetCostWithCommission(costWithoutCommission, CommissionPercent);
         }
 
         public void ApplyBarcode(Barcode barcode)

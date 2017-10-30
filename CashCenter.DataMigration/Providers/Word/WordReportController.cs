@@ -157,7 +157,7 @@ namespace CashCenter.DataMigration.Providers.Word
             }
         }
 
-        public void CreateReport(ReportWaterAndEnergyCustomersPaymentsModel model)
+        public void CreateReport(CommonPaymentsModel model)
         {
             var templateFullpath = Path.Combine(Environment.CurrentDirectory, templateFilename);
             if (!File.Exists(templateFullpath))
@@ -172,7 +172,7 @@ namespace CashCenter.DataMigration.Providers.Word
                         document.Bookmarks["StartDate"].Range.Text = model.StartDate.ToString("dd MMMM yyyy г.");
                         document.Bookmarks["EndDate"].Range.Text = model.EndDate.ToString("dd MMMM yyyy г.");
 
-                        var itemsTable = document.Bookmarks["WaterAndEnergyPayments"]?.Range?.Tables[1];
+                        var itemsTable = document.Bookmarks["Payments"]?.Range?.Tables[1];
                         if (itemsTable == null)
                             throw new ApplicationException("Не найдена таблица для выгрузки платежей в шаблоне отчета");
 
@@ -181,17 +181,28 @@ namespace CashCenter.DataMigration.Providers.Word
                         {
                             var row = itemsTable.Rows.Add(itemsTable.Rows[acticleSaleNumber + 1]);
                             row.Cells[1].Range.Text = modelItem.Date.ToString("dd.MM.yyyy");
-                            row.Cells[2].Range.Text = modelItem.EnergyCost.ToString("0.00");
-                            row.Cells[3].Range.Text = modelItem.WaterWithoutComissionCost.ToString("0.00");
-                            row.Cells[4].Range.Text = modelItem.WaterComissionCost.ToString("0.00");
+                            row.Cells[2].Range.Text = modelItem.EnergyTotal.ToString("0.00");
+                            row.Cells[3].Range.Text = modelItem.WaterWithoutCommissionTotal.ToString("0.00");
+                            row.Cells[4].Range.Text = modelItem.WaterCommissionTotal.ToString("0.00");
+                            row.Cells[5].Range.Text = modelItem.GarbageWithoutCommissionTotal.ToString("0.00");
+                            row.Cells[6].Range.Text = modelItem.GarbageCommissionTotal.ToString("0.00");
+                            row.Cells[7].Range.Text = modelItem.RepairWithoutCommissionTotal.ToString("0.00");
+                            row.Cells[8].Range.Text = modelItem.RepairCommissionTotal.ToString("0.00");
                             acticleSaleNumber++;
                         }
 
                         itemsTable.Rows[acticleSaleNumber + 1].Delete();
 
-                        document.Bookmarks["TotalEnergyCost"].Range.Text = model.TotalEnergyCost.ToString("0.00");
-                        document.Bookmarks["TotalWaterWithoutComissionCost"].Range.Text = model.TotalWaterWithoutComissionCost.ToString("0.00");
-                        document.Bookmarks["TotalWaterComissionCost"].Range.Text = model.TotalWaterComissionCost.ToString("0.00");
+                        document.Bookmarks["FinalEnergyTotal"].Range.Text = model.FinalEnergyTotal.ToString("0.00");
+
+                        document.Bookmarks["FinalWaterWithoutComissionTotal"].Range.Text = model.FinalWaterWithoutComissionTotal.ToString("0.00");
+                        document.Bookmarks["FinalWaterComissionTotal"].Range.Text = model.FinalWaterComissionTotal.ToString("0.00");
+
+                        document.Bookmarks["FinalGarbageWithoutComissionTotal"].Range.Text = model.FinalGarbageWithoutComissionTotal.ToString("0.00");
+                        document.Bookmarks["FinalGarbageComissionTotal"].Range.Text = model.FinalGarbageComissionTotal.ToString("0.00");
+
+                        document.Bookmarks["FinalRepairWithoutComissionTotal"].Range.Text = model.FinalRepairWithoutComissionTotal.ToString("0.00");
+                        document.Bookmarks["FinalRepairComissionTotal"].Range.Text = model.FinalRepairComissionTotal.ToString("0.00");
                     }
 
                     application.Activate();

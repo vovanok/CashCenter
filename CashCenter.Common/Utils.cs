@@ -8,9 +8,14 @@
             return (value / (100 + ndsValue)) * ndsValue;
         }
 
-        public static decimal GetCostWithComission(decimal costWithoutComission, float commissionPercent)
+        public static decimal GetCostWithCommission(decimal costWithoutComission, float commissionPercent)
         {
-            return costWithoutComission + costWithoutComission * (decimal)(commissionPercent / 100f);
+            return costWithoutComission + GetCommission(costWithoutComission, commissionPercent);
+        }
+
+        public static decimal GetCommission(decimal costWithoutComission, float commissionPercent)
+        {
+            return costWithoutComission * (decimal)(commissionPercent / 100f);
         }
     }
 }
