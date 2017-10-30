@@ -18,7 +18,7 @@ namespace CashCenter.Common
         public static string EnergyCustomersReportTemplateFilename => GetAppSettingByKey("EnergyCustomersReportTemplateFilename", string.Empty);
         public static string WaterCustomersReportTemplateFilename => GetAppSettingByKey("WaterCustomersReportTemplateFilename", string.Empty);
         public static string ArticlesSalesReportTemplateFilename => GetAppSettingByKey("ArticlesSalesReportTemplateFilename", string.Empty);
-        public static string WaterAndEnergyCustomersReportTemplateFilename => GetAppSettingByKey("WaterAndEnergyCustomersReportTemplateFilename", string.Empty);
+        public static string CommonPaymentsReportTemplateFilename => GetAppSettingByKey("CommonPaymentsReportTemplateFilename", string.Empty);
         public static int CurrentRegionId => GetAppSettingByKeyAsInt("CurrentRegionId", 100);
 		public static int CheckPrinterPassword => GetAppSettingByKeyAsInt("CheckPrinterPassword", 0);
 		public static int CheckPrinterMaxLineLength => GetAppSettingByKeyAsInt("CheckPrinterMaxLineLength", 10);

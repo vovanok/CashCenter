@@ -5,12 +5,13 @@ using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
 using CashCenter.DataMigration.Providers.Word.Entities;
+using CashCenter.DataMigration.CommonPayments;
 
 namespace CashCenter.DataMigration.WaterAndEnergyCustomers
 {
-    public class WaterAndEnergyCustomerPaymentsWordExporter : BaseExporter<WaterAndEnergyCustomersDataSource>
+    public class CommonPaymentsWordExporter : BaseExporter<CommonPaymentsDataSource>
     {
-        protected override List<WaterAndEnergyCustomersDataSource> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
+        protected override List<CommonPaymentsDataSource> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
             var waterCustomersPayments = DalController.Instance.WaterCustomerPayments.Where(waterCustomerPayment =>
                 beginDatetime <= waterCustomerPayment.CreateDate && waterCustomerPayment.CreateDate <= endDatetime).ToList();
@@ -18,11 +19,11 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             var energyCustomersPayments = DalController.Instance.EnergyCustomerPayments.Where(energyCustomerPayment =>
                 beginDatetime <= energyCustomerPayment.CreateDate && energyCustomerPayment.CreateDate <= endDatetime).ToList();
 
-            return new List<WaterAndEnergyCustomersDataSource>
-                { new WaterAndEnergyCustomersDataSource(waterCustomersPayments, energyCustomersPayments) };
+            return new List<CommonPaymentsDataSource>
+                { new CommonPaymentsDataSource(waterCustomersPayments, energyCustomersPayments) };
         }
 
-        protected override ExportResult TryExportItems(IEnumerable<WaterAndEnergyCustomersDataSource> waterAndEnergyCustomerPaymentsDataSources)
+        protected override ExportResult TryExportItems(IEnumerable<CommonPaymentsDataSource> waterAndEnergyCustomerPaymentsDataSources)
         {
             if (waterAndEnergyCustomerPaymentsDataSources == null)
                 return new ExportResult();
@@ -85,7 +86,7 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             var reportModel = new ReportWaterAndEnergyCustomersPaymentsModel(beginDatetime, endDatetime,
                 waterAndEnergyCustomersPaymentsItemModels, totalEnergyCost, totalWaterWithoutComissionCost, totalWaterComissionCost);
 
-            var wordReport = new WordReportController(Config.WaterAndEnergyCustomersReportTemplateFilename);
+            var wordReport = new WordReportController(Config.CommonPaymentsReportTemplateFilename);
             wordReport.CreateReport(reportModel);
 
             return new ExportResult(countItems, waterAndEnergyCustomerPayments.AllPaymentsCount - countItems);

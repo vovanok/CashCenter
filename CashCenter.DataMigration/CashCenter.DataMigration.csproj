@@ -101,8 +101,8 @@
     <Compile Include="Providers\Word\Entities\ReportWaterCustomerPaymentModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportWaterCustomersModel.cs" />
     <Compile Include="Providers\Word\WordReportController.cs" />
-    <Compile Include="WaterAndEnergyCustomers\WaterAndEnergyCustomerPaymentsWordExporter.cs" />
-    <Compile Include="WaterAndEnergyCustomers\WaterAndEnergyCustomersDataSource.cs" />
+    <Compile Include="CommonPayments\CommonPaymentsWordExporter.cs" />
+    <Compile Include="CommonPayments\CommonPaymentsDataSource.cs" />
     <Compile Include="WaterCustomers\WaterCustomerPaymentsDbfExporter.cs" />
     <Compile Include="WaterCustomers\WaterCustomerPaymentsWordExporter.cs" />
     <Compile Include="WaterCustomers\WaterCustomersDbfImporter.cs" />

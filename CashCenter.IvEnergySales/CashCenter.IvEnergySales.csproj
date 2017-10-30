@@ -244,10 +244,10 @@
     <None Include="Templates\ArticlesReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Templates\EnergyCustomersReportTemplate.docx">
+    <None Include="Templates\CommonPaymentsReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Templates\WaterAndEnergyCustomersReportTemplate.docx">
+    <None Include="Templates\EnergyCustomersReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Templates\WaterCustomersReportTemplate.docx">
