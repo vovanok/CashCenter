@@ -28,7 +28,6 @@ namespace CashCenter.IvEnergySales.Check
                   totalCost: cost,
                   quantity: 1,
                   email: email,
-                  paySection: 1,
                   ndsPercent: Config.EnergyNdsPercent)
         {
         }

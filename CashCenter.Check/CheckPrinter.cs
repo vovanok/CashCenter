@@ -83,12 +83,12 @@ namespace CashCenter.Check
                 cashMachine.Driver.Price = check.Cost;
 
                 var payDepartment =
-                    (1 <= check.PaySection && check.PaySection <= 16)
-                        ? check.PaySection
+                    (1 <= check.Descriptor.PaySection && check.Descriptor.PaySection <= 16)
+                        ? check.Descriptor.PaySection
                         : 1;
 
                 cashMachine.Driver.Department = payDepartment;
-                Log.Info($"Установлена секция чека {check.PaySection}");
+                Log.Info($"Установлена секция чека {check.Descriptor.PaySection}");
 
                 cashMachine.Driver.Tax1 = ndsTypeToTax1Map.ContainsKey(check.NdsPercent) ? ndsTypeToTax1Map[check.NdsPercent] : 0;
                 cashMachine.Driver.Tax2 = 0;

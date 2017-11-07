@@ -16,11 +16,10 @@ namespace CashCenter.Check
         public decimal TotalCost { get; private set; }
         public double Quantity { get; private set; }
         public string Email { get; private set; }
-        public int PaySection { get; private set; }
         public NdsPercent NdsPercent { get; private set; }
 
         public Check(string descriptorId, Dictionary<string, string> parameters, decimal cost,
-            decimal totalCost, double quantity, string email, int paySection, NdsPercent ndsPercent)
+            decimal totalCost, double quantity, string email, NdsPercent ndsPercent)
         {
             Descriptor = GetCheckDescriptorById(descriptorId);
             Parameters = parameters;
@@ -28,7 +27,6 @@ namespace CashCenter.Check
             TotalCost = totalCost;
             Quantity = quantity;
             Email = email;
-            PaySection = paySection;
             NdsPercent = ndsPercent;
         }
 

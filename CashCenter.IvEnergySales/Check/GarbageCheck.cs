@@ -7,7 +7,7 @@ namespace CashCenter.IvEnergySales.Check
         public GarbageCheck(int customerNumber, string cashierName,
             decimal costWithoutComission, decimal comissionValue, decimal cost)
             : base(
-                 descriptorId: "GarbageAndRepair",
+                 descriptorId: "Garbage",
                   parameters: new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },
@@ -19,7 +19,6 @@ namespace CashCenter.IvEnergySales.Check
                   totalCost: cost,
                   quantity: 1,
                   email: string.Empty,
-                  paySection: 4,
                   ndsPercent: CashCenter.Common.NdsPercent.NdsNone)
         {
         }

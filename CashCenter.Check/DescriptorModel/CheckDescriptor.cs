@@ -8,6 +8,9 @@ namespace CashCenter.Check.DescriptorModel
         [XmlAttribute("id")]
         public string Id { get; set; }
 
+        [XmlAttribute("paySection")]
+        public int PaySection { get; set; }
+
         [XmlArray("Lines")]
         [XmlArrayItem("Line")]
         public List<CheckLineDescriptor> Lines { get; set; }

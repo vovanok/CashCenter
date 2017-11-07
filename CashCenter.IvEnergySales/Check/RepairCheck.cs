@@ -7,7 +7,7 @@ namespace CashCenter.IvEnergySales.Check
         public RepairCheck(int customerNumber, string cashierName,
             decimal costWithoutComission, decimal comissionValue, decimal cost)
             : base(
-                 descriptorId: "GarbageAndRepair",
+                 descriptorId: "Repair",
                   parameters: new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },
@@ -19,7 +19,6 @@ namespace CashCenter.IvEnergySales.Check
                   totalCost: cost,
                   quantity: 1,
                   email: string.Empty,
-                  paySection: 5,
                   ndsPercent: CashCenter.Common.NdsPercent.NdsNone)
         {
         }
