@@ -394,19 +394,19 @@ namespace CashCenter.DataMigration.Providers.Dbf
                         GetMoneyString(payment.Penalty),
 
                         GetStringForQuery(payment.CounterNumber1),
-                        GetMoneyString(0),
+                        GetMoneyString(payment.CounterCost1),
                         GetCounterValueString(payment.CounterValue1),
 
                         GetStringForQuery(payment.CounterNumber2),
-                        GetMoneyString(0),
+                        GetMoneyString(payment.CounterCost2),
                         GetCounterValueString(payment.CounterValue2),
 
                         GetStringForQuery(payment.CounterNumber3),
-                        GetMoneyString(0),
+                        GetMoneyString(payment.CounterCost3),
                         GetCounterValueString(payment.CounterValue3),
 
                         GetStringForQuery(payment.CounterNumber4),
-                        GetMoneyString(0),
+                        GetMoneyString(payment.CounterCost4),
                         GetCounterValueString(payment.CounterValue4)
                     };
 

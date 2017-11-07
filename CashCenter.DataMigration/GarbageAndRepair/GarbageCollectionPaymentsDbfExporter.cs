@@ -28,6 +28,7 @@ namespace CashCenter.DataMigration.GarbageAndRepair
                     new DbfGarbageOrRepairPayment(
                         garbageCollectionPayment.FinancialPeriodCode,
                         garbageCollectionPayment.CreateDate,
+                        garbageCollectionPayment.CreateDate,
                         garbageCollectionPayment.FilialCode,
                         garbageCollectionPayment.OrganizationCode,
                         garbageCollectionPayment.CustomerNumber,

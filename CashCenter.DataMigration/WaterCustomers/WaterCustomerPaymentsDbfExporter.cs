@@ -32,12 +32,16 @@ namespace CashCenter.DataMigration.WaterCustomers
                         waterCustomerPayment.CreateDate.ToString("yyyyMM"),
                         waterCustomerPayment.Penalty,
                         waterCustomerPayment.WaterCustomer.CounterNumber1,
+                        0,
                         waterCustomerPayment.CounterValue1,
                         waterCustomerPayment.WaterCustomer.CounterNumber2,
+                        0,
                         waterCustomerPayment.CounterValue2,
                         waterCustomerPayment.WaterCustomer.CounterNumber3,
+                        0,
                         waterCustomerPayment.CounterValue3,
                         waterCustomerPayment.WaterCustomer.CounterNumber4,
+                        0,
                         waterCustomerPayment.CounterValue4));
 
             var countItemsForExport = paymentsForExport.Count();

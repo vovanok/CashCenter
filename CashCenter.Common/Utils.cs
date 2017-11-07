@@ -1,4 +1,6 @@
-﻿namespace CashCenter.Common
+﻿using System;
+
+namespace CashCenter.Common
 {
     public static class Utils
     {
@@ -16,6 +18,13 @@
         public static decimal GetCommission(decimal costWithoutComission, float commissionPercent)
         {
             return costWithoutComission * (decimal)(commissionPercent / 100f);
+        }
+
+        public static object GetDefault(Type type)
+        {
+            return type.IsValueType
+                ? Activator.CreateInstance(type)
+                : null;
         }
     }
 }

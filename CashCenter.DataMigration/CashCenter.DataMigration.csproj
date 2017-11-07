@@ -68,6 +68,8 @@
     <Compile Include="Articles\ArticleSalesWordExporter.cs" />
     <Compile Include="Articles\ArticlesCountsDbfImporter.cs" />
     <Compile Include="Articles\ArticlesDbfImporter.cs" />
+    <Compile Include="Dbf\Dbf.cs" />
+    <Compile Include="Dbf\DbfAttributes.cs" />
     <Compile Include="GarbageAndRepair\GarbageCollectionPaymentsDbfExporter.cs" />
     <Compile Include="GarbageAndRepair\RepairPaymentsDbfExporter.cs" />
     <Compile Include="Import\BaseDbfImporter.cs" />
@@ -82,7 +84,7 @@
     <Compile Include="Providers\Dbf\Entities\DbfArticle.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticleQuantity.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticleSale.cs" />
-    <Compile Include="Providers\Dbf\Entities\DbfCustomer.cs" />
+    <Compile Include="Providers\Dbf\Entities\DbfEnergyCustomer.cs" />
     <Compile Include="ExportResult.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfGarbageOrRepairPayment.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfWaterCustomer.cs" />
