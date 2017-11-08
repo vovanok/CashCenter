@@ -32,7 +32,7 @@ namespace CashCenter.DataMigration.GarbageAndRepair
                         repairPayment.FilialCode,
                         repairPayment.OrganizationCode,
                         repairPayment.CustomerNumber,
-                        repairPayment.Cost));
+                        Utils.RubToCopeck(repairPayment.Cost)));
 
             var countItemsForExport = paymentsForExport.Count();
             if (countItemsForExport == 0)

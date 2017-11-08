@@ -20,6 +20,11 @@ namespace CashCenter.Common
             return costWithoutComission * (decimal)(commissionPercent / 100f);
         }
 
+        public static decimal RubToCopeck(decimal rubValue)
+        {
+            return rubValue * 100;
+        }
+
         public static object GetDefault(Type type)
         {
             return type.IsValueType
