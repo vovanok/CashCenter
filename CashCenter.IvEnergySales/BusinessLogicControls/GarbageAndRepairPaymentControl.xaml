@@ -86,7 +86,8 @@
                  Text="{Binding OverridedCost.Value, Converter={StaticResource FractionalNumberConverter}}"
                  VerticalContentAlignment="Center"
                  IsEnabled="{Binding IsPaymentEnable.Value}"
-                 behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"/>
+                 behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                 behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
         <WrapPanel Grid.Row="8" HorizontalAlignment="Right">
             <Label Content="Сумма с комиссией"/>
