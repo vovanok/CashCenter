@@ -10,6 +10,7 @@ namespace CashCenter.Common
         public static string DbfConnectionStringFormat => GetAppSettingByKey("DbfConnectionStringFormat", string.Empty);
         public static string OutputDirectory => GetAppSettingByKey("OutputDirectory", string.Empty);
         public static string EnergyCustomerOffOutputFileFormat => GetAppSettingByKey("EnergyCustomerOffOutputFileFormat", string.Empty);
+        public static string AllPaymentsRfcOutputFileFormat => GetAppSettingByKey("AllPaymentsRfcOutputFileFormat", string.Empty);
         public static string WaterCustomerDbfOutputFileFormat => GetAppSettingByKey("WaterCustomerDbfOutputFileFormat", string.Empty);
         public static string ArticlesDbfOutputFileFormat => GetAppSettingByKey("ArticlesDbfOutputFileFormat", string.Empty);
         public static string ArticlesSeparatedDbfOutputFileFormat => GetAppSettingByKey("ArticlesSeparatedDbfOutputFileFormat", string.Empty);

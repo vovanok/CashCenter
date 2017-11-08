@@ -63,6 +63,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllPayments\AllPaymentsContainer.cs" />
+    <Compile Include="AllPayments\AllPaymentsRkcExporter.cs" />
     <Compile Include="Articles\ArticleSalesDbfExporter.cs" />
     <Compile Include="Articles\ArticleSalesSeparatedDbfExporter.cs" />
     <Compile Include="Articles\ArticleSalesWordExporter.cs" />
@@ -94,6 +96,8 @@
     <Compile Include="Providers\Off\Entities\OffCustomerPayment.cs" />
     <Compile Include="Providers\Off\OffRegistryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Rkc\Entities\RkcAllPaymentsItem.cs" />
+    <Compile Include="Providers\Rkc\RkcController.cs" />
     <Compile Include="Providers\Word\Entities\ReportArticleSaleModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportArticlesSalesModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportEnergyCustomerPaymentModel.cs" />
