@@ -17,7 +17,7 @@ namespace CashCenter.Common
 
         public static decimal GetCommission(decimal costWithoutComission, float commissionPercent)
         {
-            return costWithoutComission * (decimal)(commissionPercent / 100f);
+            return RoundMoney(costWithoutComission * (decimal)(commissionPercent / 100f));
         }
 
         public static decimal RubToCopeck(decimal rubValue)
@@ -30,6 +30,11 @@ namespace CashCenter.Common
             return type.IsValueType
                 ? Activator.CreateInstance(type)
                 : null;
+        }
+
+        public static decimal RoundMoney(decimal value)
+        {
+            return Math.Floor(value * 100) / 100;
         }
     }
 }

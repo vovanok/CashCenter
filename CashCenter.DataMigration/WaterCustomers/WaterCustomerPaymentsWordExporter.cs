@@ -26,7 +26,7 @@ namespace CashCenter.DataMigration.WaterCustomers
                 .Select(waterCustomerPayment =>
                     {
                         decimal paymentAndPenaltyCost = waterCustomerPayment.Cost + waterCustomerPayment.Penalty;
-                        decimal comissionCost = paymentAndPenaltyCost * (decimal)(waterCustomerPayment.ComissionPercent / 100);
+                        decimal commissionCost = Utils.GetCommission(paymentAndPenaltyCost, (float)waterCustomerPayment.ComissionPercent);
 
                         return new ReportWaterCustomerPaymentModel(
                             waterCustomerPayment.CreateDate,
@@ -37,8 +37,8 @@ namespace CashCenter.DataMigration.WaterCustomers
                             waterCustomerPayment.Cost,
                             waterCustomerPayment.Penalty,
                             paymentAndPenaltyCost,
-                            comissionCost,
-                            paymentAndPenaltyCost + comissionCost);
+                            commissionCost,
+                            paymentAndPenaltyCost + commissionCost);
                         });
 
             int customerPaymentModelsCount = customerPaymentModels.Count();
