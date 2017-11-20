@@ -61,7 +61,7 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.Cost,
-                    Utils.GetCommission(item.Cost, (float)item.ComissionPercent))));
+                    item.CommissionValue)));
 
             itemsForStore.AddRange(container.ArticleSales.Where(item => item != null)
                 .Select(item => new RkcAllPaymentsItem(
@@ -83,7 +83,7 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.Cost,
-                    Utils.GetCommission(item.Cost, (float)item.CommissionPercent))));
+                    item.CommissionValue)));
 
             itemsForStore.AddRange(container.RepairPayments.Where(item => item != null)
                 .Select(item => new RkcAllPaymentsItem(
@@ -94,7 +94,7 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.Cost,
-                    Utils.GetCommission(item.Cost, (float)item.CommissionPercent))));
+                    item.CommissionValue)));
 
             outputController.StoreItems(itemsForStore);
             int itemsCount = itemsForStore.Count;

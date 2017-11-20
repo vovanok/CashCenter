@@ -97,7 +97,7 @@
           <Property Name="FilialCode" Type="int" Nullable="false" />
           <Property Name="CustomerNumber" Type="int" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="CommissionPercent" Type="float" Nullable="false" />
+          <Property Name="CommissionValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentReason">
           <Key>
@@ -124,7 +124,7 @@
           <Property Name="FilialCode" Type="int" Nullable="false" />
           <Property Name="CustomerNumber" Type="int" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="CommissionPercent" Type="float" Nullable="false" />
+          <Property Name="CommissionValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="WaterCustomer">
           <Key>
@@ -156,7 +156,7 @@
           <Property Name="Penalty" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="FiscalNumber" Type="int" Nullable="false" />
-          <Property Name="ComissionPercent" Type="float" Nullable="false" />
+          <Property Name="CommissionValue" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <Association Name="FK_ArticlePrice_To_Article">
           <End Role="Article" Type="Self.Article" Multiplicity="1" />
@@ -576,7 +576,7 @@
           <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
-          <Property Name="ComissionPercent" Type="Double" Nullable="false" />
+          <Property Name="CommissionValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <NavigationProperty Name="WaterCustomer" Relationship="CashCenterModel.FK_WaterCustomerPayment_ToWaterCustomer" FromRole="WaterCustomerPayment" ToRole="WaterCustomer" />
         </EntityType>
         <Association Name="FK_WaterCustomerPayment_ToWaterCustomer">
@@ -602,7 +602,7 @@
           <Property Name="FilialCode" Type="Int32" Nullable="false" />
           <Property Name="CustomerNumber" Type="Int32" Nullable="false" />
           <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CommissionPercent" Type="Double" Nullable="false" />
+          <Property Name="CommissionValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="RepairPayment">
           <Key>
@@ -615,7 +615,7 @@
           <Property Name="FilialCode" Type="Int32" Nullable="false" />
           <Property Name="CustomerNumber" Type="Int32" Nullable="false" />
           <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="CommissionPercent" Type="Double" Nullable="false" />
+          <Property Name="CommissionValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -746,7 +746,7 @@
           <EntitySetMapping Name="WaterCustomerPayments">
             <EntityTypeMapping TypeName="CashCenterModel.WaterCustomerPayment">
               <MappingFragment StoreEntitySet="WaterCustomerPayment">
-                <ScalarProperty Name="ComissionPercent" ColumnName="ComissionPercent" />
+                <ScalarProperty Name="CommissionValue" ColumnName="CommissionValue" />
                 <ScalarProperty Name="FiscalNumber" ColumnName="FiscalNumber" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="Penalty" ColumnName="Penalty" />
@@ -764,7 +764,7 @@
           <EntitySetMapping Name="GarbageCollectionPayments">
             <EntityTypeMapping TypeName="CashCenterModel.GarbageCollectionPayment">
               <MappingFragment StoreEntitySet="GarbageCollectionPayment">
-                <ScalarProperty Name="CommissionPercent" ColumnName="CommissionPercent" />
+                <ScalarProperty Name="CommissionValue" ColumnName="CommissionValue" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
                 <ScalarProperty Name="FilialCode" ColumnName="FilialCode" />
@@ -778,7 +778,7 @@
           <EntitySetMapping Name="RepairPayments">
             <EntityTypeMapping TypeName="CashCenterModel.RepairPayment">
               <MappingFragment StoreEntitySet="RepairPayment">
-                <ScalarProperty Name="CommissionPercent" ColumnName="CommissionPercent" />
+                <ScalarProperty Name="CommissionValue" ColumnName="CommissionValue" />
                 <ScalarProperty Name="Cost" ColumnName="Cost" />
                 <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
                 <ScalarProperty Name="FilialCode" ColumnName="FilialCode" />

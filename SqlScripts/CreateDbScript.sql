@@ -116,7 +116,7 @@ CREATE TABLE [dbo].[WaterCustomerPayment] (
     [Penalty]          DECIMAL (18, 2) NOT NULL,
     [Cost]             DECIMAL (18, 2) NOT NULL,
     [FiscalNumber]     INT             NOT NULL,
-    [ComissionPercent] FLOAT (53)      NOT NULL,
+    [CommissionValue]  DECIMAL (18, 2) NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_WaterCustomerPayment_ToWaterCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[WaterCustomer] ([Id])
 );
@@ -129,7 +129,7 @@ CREATE TABLE [dbo].[GarbageCollectionPayment] (
     [FilialCode]          INT             NOT NULL,
     [CustomerNumber]      INT             NOT NULL,
     [Cost]                DECIMAL (18, 2) NOT NULL,
-    [CommissionPercent]   FLOAT           NOT NULL, 
+    [CommissionValue]     DECIMAL (18, 2) NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
@@ -141,6 +141,6 @@ CREATE TABLE [dbo].[RepairPayment] (
     [FilialCode]          INT             NOT NULL,
     [CustomerNumber]      INT             NOT NULL,
     [Cost]                DECIMAL (18, 2) NOT NULL,
-    [CommissionPercent]   FLOAT           NOT NULL, 
+    [CommissionValue]     DECIMAL (18, 2) NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );

@@ -83,9 +83,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
                 targetModelItem.WaterWithoutCommissionTotal += waterCustomerPayment.Cost;
                 finalWaterWithoutCommissionTotal += waterCustomerPayment.Cost;
 
-                decimal commissionCost = Utils.GetCommission(waterCustomerPayment.Cost, (float)waterCustomerPayment.ComissionPercent);
-                targetModelItem.WaterCommissionTotal += commissionCost;
-                finalWaterCommissionTotal += commissionCost;
+                targetModelItem.WaterCommissionTotal += waterCustomerPayment.CommissionValue;
+                finalWaterCommissionTotal += waterCustomerPayment.CommissionValue;
 
                 countItems++;
             }
@@ -103,9 +102,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
                 targetModelItem.GarbageWithoutCommissionTotal += garbagePayment.Cost;
                 finalGarbageWithoutComissionTotal += garbagePayment.Cost;
 
-                decimal commissionTotal = Utils.GetCommission(garbagePayment.Cost, (float)garbagePayment.CommissionPercent);
-                targetModelItem.GarbageCommissionTotal += commissionTotal;
-                finalGarbageCommissionTotal += commissionTotal;
+                targetModelItem.GarbageCommissionTotal += garbagePayment.CommissionValue;
+                finalGarbageCommissionTotal += garbagePayment.CommissionValue;
 
                 countItems++;
             }
@@ -123,9 +121,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
                 targetModelItem.RepairWithoutCommissionTotal += repairPayment.Cost;
                 finalRepairWithoutCommissionTotal += repairPayment.Cost;
 
-                decimal commissionTotal = Utils.GetCommission(repairPayment.Cost, (float)repairPayment.CommissionPercent);
-                targetModelItem.RepairCommissionTotal += commissionTotal;
-                finalRepairCommissionTotal += commissionTotal;
+                targetModelItem.RepairCommissionTotal += repairPayment.CommissionValue;
+                finalRepairCommissionTotal += repairPayment.CommissionValue;
 
                 countItems++;
             }

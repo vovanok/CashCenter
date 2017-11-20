@@ -22,7 +22,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 FilialCode = filialCode,
                 CustomerNumber = customerNumber,
                 Cost = cost,
-                CommissionPercent = Settings.RepairCommissionPercent
+                CommissionValue = Utils.GetCommission(cost, Settings.RepairCommissionPercent)
             };
 
             DalController.Instance.AddRepairPayment(payment);

@@ -85,10 +85,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
             Log.Info($"Старт -> {operationName}");
 
             decimal costWithoutCommission = cost + penalty;
-            decimal costWithComission = GetCostWithComission(costWithoutCommission);
-            decimal comissionValue = costWithComission - costWithoutCommission;
+            decimal commissionValue = Utils.GetCommission(costWithoutCommission, Settings.WaterСommissionPercent);
+            decimal costWithComission = costWithoutCommission + commissionValue;
 
-            if (isWithoutCheck || TryPrintChecks(costWithoutCommission, comissionValue, costWithComission,
+            if (isWithoutCheck || TryPrintChecks(costWithoutCommission, commissionValue, costWithComission,
                 Customer.Value.Number, Customer.Value.Name, Customer.Value.Email))
             {
                 var payment = new WaterCustomerPayment
@@ -103,7 +103,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                     Penalty = penalty,
                     Cost = cost,
                     FiscalNumber = 0, // TODO: Fill fiscal
-                    ComissionPercent = Settings.WaterСommissionPercent
+                    CommissionValue = commissionValue
                 };
 
                 DalController.Instance.AddWaterCustomerPayment(payment);
@@ -119,7 +119,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public decimal GetCostWithComission(decimal costWithoutComission)
         {
-            return costWithoutComission + costWithoutComission * (decimal)(Settings.WaterСommissionPercent / 100f);
+            return costWithoutComission + Utils.GetCommission(costWithoutComission, Settings.WaterСommissionPercent);
         }
 
         private bool TryPrintChecks(decimal costWithoutCommision, decimal comissionValue,

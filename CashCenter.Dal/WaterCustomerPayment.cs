@@ -25,7 +25,7 @@ namespace CashCenter.Dal
         public decimal Penalty { get; set; }
         public decimal Cost { get; set; }
         public int FiscalNumber { get; set; }
-        public double ComissionPercent { get; set; }
+        public decimal CommissionValue { get; set; }
     
         public virtual WaterCustomer WaterCustomer { get; set; }
     }

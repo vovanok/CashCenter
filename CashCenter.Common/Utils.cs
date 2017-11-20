@@ -29,7 +29,7 @@ namespace CashCenter.Common
 
         public static decimal RoundMoney(decimal value)
         {
-            return Math.Floor(value * 100) / 100;
+            return Math.Round(value, 2);
         }
     }
 }

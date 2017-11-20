@@ -22,7 +22,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 FilialCode = filialCode,
                 CustomerNumber = customerNumber,
                 Cost = cost,
-                CommissionPercent = Settings.GarbageCollectionCommissionPercent
+                CommissionValue = Utils.GetCommission(cost, Settings.GarbageCollectionCommissionPercent)
             };
 
             DalController.Instance.AddGarbageCollectionPayment(payment);
