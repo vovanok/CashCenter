@@ -39,7 +39,7 @@ namespace CashCenter.DataMigration.Providers.Rkc
                             item.PaymentCommission.ToString("0.00", CultureInfo.InvariantCulture)
                         }));
 
-                    sbRkcContent.Append("|>> ");
+                    sbRkcContent.Append("|>> \n");
                 }
 
                 var rkcFilename = Path.Combine(directoryName, string.Format(Config.AllPaymentsRfcOutputFileFormat, DateTime.Now));

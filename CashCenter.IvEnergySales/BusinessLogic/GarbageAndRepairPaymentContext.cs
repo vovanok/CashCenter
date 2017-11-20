@@ -21,7 +21,7 @@ namespace CashCenter.IvEnergySales.BusinessLogic
 
         public decimal GetCostWithComission(decimal costWithoutCommission)
         {
-            return Utils.GetCostWithCommission(costWithoutCommission, CommissionPercent);
+            return costWithoutCommission + Utils.GetCommission(costWithoutCommission, CommissionPercent);
         }
 
         public void ApplyBarcode(Barcode barcode)
@@ -69,10 +69,10 @@ namespace CashCenter.IvEnergySales.BusinessLogic
                 $"\tcost = {cost}";
             Log.Info($"Старт -> {operationInfo}");
 
-            var costWithCommission = GetCostWithComission(cost);
-            decimal comissionValue = costWithCommission - cost;
+            decimal commissionValue = Utils.GetCommission(cost, CommissionPercent);
+            decimal costWithCommission = cost + commissionValue;
 
-            if (isWithoutCheck || TryPrintChecks(Barcode.CustomerNumber, cost, comissionValue, costWithCommission))
+            if (isWithoutCheck || TryPrintChecks(Barcode.CustomerNumber, cost, commissionValue, costWithCommission))
             {
                 StorePaymentToDb(Barcode.FinancialPeriod, createDate, OrganizationCode, FilialCode, Barcode.CustomerNumber, cost);
                 Log.Info($"Успешно завершено -> {operationInfo}");

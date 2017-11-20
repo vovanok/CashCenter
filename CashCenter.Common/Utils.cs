@@ -10,11 +10,6 @@ namespace CashCenter.Common
             return (value / (100 + ndsValue)) * ndsValue;
         }
 
-        public static decimal GetCostWithCommission(decimal costWithoutComission, float commissionPercent)
-        {
-            return costWithoutComission + GetCommission(costWithoutComission, commissionPercent);
-        }
-
         public static decimal GetCommission(decimal costWithoutComission, float commissionPercent)
         {
             return RoundMoney(costWithoutComission * (decimal)(commissionPercent / 100f));

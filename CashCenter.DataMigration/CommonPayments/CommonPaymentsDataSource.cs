@@ -9,6 +9,7 @@ namespace CashCenter.DataMigration.CommonPayments
         public List<EnergyCustomerPayment> EnergyCustomersPayments { get; private set; }
         public List<GarbageCollectionPayment> GarbagePayments { get; private set; }
         public List<RepairPayment> RepairPayments { get; private set; }
+
         public int AllPaymentsCount
         {
             get { return WaterCustomersPayments.Count + EnergyCustomersPayments.Count + GarbagePayments.Count + RepairPayments.Count; }
