@@ -130,5 +130,41 @@ namespace CashCenter.Common.Properties {
                 this["RepairCommissionPercent"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ArticlesManipulatorType {
+            get {
+                return ((int)(this["ArticlesManipulatorType"]));
+            }
+            set {
+                this["ArticlesManipulatorType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ArticlesZeusDbUrl {
+            get {
+                return ((string)(this["ArticlesZeusDbUrl"]));
+            }
+            set {
+                this["ArticlesZeusDbUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ArticlesZeusDbPath {
+            get {
+                return ((string)(this["ArticlesZeusDbPath"]));
+            }
+            set {
+                this["ArticlesZeusDbPath"] = value;
+            }
+        }
     }
 }

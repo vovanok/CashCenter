@@ -143,6 +143,7 @@
     <Compile Include="Common\GlobalEvents.cs" />
     <Compile Include="Common\ViewModel.cs" />
     <Compile Include="Converters\CustomerIsClosedStatusConverter.cs" />
+    <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Converters\FinancialPeriodConverter.cs" />
     <Compile Include="Converters\PositiveIntToStringConverter.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml.cs">
@@ -278,6 +279,10 @@
     <ProjectReference Include="..\CashCenter.DataMigration\CashCenter.DataMigration.csproj">
       <Project>{718380a0-3293-4a26-9ad4-86f836647b07}</Project>
       <Name>CashCenter.DataMigration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.ZeusDal\CashCenter.ZeusDal.csproj">
+      <Project>{dee8e0e1-13bf-4713-a615-1fbee418e5cd}</Project>
+      <Name>CashCenter.ZeusDal</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ManipulatorType.cs" />
     <Compile Include="Barcode.cs" />
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Config.cs" />

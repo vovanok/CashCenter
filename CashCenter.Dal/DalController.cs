@@ -1,13 +1,14 @@
-﻿using CashCenter.Common;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Validation;
+﻿using System;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using CashCenter.Common;
+using CashCenter.Dal.DataManipulationInterfaces;
 
 namespace CashCenter.Dal
 {
-    public class DalController
+    public class DalController : IArticlesManipulatable
     {
         private readonly CashCenterContext context = new CashCenterContext();
 

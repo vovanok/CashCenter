@@ -16,6 +16,9 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<int> ArticlesDocumentNumberCurrentValue { get; } = new Observed<int>();
         public Observed<string> ArticlesWarehouseCode { get; } = new Observed<string>();
         public Observed<string> ArticlesWarehouseName { get; } = new Observed<string>();
+        public Observed<ManipulatorType> ArticlesManipulatorType { get; } = new Observed<ManipulatorType>();
+        public Observed<string> ArticlesZeusDbUrl { get; } = new Observed<string>();
+        public Observed<string> ArticlesZeusDbPath { get; } = new Observed<string>();
         public Observed<float> WaterСommissionPercent { get; } = new Observed<float>();
         public Observed<int> GarbageCollectionFilialCode { get; } = new Observed<int>();
         public Observed<float> GarbageCollectionComissionPercent { get; } = new Observed<float>();
@@ -31,6 +34,9 @@ namespace CashCenter.IvEnergySales.Service
             ArticlesDocumentNumberCurrentValue.OnChange += (newValue) => DispatchPropertyChanged("ArticlesDocumentNumberCurrentValue");
             ArticlesWarehouseCode.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseCode");
             ArticlesWarehouseName.OnChange += (newValue) => DispatchPropertyChanged("ArticlesWarehouseName");
+            ArticlesManipulatorType.OnChange += (newValue) => DispatchPropertyChanged("ArticlesManipulatorType");
+            ArticlesZeusDbUrl.OnChange += (newValue) => DispatchPropertyChanged("ArticlesZeusDbUrl");
+            ArticlesZeusDbPath.OnChange += (newValue) => DispatchPropertyChanged("ArticlesZeusDbPath");
             WaterСommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("WaterСommissionPercent");
             GarbageCollectionFilialCode.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionFilialCode");
             GarbageCollectionComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionComissionPercent");
@@ -41,6 +47,9 @@ namespace CashCenter.IvEnergySales.Service
             ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
             ArticlesWarehouseCode.Value = Settings.ArticlesWarehouseCode;
             ArticlesWarehouseName.Value = Settings.ArticlesWarehouseName;
+            ArticlesManipulatorType.Value = Settings.ArticlesManipulatorType;
+            ArticlesZeusDbUrl.Value = Settings.ArticlesZeusDbUrl;
+            ArticlesZeusDbPath.Value = Settings.ArticlesZeusDbPath;
             WaterСommissionPercent.Value = Settings.WaterСommissionPercent;
             GarbageCollectionFilialCode.Value = Settings.GarbageCollectionFilialCode;
             GarbageCollectionComissionPercent.Value = Settings.GarbageCollectionCommissionPercent;
@@ -95,6 +104,30 @@ namespace CashCenter.IvEnergySales.Service
             }
 
             Settings.WaterСommissionPercent = WaterСommissionPercent.Value;
+
+            //
+            var oldArticlesManipulatorType = Settings.ArticlesManipulatorType;
+            Settings.ArticlesManipulatorType = ArticlesManipulatorType.Value;
+            if (oldArticlesManipulatorType != ArticlesManipulatorType.Value)
+            {
+                GlobalEvents.DispatchArticlesManipulatorTypeChanged();
+            }
+
+            //
+            var oldArticlesZeusDbUrl = Settings.ArticlesZeusDbUrl;
+            Settings.ArticlesZeusDbUrl = ArticlesZeusDbUrl.Value;
+            if (oldArticlesZeusDbUrl != ArticlesZeusDbUrl.Value)
+            {
+                GlobalEvents.DispatchArticlesZeusDbUrlChanged();
+            }
+
+            //
+            var oldArticlesZeusDbPath = Settings.ArticlesZeusDbPath;
+            Settings.ArticlesZeusDbPath = ArticlesZeusDbPath.Value;
+            if (oldArticlesZeusDbPath != ArticlesZeusDbPath.Value)
+            {
+                GlobalEvents.DispatchArticlesZeusDbPathChanged();
+            }
 
             //
             if (GarbageCollectionFilialCode.Value <= 0)

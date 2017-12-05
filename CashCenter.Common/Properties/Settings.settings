@@ -29,5 +29,14 @@
     <Setting Name="RepairCommissionPercent" Type="System.Single" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="ArticlesManipulatorType" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ArticlesZeusDbUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ArticlesZeusDbPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
