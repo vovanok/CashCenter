@@ -31,5 +31,10 @@ namespace CashCenter.Common
         {
             return Math.Round(value, 2);
         }
+
+        public static string GetDepartmentDocumentNumber()
+        {
+            return Settings.ArticlesWarehouseCode + Settings.ArticlesDocumentNumberCurrentValue.ToString("D7");
+        }
     }
 }

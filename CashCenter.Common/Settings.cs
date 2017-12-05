@@ -56,6 +56,24 @@
             set { Properties.Settings.Default.RepairCommissionPercent = value; }
         }
 
+        public static ManipulatorType ArticlesManipulatorType
+        {
+            get { return (ManipulatorType)Properties.Settings.Default.ArticlesManipulatorType; }
+            set { Properties.Settings.Default.ArticlesManipulatorType = (int)value; }
+        }
+
+        public static string ArticlesZeusDbUrl
+        {
+            get { return Properties.Settings.Default.ArticlesZeusDbUrl; }
+            set { Properties.Settings.Default.ArticlesZeusDbUrl = value; }
+        }
+
+        public static string ArticlesZeusDbPath
+        {
+            get { return Properties.Settings.Default.ArticlesZeusDbPath; }
+            set { Properties.Settings.Default.ArticlesZeusDbPath = value; }
+        }
+
         public static void Save()
         {
             Properties.Settings.Default.Save();

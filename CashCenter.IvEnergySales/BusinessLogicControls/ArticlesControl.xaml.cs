@@ -1,9 +1,12 @@
 ﻿using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Dal;
+using CashCenter.Dal.DataManipulationInterfaces;
 using CashCenter.IvEnergySales.Check;
 using CashCenter.IvEnergySales.Common;
+using CashCenter.ZeusDal;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 
@@ -34,23 +37,50 @@ namespace CashCenter.IvEnergySales
             }
         }
 
+        private IArticlesManipulatable articleManipulator;
+
         public ArticlesControl()
         {
             InitializeComponent();
 
             GlobalEvents.OnArticlesUpdated += UpdateArticles;
+
+            UpdateArticleManipulator();
+            GlobalEvents.OnArticlesManipulatorTypeChanged += UpdateArticleManipulator;
+            GlobalEvents.OnArticlesZeusDbUrlChanged += UpdateArticleManipulator;
+            GlobalEvents.OnArticlesZeusDbPathChanged += UpdateArticleManipulator;
+        }
+
+        private void UpdateArticleManipulator()
+        {
+            if (Settings.ArticlesManipulatorType == ManipulatorType.Local)
+            {
+                articleManipulator = DalController.Instance;
+            }
+            else if (Settings.ArticlesManipulatorType == ManipulatorType.Zeus)
+            {
+                articleManipulator = new ZeusContext(Settings.ArticlesZeusDbUrl, Settings.ArticlesZeusDbPath);
+            }
+
+            UpdateArticles();
         }
 
         private void UpdateArticles()
         {
+            if (articleManipulator == null)
+                return;
+
             var code = tbArticleCodeFilter.Text;
             var name = tbArticleNameFilter.Text;
             var barcode = tbArticleBarcodeFilter.Text;
 
-            var filteredArticles = DalController.Instance.Articles.Where(article =>
-                    (string.IsNullOrEmpty(code) || article.Code.IndexOf(code, StringComparison.CurrentCultureIgnoreCase) >= 0) &&
-                    (string.IsNullOrEmpty(name) || article.Name.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) >= 0) &&
-                    (string.IsNullOrEmpty(barcode) || article.Barcode.IndexOf(barcode, StringComparison.CurrentCultureIgnoreCase) >= 0));
+            var filteredArticles =
+                string.IsNullOrEmpty(code) && string.IsNullOrEmpty(name) && string.IsNullOrEmpty(barcode)
+                    ? new List<Article>()
+                    : articleManipulator.Articles.Where(article =>
+                        (string.IsNullOrEmpty(code) || article.Code.IndexOf(code, StringComparison.CurrentCultureIgnoreCase) >= 0) &&
+                        (string.IsNullOrEmpty(name) || article.Name.IndexOf(name, StringComparison.CurrentCultureIgnoreCase) >= 0) &&
+                        (string.IsNullOrEmpty(barcode) || article.Barcode.IndexOf(barcode, StringComparison.CurrentCultureIgnoreCase) >= 0));
 
             var articlesInfo = filteredArticles.Select(article => new ArticleItem(article));
 
@@ -90,17 +120,17 @@ namespace CashCenter.IvEnergySales
                 return;
             }
 
-            var prices = DalController.Instance.ArticlePrices
+            var prices = articleManipulator.ArticlePrices
                 .Where(price => price.ArticleId == selectedArticleItem.Article.Id).ToList();
 
-            var articlePriceWithTypeItems = DalController.Instance.ArticlePrices
+            var articlePriceWithTypeItems = articleManipulator.ArticlePrices
                 .Where(price => price.ArticleId == selectedArticleItem.Article.Id)
                 .GroupBy(price => price.ArticlePriceTypeId)
                 .Select(pricesByType => pricesByType.FirstOrDefault(g => g.EntryDate == pricesByType.Max(item => item.EntryDate)))
                 .Where(price => price != null)
                 .Select(price =>
                 {
-                    var type = DalController.Instance.ArticlePriceTypes.FirstOrDefault(priceType => priceType.Id == price.ArticlePriceTypeId);
+                    var type = articleManipulator.ArticlePriceTypes.FirstOrDefault(priceType => priceType.Id == price.ArticlePriceTypeId);
                     return new ArticlePriceWithType(price, type);
                 });
 
@@ -178,7 +208,7 @@ namespace CashCenter.IvEnergySales
             {
                 selectedArticleItem.Article.Quantity -= quantity;
 
-                DalController.Instance.AddArticleSale(
+                articleManipulator.AddArticleSale(
                     new ArticleSale
                     {
                         ArticlePriceId = selectedArticlePriceWithTypeItem.Price.Id,

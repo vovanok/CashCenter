@@ -5,11 +5,11 @@ namespace CashCenter.Common
 {
     public static class CommonExtensions
     {
-        public static T GetFieldFromReader<T>(this DbDataReader dataReader, string columnName)
+        public static T GetFieldFromReader<T>(this DbDataReader dataReader, string columnName, T defaultValue = default(T))
         {
             int ordinal = dataReader.GetOrdinal(columnName);
             if (dataReader.IsDBNull(ordinal))
-                return default(T);
+                return defaultValue;
 
             return dataReader.GetFieldValue<T>(ordinal);
         }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ivenergysalesservice="clr-namespace:CashCenter.IvEnergySales.Service"
+        xmlns:converters="clr-namespace:CashCenter.IvEnergySales.Converters"
         mc:Ignorable="d"
         x:Name="settingsWindow"
         Title="Настройки" Width="500" WindowStartupLocation="CenterScreen"
@@ -11,6 +12,9 @@
     <Window.DataContext>
         <ivenergysalesservice:SettingsDialogViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
+    </Window.Resources>
     <StackPanel Margin="5,5,5,0">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -25,13 +29,16 @@
             <TextBox Text="{Binding CashierName.Value}" Grid.Column="1"
                      VerticalAlignment="Center" Padding="0,5,0,5" />
         </Grid>
-        <GroupBox Header="Для экспорта товаров">
+        <GroupBox Header="Покупки товаров">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -48,6 +55,22 @@
                 <Label Content="Название склада" Grid.Row="2"/>
                 <TextBox Text="{Binding ArticlesWarehouseName.Value}" Grid.Row="2" Grid.Column="1"
                          VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="База данных" Grid.Row="3"/>
+                <StackPanel Grid.Row="3" Grid.Column="1">
+                    <RadioButton GroupName="DbManipulator" Content="Локальная БД"
+                        IsChecked="{Binding Path=ArticlesManipulatorType.Value, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Local}"/>
+                    <RadioButton GroupName="DbManipulator" Content="БД Зевса"
+                        IsChecked="{Binding Path=ArticlesManipulatorType.Value, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Zeus}"/>
+                </StackPanel>
+
+                <Label Content="URL базы данных Зевса" Grid.Row="4"/>
+                <TextBox Text="{Binding ArticlesZeusDbUrl.Value}" Grid.Row="4" Grid.Column="1"
+                    VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="Путь к базе данных Зевса" Grid.Row="5"/>
+                <TextBox Text="{Binding ArticlesZeusDbPath.Value}" Grid.Row="5" Grid.Column="1"
+                    VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
         </GroupBox>
         <GroupBox Header="Оплата за воду">

@@ -96,6 +96,7 @@
       <DependentUpon>CashCenterModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="DalController.cs" />
+    <Compile Include="DataManipulationInterfaces\IArticlesManipulatable.cs" />
     <Compile Include="Department.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
