@@ -23,7 +23,8 @@ namespace CashCenter.DataMigration.Providers.Rkc
                 if (!Directory.Exists(directoryName))
                     Directory.CreateDirectory(directoryName);
 
-                var sbRkcContent = new StringBuilder("Ver|O_RKC_1C_1|>> ");
+                var sbRkcContent = new StringBuilder();
+                sbRkcContent.AppendLine("Ver|O_RKC_1C_1|>>");
                 foreach (var item in items)
                 {
                     sbRkcContent.Append(string.Join("|",
@@ -39,11 +40,15 @@ namespace CashCenter.DataMigration.Providers.Rkc
                             item.PaymentCommission.ToString("0.00", CultureInfo.InvariantCulture)
                         }));
 
-                    sbRkcContent.Append("|>> \n");
+                    sbRkcContent.AppendLine("|>>");
                 }
 
                 var rkcFilename = Path.Combine(directoryName, string.Format(Config.AllPaymentsRfcOutputFileFormat, DateTime.Now));
-                File.AppendAllText(rkcFilename, sbRkcContent.ToString());
+
+                if (File.Exists(rkcFilename))
+                    File.Delete(rkcFilename);
+
+                File.AppendAllText(rkcFilename, sbRkcContent.ToString(), Encoding.ASCII);
             }
             catch (Exception ex)
             {
