@@ -7,7 +7,6 @@ using FirebirdSql.Data.FirebirdClient;
 using CashCenter.Dal;
 using CashCenter.Dal.DataManipulationInterfaces;
 using CashCenter.Common;
-using System.Text;
 
 namespace CashCenter.ZeusDal
 {

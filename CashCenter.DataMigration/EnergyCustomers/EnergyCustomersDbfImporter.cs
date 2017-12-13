@@ -54,6 +54,8 @@ namespace CashCenter.DataMigration.EnergyCustomers
             if (existingCustomer == null)
                 return false;
 
+            existingCustomer.Name = dbfCustomer.Name;
+            existingCustomer.Address = dbfCustomer.Address;
             existingCustomer.DayValue = dbfCustomer.DayValue;
             existingCustomer.NightValue = dbfCustomer.NightValue;
             existingCustomer.Balance = dbfCustomer.Balance;
