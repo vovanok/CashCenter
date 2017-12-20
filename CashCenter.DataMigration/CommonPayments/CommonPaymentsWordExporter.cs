@@ -80,8 +80,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
                 if (targetModelItem == null)
                     continue;
 
-                targetModelItem.WaterWithoutCommissionTotal += waterCustomerPayment.Cost;
-                finalWaterWithoutCommissionTotal += waterCustomerPayment.Cost;
+                targetModelItem.WaterWithoutCommissionTotal += waterCustomerPayment.Cost + waterCustomerPayment.Penalty;
+                finalWaterWithoutCommissionTotal += waterCustomerPayment.Cost + waterCustomerPayment.Penalty;
 
                 targetModelItem.WaterCommissionTotal += waterCustomerPayment.CommissionValue;
                 finalWaterCommissionTotal += waterCustomerPayment.CommissionValue;
