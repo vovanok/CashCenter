@@ -10,6 +10,15 @@ namespace CashCenter.DataMigration.Providers.Rkc.Entities
             Encashment = 2
         }
 
+        internal enum PaymentTarget
+        {
+            Energy = 1,
+            Water = 2,
+            Garbage = 3,
+            Repair = 4,
+            Articles = 5
+        }
+
         public ItemType Type { get; private set; }
         public int OrganizationCode { get; private set; }
         public string Inn { get; private set; }
@@ -18,9 +27,11 @@ namespace CashCenter.DataMigration.Providers.Rkc.Entities
         public DateTime PaymentDate { get; private set; }
         public decimal PaymentTotal { get; private set; }
         public decimal PaymentCommission { get; private set; }
+        public PaymentTarget Target { get; private set; }
 
         public RkcAllPaymentsItem(ItemType type, int organizationCode, string inn, string kpp,
-            string departmentCode, DateTime paymentDate, decimal paymentTotal, decimal paymentCommission)
+            string departmentCode, DateTime paymentDate, decimal paymentTotal, decimal paymentCommission,
+            PaymentTarget target)
         {
             Type = type;
             OrganizationCode = organizationCode;
@@ -30,6 +41,7 @@ namespace CashCenter.DataMigration.Providers.Rkc.Entities
             PaymentDate = paymentDate;
             PaymentTotal = paymentTotal;
             PaymentCommission = paymentCommission;
+            Target = target;
         }
     }
 }

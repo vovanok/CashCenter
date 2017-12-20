@@ -32,6 +32,7 @@ namespace CashCenter.DataMigration.Providers.Rkc
                         {
                             ((int)item.Type).ToString(),
                             item.OrganizationCode.ToString("D3"),
+                            ((int)item.Target).ToString("D3"),
                             item.Inn ?? string.Empty,
                             item.Kpp ?? string.Empty,
                             item.DepartmentCode ?? string.Empty,

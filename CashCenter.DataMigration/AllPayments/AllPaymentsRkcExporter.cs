@@ -1,10 +1,10 @@
-﻿using CashCenter.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Rkc;
 using CashCenter.DataMigration.Providers.Rkc.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CashCenter.DataMigration.AllPayments
 {
@@ -50,7 +50,8 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.Cost,
-                    0)));
+                    0,
+                    RkcAllPaymentsItem.PaymentTarget.Energy)));
 
             itemsForStore.AddRange(container.WaterPayments.Where(item => item != null)
                 .Select(item => new RkcAllPaymentsItem(
@@ -60,8 +61,9 @@ namespace CashCenter.DataMigration.AllPayments
                     string.Empty,
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
-                    item.Cost,
-                    item.CommissionValue)));
+                    item.Cost + item.Penalty,
+                    item.CommissionValue,
+                    RkcAllPaymentsItem.PaymentTarget.Water)));
 
             itemsForStore.AddRange(container.ArticleSales.Where(item => item != null)
                 .Select(item => new RkcAllPaymentsItem(
@@ -72,7 +74,8 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.ArticlePrice.Value,
-                    0)));
+                    0,
+                    RkcAllPaymentsItem.PaymentTarget.Articles)));
 
             itemsForStore.AddRange(container.GarbagePayments.Where(item => item != null)
                 .Select(item => new RkcAllPaymentsItem(
@@ -83,7 +86,8 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.Cost,
-                    item.CommissionValue)));
+                    item.CommissionValue,
+                    RkcAllPaymentsItem.PaymentTarget.Garbage)));
 
             itemsForStore.AddRange(container.RepairPayments.Where(item => item != null)
                 .Select(item => new RkcAllPaymentsItem(
@@ -94,7 +98,8 @@ namespace CashCenter.DataMigration.AllPayments
                     Settings.ArticlesWarehouseCode,
                     item.CreateDate,
                     item.Cost,
-                    item.CommissionValue)));
+                    item.CommissionValue,
+                    RkcAllPaymentsItem.PaymentTarget.Repair)));
 
             outputController.StoreItems(itemsForStore);
             int itemsCount = itemsForStore.Count;
