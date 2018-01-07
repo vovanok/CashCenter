@@ -24,7 +24,7 @@ namespace CashCenter.Dal
         public string Description { get; set; }
         public int FiscalNumber { get; set; }
     
-        public virtual EnergyCustomer EnergyCustomer { get; set; }
         public virtual PaymentReason PaymentReason { get; set; }
+        public virtual EnergyCustomer EnergyCustomer { get; set; }
     }
 }

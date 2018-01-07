@@ -18,6 +18,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             {
                 new ExportTargetItem("Платежи за электроэнергию -> OFF", new EnergyCustomerPaymentsOffExporter()),
                 new ExportTargetItem("Платежи за электроэнергию -> Word", new EnergyCustomerPaymentsWordExporter()),
+                new ExportTargetItem("Платежи за электроэнергию (для ГИС ЖКХ) -> Word", new EnergyPaymentsGisHusWordExporter()),
                 new ExportTargetItem("Платежи за воду -> DBF", new WaterCustomerPaymentsDbfExporter()),
                 new ExportTargetItem("Платежи за воду -> Word", new WaterCustomerPaymentsWordExporter()),
                 new ExportTargetItem("Покупки товаров -> DBF", new ArticleSalesDbfExporter()),

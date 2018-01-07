@@ -31,7 +31,9 @@ CREATE TABLE [dbo].[EnergyCustomer] (
     [IsActive]     BIT             NOT NULL,
     [Email]        NVARCHAR (MAX)  NOT NULL,
     [Number]       INT             NOT NULL,
-    [IsClosed] BIT NOT NULL, 
+    [IsClosed]     BIT             NOT NULL,
+    [PaymentDocumentIdentifier] NVARCHAR (20) NOT NULL,
+    [HusIdentifier] NVARCHAR (20)  NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_EnergyCustomer_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[Department] ([Id])
 );

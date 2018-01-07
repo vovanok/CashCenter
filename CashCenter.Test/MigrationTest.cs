@@ -33,8 +33,8 @@ namespace CashCenter.Test
 
             var savedEnergyCustomers = new List<DbfEnergyCustomer>
             {
-                new DbfEnergyCustomer(123, "name1", "address1", "depcode1", 345, 555, (decimal)56.56, false),
-                new DbfEnergyCustomer(-40, null, string.Empty, null, -665, 55, 0, true)
+                new DbfEnergyCustomer(123, "name1", "address1", "depcode1", 345, 555, (decimal)56.56, false, "zcvzxc", "zcvzc"),
+                new DbfEnergyCustomer(-40, null, string.Empty, null, -665, 55, 0, true, null, null)
             };
 
             var savedGarbageAndRepairsPayments = new List<DbfGarbageOrRepairPayment>

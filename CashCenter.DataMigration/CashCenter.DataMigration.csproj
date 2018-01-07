@@ -72,6 +72,7 @@
     <Compile Include="Articles\ArticlesDbfImporter.cs" />
     <Compile Include="Dbf\Dbf.cs" />
     <Compile Include="Dbf\DbfAttributes.cs" />
+    <Compile Include="EnergyCustomers\EnergyPaymentsGisHusWordExporter.cs" />
     <Compile Include="GarbageAndRepair\GarbageCollectionPaymentsDbfExporter.cs" />
     <Compile Include="GarbageAndRepair\RepairPaymentsDbfExporter.cs" />
     <Compile Include="Import\BaseDbfImporter.cs" />
@@ -98,6 +99,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Rkc\Entities\RkcAllPaymentsItem.cs" />
     <Compile Include="Providers\Rkc\RkcController.cs" />
+    <Compile Include="Providers\Word\Entities\EnergyCustomersGisHusModel.cs" />
+    <Compile Include="Providers\Word\Entities\EnergyPaymentGisHusModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportArticleSaleModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportArticlesSalesModel.cs" />
     <Compile Include="Providers\Word\Entities\ReportEnergyCustomerPaymentModel.cs" />

@@ -28,12 +28,18 @@ namespace CashCenter.DataMigration.Providers.Dbf.Entities
         [BooleanDbfColumn("ISCLOSED")]
         public bool IsClosed { get; private set; }
 
+        [CharacterDbfColumn("DOCID")]
+        public string PaymentDocumentIdentifier { get; private set; }
+
+        [CharacterDbfColumn("HUSID")]
+        public string HusIdentifier { get; private set; }
+
         public DbfEnergyCustomer()
         {
         }
 
-        public DbfEnergyCustomer(int number, string name, string address, string departmentCode,
-            int dayValue, int nightValue, decimal balance, bool isClosed)
+        public DbfEnergyCustomer(int number, string name, string address, string departmentCode, int dayValue,
+            int nightValue, decimal balance, bool isClosed, string paymentDocumentIdentifier, string husIdentifier)
         {
             Number = number;
             Name = name;
@@ -43,6 +49,8 @@ namespace CashCenter.DataMigration.Providers.Dbf.Entities
             NightValue = nightValue;
             Balance = balance;
             IsClosed = isClosed;
+            PaymentDocumentIdentifier = paymentDocumentIdentifier;
+            HusIdentifier = husIdentifier;
         }
     }
 }

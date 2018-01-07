@@ -251,6 +251,9 @@
     <None Include="Templates\CommonPaymentsReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Templates\EnergyCustomersReportGisHusTemplate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Templates\EnergyCustomersReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

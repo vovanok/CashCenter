@@ -20,6 +20,8 @@ namespace CashCenter.DataMigration.Providers.Dbf
             public const string ENERGY_CUSTOMER_NAME = "NAME";
             public const string ENERGY_CUSTOMER_ADDRESS = "ADDRESS";
             public const string ENERGY_CUSTOMER_ISCLOSED = "ISCLOSED";
+            public const string ENERGY_CUSTOMER_PAYMENT_DOC_ID = "DOCID";
+            public const string ENERGY_CUSTOMER_HUS_ID = "HUSID";
 
             public const string WATER_CUSTOMER_NUMBER = "SCHET";
             public const string WATER_CUSTOMER_NAME = "FIO";
@@ -200,8 +202,11 @@ namespace CashCenter.DataMigration.Providers.Dbf
                     int nightValue = (int)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_COUNTERS_END_NIGHT_VALUE);
                     decimal balance = (decimal)dataReader.GetFieldFromReader<double>(Sql.ENERGY_CUSTOMER_END_BALANCE);
                     bool isClosed = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_ISCLOSED) == "1";
+                    string paymentDocumentIdentifier = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_PAYMENT_DOC_ID) ?? string.Empty;
+                    string husIdentifier = dataReader.GetFieldFromReader<string>(Sql.ENERGY_CUSTOMER_HUS_ID) ?? string.Empty;
 
-                    energyCustomers.Add(new DbfEnergyCustomer(number, name, address, departamentCode, dayValue, nightValue, balance, isClosed));
+                    energyCustomers.Add(new DbfEnergyCustomer(number, name, address, departamentCode, dayValue,
+                        nightValue, balance, isClosed, paymentDocumentIdentifier, husIdentifier));
                 }
 
                 return energyCustomers;

@@ -71,6 +71,8 @@
           <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Number" Type="int" Nullable="false" />
           <Property Name="IsClosed" Type="bit" Nullable="false" />
+          <Property Name="PaymentDocumentIdentifier" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="HusIdentifier" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="EnergyCustomerPayment">
           <Key>
@@ -333,16 +335,7 @@
             <End Role="Region" EntitySet="Regions" />
             <End Role="Department" EntitySet="Departments" />
           </AssociationSet>
-          <EntitySet Name="EnergyCustomers" EntityType="CashCenterModel.EnergyCustomer" />
           <EntitySet Name="EnergyCustomerPayments" EntityType="CashCenterModel.EnergyCustomerPayment" />
-          <AssociationSet Name="FK_EnergyCustomer_ToDepartment" Association="CashCenterModel.FK_EnergyCustomer_ToDepartment">
-            <End Role="Department" EntitySet="Departments" />
-            <End Role="EnergyCustomer" EntitySet="EnergyCustomers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EnergyCustomerPayment_ToCustomer" Association="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer">
-            <End Role="EnergyCustomer" EntitySet="EnergyCustomers" />
-            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayments" />
-          </AssociationSet>
           <AssociationSet Name="FK_EnergyCustomerPayment_ToPaymentReason" Association="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason">
             <End Role="PaymentReason" EntitySet="PaymentReasons" />
             <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayments" />
@@ -364,6 +357,15 @@
           </AssociationSet>
           <EntitySet Name="GarbageCollectionPayments" EntityType="CashCenterModel.GarbageCollectionPayment" />
           <EntitySet Name="RepairPayments" EntityType="CashCenterModel.RepairPayment" />
+          <EntitySet Name="EnergyCustomers" EntityType="CashCenterModel.EnergyCustomer" />
+          <AssociationSet Name="FK_EnergyCustomer_ToDepartment" Association="CashCenterModel.FK_EnergyCustomer_ToDepartment">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnergyCustomerPayment_ToCustomer" Association="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer">
+            <End Role="EnergyCustomer" EntitySet="EnergyCustomers" />
+            <End Role="EnergyCustomerPayment" EntitySet="EnergyCustomerPayments" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="PaymentReason">
           <Key>
@@ -443,25 +445,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="EnergyCustomer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DayValue" Type="Int32" Nullable="false" />
-          <Property Name="NightValue" Type="Int32" Nullable="false" />
-          <Property Name="Balance" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Number" Type="Int32" Nullable="false" />
-          <Property Name="IsClosed" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_EnergyCustomer_ToDepartment" FromRole="EnergyCustomer" ToRole="Department" />
-          <NavigationProperty Name="EnergyCustomerPayments" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" FromRole="EnergyCustomer" ToRole="EnergyCustomerPayment" />
-        </EntityType>
         <EntityType Name="EnergyCustomerPayment">
           <Key>
             <PropertyRef Name="Id" />
@@ -475,33 +458,9 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FiscalNumber" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="EnergyCustomer" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" FromRole="EnergyCustomerPayment" ToRole="EnergyCustomer" />
           <NavigationProperty Name="PaymentReason" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToPaymentReason" FromRole="EnergyCustomerPayment" ToRole="PaymentReason" />
+          <NavigationProperty Name="EnergyCustomer" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" FromRole="EnergyCustomerPayment" ToRole="EnergyCustomer" />
         </EntityType>
-        <Association Name="FK_EnergyCustomer_ToDepartment">
-          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="1" />
-          <End Type="CashCenterModel.EnergyCustomer" Role="EnergyCustomer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Department">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EnergyCustomer">
-              <PropertyRef Name="DepartmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EnergyCustomerPayment_ToCustomer">
-          <End Type="CashCenterModel.EnergyCustomer" Role="EnergyCustomer" Multiplicity="1" />
-          <End Type="CashCenterModel.EnergyCustomerPayment" Role="EnergyCustomerPayment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EnergyCustomer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="EnergyCustomerPayment">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_EnergyCustomerPayment_ToPaymentReason">
           <End Type="CashCenterModel.PaymentReason" Role="PaymentReason" Multiplicity="1" />
           <End Type="CashCenterModel.EnergyCustomerPayment" Role="EnergyCustomerPayment" Multiplicity="*" />
@@ -617,6 +576,51 @@
           <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="CommissionValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
+        <EntityType Name="EnergyCustomer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DayValue" Type="Int32" Nullable="false" />
+          <Property Name="NightValue" Type="Int32" Nullable="false" />
+          <Property Name="Balance" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="IsClosed" Type="Boolean" Nullable="false" />
+          <Property Name="PaymentDocumentIdentifier" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HusIdentifier" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Department" Relationship="CashCenterModel.FK_EnergyCustomer_ToDepartment" FromRole="EnergyCustomer" ToRole="Department" />
+          <NavigationProperty Name="EnergyCustomerPayments" Relationship="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" FromRole="EnergyCustomer" ToRole="EnergyCustomerPayment" />
+        </EntityType>
+        <Association Name="FK_EnergyCustomer_ToDepartment">
+          <End Type="CashCenterModel.Department" Role="Department" Multiplicity="1" />
+          <End Type="CashCenterModel.EnergyCustomer" Role="EnergyCustomer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomer">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnergyCustomerPayment_ToCustomer">
+          <End Type="CashCenterModel.EnergyCustomer" Role="EnergyCustomer" Multiplicity="1" />
+          <End Type="CashCenterModel.EnergyCustomerPayment" Role="EnergyCustomerPayment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnergyCustomer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnergyCustomerPayment">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -683,24 +687,6 @@
                 <ScalarProperty Name="RegionId" ColumnName="RegionId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EnergyCustomers">
-            <EntityTypeMapping TypeName="CashCenterModel.EnergyCustomer">
-              <MappingFragment StoreEntitySet="EnergyCustomer">
-                <ScalarProperty Name="IsClosed" ColumnName="IsClosed" />
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Penalty" ColumnName="Penalty" />
-                <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="NightValue" ColumnName="NightValue" />
-                <ScalarProperty Name="DayValue" ColumnName="DayValue" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -785,6 +771,26 @@
                 <ScalarProperty Name="OrganizationCode" ColumnName="OrganizationCode" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="FinancialPeriodCode" ColumnName="FinancialPeriodCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnergyCustomers">
+            <EntityTypeMapping TypeName="CashCenterModel.EnergyCustomer">
+              <MappingFragment StoreEntitySet="EnergyCustomer">
+                <ScalarProperty Name="HusIdentifier" ColumnName="HusIdentifier" />
+                <ScalarProperty Name="PaymentDocumentIdentifier" ColumnName="PaymentDocumentIdentifier" />
+                <ScalarProperty Name="IsClosed" ColumnName="IsClosed" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Penalty" ColumnName="Penalty" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="NightValue" ColumnName="NightValue" />
+                <ScalarProperty Name="DayValue" ColumnName="DayValue" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

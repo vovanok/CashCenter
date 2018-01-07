@@ -55,6 +55,44 @@ namespace CashCenter.DataMigration.Providers.Word
             }
         }
 
+        public void CreateReport(EnergyCustomersGisHusModel model)
+        {
+            var templateFullpath = Path.Combine(Environment.CurrentDirectory, templateFilename);
+            if (!File.Exists(templateFullpath))
+                throw new ApplicationException($"Файл-шаблон отчета не существует или не задан ({templateFullpath})");
+
+            try
+            {
+                using (var application = new NetOffice.WordApi.Application { Visible = true })
+                {
+                    using (var document = application.Documents.Add(templateFullpath))
+                    {
+                        var paymentsTable = document.Bookmarks["CustomerPayment"]?.Range?.Tables[1];
+                        if (paymentsTable == null)
+                            throw new ApplicationException("Не найдена таблица для выгрузки платежей в шаблоне отчета");
+
+                        foreach (var payment in model.Payments)
+                        {
+                            var customerPaymentRow = paymentsTable.Rows.Add();
+
+                            customerPaymentRow.Cells[1].Range.Text = payment.OrderNumber.ToString();
+                            customerPaymentRow.Cells[2].Range.Text = payment.Total.ToString("0.00");
+                            customerPaymentRow.Cells[3].Range.Text = payment.Date.ToString("dd.MM.yyyy");
+                            customerPaymentRow.Cells[4].Range.Text = payment.PaymentPeriod.ToString("MM.yyyy");
+                            customerPaymentRow.Cells[5].Range.Text = payment.PaymentDocumentIdentifier;
+                            customerPaymentRow.Cells[5].Range.Text = payment.HusIdentifier;
+                        }
+                    }
+
+                    application.Activate();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException("Ошибка экспорта платежей физ.лиц в документ Word", ex);
+            }
+        }
+
         public void CreateReport(ReportWaterCustomersModel model)
         {
             var templateFullpath = Path.Combine(Environment.CurrentDirectory, templateFilename);
