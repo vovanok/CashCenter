@@ -42,7 +42,9 @@ namespace CashCenter.DataMigration.EnergyCustomers
                 Penalty = 0,
                 IsActive = true,
                 Email = string.Empty,
-                IsClosed = dbfCustomer.IsClosed
+                IsClosed = dbfCustomer.IsClosed,
+                PaymentDocumentIdentifier = dbfCustomer.PaymentDocumentIdentifier ?? string.Empty,
+                HusIdentifier = dbfCustomer.HusIdentifier ?? string.Empty
             };
         }
 
@@ -61,6 +63,8 @@ namespace CashCenter.DataMigration.EnergyCustomers
             existingCustomer.Balance = dbfCustomer.Balance;
             existingCustomer.IsActive = true;
             existingCustomer.IsClosed = dbfCustomer.IsClosed;
+            existingCustomer.PaymentDocumentIdentifier = dbfCustomer.PaymentDocumentIdentifier ?? string.Empty;
+            existingCustomer.HusIdentifier = dbfCustomer.HusIdentifier ?? string.Empty;
 
             return true;
         }
