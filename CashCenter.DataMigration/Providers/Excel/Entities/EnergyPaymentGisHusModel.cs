@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CashCenter.DataMigration.Providers.Word.Entities
+namespace CashCenter.DataMigration.Providers.Excel.Entities
 {
     public class EnergyPaymentGisHusModel
     {

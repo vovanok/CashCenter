@@ -1,16 +1,14 @@
-﻿using CashCenter.Common;
-using CashCenter.Dal;
-using CashCenter.DataMigration.Providers.Word;
-using CashCenter.DataMigration.Providers.Word.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using CashCenter.Dal;
+using CashCenter.Common;
+using CashCenter.DataMigration.Providers.Excel;
+using CashCenter.DataMigration.Providers.Excel.Entities;
 
 namespace CashCenter.DataMigration.EnergyCustomers
 {
-    public class EnergyPaymentsGisHusWordExporter : BaseExporter<EnergyCustomerPayment>
+    public class EnergyPaymentsGisHusExporter : BaseExporter<EnergyCustomerPayment>
     {
         protected override List<EnergyCustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
@@ -41,8 +39,8 @@ namespace CashCenter.DataMigration.EnergyCustomers
 
             var reportModel = new EnergyCustomersGisHusModel(beginDatetime, endDatetime, customerPaymentModels);
 
-            var wordReport = new WordReportController(Config.EnergyCustomersReportGisHusTemplateFilename);
-            wordReport.CreateReport(reportModel);
+            var excelReport = new ExcelReportController(Config.EnergyCustomersReportGisHusTemplateFilename);
+            excelReport.CreateReport(reportModel);
 
             return new ExportResult(customerPaymentModelsCount, energyPayments.Count() - customerPaymentModelsCount);
         }

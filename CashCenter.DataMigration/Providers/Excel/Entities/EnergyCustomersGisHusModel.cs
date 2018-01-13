@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CashCenter.DataMigration.Providers.Word.Entities
+namespace CashCenter.DataMigration.Providers.Excel.Entities
 {
     public class EnergyCustomersGisHusModel
     {

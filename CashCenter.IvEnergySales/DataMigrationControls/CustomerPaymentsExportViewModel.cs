@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Collections.Generic;
 using CashCenter.Common;
-using CashCenter.DataMigration.EnergyCustomers;
-using CashCenter.DataMigration.WaterCustomers;
+using CashCenter.DataMigration;
 using CashCenter.DataMigration.Articles;
+using CashCenter.DataMigration.AllPayments;
+using CashCenter.DataMigration.WaterCustomers;
+using CashCenter.DataMigration.EnergyCustomers;
+using CashCenter.DataMigration.GarbageAndRepair;
 using CashCenter.DataMigration.WaterAndEnergyCustomers;
 using CashCenter.IvEnergySales.Common;
-using CashCenter.DataMigration.GarbageAndRepair;
-using CashCenter.DataMigration.AllPayments;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
@@ -18,7 +19,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             {
                 new ExportTargetItem("Платежи за электроэнергию -> OFF", new EnergyCustomerPaymentsOffExporter()),
                 new ExportTargetItem("Платежи за электроэнергию -> Word", new EnergyCustomerPaymentsWordExporter()),
-                new ExportTargetItem("Платежи за электроэнергию (для ГИС ЖКХ) -> Word", new EnergyPaymentsGisHusWordExporter()),
+                new ExportTargetItem("Платежи за электроэнергию (для ГИС ЖКХ) -> Excel", new EnergyPaymentsGisHusExporter()),
                 new ExportTargetItem("Платежи за воду -> DBF", new WaterCustomerPaymentsDbfExporter()),
                 new ExportTargetItem("Платежи за воду -> Word", new WaterCustomerPaymentsWordExporter()),
                 new ExportTargetItem("Покупки товаров -> DBF", new ArticleSalesDbfExporter()),
@@ -67,7 +68,12 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             {
                 Log.Info($"Экспорт \"{SelectedExportTarget.Value.Name}\" с {beginDatetime} по {endDatetime}");
 
-                var exportResult = SelectedExportTarget.Value.Exporter.Export(beginDatetime, endDatetime);
+                ExportResult exportResult;
+                using (new OperationWaiter())
+                {
+                    exportResult = SelectedExportTarget.Value.Exporter.Export(beginDatetime, endDatetime);
+                }
+
                 if (exportResult.SuccessCount == 0 && exportResult.FailCount == 0)
                 {
                     var nothingToExportMessage = "Нет элементов для экспортирования";
