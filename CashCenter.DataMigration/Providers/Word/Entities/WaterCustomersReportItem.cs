@@ -2,7 +2,7 @@
 
 namespace CashCenter.DataMigration.Providers.Word.Entities
 {
-    public class ReportWaterCustomerPaymentModel
+    public class WaterCustomersReportItem
     {
         public DateTime CreationDateTime { get; private set; }
         public int CustomerNumber { get; private set; }
@@ -15,7 +15,7 @@ namespace CashCenter.DataMigration.Providers.Word.Entities
         public decimal ComissionCost { get; private set; }
         public decimal TotalCost { get; private set; }
 
-        public ReportWaterCustomerPaymentModel(DateTime creationDateTime, int customerNumber,
+        public WaterCustomersReportItem(DateTime creationDateTime, int customerNumber,
             double counterValue1, double counterValue2, double counterValue3,
             decimal paymentCost, decimal penaltyCost, decimal paymentAndPenaltyCost, decimal comissionCost, decimal totalCost)
         {

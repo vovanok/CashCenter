@@ -4,6 +4,7 @@ using System.Linq;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
+using CashCenter.DataMigration.Providers.Word.Reports;
 using CashCenter.DataMigration.Providers.Word.Entities;
 
 namespace CashCenter.DataMigration.EnergyCustomers
@@ -24,7 +25,7 @@ namespace CashCenter.DataMigration.EnergyCustomers
             var customerPaymentModels = energyPayments
                 .Where(item => item != null)
                 .Select(item =>
-                    new ReportEnergyCustomerPaymentModel(
+                    new EnergyCustomersReportItem(
                         item.EnergyCustomer.Number,
                         item.NewDayValue,
                         item.NewNightValue,
@@ -35,7 +36,7 @@ namespace CashCenter.DataMigration.EnergyCustomers
             if (customerPaymentModelsCount == 0)
                 return new ExportResult();
 
-            var reportModel = new ReportEnergyCustomersModel(beginDatetime, endDatetime, customerPaymentModels);
+            var reportModel = new EnergyCustomersReport(beginDatetime, endDatetime, customerPaymentModels);
 
             var wordReport = new WordReportController(Config.EnergyCustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);

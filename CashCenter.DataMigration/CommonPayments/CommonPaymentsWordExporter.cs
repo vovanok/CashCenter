@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
+using CashCenter.DataMigration.Providers.Word.Report;
 using CashCenter.DataMigration.Providers.Word.Entities;
 using CashCenter.DataMigration.CommonPayments;
 
@@ -38,11 +39,11 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             if (commonPayments == null)
                 return new ExportResult();
 
-            var commonPaymentsItemModels = new List<CommonPaymentsItemModel>();
+            var commonPaymentsItemModels = new List<CommonPaymentsReportItem>();
             for (DateTime currentDate = beginDatetime.DayBegin(); currentDate <= endDatetime; currentDate = currentDate.AddDays(1))
             {
                 commonPaymentsItemModels.Add(
-                    new CommonPaymentsItemModel(currentDate));
+                    new CommonPaymentsReportItem(currentDate));
             }
 
             int countItems = 0;
@@ -130,7 +131,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             if (countItems == 0)
                 return new ExportResult(0, commonPayments.AllPaymentsCount);
 
-            var reportModel = new CommonPaymentsModel(beginDatetime, endDatetime, commonPaymentsItemModels,
+            var reportModel = new CommonPaymentsReport(
+                beginDatetime, endDatetime, commonPaymentsItemModels,
                 finalEnergyTotal,
                 finalWaterWithoutCommissionTotal, finalWaterCommissionTotal,
                 finalGarbageWithoutComissionTotal, finalGarbageCommissionTotal,

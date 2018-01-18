@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
+using CashCenter.DataMigration.Providers.Word.Reports;
 using CashCenter.DataMigration.Providers.Word.Entities;
 
 namespace CashCenter.DataMigration.WaterCustomers
@@ -27,7 +28,7 @@ namespace CashCenter.DataMigration.WaterCustomers
                     {
                         decimal paymentAndPenaltyCost = waterCustomerPayment.Cost + waterCustomerPayment.Penalty;
 
-                        return new ReportWaterCustomerPaymentModel(
+                        return new WaterCustomersReportItem(
                             waterCustomerPayment.CreateDate,
                             waterCustomerPayment.WaterCustomer.Number,
                             waterCustomerPayment.CounterValue1,
@@ -44,7 +45,7 @@ namespace CashCenter.DataMigration.WaterCustomers
             if (customerPaymentModelsCount == 0)
                 return new ExportResult();
 
-            var reportModel = new ReportWaterCustomersModel(Settings.WaterСommissionPercent, customerPaymentModels); //TODO: коммисия от платежа к платежу может быть разная
+            var reportModel = new WaterCustomersReport(Settings.WaterСommissionPercent, customerPaymentModels); //TODO: коммисия от платежа к платежу может быть разная
 
             var wordReport = new WordReportController(Config.WaterCustomersReportTemplateFilename);
             wordReport.CreateReport(reportModel);

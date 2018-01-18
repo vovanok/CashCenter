@@ -2,6 +2,7 @@
 using CashCenter.Dal;
 using CashCenter.DataMigration.Providers.Word;
 using CashCenter.DataMigration.Providers.Word.Entities;
+using CashCenter.DataMigration.Providers.Word.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace CashCenter.DataMigration.Articles
             var articleSalesModels = articleSales
                 .Where(item => item != null)
                 .Select(item =>
-                    new ReportArticleSaleModel(
+                    new ArticlesSalesReportItem(
                         item.ArticlePrice.Article.Name,
                         item.ArticlePrice.Article.Code,
                         item.Quantity,
@@ -36,7 +37,7 @@ namespace CashCenter.DataMigration.Articles
                 return new ExportResult();
 
             var totalCost = articleSalesModels.Sum(item => item.ArticleCost);
-            var reportModel = new ReportArticlesSalesModel(
+            var reportModel = new ArticlesSalesReport(
                 beginDatetime,
                 endDatetime,
                 totalCost,

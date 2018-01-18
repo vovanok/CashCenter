@@ -2,7 +2,7 @@
 
 namespace CashCenter.DataMigration.Providers.Word.Entities
 {
-    public class CommonPaymentsItemModel
+    public class CommonPaymentsReportItem
     {
         public DateTime Date { get; private set; }
         public decimal EnergyTotal { get; set; }
@@ -13,7 +13,7 @@ namespace CashCenter.DataMigration.Providers.Word.Entities
         public decimal RepairWithoutCommissionTotal { get; set; }
         public decimal RepairCommissionTotal { get; set; }
 
-        public CommonPaymentsItemModel(DateTime date)
+        public CommonPaymentsReportItem(DateTime date)
         {
             Date = date;
         }

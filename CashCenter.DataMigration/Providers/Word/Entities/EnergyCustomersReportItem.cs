@@ -2,7 +2,7 @@
 
 namespace CashCenter.DataMigration.Providers.Word.Entities
 {
-    public class ReportEnergyCustomerPaymentModel
+    public class EnergyCustomersReportItem
     {
         public int CustomerNumber { get; private set; }
         public int DayValue { get; private set; }
@@ -10,9 +10,8 @@ namespace CashCenter.DataMigration.Providers.Word.Entities
         public decimal Cost { get; private set; }
         public DateTime CreationDate { get; private set; }
 
-        public ReportEnergyCustomerPaymentModel(
-            int customerNumber, int dayValue, int nightValue,
-            decimal cost, DateTime creationDate)
+        public EnergyCustomersReportItem(int customerNumber, int dayValue,
+            int nightValue, decimal cost, DateTime creationDate)
         {
             CustomerNumber = customerNumber;
             DayValue = dayValue;
