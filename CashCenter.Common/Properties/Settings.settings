@@ -2,64 +2,64 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CashCenter.Common.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="CasherName" Type="System.String" Scope="User">
+    <Setting Name="CasherName" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ArticlesWarehouseCode" Type="System.String" Scope="User">
+    <Setting Name="ArticlesWarehouseCode" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ArticlesWarehouseName" Type="System.String" Scope="User">
+    <Setting Name="ArticlesWarehouseName" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ArticlesDocumentNumberCurrentValue" Type="System.Int32" Scope="User">
+    <Setting Name="ArticlesDocumentNumberCurrentValue" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="WaterСommissionPercent" Type="System.Single" Scope="User">
+    <Setting Name="WaterСommissionPercent" Provider="PortableSettingsProvider" Type="System.Single" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
-    <Setting Name="GarbageCollectionFilialCode" Type="System.Int32" Scope="User">
+    <Setting Name="GarbageCollectionFilialCode" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="GarbageCollectionCommissionPercent" Type="System.Single" Scope="User">
+    <Setting Name="GarbageCollectionCommissionPercent" Provider="PortableSettingsProvider" Type="System.Single" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
-    <Setting Name="RepairFilialCode" Type="System.Int32" Scope="User">
+    <Setting Name="RepairFilialCode" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="RepairCommissionPercent" Type="System.Single" Scope="User">
+    <Setting Name="RepairCommissionPercent" Provider="PortableSettingsProvider" Type="System.Single" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
-    <Setting Name="ArticlesManipulatorType" Type="System.Int32" Scope="User">
+    <Setting Name="ArticlesManipulatorType" Provider="PortableSettingsProvider" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ArticlesZeusDbUrl" Type="System.String" Scope="User">
+    <Setting Name="ArticlesZeusDbUrl" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ArticlesZeusDbPath" Type="System.String" Scope="User">
+    <Setting Name="ArticlesZeusDbPath" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyPerformerInn" Type="System.String" Scope="User">
+    <Setting Name="EnergyPerformerInn" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyPerformerName" Type="System.String" Scope="User">
+    <Setting Name="EnergyPerformerName" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyPerformerKpp" Type="System.String" Scope="User">
+    <Setting Name="EnergyPerformerKpp" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyReceiverInn" Type="System.String" Scope="User">
+    <Setting Name="EnergyReceiverInn" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyReceiverName" Type="System.String" Scope="User">
+    <Setting Name="EnergyReceiverName" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyReceiverBankName" Type="System.String" Scope="User">
+    <Setting Name="EnergyReceiverBankName" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyReceiverBankBik" Type="System.String" Scope="User">
+    <Setting Name="EnergyReceiverBankBik" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="EnergyReceiverAccount" Type="System.String" Scope="User">
+    <Setting Name="EnergyReceiverAccount" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

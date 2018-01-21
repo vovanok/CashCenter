@@ -55,6 +55,7 @@
     <Compile Include="FileBuffer.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="NdsPercent.cs" />
+    <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Observed.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
