@@ -29,7 +29,57 @@
             <TextBox Text="{Binding CashierName.Value}" Grid.Column="1"
                      VerticalAlignment="Center" Padding="0,5,0,5" />
         </Grid>
-        <GroupBox Header="Покупки товаров">
+        <Expander Header="Оплата за электричество">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <Label Content="ИНН исполнителя (для ЮЛ и ИП)"/>
+                <TextBox Text="{Binding EnergyPerformerInn.Value}" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="Наименование исполнителя (для ЮЛ)" Grid.Row="1" />
+                <TextBox Text="{Binding EnergyPerformerName.Value}" Grid.Row="1" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="КПП исполнителя (для ЮЛ)" Grid.Row="2" />
+                <TextBox Text="{Binding EnergyPerformerKpp.Value}" Grid.Row="2" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="ИНН получателя" Grid.Row="3" />
+                <TextBox Text="{Binding EnergyReceiverInn.Value}" Grid.Row="3" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="Наименование получателя" Grid.Row="4" />
+                <TextBox Text="{Binding EnergyReceiverName.Value}" Grid.Row="4" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="Наименование банка получателя" Grid.Row="5" />
+                <TextBox Text="{Binding EnergyReceiverBankName.Value}" Grid.Row="5" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="БИК банка получателя" Grid.Row="6" />
+                <TextBox Text="{Binding EnergyReceiverBankBik.Value}" Grid.Row="6" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+
+                <Label Content="Счёт получателя (расчётный счёт)" Grid.Row="7" />
+                <TextBox Text="{Binding EnergyReceiverAccount.Value}" Grid.Row="7" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+            </Grid>
+        </Expander>
+        <Expander Header="Покупки товаров">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -72,8 +122,8 @@
                 <TextBox Text="{Binding ArticlesZeusDbPath.Value}" Grid.Row="5" Grid.Column="1"
                     VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
-        </GroupBox>
-        <GroupBox Header="Оплата за воду">
+        </Expander>
+        <Expander Header="Оплата за воду">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -86,8 +136,8 @@
                 <TextBox Text="{Binding WaterСommissionPercent.Value}" Grid.Column="1"
                          VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
-        </GroupBox>
-        <GroupBox Header="Оплата за вывоз ТКО">
+        </Expander>
+        <Expander Header="Оплата за вывоз ТКО">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -104,8 +154,8 @@
                 <TextBox Text="{Binding GarbageCollectionComissionPercent.Value}" Grid.Row="1" Grid.Column="1"
                          VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
-        </GroupBox>
-        <GroupBox Header="Оплата за кап. ремонт">
+        </Expander>
+        <Expander Header="Оплата за кап. ремонт">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -122,8 +172,8 @@
                 <TextBox Text="{Binding RepairComissionPercent.Value}" Grid.Row="1" Grid.Column="1"
                          VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
-        </GroupBox>
-        <GroupBox Header="Отделения">
+        </Expander>
+        <Expander Header="Отделения">
             <DataGrid ItemsSource="{Binding Deparments}"
                       AutoGenerateColumns="False" RowHeaderWidth="0"
                       CanUserResizeRows="False" Height="100" VerticalScrollBarVisibility="Visible"
@@ -133,7 +183,7 @@
                     <DataGridTextColumn Header="Название" Width="0.5*" Binding="{Binding Path=Name}"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </GroupBox>
+        </Expander>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

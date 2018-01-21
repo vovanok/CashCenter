@@ -166,5 +166,101 @@ namespace CashCenter.Common.Properties {
                 this["ArticlesZeusDbPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyPerformerInn {
+            get {
+                return ((string)(this["EnergyPerformerInn"]));
+            }
+            set {
+                this["EnergyPerformerInn"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyPerformerName {
+            get {
+                return ((string)(this["EnergyPerformerName"]));
+            }
+            set {
+                this["EnergyPerformerName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyPerformerKpp {
+            get {
+                return ((string)(this["EnergyPerformerKpp"]));
+            }
+            set {
+                this["EnergyPerformerKpp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyReceiverInn {
+            get {
+                return ((string)(this["EnergyReceiverInn"]));
+            }
+            set {
+                this["EnergyReceiverInn"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyReceiverName {
+            get {
+                return ((string)(this["EnergyReceiverName"]));
+            }
+            set {
+                this["EnergyReceiverName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyReceiverBankName {
+            get {
+                return ((string)(this["EnergyReceiverBankName"]));
+            }
+            set {
+                this["EnergyReceiverBankName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyReceiverBankBik {
+            get {
+                return ((string)(this["EnergyReceiverBankBik"]));
+            }
+            set {
+                this["EnergyReceiverBankBik"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EnergyReceiverAccount {
+            get {
+                return ((string)(this["EnergyReceiverAccount"]));
+            }
+            set {
+                this["EnergyReceiverAccount"] = value;
+            }
+        }
     }
 }

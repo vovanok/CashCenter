@@ -74,6 +74,54 @@
             set { Properties.Settings.Default.ArticlesZeusDbPath = value; }
         }
 
+        public static string EnergyPerformerInn
+        {
+            get { return Properties.Settings.Default.EnergyPerformerInn; }
+            set { Properties.Settings.Default.EnergyPerformerInn = value; }
+        }
+
+        public static string EnergyPerformerName
+        {
+            get { return Properties.Settings.Default.EnergyPerformerName; }
+            set { Properties.Settings.Default.EnergyPerformerName = value; }
+        }
+
+        public static string EnergyPerformerKpp
+        {
+            get { return Properties.Settings.Default.EnergyPerformerKpp; }
+            set { Properties.Settings.Default.EnergyPerformerKpp = value; }
+        }
+
+        public static string EnergyReceiverInn
+        {
+            get { return Properties.Settings.Default.EnergyReceiverInn; }
+            set { Properties.Settings.Default.EnergyReceiverInn = value; }
+        }
+
+        public static string EnergyReceiverName
+        {
+            get { return Properties.Settings.Default.EnergyReceiverName; }
+            set { Properties.Settings.Default.EnergyReceiverName = value; }
+        }
+
+        public static string EnergyReceiverBankName
+        {
+            get { return Properties.Settings.Default.EnergyReceiverBankName; }
+            set { Properties.Settings.Default.EnergyReceiverBankName = value; }
+        }
+
+        public static string EnergyReceiverBankBik
+        {
+            get { return Properties.Settings.Default.EnergyReceiverBankBik; }
+            set { Properties.Settings.Default.EnergyReceiverBankBik = value; }
+        }
+
+        public static string EnergyReceiverAccount
+        {
+            get { return Properties.Settings.Default.EnergyReceiverAccount; }
+            set { Properties.Settings.Default.EnergyReceiverAccount = value; }
+        }
+
         public static void Save()
         {
             Properties.Settings.Default.Save();

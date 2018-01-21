@@ -35,14 +35,14 @@ namespace CashCenter.DataMigration.EnergyCustomers
                         item.EnergyCustomer.PaymentDocumentIdentifier,
                         item.EnergyCustomer.HusIdentifier,
                         GetUnifiedAccountByHusIdentifier(item.EnergyCustomer.HusIdentifier),
-                        "performer INN",
-                        "performer Name",
-                        "performer KPP",
-                        "receiver INN",
-                        "receiver Name",
-                        "receiver bank name",
-                        "receiver bank bik",
-                        "receiver account")).ToList();
+                        Settings.EnergyPerformerInn,
+                        Settings.EnergyPerformerName,
+                        Settings.EnergyPerformerKpp,
+                        Settings.EnergyReceiverInn,
+                        Settings.EnergyReceiverName,
+                        Settings.EnergyReceiverBankName,
+                        Settings.EnergyReceiverBankBik,
+                        Settings.EnergyReceiverAccount)).ToList();
 
             var customerPaymentModelsCount = customerPaymentModels.Count;
             if (customerPaymentModelsCount == 0)

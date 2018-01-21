@@ -24,6 +24,14 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<float> GarbageCollectionComissionPercent { get; } = new Observed<float>();
         public Observed<int> RepairFilialCode { get; } = new Observed<int>();
         public Observed<float> RepairComissionPercent { get; } = new Observed<float>();
+        public Observed<string> EnergyPerformerInn { get; } = new Observed<string>();
+        public Observed<string> EnergyPerformerName { get; } = new Observed<string>();
+        public Observed<string> EnergyPerformerKpp { get; } = new Observed<string>();
+        public Observed<string> EnergyReceiverInn { get; } = new Observed<string>();
+        public Observed<string> EnergyReceiverName { get; } = new Observed<string>();
+        public Observed<string> EnergyReceiverBankName { get; } = new Observed<string>();
+        public Observed<string> EnergyReceiverBankBik { get; } = new Observed<string>();
+        public Observed<string> EnergyReceiverAccount { get; } = new Observed<string>();
 
         public Command SaveCommand { get; }
         public Command CloseCommand { get; }
@@ -42,6 +50,14 @@ namespace CashCenter.IvEnergySales.Service
             GarbageCollectionComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionComissionPercent");
             RepairFilialCode.OnChange += (newValue) => DispatchPropertyChanged("RepairFilialCode");
             RepairComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("RepairComissionPercent");
+            EnergyPerformerInn.OnChange += (newValue) => DispatchPropertyChanged("EnergyPerformerInn");
+            EnergyPerformerName.OnChange += (newValue) => DispatchPropertyChanged("EnergyPerformerName");
+            EnergyPerformerKpp.OnChange += (newValue) => DispatchPropertyChanged("EnergyPerformerKpp");
+            EnergyReceiverInn.OnChange += (newValue) => DispatchPropertyChanged("EnergyReceiverInn");
+            EnergyReceiverName.OnChange += (newValue) => DispatchPropertyChanged("EnergyReceiverName");
+            EnergyReceiverBankName.OnChange += (newValue) => DispatchPropertyChanged("EnergyReceiverBankName");
+            EnergyReceiverBankBik.OnChange += (newValue) => DispatchPropertyChanged("EnergyReceiverBankBik");
+            EnergyReceiverAccount.OnChange += (newValue) => DispatchPropertyChanged("EnergyReceiverAccount");
 
             CashierName.Value = Settings.CasherName;
             ArticlesDocumentNumberCurrentValue.Value = Settings.ArticlesDocumentNumberCurrentValue;
@@ -55,6 +71,14 @@ namespace CashCenter.IvEnergySales.Service
             GarbageCollectionComissionPercent.Value = Settings.GarbageCollectionCommissionPercent;
             RepairFilialCode.Value = Settings.RepairFilialCode;
             RepairComissionPercent.Value = Settings.RepairCommissionPercent;
+            EnergyPerformerInn.Value = Settings.EnergyPerformerInn;
+            EnergyPerformerName.Value = Settings.EnergyPerformerName;
+            EnergyPerformerKpp.Value = Settings.EnergyPerformerKpp;
+            EnergyReceiverInn.Value = Settings.EnergyReceiverInn;
+            EnergyReceiverName.Value = Settings.EnergyReceiverName;
+            EnergyReceiverBankName.Value = Settings.EnergyReceiverBankName;
+            EnergyReceiverBankBik.Value = Settings.EnergyReceiverBankBik;
+            EnergyReceiverAccount.Value = Settings.EnergyReceiverAccount;
 
             Deparments = DalController.Instance.Departments
                 .Where(department => department.RegionId == Config.CurrentRegionId).ToList();
@@ -164,6 +188,30 @@ namespace CashCenter.IvEnergySales.Service
             }
 
             Settings.RepairCommissionPercent = RepairComissionPercent.Value;
+
+            //
+            Settings.EnergyPerformerInn = EnergyPerformerInn.Value;
+
+            //
+            Settings.EnergyPerformerName = EnergyPerformerName.Value;
+
+            //
+            Settings.EnergyPerformerKpp = EnergyPerformerKpp.Value;
+
+            //
+            Settings.EnergyReceiverInn = EnergyReceiverInn.Value;
+
+            //
+            Settings.EnergyReceiverName = EnergyReceiverName.Value;
+
+            //
+            Settings.EnergyReceiverBankName = EnergyReceiverBankName.Value;
+
+            //
+            Settings.EnergyReceiverBankBik = EnergyReceiverBankBik.Value;
+
+            //
+            Settings.EnergyReceiverAccount = EnergyReceiverAccount.Value;
 
             Settings.Save();
 
