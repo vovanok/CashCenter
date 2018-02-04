@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CashCenterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CashCenterModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="HotWaterCustomer">
           <Key>
             <PropertyRef Name="Id" />
@@ -25,6 +25,7 @@
           <Property Name="CounterValue4" Type="float" Nullable="false" />
           <Property Name="CounterName5" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CounterValue5" Type="float" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="HotWaterPayment">
           <Key>
@@ -40,6 +41,7 @@
           <Property Name="NewCounterValue3" Type="float" Nullable="false" />
           <Property Name="NewCounterValue4" Type="float" Nullable="false" />
           <Property Name="NewCounterValue5" Type="float" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <Association Name="FK_HotWaterPayment_ToHotWaterCustomer">
           <End Role="HotWaterCustomer" Type="Self.HotWaterCustomer" Multiplicity="1" />
@@ -61,32 +63,40 @@
             <End Role="HotWaterPayment" EntitySet="HotWaterPayment" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CashCenterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="HotWaterDb" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="HotWaterCustomers" EntityType="CashCenterModel.HotWaterCustomer" />
+          <EntitySet Name="HotWaterPayments" EntityType="CashCenterModel.HotWaterPayment" />
+          <AssociationSet Name="FK_HotWaterPayment_ToHotWaterCustomer" Association="CashCenterModel.FK_HotWaterPayment_ToHotWaterCustomer">
+            <End Role="HotWaterCustomer" EntitySet="HotWaterCustomers" />
+            <End Role="HotWaterPayment" EntitySet="HotWaterPayments" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="HotWaterCustomer">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Number" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TimePeriodCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="TotalForPay" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="CounterName1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TimePeriodCode" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="TotalForPay" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CounterName1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CounterValue1" Type="Double" Nullable="false" />
-          <Property Name="CounterName2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CounterName2" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CounterValue2" Type="Double" Nullable="false" />
-          <Property Name="CounterName3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CounterName3" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CounterValue3" Type="Double" Nullable="false" />
-          <Property Name="CounterName4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CounterName4" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CounterValue4" Type="Double" Nullable="false" />
-          <Property Name="CounterName5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CounterName5" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CounterValue5" Type="Double" Nullable="false" />
-          <NavigationProperty Name="HotWaterPayments" Relationship="Self.FK_HotWaterPayment_ToHotWaterCustomer" FromRole="HotWaterCustomer" ToRole="HotWaterPayment" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="HotWaterPayments" Relationship="CashCenterModel.FK_HotWaterPayment_ToHotWaterCustomer" FromRole="HotWaterCustomer" ToRole="HotWaterPayment" />
         </EntityType>
         <EntityType Name="HotWaterPayment">
           <Key>
@@ -95,18 +105,19 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="CommisionTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="CommisionTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="NewCounterValue1" Type="Double" Nullable="false" />
           <Property Name="NewCounterValue2" Type="Double" Nullable="false" />
           <Property Name="NewCounterValue3" Type="Double" Nullable="false" />
           <Property Name="NewCounterValue4" Type="Double" Nullable="false" />
           <Property Name="NewCounterValue5" Type="Double" Nullable="false" />
-          <NavigationProperty Name="HotWaterCustomer" Relationship="Self.FK_HotWaterPayment_ToHotWaterCustomer" FromRole="HotWaterPayment" ToRole="HotWaterCustomer" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="HotWaterCustomer" Relationship="CashCenterModel.FK_HotWaterPayment_ToHotWaterCustomer" FromRole="HotWaterPayment" ToRole="HotWaterCustomer" />
         </EntityType>
         <Association Name="FK_HotWaterPayment_ToHotWaterCustomer">
-          <End Role="HotWaterCustomer" Type="Self.HotWaterCustomer" Multiplicity="1" />
-          <End Role="HotWaterPayment" Type="Self.HotWaterPayment" Multiplicity="*" />
+          <End Type="CashCenterModel.HotWaterCustomer" Role="HotWaterCustomer" Multiplicity="1" />
+          <End Type="CashCenterModel.HotWaterPayment" Role="HotWaterPayment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="HotWaterCustomer">
               <PropertyRef Name="Id" />
@@ -116,55 +127,49 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="CashCenterEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="HotWaterCustomers" EntityType="Self.HotWaterCustomer" />
-          <EntitySet Name="HotWaterPayments" EntityType="Self.HotWaterPayment" />
-          <AssociationSet Name="FK_HotWaterPayment_ToHotWaterCustomer" Association="Self.FK_HotWaterPayment_ToHotWaterCustomer">
-            <End Role="HotWaterCustomer" EntitySet="HotWaterCustomers" />
-            <End Role="HotWaterPayment" EntitySet="HotWaterPayments" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CashCenterModelStoreContainer" CdmEntityContainer="CashCenterEntities">
+        <EntityContainerMapping StorageEntityContainer="CashCenterModelStoreContainer" CdmEntityContainer="HotWaterDb">
           <EntitySetMapping Name="HotWaterCustomers">
             <EntityTypeMapping TypeName="CashCenterModel.HotWaterCustomer">
               <MappingFragment StoreEntitySet="HotWaterCustomer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="TimePeriodCode" ColumnName="TimePeriodCode" />
-                <ScalarProperty Name="TotalForPay" ColumnName="TotalForPay" />
-                <ScalarProperty Name="CounterName1" ColumnName="CounterName1" />
-                <ScalarProperty Name="CounterValue1" ColumnName="CounterValue1" />
-                <ScalarProperty Name="CounterName2" ColumnName="CounterName2" />
-                <ScalarProperty Name="CounterValue2" ColumnName="CounterValue2" />
-                <ScalarProperty Name="CounterName3" ColumnName="CounterName3" />
-                <ScalarProperty Name="CounterValue3" ColumnName="CounterValue3" />
-                <ScalarProperty Name="CounterName4" ColumnName="CounterName4" />
-                <ScalarProperty Name="CounterValue4" ColumnName="CounterValue4" />
-                <ScalarProperty Name="CounterName5" ColumnName="CounterName5" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CounterValue5" ColumnName="CounterValue5" />
+                <ScalarProperty Name="CounterName5" ColumnName="CounterName5" />
+                <ScalarProperty Name="CounterValue4" ColumnName="CounterValue4" />
+                <ScalarProperty Name="CounterName4" ColumnName="CounterName4" />
+                <ScalarProperty Name="CounterValue3" ColumnName="CounterValue3" />
+                <ScalarProperty Name="CounterName3" ColumnName="CounterName3" />
+                <ScalarProperty Name="CounterValue2" ColumnName="CounterValue2" />
+                <ScalarProperty Name="CounterName2" ColumnName="CounterName2" />
+                <ScalarProperty Name="CounterValue1" ColumnName="CounterValue1" />
+                <ScalarProperty Name="CounterName1" ColumnName="CounterName1" />
+                <ScalarProperty Name="TotalForPay" ColumnName="TotalForPay" />
+                <ScalarProperty Name="TimePeriodCode" ColumnName="TimePeriodCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HotWaterPayments">
             <EntityTypeMapping TypeName="CashCenterModel.HotWaterPayment">
               <MappingFragment StoreEntitySet="HotWaterPayment">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="CommisionTotal" ColumnName="CommisionTotal" />
-                <ScalarProperty Name="NewCounterValue1" ColumnName="NewCounterValue1" />
-                <ScalarProperty Name="NewCounterValue2" ColumnName="NewCounterValue2" />
-                <ScalarProperty Name="NewCounterValue3" ColumnName="NewCounterValue3" />
-                <ScalarProperty Name="NewCounterValue4" ColumnName="NewCounterValue4" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="NewCounterValue5" ColumnName="NewCounterValue5" />
+                <ScalarProperty Name="NewCounterValue4" ColumnName="NewCounterValue4" />
+                <ScalarProperty Name="NewCounterValue3" ColumnName="NewCounterValue3" />
+                <ScalarProperty Name="NewCounterValue2" ColumnName="NewCounterValue2" />
+                <ScalarProperty Name="NewCounterValue1" ColumnName="NewCounterValue1" />
+                <ScalarProperty Name="CommisionTotal" ColumnName="CommisionTotal" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

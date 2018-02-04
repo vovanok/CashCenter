@@ -13,10 +13,10 @@ namespace CashCenter.Objective.HotWater
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CashCenterEntities : DbContext
+    public partial class HotWaterDb : DbContext
     {
-        public CashCenterEntities()
-            : base("name=CashCenterEntities")
+        public HotWaterDb()
+            : base("name=HotWaterDb")
         {
         }
     

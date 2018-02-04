@@ -44,6 +44,12 @@
             set { Properties.Settings.Default.GarbageCollectionCommissionPercent = value; }
         }
 
+        public static float HotWaterСommissionPercent
+        {
+            get { return Properties.Settings.Default.HotWaterСommissionPercent; }
+            set { Properties.Settings.Default.HotWaterСommissionPercent = value; }
+        }
+
         public static int RepairFilialCode
         {
             get { return Properties.Settings.Default.RepairFilialCode; }

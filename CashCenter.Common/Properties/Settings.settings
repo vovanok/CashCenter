@@ -62,5 +62,8 @@
     <Setting Name="EnergyReceiverAccount" Provider="PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="HotWaterСommissionPercent" Provider="PortableSettingsProvider" Type="System.Single" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -10,6 +10,7 @@ namespace CashCenter.Common
         public static event Action OnArticlesManipulatorTypeChanged;
         public static event Action OnArticlesZeusDbUrlChanged;
         public static event Action OnArticlesZeusDbPathChanged;
+        public static event Action OnHotWaterComissionPercentChanged;
 
         public static void DispatchDepartmentsChanged()
         {
@@ -45,6 +46,12 @@ namespace CashCenter.Common
         {
             if (OnArticlesZeusDbPathChanged != null)
                 OnArticlesZeusDbPathChanged();
+        }
+
+        public static void DispatchHotWaterComissionPercentChanged()
+        {
+            if (OnHotWaterComissionPercentChanged != null)
+                OnHotWaterComissionPercentChanged();
         }
     }
 }

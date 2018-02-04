@@ -28,6 +28,7 @@ namespace CashCenter.Common
         public static NdsPercent EnergyNdsPercent => GetAppSettingByKeyAsNdsPercent("EnergyNdsPercent", NdsPercent.Nds18);
         public static NdsPercent WaterNdsPercent => GetAppSettingByKeyAsNdsPercent("WaterNdsPercent", NdsPercent.Nds18);
         public static NdsPercent ArticlesNdsPercent => GetAppSettingByKeyAsNdsPercent("ArticlesNdsPercent", NdsPercent.Nds18);
+        public static NdsPercent HotWaterNdsPercent => GetAppSettingByKeyAsNdsPercent("HotWaterNdsPercent", NdsPercent.Nds18);
         public static string ChecksFilename => GetAppSettingByKey("ChecksFilename", string.Empty);
         public static bool IsShowWaterPayments => GetAppSettingByKeyAsBool("IsShowWaterPayments", false);
         public static bool IsShowArticles => GetAppSettingByKeyAsBool("IsShowArticles", false);

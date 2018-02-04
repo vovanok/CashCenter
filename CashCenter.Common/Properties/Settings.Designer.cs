@@ -282,5 +282,18 @@ namespace CashCenter.Common.Properties {
                 this["EnergyReceiverAccount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public float HotWaterСommissionPercent {
+            get {
+                return ((float)(this["HotWaterСommissionPercent"]));
+            }
+            set {
+                this["HotWaterСommissionPercent"] = value;
+            }
+        }
     }
 }

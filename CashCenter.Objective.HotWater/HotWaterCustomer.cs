@@ -36,6 +36,7 @@ namespace CashCenter.Objective.HotWater
         public double CounterValue4 { get; set; }
         public string CounterName5 { get; set; }
         public double CounterValue5 { get; set; }
+        public string Email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HotWaterPayment> HotWaterPayments { get; set; }

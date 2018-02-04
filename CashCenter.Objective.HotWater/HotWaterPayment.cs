@@ -24,6 +24,7 @@ namespace CashCenter.Objective.HotWater
         public double NewCounterValue3 { get; set; }
         public double NewCounterValue4 { get; set; }
         public double NewCounterValue5 { get; set; }
+        public string Description { get; set; }
     
         public virtual HotWaterCustomer HotWaterCustomer { get; set; }
     }
