@@ -38,6 +38,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Label Content="Лицевой счет" Style="{StaticResource PropertyLabel}"/>
@@ -69,6 +70,12 @@
                     <Label Content="{Binding CustomerAddress.Value}" FontWeight="Bold"
                            HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
                 </Viewbox>
+                
+                <Label Content="Адрес эл. почты плательщика" Grid.Row="4" Style="{StaticResource PropertyLabel}"/>
+                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding CustomerEmail.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                         behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
+                         behaviors:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Оплата">

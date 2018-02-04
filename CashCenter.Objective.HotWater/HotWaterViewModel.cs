@@ -14,8 +14,8 @@ namespace CashCenter.Objective.HotWater
         public Observed<bool> IsEmailFocused { get; } = new Observed<bool>();
         public Observed<uint> CustomerNumber { get; } = new Observed<uint>();
         public Observed<string> CustomerName { get; } = new Observed<string>();
-        public Observed<string> CustomerEmail { get; } = new Observed<string>();
         public Observed<string> CustomerAddress { get; } = new Observed<string>();
+        public Observed<string> CustomerEmail { get; } = new Observed<string>();
 
         public Observed<string> Counter1Name { get; } = new Observed<string>();
         public Observed<string> Counter2Name { get; } = new Observed<string>();
