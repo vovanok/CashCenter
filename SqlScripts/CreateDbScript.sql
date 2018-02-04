@@ -146,3 +146,38 @@ CREATE TABLE [dbo].[RepairPayment] (
     [CommissionValue]     DECIMAL (18, 2) NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+CREATE TABLE [dbo].[HotWaterCustomer] (
+    [Id]             INT            IDENTITY (1, 1) NOT NULL,
+    [Number]         INT            NOT NULL,
+    [Name]           NVARCHAR (MAX) NOT NULL,
+    [Address]        NVARCHAR (MAX) NOT NULL,
+    [TimePeriodCode] NVARCHAR (4)   NOT NULL,
+    [TotalForPay]    DECIMAL (18,2) NOT NULL,
+    [CounterName1]   NVARCHAR (MAX) NOT NULL,
+    [CounterValue1]  FLOAT (53)     NOT NULL,
+    [CounterName2]   NVARCHAR (MAX) NOT NULL,
+    [CounterValue2]  FLOAT (53)     NOT NULL,
+    [CounterName3]   NVARCHAR (MAX) NOT NULL,
+    [CounterValue3]  FLOAT (53)     NOT NULL,
+    [CounterName4]   NVARCHAR (MAX) NOT NULL,
+    [CounterValue4]  FLOAT (53)     NOT NULL,
+    [CounterName5]   NVARCHAR (MAX) NOT NULL,
+    [CounterValue5]  FLOAT (53)     NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+CREATE TABLE [dbo].[HotWaterPayment] (
+    [Id]               INT             IDENTITY (1, 1) NOT NULL,
+    [CustomerId]       INT             NOT NULL,
+    [CreateDate]       DATETIME        NOT NULL,
+    [Total]            DECIMAL (18,2)  NOT NULL,
+    [CommisionTotal]   DECIMAL (18,2)  NOT NULL,
+    [NewCounterValue1] FLOAT (53)      NOT NULL,
+    [NewCounterValue2] FLOAT (53)      NOT NULL,
+    [NewCounterValue3] FLOAT (53)      NOT NULL,
+    [NewCounterValue4] FLOAT (53)      NOT NULL,
+    [NewCounterValue5] FLOAT (53)      NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_HotWaterPayment_ToHotWaterCustomer] FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[HotWaterCustomer] ([Id])
+);

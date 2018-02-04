@@ -6,7 +6,6 @@ using System.Windows.Media;
 using System.ComponentModel;
 using CashCenter.Dal;
 using CashCenter.Common;
-using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales
 {

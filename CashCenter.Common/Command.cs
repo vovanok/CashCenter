@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace CashCenter.IvEnergySales.Common
+namespace CashCenter.Common
 {
     public class Command : ICommand
     {

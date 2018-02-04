@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using CashCenter.Dal;
 using CashCenter.Check;
 using CashCenter.Common;
-using CashCenter.IvEnergySales.Common;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.Common.Exceptions;
 

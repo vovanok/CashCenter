@@ -1,8 +1,7 @@
-﻿using CashCenter.Common;
-using CashCenter.IvEnergySales.Common;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Threading;
+using CashCenter.Common;
 
 namespace CashCenter.IvEnergySales
 {

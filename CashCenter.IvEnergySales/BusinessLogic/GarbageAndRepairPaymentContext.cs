@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CashCenter.Common;
-using CashCenter.IvEnergySales.Common;
-using CashCenter.IvEnergySales.Exceptions;
 using CashCenter.Check;
+using CashCenter.Common;
+using CashCenter.Common.Exceptions;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {

@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace CashCenter.IvEnergySales.Converters
+namespace CashCenter.Common.Converters
 {
     public class FractionalNumberConverter : IValueConverter
     {

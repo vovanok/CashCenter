@@ -1,12 +1,11 @@
-﻿using CashCenter.Dal;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using CashCenter.Dal;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.IvEnergySales.Check;
-using CashCenter.IvEnergySales.Common;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {

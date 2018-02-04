@@ -127,7 +127,6 @@
     <Compile Include="BusinessLogicControls\ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\DependencyObjectBehavior.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogicControls\GarbageAndRepairPaymentControl.xaml.cs">
       <DependentUpon>GarbageAndRepairPaymentControl.xaml</DependentUpon>
@@ -142,13 +141,6 @@
     <Compile Include="Check\GarbageCheck.cs" />
     <Compile Include="Check\RepairCheck.cs" />
     <Compile Include="Check\WaterCustomerCheck.cs" />
-    <Compile Include="Common\Command.cs" />
-    <Compile Include="Common\GlobalEvents.cs" />
-    <Compile Include="Common\ViewModel.cs" />
-    <Compile Include="Converters\CustomerIsClosedStatusConverter.cs" />
-    <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
-    <Compile Include="Converters\FinancialPeriodConverter.cs" />
-    <Compile Include="Converters\PositiveIntToStringConverter.cs" />
     <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml.cs">
       <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
     </Compile>
@@ -156,7 +148,6 @@
       <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="BusinessLogicControls\CustomerWaterPaymentControlViewModel.cs" />
-    <Compile Include="Converters\FractionalNumberConverter.cs" />
     <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
     <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
@@ -177,9 +168,6 @@
     <Compile Include="CommonControls\FileSelectorControl.xaml.cs">
       <DependentUpon>FileSelectorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Exceptions\IncorrectDataException.cs" />
-    <Compile Include="Common\Message.cs" />
-    <Compile Include="Common\OperationWaiter.cs" />
     <Compile Include="Service\DataMigrationViewModel.cs" />
     <Compile Include="Service\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using CashCenter.IvEnergySales.Common;
+using CashCenter.Common;
 
 namespace CashCenter.IvEnergySales.Service
 {

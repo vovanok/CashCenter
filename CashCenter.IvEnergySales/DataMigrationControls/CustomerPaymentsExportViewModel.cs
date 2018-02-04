@@ -9,7 +9,6 @@ using CashCenter.DataMigration.WaterCustomers;
 using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.GarbageAndRepair;
 using CashCenter.DataMigration.WaterAndEnergyCustomers;
-using CashCenter.IvEnergySales.Common;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {

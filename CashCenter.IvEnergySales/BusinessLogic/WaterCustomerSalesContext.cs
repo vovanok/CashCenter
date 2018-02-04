@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using CashCenter.Dal;
 using CashCenter.Check;
 using CashCenter.Common;
+using CashCenter.Common.Exceptions;
 using CashCenter.IvEnergySales.Check;
-using CashCenter.IvEnergySales.Common;
-using CashCenter.IvEnergySales.Exceptions;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {

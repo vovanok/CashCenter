@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace CashCenter.IvEnergySales.Common
+namespace CashCenter.Common
 {
     public class ViewModel : INotifyPropertyChanged
     {

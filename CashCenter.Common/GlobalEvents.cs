@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CashCenter.IvEnergySales.Common
+namespace CashCenter.Common
 {
     public static class GlobalEvents
     {
