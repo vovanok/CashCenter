@@ -40,8 +40,8 @@ namespace CashCenter.Objective.HotWater
 
         public void Pay(
             string email,
-            float counter1Value, float counter2Value, float counter3Value,
-            float counter4Value, double counter5Value, decimal total,
+            double counter1Value, double counter2Value, double counter3Value,
+            double counter4Value, double counter5Value, decimal total,
             string description, bool isWithoutCheck)
         {
             if (Customer.Value == null)

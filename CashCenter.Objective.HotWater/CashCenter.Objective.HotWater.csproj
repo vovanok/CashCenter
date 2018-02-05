@@ -84,7 +84,6 @@
     <Compile Include="HotWaterCheck.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
     <EntityDeploy Include="HotWaterModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>HotWaterModel.Designer.cs</LastGenOutput>

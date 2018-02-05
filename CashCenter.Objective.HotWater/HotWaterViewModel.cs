@@ -23,11 +23,11 @@ namespace CashCenter.Objective.HotWater
         public Observed<string> Counter4Name { get; } = new Observed<string>();
         public Observed<string> Counter5Name { get; } = new Observed<string>();
 
-        public Observed<float> Counter1Value { get; } = new Observed<float>();
-        public Observed<float> Counter2Value { get; } = new Observed<float>();
-        public Observed<float> Counter3Value { get; } = new Observed<float>();
-        public Observed<float> Counter4Value { get; } = new Observed<float>();
-        public Observed<float> Counter5Value { get; } = new Observed<float>();
+        public Observed<double> Counter1Value { get; } = new Observed<double>();
+        public Observed<double> Counter2Value { get; } = new Observed<double>();
+        public Observed<double> Counter3Value { get; } = new Observed<double>();
+        public Observed<double> Counter4Value { get; } = new Observed<double>();
+        public Observed<double> Counter5Value { get; } = new Observed<double>();
 
         public Observed<decimal> Total { get; } = new Observed<decimal>();
         public Observed<decimal> TotalWithCommission { get; } = new Observed<decimal>();
@@ -51,15 +51,17 @@ namespace CashCenter.Objective.HotWater
             CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
             CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");
 
-            Counter1Name.OnChange += (newValue) => DispatchPropertyChanged("Counter1Number");
-            Counter2Name.OnChange += (newValue) => DispatchPropertyChanged("Counter2Number");
-            Counter3Name.OnChange += (newValue) => DispatchPropertyChanged("Counter3Number");
-            Counter4Name.OnChange += (newValue) => DispatchPropertyChanged("Counter4Number");
+            Counter1Name.OnChange += (newValue) => DispatchPropertyChanged("Counter1Name");
+            Counter2Name.OnChange += (newValue) => DispatchPropertyChanged("Counter2Name");
+            Counter3Name.OnChange += (newValue) => DispatchPropertyChanged("Counter3Name");
+            Counter4Name.OnChange += (newValue) => DispatchPropertyChanged("Counter4Name");
+            Counter5Name.OnChange += (newValue) => DispatchPropertyChanged("Counter5Name");
 
             Counter1Value.OnChange += (newValue) => DispatchPropertyChanged("Counter1Value");
             Counter2Value.OnChange += (newValue) => DispatchPropertyChanged("Counter2Value");
             Counter3Value.OnChange += (newValue) => DispatchPropertyChanged("Counter3Value");
             Counter4Value.OnChange += (newValue) => DispatchPropertyChanged("Counter4Value");
+            Counter5Value.OnChange += (newValue) => DispatchPropertyChanged("Counter5Value");
 
             Total.OnChange += (newValue) =>
             {
@@ -67,7 +69,7 @@ namespace CashCenter.Objective.HotWater
                 UpdateTotalWithCommission();
             };
 
-            TotalWithCommission.OnChange += (newValue) => DispatchPropertyChanged("TotalWithComission");
+            TotalWithCommission.OnChange += (newValue) => DispatchPropertyChanged("TotalWithCommission");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
 
@@ -105,13 +107,13 @@ namespace CashCenter.Objective.HotWater
             Counter4Name.Value = customer?.CounterName4 ?? string.Empty;
             Counter5Name.Value = customer?.CounterName5 ?? string.Empty;
 
-            Counter1Value.Value = 0;
-            Counter2Value.Value = 0;
-            Counter3Value.Value = 0;
-            Counter4Value.Value = 0;
-            Counter5Value.Value = 0;
+            Counter1Value.Value = customer?.CounterValue1 ?? 0;
+            Counter2Value.Value = customer?.CounterValue2 ?? 0;
+            Counter3Value.Value = customer?.CounterValue3 ?? 0;
+            Counter4Value.Value = customer?.CounterValue4 ?? 0;
+            Counter5Value.Value = customer?.CounterValue5 ?? 0;
 
-            Total.Value = 0;
+            Total.Value = customer?.TotalForPay ?? 0;
 
             Description.Value = string.Empty;
 

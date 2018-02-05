@@ -232,6 +232,7 @@
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Templates\ArticlesReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -247,11 +248,6 @@
     </None>
     <None Include="Templates\WaterCustomersReportTemplate.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
