@@ -33,6 +33,7 @@ namespace CashCenter.Common
         public static bool IsShowWaterPayments => GetAppSettingByKeyAsBool("IsShowWaterPayments", false);
         public static bool IsShowArticles => GetAppSettingByKeyAsBool("IsShowArticles", false);
         public static bool IsShowGarbageCollection => GetAppSettingByKeyAsBool("IsShowGarbageCollection", false);
+        public static bool IsShowHotWater => GetAppSettingByKeyAsBool("IsShowHotWater", false);
 
         private static string GetAppSettingByKey(string key, string defaultValue)
 		{

@@ -274,6 +274,10 @@
       <Project>{718380a0-3293-4a26-9ad4-86f836647b07}</Project>
       <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Objective.HotWater\CashCenter.Objective.HotWater.csproj">
+      <Project>{129cc922-fb67-4156-9d8d-860fa9735cf4}</Project>
+      <Name>CashCenter.Objective.HotWater</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CashCenter.ZeusDal\CashCenter.ZeusDal.csproj">
       <Project>{dee8e0e1-13bf-4713-a615-1fbee418e5cd}</Project>
       <Name>CashCenter.ZeusDal</Name>
@@ -307,6 +311,7 @@
     <Content Include="Checks.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Content\hotwater.png" />
     <Resource Include="Content\garbage_and_repair.png" />
     <Resource Include="Content\articles.ico" />
   </ItemGroup>

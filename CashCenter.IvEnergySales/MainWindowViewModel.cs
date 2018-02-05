@@ -21,6 +21,7 @@ namespace CashCenter.IvEnergySales
         public bool IsWaterPaymentVisible { get { return Config.IsShowWaterPayments && !(DateTime.Now > Config.DeathDate); } }
         public bool IsArticlesVisible { get { return Config.IsShowArticles && !(DateTime.Now > Config.DeathDate); } }
         public bool IsGarbageCollectionVisible { get { return Config.IsShowGarbageCollection && !(DateTime.Now > Config.DeathDate); } }
+        public bool IsHotWaterVisible { get { return Config.IsShowHotWater && !(DateTime.Now > Config.DeathDate); } }
 
         public MainWindowViewModel()
         {
