@@ -21,6 +21,7 @@ namespace CashCenter.IvEnergySales.Service
         public Observed<float> WaterСommissionPercent { get; } = new Observed<float>();
         public Observed<int> GarbageCollectionFilialCode { get; } = new Observed<int>();
         public Observed<float> GarbageCollectionComissionPercent { get; } = new Observed<float>();
+        public Observed<float> HotWaterСommissionPercent { get; } = new Observed<float>();
         public Observed<int> RepairFilialCode { get; } = new Observed<int>();
         public Observed<float> RepairComissionPercent { get; } = new Observed<float>();
         public Observed<string> EnergyPerformerInn { get; } = new Observed<string>();
@@ -47,6 +48,7 @@ namespace CashCenter.IvEnergySales.Service
             WaterСommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("WaterСommissionPercent");
             GarbageCollectionFilialCode.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionFilialCode");
             GarbageCollectionComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("GarbageCollectionComissionPercent");
+            HotWaterСommissionPercent.OnChange += (newValue) => DispatchPropertyChanged("HotWaterСommissionPercent");
             RepairFilialCode.OnChange += (newValue) => DispatchPropertyChanged("RepairFilialCode");
             RepairComissionPercent.OnChange += (newValue) => DispatchPropertyChanged("RepairComissionPercent");
             EnergyPerformerInn.OnChange += (newValue) => DispatchPropertyChanged("EnergyPerformerInn");
@@ -68,6 +70,7 @@ namespace CashCenter.IvEnergySales.Service
             WaterСommissionPercent.Value = Settings.WaterСommissionPercent;
             GarbageCollectionFilialCode.Value = Settings.GarbageCollectionFilialCode;
             GarbageCollectionComissionPercent.Value = Settings.GarbageCollectionCommissionPercent;
+            HotWaterСommissionPercent.Value = Settings.HotWaterСommissionPercent;
             RepairFilialCode.Value = Settings.RepairFilialCode;
             RepairComissionPercent.Value = Settings.RepairCommissionPercent;
             EnergyPerformerInn.Value = Settings.EnergyPerformerInn;
@@ -171,6 +174,15 @@ namespace CashCenter.IvEnergySales.Service
             Settings.GarbageCollectionCommissionPercent = GarbageCollectionComissionPercent.Value;
 
             //
+            if (HotWaterСommissionPercent.Value < 0 || HotWaterСommissionPercent.Value > 100)
+            {
+                Message.Error("% комиссии за оплату горячей воды должен быть от 0 до 100");
+                return;
+            }
+
+            Settings.HotWaterСommissionPercent = HotWaterСommissionPercent.Value;
+
+            //
             if (RepairFilialCode.Value <= 0)
             {
                 Message.Error("Код филиала для приема оплаты за кап. ремонт должен быть положительным числом");
@@ -215,6 +227,7 @@ namespace CashCenter.IvEnergySales.Service
             Settings.Save();
 
             GlobalEvents.DispatchWaterComissionPercentChanged();
+            GlobalEvents.DispatchHotWaterComissionPercentChanged();
 
             DalController.Instance.Save();
             GlobalEvents.DispatchDepartmentsChanged();

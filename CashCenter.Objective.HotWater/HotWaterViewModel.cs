@@ -73,7 +73,7 @@ namespace CashCenter.Objective.HotWater
 
             GlobalEvents.OnHotWaterComissionPercentChanged += () =>
             {
-                DispatchPropertyChanged("СomissionPercent");
+                DispatchPropertyChanged("СommissionPercent");
                 UpdateTotalWithCommission();
             };
 

@@ -173,6 +173,20 @@
                          VerticalAlignment="Center" Padding="0,5,0,5" />
             </Grid>
         </Expander>
+        <Expander Header="Оплата за горячую воду">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="% комиссии"/>
+                <TextBox Text="{Binding HotWaterСommissionPercent.Value}" Grid.Column="1"
+                         VerticalAlignment="Center" Padding="0,5,0,5" />
+            </Grid>
+        </Expander>
         <Expander Header="Отделения">
             <DataGrid ItemsSource="{Binding Deparments}"
                       AutoGenerateColumns="False" RowHeaderWidth="0"
