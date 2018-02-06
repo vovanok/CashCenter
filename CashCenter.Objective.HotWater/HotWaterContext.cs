@@ -25,7 +25,7 @@ namespace CashCenter.Objective.HotWater
             Log.Info($"Запуск -> {operationName}");
 
             Customer.Value = db.HotWaterCustomers
-                .FirstOrDefault(customer => customer.Number == number);
+                .FirstOrDefault(customer => customer.IsActive && customer.Number == number);
 
             if (Customer.Value == null)
                 Log.Info($"Не найдено -> {operationName}");

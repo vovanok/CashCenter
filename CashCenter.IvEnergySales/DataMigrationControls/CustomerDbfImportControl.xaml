@@ -27,8 +27,8 @@
         <CheckBox Content="Добавлять количества к существующим (иначе заменять)" IsChecked="{Binding IsAddArticleQuantities.Value}"
             Visibility="{Binding Converter={StaticResource BoolToVisibility}, ElementName=cbImportTargets, Path=SelectedItem.IsNeedAddOrReplaceDecision}"/>
 
-        <Label Content="Откуда импортировать? (путь к DBF)" />
-        <local:FileSelectorControl Filename="{Binding DbfFilename.Value, Mode=TwoWay}" FilesFilter="*.DBF|*.DBF" />
+        <Label Content="Откуда импортировать? (путь к файлу)" />
+        <local:FileSelectorControl Filename="{Binding DbfFilename.Value, Mode=TwoWay}" FilesFilter="DBF или TXT|*.DBF;*.TXT" />
         <Button Content="Импортировать" Command="{Binding ImportCommand}" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" />
     </StackPanel>
 </UserControl>

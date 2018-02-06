@@ -164,7 +164,8 @@ CREATE TABLE [dbo].[HotWaterCustomer] (
     [CounterValue4]  FLOAT (53)      NOT NULL,
     [CounterName5]   NVARCHAR (MAX)  NOT NULL,
     [CounterValue5]  FLOAT (53)      NOT NULL,
-    [Email] NVARCHAR(100) NOT NULL, 
+    [Email]          NVARCHAR (100)  NOT NULL,
+    [IsActive] 	     BIT 	     NOT NULL, 
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

@@ -26,6 +26,7 @@
           <Property Name="CounterName5" Type="nvarchar(max)" Nullable="false" />
           <Property Name="CounterValue5" Type="float" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="HotWaterPayment">
           <Key>
@@ -97,6 +98,7 @@
           <Property Name="CounterValue5" Type="Double" Nullable="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="HotWaterPayments" Relationship="CashCenterModel.FK_HotWaterPayment_ToHotWaterCustomer" FromRole="HotWaterCustomer" ToRole="HotWaterPayment" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="HotWaterPayment">
           <Key>
@@ -136,6 +138,7 @@
           <EntitySetMapping Name="HotWaterCustomers">
             <EntityTypeMapping TypeName="CashCenterModel.HotWaterCustomer">
               <MappingFragment StoreEntitySet="HotWaterCustomer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="CounterValue5" ColumnName="CounterValue5" />
                 <ScalarProperty Name="CounterName5" ColumnName="CounterName5" />

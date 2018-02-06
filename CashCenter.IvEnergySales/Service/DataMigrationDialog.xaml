@@ -16,7 +16,7 @@
             <TabItem Header="Экспорт данных">
                 <local:CustomerPaymentsExportControl />
             </TabItem>
-            <TabItem Header="Импорт из DBF">
+            <TabItem Header="Импорт из файла">
                 <local:CustomerDbfImportControl />
             </TabItem>
         </TabControl>

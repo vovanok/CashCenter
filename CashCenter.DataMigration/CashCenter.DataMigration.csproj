@@ -87,6 +87,7 @@
     <Compile Include="EnergyCustomers\EnergyCustomersDbfImporter.cs" />
     <Compile Include="IExporter.cs" />
     <Compile Include="Import\IImporter.cs" />
+    <Compile Include="Providers\Csv\CsvController.cs" />
     <Compile Include="Providers\Dbf\DbfRegistryController.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticle.cs" />
     <Compile Include="Providers\Dbf\Entities\DbfArticleQuantity.cs" />

@@ -61,6 +61,7 @@
     <Compile Include="HotWaterCustomer.cs">
       <DependentUpon>HotWaterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="HotWaterCustomerTxtImporter.cs" />
     <Compile Include="HotWaterModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -82,12 +83,14 @@
     <Compile Include="HotWaterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HotWaterCheck.cs" />
+    <Compile Include="TxtHotWaterCustomer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="HotWaterModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>HotWaterModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="HotWaterModel.edmx.diagram">
       <DependentUpon>HotWaterModel.edmx</DependentUpon>
     </None>
@@ -110,6 +113,10 @@
     <ProjectReference Include="..\CashCenter.Common\CashCenter.Common.csproj">
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.DataMigration\CashCenter.DataMigration.csproj">
+      <Project>{718380A0-3293-4A26-9AD4-86F836647B07}</Project>
+      <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

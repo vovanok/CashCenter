@@ -10,3 +10,6 @@ delete from WaterCustomer
 
 delete from GarbageCollectionPayment
 delete from RepairPayment
+
+delete from HotWaterCustomer
+delete from HotWaterPayment
