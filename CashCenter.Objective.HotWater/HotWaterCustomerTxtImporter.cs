@@ -5,7 +5,7 @@ using CashCenter.DataMigration.Providers.Csv;
 
 namespace CashCenter.Objective.HotWater
 {
-    public class HotWaterCustomerTxtImporter : BaseImporter<TxtHotWaterCustomer, HotWaterCustomer>
+    public class HotWaterCustomerTxtImporter : BaseImporter<TxtHotWaterCustomerModel, HotWaterCustomer>
     {
         public string CsvFilename { get; set; }
 
@@ -38,7 +38,7 @@ namespace CashCenter.Objective.HotWater
             return count;
         }
 
-        protected override IEnumerable<TxtHotWaterCustomer> GetSourceItems()
+        protected override IEnumerable<TxtHotWaterCustomerModel> GetSourceItems()
         {
             var rows = csvRegistry.LoadRows();
 
@@ -46,7 +46,7 @@ namespace CashCenter.Objective.HotWater
             {
                 var columns = row.ToArray();
 
-                return new TxtHotWaterCustomer(
+                return new TxtHotWaterCustomerModel(
                     number: GetIntOrDefault(columns, 0),
                     name: GetStringOrDefault(columns, 1),
                     address: GetStringOrDefault(columns, 2),
@@ -65,7 +65,7 @@ namespace CashCenter.Objective.HotWater
             });
         }
 
-        protected override HotWaterCustomer GetTargetItemBySource(TxtHotWaterCustomer sourceItem)
+        protected override HotWaterCustomer GetTargetItemBySource(TxtHotWaterCustomerModel sourceItem)
         {
             return new HotWaterCustomer
             {
@@ -89,7 +89,7 @@ namespace CashCenter.Objective.HotWater
             };
         }
 
-        protected override bool TryUpdateExistingItem(TxtHotWaterCustomer txtHotWaterCustomer)
+        protected override bool TryUpdateExistingItem(TxtHotWaterCustomerModel txtHotWaterCustomer)
         {
             if (txtHotWaterCustomer == null)
                 return false;

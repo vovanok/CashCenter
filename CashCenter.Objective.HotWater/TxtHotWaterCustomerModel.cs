@@ -1,6 +1,6 @@
 ﻿namespace CashCenter.Objective.HotWater
 {
-    public class TxtHotWaterCustomer
+    public class TxtHotWaterCustomerModel
     {
         // Лицевой счет
         public int Number { get; private set; }
@@ -47,7 +47,7 @@
         // Показания счетчика №5
         public double CounterValue5 { get; private set; }
 
-        public TxtHotWaterCustomer(
+        public TxtHotWaterCustomerModel(
             int number, string name, string address,
             string timePeriodCode, decimal totalForPay,
             string counterName1, double counterValue1,

@@ -146,7 +146,7 @@
                     </Grid.RowDefinitions>
 
                     <Label Content="Сумма" Style="{StaticResource PropertyLabel}"/>
-                    <TextBox Text="{Binding Total.Value, Converter={StaticResource FractionalNumberConverter}}"
+                    <TextBox Text="{Binding TotalWithCommission.Value, Converter={StaticResource FractionalNumberConverter}}"
                              Grid.Column="1" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
                              behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
@@ -157,7 +157,7 @@
                         <Label Content="{Binding СommissionPercent}"/>
                         <Label Content="%"/>
                     </WrapPanel>
-                    <Label Content="{Binding TotalWithCommission.Value, Converter={StaticResource FractionalNumberConverter}}"
+                    <Label Content="{Binding Total.Value, Converter={StaticResource FractionalNumberConverter}}"
                            Grid.Column="1" Grid.Row="1" VerticalContentAlignment="Center"/>
 
                     <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>

@@ -9,6 +9,7 @@ using CashCenter.DataMigration.WaterCustomers;
 using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.GarbageAndRepair;
 using CashCenter.DataMigration.WaterAndEnergyCustomers;
+using CashCenter.Objective.HotWater;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
@@ -27,7 +28,8 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 new ExportTargetItem("Платежи за вывоз ТКО -> DBF", new GarbageCollectionPaymentsDbfExporter()),
                 new ExportTargetItem("Платежи за кап. ремонт -> DBF", new RepairPaymentsDbfExporter()),
                 new ExportTargetItem("Все основные платежи -> Word", new CommonPaymentsWordExporter()),
-                new ExportTargetItem("Все платежи -> RKC", new AllPaymentsRkcExporter())
+                new ExportTargetItem("Все платежи -> RKC", new AllPaymentsRkcExporter()),
+                new ExportTargetItem("Платежи за горячую воду -> TXT", new HotWaterPaymentsTxtExporter())
             };
 
         public Observed<ExportTargetItem> SelectedExportTarget { get; } = new Observed<ExportTargetItem>();

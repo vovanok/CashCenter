@@ -63,20 +63,20 @@ namespace CashCenter.Objective.HotWater
             Counter4Value.OnChange += (newValue) => DispatchPropertyChanged("Counter4Value");
             Counter5Value.OnChange += (newValue) => DispatchPropertyChanged("Counter5Value");
 
-            Total.OnChange += (newValue) =>
+            TotalWithCommission.OnChange += (newValue) =>
             {
-                DispatchPropertyChanged("Total");
-                UpdateTotalWithCommission();
+                DispatchPropertyChanged("TotalWithCommission");
+                UpdateTotal();
             };
 
-            TotalWithCommission.OnChange += (newValue) => DispatchPropertyChanged("TotalWithCommission");
+            Total.OnChange += (newValue) => DispatchPropertyChanged("Total");
             Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
             IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
 
             GlobalEvents.OnHotWaterComissionPercentChanged += () =>
             {
                 DispatchPropertyChanged("СommissionPercent");
-                UpdateTotalWithCommission();
+                UpdateTotal();
             };
 
             FindCustomerCommand = new Command(FindCustomerHandler);
@@ -87,9 +87,9 @@ namespace CashCenter.Objective.HotWater
             context.ClearCustomer();
         }
 
-        private void UpdateTotalWithCommission()
+        private void UpdateTotal()
         {
-            TotalWithCommission.Value = context.GetCostWithCommission(Total.Value);
+            Total.Value = context.GetTotal(TotalWithCommission.Value);
         }
 
         private void HotWaterCustomerChanged(HotWaterCustomer customer)
@@ -113,7 +113,7 @@ namespace CashCenter.Objective.HotWater
             Counter4Value.Value = customer?.CounterValue4 ?? 0;
             Counter5Value.Value = customer?.CounterValue5 ?? 0;
 
-            Total.Value = customer?.TotalForPay ?? 0;
+            TotalWithCommission.Value = customer?.TotalForPay ?? 0;
 
             Description.Value = string.Empty;
 
@@ -172,7 +172,7 @@ namespace CashCenter.Objective.HotWater
                     context.Pay(
                         CustomerEmail.Value,
                         Counter1Value.Value, Counter2Value.Value, Counter3Value.Value,
-                        Counter4Value.Value, Counter5Value.Value, Total.Value,
+                        Counter4Value.Value, Counter5Value.Value, TotalWithCommission.Value,
                         Description.Value, isWithoutCheck);
                     context.ClearCustomer();
                 }

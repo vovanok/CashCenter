@@ -9,6 +9,7 @@ using CashCenter.DataMigration.Import;
 using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.WaterCustomers;
 using CashCenter.DataMigration.Articles;
+using CashCenter.Objective.HotWater;
 
 namespace CashCenter.IvEnergySales.DataMigrationControls
 {
@@ -16,10 +17,11 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
     {
         public IEnumerable<ImportTargetItem> ImportTargets { get; } = new[]
             {
-                new ImportTargetItem("Потребители электроэнергии", new EnergyCustomersDbfImporter(), true, false, false),
-                new ImportTargetItem("Потребители воды", new WaterCustomersDbfImporter(), false, false, false),
-                new ImportTargetItem("Товары", new ArticlesDbfImporter(), false, true, false),
-                new ImportTargetItem("Пополнения товаров", new ArticlesCountsDbfImporter(), false, false, true)
+                new ImportTargetItem("Потребители электроэнергии из DBF", new EnergyCustomersDbfImporter(), true, false, false),
+                new ImportTargetItem("Потребители воды из DBF", new WaterCustomersDbfImporter(), false, false, false),
+                new ImportTargetItem("Товары из DBF", new ArticlesDbfImporter(), false, true, false),
+                new ImportTargetItem("Пополнения товаров из DBF", new ArticlesCountsDbfImporter(), false, false, true),
+                new ImportTargetItem("Потребители горячей воды из TXT", new HotWaterCustomerTxtImporter(), false, false, false)
             };
 
         public List<ArticlePriceType> ArticlePriceTypes { get; } = DalController.Instance.ArticlePriceTypes.ToList();
@@ -65,6 +67,9 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
 
             if (SelectedImportTarget.Value.Importer is IDbfImporter dbfImporter)
                 dbfImporter.DbfFilename = DbfFilename.Value;
+
+            if (SelectedImportTarget.Value.Importer is HotWaterCustomerTxtImporter hotWaterImporter)
+                hotWaterImporter.CsvFilename = DbfFilename.Value;
 
             if (SelectedImportTarget.Value.Importer is EnergyCustomersDbfImporter energyCustomerDbfImporter)
             {

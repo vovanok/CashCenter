@@ -38,10 +38,9 @@ namespace CashCenter.Objective.HotWater
             Customer.Value = null;
         }
 
-        public void Pay(
-            string email,
+        public void Pay(string email,
             double counter1Value, double counter2Value, double counter3Value,
-            double counter4Value, double counter5Value, decimal total,
+            double counter4Value, double counter5Value, decimal totalWithCommission,
             string description, bool isWithoutCheck)
         {
             if (Customer.Value == null)
@@ -64,7 +63,7 @@ namespace CashCenter.Objective.HotWater
             if (counter5Value < 0)
                 errors.Add("Показание счетчика 5 не должно быть меньше 0");
 
-            if (total <= 0)
+            if (totalWithCommission <= 0)
                 errors.Add("Сумма должна быть больше нуля");
 
             var isEmailChange = !string.IsNullOrEmpty(email) && Customer.Value.Email != email;
@@ -84,10 +83,10 @@ namespace CashCenter.Objective.HotWater
                 db.SaveChanges();
             }
 
-            var operationName = $"Платеж за воду: email={email}, counter1Value={counter1Value}, counter2Value={counter2Value}, counter3Value={counter3Value}, counter4Value={counter4Value}, total={total}, description={description}, isWithoutCheck={isWithoutCheck}";
+            var operationName = $"Платеж за воду: email={email}, counter1Value={counter1Value}, counter2Value={counter2Value}, counter3Value={counter3Value}, counter4Value={counter4Value}, totalWithCommission={totalWithCommission}, description={description}, isWithoutCheck={isWithoutCheck}";
             Log.Info($"Старт -> {operationName}");
 
-            decimal totalWithCommission = GetCostWithCommission(total);
+            decimal total = GetTotal(totalWithCommission);
             decimal commissionValue = totalWithCommission - total;
 
             if (isWithoutCheck || TryPrintChecks(total, commissionValue, totalWithCommission,
@@ -119,21 +118,21 @@ namespace CashCenter.Objective.HotWater
             }
         }
 
-        public decimal GetCostWithCommission(decimal costWithoutCommission)
+        public decimal GetTotal(decimal costWithCommission)
         {
-            return costWithoutCommission +
-                Utils.GetCommission(costWithoutCommission, Settings.HotWaterСommissionPercent);
+            return costWithCommission -
+                Utils.GetCommission(costWithCommission, Settings.HotWaterСommissionPercent);
         }
 
         private bool TryPrintChecks(decimal costWithoutCommision, decimal comissionValue,
-            decimal totalCost, int customerNumber, string customerName, string customerEmail)
+            decimal totalWithCommission, int customerNumber, string customerName, string customerEmail)
         {
             try
             {
                 using (var waiter = new OperationWaiter())
                 {
                     var check = new HotWaterCheck(customerNumber, customerName,
-                        Settings.CasherName, costWithoutCommision, comissionValue, totalCost, customerEmail);
+                        Settings.CasherName, costWithoutCommision, totalWithCommission, customerEmail);
 
                     CheckPrinter.Print(check);
                     return true;

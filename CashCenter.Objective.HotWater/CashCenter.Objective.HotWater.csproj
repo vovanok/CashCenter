@@ -80,17 +80,17 @@
     <Compile Include="HotWaterPayment.cs">
       <DependentUpon>HotWaterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="HotWaterPaymentsTxtExporter.cs" />
     <Compile Include="HotWaterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HotWaterCheck.cs" />
-    <Compile Include="TxtHotWaterCustomer.cs" />
+    <Compile Include="TxtHotWaterCustomerModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="HotWaterModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>HotWaterModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="HotWaterModel.edmx.diagram">
       <DependentUpon>HotWaterModel.edmx</DependentUpon>
     </None>

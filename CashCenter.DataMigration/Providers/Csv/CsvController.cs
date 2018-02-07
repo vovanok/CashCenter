@@ -30,8 +30,12 @@ namespace CashCenter.DataMigration.Providers.Csv
 
         public void SaveRows(IEnumerable<IEnumerable<string>> rows)
         {
-            if (string.IsNullOrEmpty(filename) || !File.Exists(filename))
-                throw new FileNotFoundException("Файл для сохранения не найден", filename);
+            if (string.IsNullOrEmpty(filename))
+                throw new FileNotFoundException("Имя файла для сохранения не задано", filename);
+
+            string directory = Path.GetDirectoryName(filename);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
 
             File.WriteAllLines(filename,
                 rows.Select(row => string.Join(separator.ToString(), row)));
