@@ -46,6 +46,23 @@ namespace CashCenter.Objective.HotWater
             if (countItemsForExport == 0)
                 return new ExportResult();
 
+            decimal sumTotalWithCommission = hotWaterCustomerPayments.Sum(payment => payment.Total + payment.CommisionTotal);
+            decimal sumTotal = hotWaterCustomerPayments.Sum(payment => payment.Total);
+            decimal sumCommissionTotal = hotWaterCustomerPayments.Sum(payment => payment.CommisionTotal);
+
+            rows = rows.Concat(new[]
+                {
+                    new[]
+                    {
+                        $"={rows.Count()}",
+                        sumTotalWithCommission.ToString("0.00"),
+                        sumTotal.ToString("0.00"),
+                        sumCommissionTotal.ToString("0.00"),
+                        string.Empty,
+                        DateTime.Now.ToString("dd-MM-yyyy")
+                    }
+                });
+
             var filename = Path.Combine(Config.OutputDirectory,
                 string.Format(Config.HotWaterPaymentTxtOutputFileFormat, DateTime.Now));
 
