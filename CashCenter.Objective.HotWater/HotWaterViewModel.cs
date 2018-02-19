@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows;
-using CashCenter.Common;
+using CashCenter.Dal;
 using CashCenter.Check;
+using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 
 namespace CashCenter.Objective.HotWater

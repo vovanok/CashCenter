@@ -26,6 +26,9 @@
         <EntityTypeShape EntityType="CashCenterModel.EnergyCustomer" Width="1.75" PointX="6" PointY="4.25" FillColor="Green" />
         <AssociationConnector Association="CashCenterModel.FK_EnergyCustomer_ToDepartment" />
         <AssociationConnector Association="CashCenterModel.FK_EnergyCustomerPayment_ToCustomer" />
+        <EntityTypeShape EntityType="CashCenterModel.HotWaterCustomer" Width="1.875" PointX="12.625" PointY="3.875" FillColor="192, 64, 0" />
+        <EntityTypeShape EntityType="CashCenterModel.HotWaterPayment" Width="1.875" PointX="14.875" PointY="4.625" FillColor="192, 64, 0" />
+        <AssociationConnector Association="CashCenterModel.FK_HotWaterPayment_ToHotWaterCustomer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

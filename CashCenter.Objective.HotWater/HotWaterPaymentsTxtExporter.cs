@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CashCenter.Common;
+using CashCenter.Dal;
 using CashCenter.DataMigration;
 using CashCenter.DataMigration.Providers.Csv;
 
@@ -10,7 +11,7 @@ namespace CashCenter.Objective.HotWater
 {
     public class HotWaterPaymentsTxtExporter : BaseExporter<HotWaterPayment>
     {
-        private HotWaterDb db = new HotWaterDb();
+        private CashCenterContext db = new CashCenterContext();
 
         protected override List<HotWaterPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {

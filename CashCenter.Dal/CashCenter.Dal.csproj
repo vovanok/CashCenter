@@ -110,6 +110,12 @@
     <Compile Include="GarbageCollectionPayment.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="HotWaterCustomer.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HotWaterPayment.cs">
+      <DependentUpon>CashCenterModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PaymentReason.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>

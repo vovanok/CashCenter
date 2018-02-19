@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
+using CashCenter.Dal;
 using CashCenter.DataMigration.Import;
 using CashCenter.DataMigration.Providers.Csv;
 
@@ -9,7 +10,7 @@ namespace CashCenter.Objective.HotWater
     {
         public string CsvFilename { get; set; }
 
-        private HotWaterDb db = new HotWaterDb();
+        private CashCenterContext db = new CashCenterContext();
         private CsvController csvRegistry;
 
         public override ImportResult Import()

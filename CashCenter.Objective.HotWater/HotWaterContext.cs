@@ -4,6 +4,7 @@ using System.Linq;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
+using CashCenter.Dal;
 
 namespace CashCenter.Objective.HotWater
 {
@@ -11,7 +12,7 @@ namespace CashCenter.Objective.HotWater
     {
         public Observed<HotWaterCustomer> Customer { get; } = new Observed<HotWaterCustomer>();
 
-        private HotWaterDb db = new HotWaterDb();
+        private CashCenterContext db = new CashCenterContext();
 
         public event Action<HotWaterCustomer> OnCustomerChanged
         {

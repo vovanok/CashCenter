@@ -26,8 +26,12 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             var repairPayments = DalController.Instance.RepairPayments.Where(repairPayment =>
                 beginDatetime <= repairPayment.CreateDate && repairPayment.CreateDate <= endDatetime).ToList();
 
+            var db = new CashCenterContext();
+            var hotWaterPayments = db.HotWaterPayments.Where(hotWaterPayment =>
+                beginDatetime <= hotWaterPayment.CreateDate && hotWaterPayment.CreateDate <= endDatetime).ToList();
+
             return new List<CommonPaymentsDataSource>
-                { new CommonPaymentsDataSource(waterCustomersPayments, energyCustomersPayments, garbagePayments, repairPayments) };
+                { new CommonPaymentsDataSource(waterCustomersPayments, energyCustomersPayments, garbagePayments, repairPayments, hotWaterPayments) };
         }
 
         protected override ExportResult TryExportItems(IEnumerable<CommonPaymentsDataSource> commonPaymentsDataSources)
@@ -54,6 +58,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
             decimal finalGarbageCommissionTotal = 0;
             decimal finalRepairWithoutCommissionTotal = 0;
             decimal finalRepairCommissionTotal = 0;
+            decimal finalHotWaterWithoutCommissionTotal = 0;
+            decimal finalHotWaterCommissionTotal = 0;
 
             foreach (var energyCustomerPayment in commonPayments.EnergyCustomersPayments)
             {
@@ -116,7 +122,7 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
 
                 var targetModelItem = commonPaymentsItemModels
                     .FirstOrDefault(itemModel => itemModel.Date == repairPayment.CreateDate.DayBegin());
-                if (repairPayment == null)
+                if (targetModelItem == null)
                     continue;
 
                 targetModelItem.RepairWithoutCommissionTotal += repairPayment.Cost;
@@ -128,6 +134,23 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
                 countItems++;
             }
 
+            foreach (var hotWaterPayment in commonPayments.HotWaterPayments)
+            {
+                if (hotWaterPayment == null)
+                    continue;
+
+                var targetModelItem = commonPaymentsItemModels
+                    .FirstOrDefault(itemModel => itemModel.Date == hotWaterPayment.CreateDate.DayBegin());
+                if (targetModelItem == null)
+                    continue;
+
+                targetModelItem.HotWaterWithoutCommissionTotal += hotWaterPayment.Total;
+                finalHotWaterWithoutCommissionTotal += hotWaterPayment.Total;
+
+                targetModelItem.HotWaterCommissionTotal += hotWaterPayment.CommisionTotal;
+                finalHotWaterCommissionTotal += hotWaterPayment.CommisionTotal;
+            }
+
             if (countItems == 0)
                 return new ExportResult(0, commonPayments.AllPaymentsCount);
 
@@ -136,7 +159,8 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
                 finalEnergyTotal,
                 finalWaterWithoutCommissionTotal, finalWaterCommissionTotal,
                 finalGarbageWithoutComissionTotal, finalGarbageCommissionTotal,
-                finalRepairWithoutCommissionTotal, finalRepairCommissionTotal);
+                finalRepairWithoutCommissionTotal, finalRepairCommissionTotal,
+                finalHotWaterWithoutCommissionTotal, finalHotWaterCommissionTotal);
 
             var wordReport = new WordReportController(Config.CommonPaymentsReportTemplateFilename);
             wordReport.CreateReport(reportModel);

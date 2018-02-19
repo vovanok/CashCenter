@@ -10,19 +10,32 @@ namespace CashCenter.DataMigration.Providers.Word.Report
         public DateTime StartDate { get; private set; }
         public DateTime EndDate { get; private set; }
         public List<CommonPaymentsReportItem> Items { get; private set; }
+
+        // Energy
         public decimal FinalEnergyTotal { get; private set; }
+
+        // Water
         public decimal FinalWaterWithoutComissionTotal { get; private set; }
         public decimal FinalWaterComissionTotal { get; private set; }
+
+        // Garbage
         public decimal FinalGarbageWithoutComissionTotal { get; private set; }
         public decimal FinalGarbageComissionTotal { get; private set; }
+
+        // Repair
         public decimal FinalRepairWithoutComissionTotal { get; private set; }
         public decimal FinalRepairComissionTotal { get; private set; }
+
+        // Hot water
+        public decimal FinalHotWaterWithoutComission { get; private set; }
+        public decimal FinalHotWaterComissionTotal { get; private set; }
 
         public CommonPaymentsReport(DateTime startDate, DateTime endDate,
             List<CommonPaymentsReportItem> items, decimal finalEnergyTotal,
             decimal finalWaterWithoutComissionTotal, decimal finalWaterComissionTotal,
             decimal finalGarbageWithoutComissionTotal, decimal finalGarbageComissionTotal,
-            decimal finalRepairWithoutComissionTotal, decimal finalRepairComissionTotal)
+            decimal finalRepairWithoutComissionTotal, decimal finalRepairComissionTotal,
+            decimal finalHotWaterWithoutComission, decimal finalHotWaterComissionTotal)
         {
             StartDate = startDate;
             EndDate = endDate;
@@ -34,6 +47,8 @@ namespace CashCenter.DataMigration.Providers.Word.Report
             FinalGarbageComissionTotal = finalGarbageComissionTotal;
             FinalRepairWithoutComissionTotal = finalRepairWithoutComissionTotal;
             FinalRepairComissionTotal = finalRepairComissionTotal;
+            FinalHotWaterWithoutComission = finalHotWaterWithoutComission;
+            FinalHotWaterComissionTotal = finalHotWaterComissionTotal;
         }
 
         public void ExportToDocument(Document wordDocument)
@@ -57,6 +72,8 @@ namespace CashCenter.DataMigration.Providers.Word.Report
                 row.Cells[6].Range.Text = modelItem.GarbageCommissionTotal.ToString("0.00");
                 row.Cells[7].Range.Text = modelItem.RepairWithoutCommissionTotal.ToString("0.00");
                 row.Cells[8].Range.Text = modelItem.RepairCommissionTotal.ToString("0.00");
+                row.Cells[9].Range.Text = modelItem.HotWaterWithoutCommissionTotal.ToString("0.00");
+                row.Cells[10].Range.Text = modelItem.HotWaterCommissionTotal.ToString("0.00");
                 acticleSaleNumber++;
             }
 
@@ -72,6 +89,9 @@ namespace CashCenter.DataMigration.Providers.Word.Report
 
             wordDocument.Bookmarks["FinalRepairWithoutComissionTotal"].Range.Text = FinalRepairWithoutComissionTotal.ToString("0.00");
             wordDocument.Bookmarks["FinalRepairComissionTotal"].Range.Text = FinalRepairComissionTotal.ToString("0.00");
+
+            wordDocument.Bookmarks["FinalHotWaterWithoutComission"].Range.Text = FinalHotWaterWithoutComission.ToString("0.00");
+            wordDocument.Bookmarks["FinalHotWaterComissionTotal"].Range.Text = FinalHotWaterComissionTotal.ToString("0.00");
         }
     }
 }

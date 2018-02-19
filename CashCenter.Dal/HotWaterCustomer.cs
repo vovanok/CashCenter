@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CashCenter.Objective.HotWater
+namespace CashCenter.Dal
 {
     using System;
     using System.Collections.Generic;

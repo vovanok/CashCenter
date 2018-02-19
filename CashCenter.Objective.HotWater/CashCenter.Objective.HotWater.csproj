@@ -58,28 +58,7 @@
     <Compile Include="HotWaterControl.xaml.cs">
       <DependentUpon>HotWaterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HotWaterCustomer.cs">
-      <DependentUpon>HotWaterModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="HotWaterCustomerTxtImporter.cs" />
-    <Compile Include="HotWaterModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HotWaterModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HotWaterModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HotWaterModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="HotWaterModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HotWaterModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="HotWaterPayment.cs">
-      <DependentUpon>HotWaterModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="HotWaterPaymentsTxtExporter.cs" />
     <Compile Include="HotWaterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,13 +66,6 @@
     <Compile Include="TxtHotWaterCustomerModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="HotWaterModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>HotWaterModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="HotWaterModel.edmx.diagram">
-      <DependentUpon>HotWaterModel.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -114,22 +86,14 @@
       <Project>{26c9c78c-5393-4633-be39-7aefada31a56}</Project>
       <Name>CashCenter.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Dal\CashCenter.Dal.csproj">
+      <Project>{cad4a97e-4f23-41d9-bc76-0f7633c0e1f6}</Project>
+      <Name>CashCenter.Dal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CashCenter.DataMigration\CashCenter.DataMigration.csproj">
       <Project>{718380A0-3293-4A26-9AD4-86F836647B07}</Project>
       <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="HotWaterModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HotWaterModel.edmx</DependentUpon>
-      <LastGenOutput>HotWaterModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="HotWaterModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HotWaterModel.edmx</DependentUpon>
-      <LastGenOutput>HotWaterModel.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
