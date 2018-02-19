@@ -16,7 +16,8 @@ namespace CashCenter.DataMigration.Providers.Rkc.Entities
             Water = 2,
             Garbage = 3,
             Repair = 4,
-            Articles = 5
+            Articles = 5,
+            HotWater = 6
         }
 
         public ItemType Type { get; private set; }

@@ -14,6 +14,8 @@ namespace CashCenter.DataMigration.AllPayments
 
         protected override List<AllPaymentsContainer> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
+            var db = new CashCenterContext();
+
             return new List<AllPaymentsContainer>
             {
                 new AllPaymentsContainer(
@@ -26,6 +28,8 @@ namespace CashCenter.DataMigration.AllPayments
                     DalController.Instance.GarbageCollectionPayments.Where(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
                     DalController.Instance.RepairPayments.Where(customerPayment =>
+                        beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
+                    db.HotWaterPayments.Where(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList())
             };
         }
@@ -100,6 +104,18 @@ namespace CashCenter.DataMigration.AllPayments
                     item.Cost,
                     item.CommissionValue,
                     RkcAllPaymentsItem.PaymentTarget.Repair)));
+
+            itemsForStore.AddRange(container.HotWaterPayments.Where(item => item != null)
+                .Select(item => new RkcAllPaymentsItem(
+                    RkcAllPaymentsItem.ItemType.Payment,
+                    3,
+                    string.Empty,
+                    string.Empty,
+                    Settings.ArticlesWarehouseCode,
+                    item.CreateDate,
+                    item.Total,
+                    item.CommisionTotal,
+                    RkcAllPaymentsItem.PaymentTarget.HotWater)));
 
             outputController.StoreItems(itemsForStore);
             int itemsCount = itemsForStore.Count;

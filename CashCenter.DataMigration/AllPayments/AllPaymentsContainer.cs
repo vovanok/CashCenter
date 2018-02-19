@@ -10,13 +10,15 @@ namespace CashCenter.DataMigration.AllPayments
         public List<ArticleSale> ArticleSales { get; private set; }
         public List<GarbageCollectionPayment> GarbagePayments { get; private set; }
         public List<RepairPayment> RepairPayments { get; private set; }
+        public List<HotWaterPayment> HotWaterPayments { get; private set; }
 
         public int AllItemsCount
         {
             get
             {
                 return EnergyPayments.Count + WaterPayments.Count +
-                    ArticleSales.Count + GarbagePayments.Count + RepairPayments.Count;
+                    ArticleSales.Count + GarbagePayments.Count +
+                    RepairPayments.Count + HotWaterPayments.Count;
             }
         }
 
@@ -25,13 +27,15 @@ namespace CashCenter.DataMigration.AllPayments
             List<WaterCustomerPayment> waterPayments,
             List<ArticleSale> articleSales,
             List<GarbageCollectionPayment> garbagePayments,
-            List<RepairPayment> repairPayments)
+            List<RepairPayment> repairPayments,
+            List<HotWaterPayment> hotWaterPayments)
         {
             EnergyPayments = energyPayments;
             WaterPayments = waterPayments;
             ArticleSales = articleSales;
             GarbagePayments = garbagePayments;
             RepairPayments = repairPayments;
+            HotWaterPayments = hotWaterPayments;
         }
     }
 }
