@@ -2,18 +2,22 @@
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.Text;
 
 namespace CashCenter.DataMigration.Providers.Csv
 {
     public class CsvController
     {
         private string filename;
+        private Encoding encoding;
         private char separator;
         private Func<string, bool> exclusionLineFunction;
-
-        public CsvController(string filename, Func<string, bool> exclusionLineFunction = null, char separator = ';')
+        
+        public CsvController(string filename, Encoding encoding,
+            Func<string, bool> exclusionLineFunction = null, char separator = ';')
         {
             this.filename = filename;
+            this.encoding = encoding;
             this.separator = separator;
             this.exclusionLineFunction = exclusionLineFunction ?? (line => true);
         }
@@ -37,8 +41,10 @@ namespace CashCenter.DataMigration.Providers.Csv
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
-            File.WriteAllLines(filename,
-                rows.Select(row => string.Join(separator.ToString(), row)));
+            File.WriteAllLines(
+                filename,
+                rows.Select(row => string.Join(separator.ToString(), row)),
+                encoding);
         }
     }
 }

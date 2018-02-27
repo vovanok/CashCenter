@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CashCenter.Dal;
 using CashCenter.DataMigration.Import;
 using CashCenter.DataMigration.Providers.Csv;
+using System.Text;
 
 namespace CashCenter.Objective.HotWater
 {
@@ -15,7 +16,7 @@ namespace CashCenter.Objective.HotWater
 
         public override ImportResult Import()
         {
-            csvRegistry = new CsvController(CsvFilename, line => line.StartsWith("#"));
+            csvRegistry = new CsvController(CsvFilename, Encoding.Default, line => line.StartsWith("#"));
             return base.Import();
         }
 

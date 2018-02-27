@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.DataMigration;
@@ -34,7 +35,7 @@ namespace CashCenter.Objective.HotWater
                         string.Empty,
                         string.Empty,
                         string.Empty,
-                        payment.HotWaterCustomer.Number.ToString(),
+                        payment.HotWaterCustomer.Number.ToString("D3"),
                         payment.HotWaterCustomer.Name,
                         payment.HotWaterCustomer.Address,
                         payment.CreateDate.ToString("MMyy"),
@@ -70,7 +71,7 @@ namespace CashCenter.Objective.HotWater
             Exception exportException = null;
             try
             {
-                var txtRegistry = new CsvController(filename);
+                var txtRegistry = new CsvController(filename, Encoding.GetEncoding(1251));
                 txtRegistry.SaveRows(rows);
             }
             finally
