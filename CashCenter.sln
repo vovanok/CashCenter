@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.ZeusDal", "CashC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.Objective.HotWater", "CashCenter.Objective.HotWater\CashCenter.Objective.HotWater.csproj", "{129CC922-FB67-4156-9D8D-860FA9735CF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashCenter.Objective.DocumentsReceipt", "CashCenter.Objective.DocumentsReceipt\CashCenter.Objective.DocumentsReceipt.csproj", "{58C88A18-F291-4997-A9C8-DC5FA1E04C34}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,18 @@ Global
 		{129CC922-FB67-4156-9D8D-860FA9735CF4}.Release|x64.Build.0 = Release|Any CPU
 		{129CC922-FB67-4156-9D8D-860FA9735CF4}.Release|x86.ActiveCfg = Release|Any CPU
 		{129CC922-FB67-4156-9D8D-860FA9735CF4}.Release|x86.Build.0 = Release|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Debug|x64.Build.0 = Debug|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Debug|x86.Build.0 = Debug|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Release|x64.ActiveCfg = Release|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Release|x64.Build.0 = Release|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Release|x86.ActiveCfg = Release|Any CPU
+		{58C88A18-F291-4997-A9C8-DC5FA1E04C34}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f7f4f0a88f524c7da4c8bd336d2cc7e5" Name="Diagram1">
+        <EntityTypeShape EntityType="CashCenter.DocumentsReceiptModel.Department" Width="1.5" PointX="1" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CashCenter.DocumentsReceiptModel.ReceiptDocument" Width="1.75" PointX="5.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CashCenter.DocumentsReceiptModel.SettlementCenter" Width="1.75" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="CashCenter.DocumentsReceiptModel.FK_SettlementCenter_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="CashCenter.DocumentsReceiptModel.FK_ReceiptDocument_SettlementCenter" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CashCenter.DocumentsReceiptModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReceiptDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PaymentsCountSum" Type="int" Nullable="false" />
+          <Property Name="PaymentsTotalSum" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SettlementCenterId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SettlementCenter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ReceiptDocument_SettlementCenter">
+          <End Role="SettlementCenter" Type="Self.SettlementCenter" Multiplicity="1" />
+          <End Role="ReceiptDocument" Type="Self.ReceiptDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettlementCenter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReceiptDocument">
+              <PropertyRef Name="SettlementCenterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SettlementCenter_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="SettlementCenter" Type="Self.SettlementCenter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SettlementCenter">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CashCenterDocumentsReceiptModelStoreContainer">
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptDocument" EntityType="Self.ReceiptDocument" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SettlementCenter" EntityType="Self.SettlementCenter" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ReceiptDocument_SettlementCenter" Association="Self.FK_ReceiptDocument_SettlementCenter">
+            <End Role="SettlementCenter" EntitySet="SettlementCenter" />
+            <End Role="ReceiptDocument" EntitySet="ReceiptDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SettlementCenter_Department" Association="Self.FK_SettlementCenter_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="SettlementCenter" EntitySet="SettlementCenter" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CashCenter.DocumentsReceiptModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="SettlementCenters" Relationship="Self.FK_SettlementCenter_Department" FromRole="Department" ToRole="SettlementCenter" />
+        </EntityType>
+        <EntityType Name="ReceiptDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PaymentsCountSum" Type="Int32" Nullable="false" />
+          <Property Name="PaymentsTotalSum" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SettlementCenterId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SettlementCenter" Relationship="Self.FK_ReceiptDocument_SettlementCenter" FromRole="ReceiptDocument" ToRole="SettlementCenter" />
+        </EntityType>
+        <EntityType Name="SettlementCenter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_SettlementCenter_Department" FromRole="SettlementCenter" ToRole="Department" />
+          <NavigationProperty Name="ReceiptDocuments" Relationship="Self.FK_ReceiptDocument_SettlementCenter" FromRole="SettlementCenter" ToRole="ReceiptDocument" />
+        </EntityType>
+        <Association Name="FK_SettlementCenter_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="SettlementCenter" Type="Self.SettlementCenter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SettlementCenter">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReceiptDocument_SettlementCenter">
+          <End Role="SettlementCenter" Type="Self.SettlementCenter" Multiplicity="1" />
+          <End Role="ReceiptDocument" Type="Self.ReceiptDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SettlementCenter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReceiptDocument">
+              <PropertyRef Name="SettlementCenterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CashCenterDocumentsReceiptEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="ReceiptDocuments" EntityType="Self.ReceiptDocument" />
+          <EntitySet Name="SettlementCenters" EntityType="Self.SettlementCenter" />
+          <AssociationSet Name="FK_SettlementCenter_Department" Association="Self.FK_SettlementCenter_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="SettlementCenter" EntitySet="SettlementCenters" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReceiptDocument_SettlementCenter" Association="Self.FK_ReceiptDocument_SettlementCenter">
+            <End Role="SettlementCenter" EntitySet="SettlementCenters" />
+            <End Role="ReceiptDocument" EntitySet="ReceiptDocuments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CashCenterDocumentsReceiptModelStoreContainer" CdmEntityContainer="CashCenterDocumentsReceiptEntities">
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="CashCenter.DocumentsReceiptModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReceiptDocuments">
+            <EntityTypeMapping TypeName="CashCenter.DocumentsReceiptModel.ReceiptDocument">
+              <MappingFragment StoreEntitySet="ReceiptDocument">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PaymentsCountSum" ColumnName="PaymentsCountSum" />
+                <ScalarProperty Name="PaymentsTotalSum" ColumnName="PaymentsTotalSum" />
+                <ScalarProperty Name="SettlementCenterId" ColumnName="SettlementCenterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SettlementCenters">
+            <EntityTypeMapping TypeName="CashCenter.DocumentsReceiptModel.SettlementCenter">
+              <MappingFragment StoreEntitySet="SettlementCenter">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
