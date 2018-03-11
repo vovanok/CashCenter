@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="CashCenter.Objective.DocumentsReceipt.DocumentReceiptControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CashCenter.Objective.DocumentsReceipt"
+             xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon.Controls;assembly=CashCenter.ViewCommon"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <Label Content="Отделение"/>
+                <ComboBox ItemsSource="{Binding Departments}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedDepartment}"/>
+                <Button Content="Новое отделение" Command="{Binding AddDeparmentCommand}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <Label Content="Расчетный центр"/>
+                <ComboBox ItemsSource="{Binding SettlementCenters}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSettlementCenter}"/>
+                <Button Content="Новый расчетный центр" Command="{Binding AddSettlementCenter}"/>
+            </StackPanel>
+        </Grid>
+        <Label Content="Выбор файлов для добавления"/>
+        <viewCommon:FileSelectorControl Filename="{Binding Filename, Mode=TwoWay}" FilesFilter="OFF|*.OFF"/>
+    </StackPanel>
+</UserControl>

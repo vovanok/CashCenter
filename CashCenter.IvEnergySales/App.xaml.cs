@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Threading;
 using CashCenter.Common;
+using CashCenter.ViewCommon;
 
 namespace CashCenter.IvEnergySales
 {

@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales"
-             xmlns:converters="clr-namespace:CashCenter.Common.Converters;assembly=CashCenter.Common"
-             xmlns:behaviors="clr-namespace:CashCenter.Common.Behaviors;assembly=CashCenter.Common"
+             xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
+             xmlns:behaviors="clr-namespace:CashCenter.ViewCommon.Behaviors;assembly=CashCenter.ViewCommon"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="300">
     <UserControl.Resources>

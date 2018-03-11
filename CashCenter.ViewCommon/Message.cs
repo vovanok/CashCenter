@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace CashCenter.Common
+namespace CashCenter.ViewCommon
 {
     public static class Message
     {

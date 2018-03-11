@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace CashCenter.Common.Behaviors
+namespace CashCenter.ViewCommon.Behaviors
 {
     public static class DependencyObjectBehavior
     {

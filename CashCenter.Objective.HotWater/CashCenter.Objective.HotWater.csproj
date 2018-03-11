@@ -94,6 +94,10 @@
       <Project>{718380A0-3293-4A26-9AD4-86F836647B07}</Project>
       <Name>CashCenter.DataMigration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CashCenter.ViewCommon\CashCenter.ViewCommon.csproj">
+      <Project>{3a1b9fd8-935d-4c92-bb07-c435c54f7b27}</Project>
+      <Name>CashCenter.ViewCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

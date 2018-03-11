@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
 using CashCenter.Common;
+using CashCenter.ViewCommon;
 using CashCenter.Dal;
 
 namespace CashCenter.IvEnergySales.Service

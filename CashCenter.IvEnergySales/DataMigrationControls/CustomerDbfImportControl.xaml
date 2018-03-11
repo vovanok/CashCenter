@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+             xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon.Controls;assembly=CashCenter.ViewCommon"
              xmlns:migrationControls="clr-namespace:CashCenter.IvEnergySales.DataMigrationControls"
              mc:Ignorable="d">
     <UserControl.DataContext>
@@ -28,7 +29,7 @@
             Visibility="{Binding Converter={StaticResource BoolToVisibility}, ElementName=cbImportTargets, Path=SelectedItem.IsNeedAddOrReplaceDecision}"/>
 
         <Label Content="Откуда импортировать? (путь к файлу)" />
-        <local:FileSelectorControl Filename="{Binding DbfFilename.Value, Mode=TwoWay}" FilesFilter="DBF или TXT|*.DBF;*.TXT" />
+        <viewCommon:FileSelectorControl Filename="{Binding DbfFilename.Value, Mode=TwoWay}" FilesFilter="DBF или TXT|*.DBF;*.TXT" />
         <Button Content="Импортировать" Command="{Binding ImportCommand}" Width="100" Height="30" Margin="0,5,0,0" HorizontalAlignment="Left" />
     </StackPanel>
 </UserControl>

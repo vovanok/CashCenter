@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ivenergysalesservice="clr-namespace:CashCenter.IvEnergySales.Service"
-        xmlns:converters="clr-namespace:CashCenter.Common.Converters;assembly=CashCenter.Common"
+        xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
         mc:Ignorable="d"
         x:Name="settingsWindow"
         Title="Настройки" Width="500" WindowStartupLocation="CenterScreen"

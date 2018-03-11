@@ -4,6 +4,7 @@ using CashCenter.Dal;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
+using CashCenter.ViewCommon;
 
 namespace CashCenter.Objective.HotWater
 {

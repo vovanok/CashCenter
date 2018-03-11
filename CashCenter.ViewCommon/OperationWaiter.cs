@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace CashCenter.Common
+namespace CashCenter.ViewCommon
 {
     public class OperationWaiter : IDisposable
     {

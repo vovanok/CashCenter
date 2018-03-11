@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace CashCenter.IvEnergySales
+namespace CashCenter.ViewCommon.Controls
 {
     public partial class FileSelectorControl : UserControl
     {

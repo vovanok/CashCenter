@@ -17,13 +17,13 @@ namespace CashCenter.Objective.DocumentsReceipt.DAL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Department()
         {
-            this.SettlementCenters = new HashSet<SettlementCenter>();
+            this.ReceiptDocuments = new HashSet<ReceiptDocument>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SettlementCenter> SettlementCenters { get; set; }
+        public virtual ICollection<ReceiptDocument> ReceiptDocuments { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.ComponentModel;
 using CashCenter.Dal;
 using CashCenter.Common;
+using CashCenter.ViewCommon;
 
 namespace CashCenter.IvEnergySales
 {
@@ -36,10 +37,9 @@ namespace CashCenter.IvEnergySales
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-#if DEBUG
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 return;
-#endif
+
             try
             {
                 Region = DalController.Instance.Regions.FirstOrDefault(region => region.Id == Config.CurrentRegionId);

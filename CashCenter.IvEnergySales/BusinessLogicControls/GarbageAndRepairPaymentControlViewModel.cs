@@ -3,6 +3,7 @@ using System.Windows;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
+using CashCenter.ViewCommon;
 using CashCenter.IvEnergySales.BusinessLogic;
 using System.Collections.Generic;
 using System.Linq;

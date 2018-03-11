@@ -19,7 +19,9 @@ namespace CashCenter.Objective.DocumentsReceipt.DAL
         public int PaymentsCountSum { get; set; }
         public decimal PaymentsTotalSum { get; set; }
         public int SettlementCenterId { get; set; }
+        public int DepartmentId { get; set; }
     
+        public virtual Department Department { get; set; }
         public virtual SettlementCenter SettlementCenter { get; set; }
     }
 }

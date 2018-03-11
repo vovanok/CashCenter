@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using CashCenter.Common;
+using CashCenter.ViewCommon;
 using CashCenter.DataMigration;
 using CashCenter.DataMigration.Articles;
 using CashCenter.DataMigration.AllPayments;

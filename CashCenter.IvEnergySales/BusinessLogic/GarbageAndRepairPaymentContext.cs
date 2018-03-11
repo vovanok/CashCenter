@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
+using CashCenter.ViewCommon;
 
 namespace CashCenter.IvEnergySales.BusinessLogic
 {

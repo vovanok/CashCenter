@@ -165,9 +165,6 @@
     <Compile Include="CommonControls\DepartmentSelectorControl.xaml.cs">
       <DependentUpon>DepartmentSelectorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CommonControls\FileSelectorControl.xaml.cs">
-      <DependentUpon>FileSelectorControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\DataMigrationViewModel.cs" />
     <Compile Include="Service\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
@@ -202,10 +199,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CommonControls\DepartmentSelectorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CommonControls\FileSelectorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -273,6 +266,10 @@
     <ProjectReference Include="..\CashCenter.Objective.HotWater\CashCenter.Objective.HotWater.csproj">
       <Project>{129cc922-fb67-4156-9d8d-860fa9735cf4}</Project>
       <Name>CashCenter.Objective.HotWater</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.ViewCommon\CashCenter.ViewCommon.csproj">
+      <Project>{3a1b9fd8-935d-4c92-bb07-c435c54f7b27}</Project>
+      <Name>CashCenter.ViewCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.ZeusDal\CashCenter.ZeusDal.csproj">
       <Project>{dee8e0e1-13bf-4713-a615-1fbee418e5cd}</Project>

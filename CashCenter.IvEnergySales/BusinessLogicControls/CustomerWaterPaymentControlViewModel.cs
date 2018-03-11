@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
-using CashCenter.Common;
 using CashCenter.Dal;
 using CashCenter.IvEnergySales.BusinessLogic;
 using CashCenter.Check;
+using CashCenter.Common;
 using CashCenter.Common.Exceptions;
+using CashCenter.ViewCommon;
 
 namespace CashCenter.IvEnergySales
 {

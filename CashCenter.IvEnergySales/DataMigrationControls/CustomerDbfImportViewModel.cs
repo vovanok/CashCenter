@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using CashCenter.Dal;
 using CashCenter.Common;
+using CashCenter.ViewCommon;
 using CashCenter.DataMigration.Import;
 using CashCenter.DataMigration.EnergyCustomers;
 using CashCenter.DataMigration.WaterCustomers;

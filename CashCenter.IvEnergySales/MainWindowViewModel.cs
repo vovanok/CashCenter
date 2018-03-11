@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using CashCenter.Common;
+using CashCenter.ViewCommon;
 using CashCenter.Check;
 
 namespace CashCenter.IvEnergySales
