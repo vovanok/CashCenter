@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
-namespace CashCenter.ViewCommon.Behaviors
+namespace CashCenter.ViewCommon
 {
     public static class DependencyObjectBehavior
     {
@@ -98,16 +98,6 @@ namespace CashCenter.ViewCommon.Behaviors
             }
         }
 
-        private static void TextBoxUnloaded(object sender, RoutedEventArgs args)
-        {
-            var element = sender as FrameworkElement;
-            if (element == null)
-                return;
-
-            element.Unloaded -= TextBoxUnloaded;
-            element.PreviewKeyDown -= TextBoxPreviewKeyDown;
-        }
-
         private static void IsTabOnEnterChanged(
             DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
@@ -116,14 +106,9 @@ namespace CashCenter.ViewCommon.Behaviors
                 return;
 
             if ((bool)args.NewValue)
-            {
-                element.Unloaded += TextBoxUnloaded;
                 element.PreviewKeyDown += TextBoxPreviewKeyDown;
-            }
             else
-            {
                 element.PreviewKeyDown -= TextBoxPreviewKeyDown;
-            }
         }
 
         #endregion
@@ -166,5 +151,41 @@ namespace CashCenter.ViewCommon.Behaviors
         }
 
         #endregion
+
+        #region Drop command
+
+        public static readonly DependencyProperty DropCommandProperty =
+            DependencyProperty.RegisterAttached(
+                "DropCommand", typeof(ICommand), typeof(DependencyObjectBehavior),
+                new UIPropertyMetadata(null, OnDropCommandChanged));
+
+        public static ICommand GetDropCommand(DependencyObject dependencyObject)
+        {
+            return (ICommand)dependencyObject?.GetValue(DropCommandProperty);
+        }
+
+        public static void SetDropCommand(DependencyObject dependencyObject, ICommand value)
+        {
+            if (value != null)
+                dependencyObject?.SetValue(DropCommandProperty, value);
+        }
+
+        private static void OnDropCommandChanged(
+            DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
+        {
+            var uiElement = dependencyObject as UIElement;
+            if (uiElement == null || args == null || !(args.NewValue is ICommand))
+                return;
+
+            var command = args.NewValue as ICommand;
+            uiElement.Drop += (sender, dropArguments) => command.Execute(dropArguments);
+        }
+
+        #endregion
     }
+
+    //public static class Dropable
+    //{
+        
+    //}
 }

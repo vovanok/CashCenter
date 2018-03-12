@@ -5,8 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.Objective.DocumentsReceipt"
              xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon.Controls;assembly=CashCenter.ViewCommon"
+             xmlns:behaviors="clr-namespace:CashCenter.ViewCommon;assembly=CashCenter.ViewCommon"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Button" x:Key="MainButton">
+            <Setter Property="Margin" Value="15,5,15,5"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:DocumentReceiptControlViewModel />
+    </UserControl.DataContext>
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -21,15 +35,20 @@
             <StackPanel>
                 <Label Content="Отделение"/>
                 <ComboBox ItemsSource="{Binding Departments}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedDepartment}"/>
-                <Button Content="Новое отделение" Command="{Binding AddDeparmentCommand}"/>
+                <Button Content="Новое отделение" Command="{Binding AddDeparmentCommand}" Style="{StaticResource MainButton}" />
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <Label Content="Расчетный центр"/>
                 <ComboBox ItemsSource="{Binding SettlementCenters}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSettlementCenter}"/>
-                <Button Content="Новый расчетный центр" Command="{Binding AddSettlementCenter}"/>
+                <Button Content="Новый РЦ" Command="{Binding AddSettlementCenterCommand}" Style="{StaticResource MainButton}" />
             </StackPanel>
         </Grid>
         <Label Content="Выбор файлов для добавления"/>
-        <viewCommon:FileSelectorControl Filename="{Binding Filename, Mode=TwoWay}" FilesFilter="OFF|*.OFF"/>
+        <viewCommon:FileSelectorControl Filename="{Binding SelectedFilename.Value, Mode=TwoWay}" FilesFilter="OFF|*.OFF"/>
+        <Button Content="Добавить" Command="{Binding AddPreloadedDocumentCommand}" Style="{StaticResource MainButton}" />
+        <StackPanel behaviors:DependencyObjectBehavior.DropCommand="{Binding DropDocumentCommand}" AllowDrop="True">
+            <DataGrid DataContext="{Binding PreloadedDocuments}" Height="200" />
+        </StackPanel>
+        <Button Content="Загрузить добавленные" Command="{Binding LoadPreloadedDocumentsCommand}" Style="{StaticResource MainButton}" />
     </StackPanel>
 </UserControl>

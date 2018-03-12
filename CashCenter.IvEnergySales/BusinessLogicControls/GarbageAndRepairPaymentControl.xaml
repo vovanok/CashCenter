@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales.BusinessLogicControls"
              xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
-             xmlns:behaviors="clr-namespace:CashCenter.ViewCommon.Behaviors;assembly=CashCenter.ViewCommon"
+             xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon;assembly=CashCenter.ViewCommon"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -50,8 +50,8 @@
         <Label Content="Штрих-код" Style="{StaticResource PropertyLabel}"/>
         <TextBox Grid.Column="1" Text="{Binding BarcodeString.Value, UpdateSourceTrigger=PropertyChanged}"
             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-            behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-            behaviors:DependencyObjectBehavior.IsFocused="{Binding IsBarcodeFocused.Value, Mode=TwoWay}">
+            viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+            viewCommon:DependencyObjectBehavior.IsFocused="{Binding IsBarcodeFocused.Value, Mode=TwoWay}">
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding ApplyBarcodeCommand}" Key="Return"/>
             </TextBox.InputBindings>
@@ -86,8 +86,8 @@
                  Text="{Binding OverridedCost.Value, Converter={StaticResource FractionalNumberConverter}}"
                  VerticalContentAlignment="Center"
                  IsEnabled="{Binding IsPaymentEnable.Value}"
-                 behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                 behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                 viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                 viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
         <WrapPanel Grid.Row="8" HorizontalAlignment="Right">
             <Label Content="Сумма с комиссией"/>

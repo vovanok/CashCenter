@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales"
-             xmlns:behaviors="clr-namespace:CashCenter.ViewCommon.Behaviors;assembly=CashCenter.ViewCommon"
+             xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon;assembly=CashCenter.ViewCommon"
              xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
              mc:Ignorable="d">
     <UserControl.Resources>
@@ -57,8 +57,8 @@
 
                     <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource PositiveIntToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding FindCustomerCommand}" Key="Return"/>
                         </TextBox.InputBindings>
@@ -83,10 +83,10 @@
                        Grid.Column="1" Grid.Row="4" VerticalContentAlignment="Center"/>
 
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="5" Style="{StaticResource PropertyLabel}"/>
-                <TextBox Text="{Binding CustomerEmail.Value}"
+                <TextBox Text="{Binding CustomerEmail.Value}" x:Name="testtest"
                          IsEnabled="{Binding IsPaymentEnable.Value}"
-                         behaviors:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"
-                         behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
+                         viewCommon:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"
+                         viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"
                          Grid.Column="1" Grid.Row="5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
             </Grid>
         </GroupBox>
@@ -124,14 +124,14 @@
                              Grid.Column="2" Grid.Row="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsDayValueActive.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding CurrentNightValue.Value, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Column="2" Grid.Row="2"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsNightValueActive.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <Label FontWeight="Bold" Grid.Column="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                         <TextBlock TextWrapping="Wrap" Text="Разница"/>
                     </Label>
@@ -162,22 +162,22 @@
                     <ComboBox ItemsSource="{Binding PaymentReasons}"
                               SelectedItem="{Binding SelectedPaymentReason.Value}"
                               IsEnabled="{Binding IsPaymentEnable.Value}"
-                              behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
+                              viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"
                               DisplayMemberPath="Name" Grid.Column="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"/>
 
                     <Label Content="Сумма" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Cost.Value, Converter={StaticResource FractionalNumberConverter}}"
                              Grid.Column="1" Grid.Row="1"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     
                     <Label Content="Примечание" Grid.Row="2" Style="{StaticResource PropertyLabel}"/>
                     <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"
                              />
 
                     <Button Content="Оплатить"

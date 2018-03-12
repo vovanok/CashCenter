@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CashCenter.Objective.DocumentsReceipt.DAL
+namespace CashCenter.Objective.DocumentsReceipt.Dal
 {
     using System;
     using System.Data.Entity;

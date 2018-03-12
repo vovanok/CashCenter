@@ -69,42 +69,43 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL\Department.cs">
+    <Compile Include="Dal\Department.cs">
       <DependentUpon>DocumentsReceiptModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\DocumentsReceiptModel.Context.cs">
+    <Compile Include="Dal\DocumentsReceiptModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DocumentsReceiptModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\DocumentsReceiptModel.cs">
+    <Compile Include="Dal\DocumentsReceiptModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DocumentsReceiptModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\DocumentsReceiptModel.Designer.cs">
+    <Compile Include="Dal\DocumentsReceiptModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DocumentsReceiptModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DAL\ReceiptDocument.cs">
+    <Compile Include="Dal\ReceiptDocument.cs">
       <DependentUpon>DocumentsReceiptModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\SettlementCenter.cs">
+    <Compile Include="Dal\SettlementCenter.cs">
       <DependentUpon>DocumentsReceiptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DocumentReceiptControl.xaml.cs">
       <DependentUpon>DocumentReceiptControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DocumentReceiptControlViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DAL\DocumentsReceiptModel.Context.tt">
+    <Content Include="Dal\DocumentsReceiptModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DocumentsReceiptModel.Context.cs</LastGenOutput>
       <DependentUpon>DocumentsReceiptModel.edmx</DependentUpon>
     </Content>
-    <Content Include="DAL\DocumentsReceiptModel.tt">
+    <Content Include="Dal\DocumentsReceiptModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DocumentsReceiptModel.edmx</DependentUpon>
       <LastGenOutput>DocumentsReceiptModel.cs</LastGenOutput>
@@ -112,14 +113,14 @@
     <Content Include="SqlScripts\v1.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="DAL\DocumentsReceiptModel.edmx">
+    <EntityDeploy Include="Dal\DocumentsReceiptModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DocumentsReceiptModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="DAL\DocumentsReceiptModel.edmx.diagram">
+    <None Include="Dal\DocumentsReceiptModel.edmx.diagram">
       <DependentUpon>DocumentsReceiptModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />

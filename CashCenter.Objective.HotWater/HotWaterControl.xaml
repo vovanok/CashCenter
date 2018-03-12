@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CashCenter.Objective.HotWater"
              xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
-             xmlns:behaviors="clr-namespace:CashCenter.ViewCommon.Behaviors;assembly=CashCenter.ViewCommon"
+             xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon;assembly=CashCenter.ViewCommon"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="550">
     <UserControl.Resources>
         <Style TargetType="Label" x:Key="PropertyLabel">
@@ -50,8 +50,8 @@
 
                     <TextBox Text="{Binding CustomerNumber.Value, Converter={StaticResource PositiveIntToStringConverter}, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsFocused="{Binding IsCustomerNumberFocused.Value, Mode=TwoWay}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding FindCustomerCommand}" Key="Return"/>
                         </TextBox.InputBindings>
@@ -74,8 +74,8 @@
                 <Label Content="Адрес эл. почты плательщика" Grid.Row="4" Style="{StaticResource PropertyLabel}"/>
                 <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding CustomerEmail.Value}" IsEnabled="{Binding IsPaymentEnable.Value}"
                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                         behaviors:DependencyObjectBehavior.IsTabOnEnter="True"
-                         behaviors:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
+                         viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"
+                         viewCommon:DependencyObjectBehavior.IsFocused="{Binding IsEmailFocused.Value, Mode=TwoWay}"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Оплата">
@@ -107,28 +107,28 @@
                     <TextBox Text="{Binding Counter1Value.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1" Grid.Row="1"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter2Value.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter3Value.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1" Grid.Row="3"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter4Value.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1" Grid.Row="4"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                     <TextBox Text="{Binding Counter5Value.Value, Converter={StaticResource FractionalNumberConverter}}" Grid.Column="1" Grid.Row="5"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
                 </Grid>
 
                 <Grid>
@@ -149,8 +149,8 @@
                     <TextBox Text="{Binding TotalWithCommission.Value, Converter={StaticResource FractionalNumberConverter}}"
                              Grid.Column="1" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.SelectAllTextOnFocus="True"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.SelectAllTextOnFocus="True"
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
                     <WrapPanel Grid.Row="1" HorizontalAlignment="Right">
                         <Label Content="Сумма с комиссией"/>
@@ -164,7 +164,7 @@
                     <TextBox Text="{Binding Description.Value}" Grid.Column="1" Grid.Row="2"
                              HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                              IsEnabled="{Binding IsPaymentEnable.Value}"
-                             behaviors:DependencyObjectBehavior.IsTabOnEnter="True"/>
+                             viewCommon:DependencyObjectBehavior.IsTabOnEnter="True"/>
 
                     <Button Content="Оплатить" Grid.Row="3" Style="{StaticResource MainButton}"
                             Command="{Binding PayCommand}"
