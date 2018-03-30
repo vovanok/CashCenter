@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace CashCenter.IvEnergySales.Check
+namespace CashCenter.Objective.GarbageAndRepair
 {
-    public class GarbageCheck : CashCenter.Check.Check
+    public class RepairCheck : CashCenter.Check.Check
     {
-        public GarbageCheck(int customerNumber, string cashierName,
+        public RepairCheck(int customerNumber, string cashierName,
             decimal costWithoutComission, decimal comissionValue, decimal cost)
             : base(
-                 descriptorId: "Garbage",
+                 descriptorId: "Repair",
                   parameters: new Dictionary<string, string>
                   {
                       { "customerNumber", customerNumber.ToString() },

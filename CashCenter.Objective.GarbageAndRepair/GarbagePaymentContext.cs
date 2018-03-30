@@ -1,9 +1,8 @@
 ﻿using System;
 using CashCenter.Common;
 using CashCenter.Dal;
-using CashCenter.IvEnergySales.Check;
 
-namespace CashCenter.IvEnergySales.BusinessLogic
+namespace CashCenter.Objective.GarbageAndRepair
 {
     public class GarbagePaymentContext : GarbageAndRepairPaymentContext
     {

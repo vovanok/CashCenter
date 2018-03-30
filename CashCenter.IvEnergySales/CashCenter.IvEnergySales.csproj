@@ -127,16 +127,7 @@
     <Compile Include="BusinessLogicControls\ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BusinessLogicControls\GarbageAndRepairPaymentControl.xaml.cs">
-      <DependentUpon>GarbageAndRepairPaymentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BusinessLogicControls\GarbageAndRepairPaymentControlViewModel.cs" />
-    <Compile Include="BusinessLogic\GarbageAndRepairPaymentContext.cs" />
-    <Compile Include="BusinessLogic\GarbagePaymentContext.cs" />
-    <Compile Include="BusinessLogic\RepairPaymentContext.cs" />
     <Compile Include="Check\ArticleSaleCheck.cs" />
-    <Compile Include="Check\GarbageCheck.cs" />
-    <Compile Include="Check\RepairCheck.cs" />
     <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
     <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
@@ -157,10 +148,6 @@
     </Compile>
     <Compile Include="Service\SettingsDialogViewModel.cs" />
     <Page Include="BusinessLogicControls\ArticlesControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BusinessLogicControls\GarbageAndRepairPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,6 +230,10 @@
     <ProjectReference Include="..\CashCenter.Objective.Energy\CashCenter.Objective.Energy.csproj">
       <Project>{d3a32992-efa2-49ca-9ad2-6021172bc80e}</Project>
       <Name>CashCenter.Objective.Energy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Objective.GarbageAndRepair\CashCenter.Objective.GarbageAndRepair.csproj">
+      <Project>{f045544d-84a1-4d7c-bfdd-a7b87536e3ae}</Project>
+      <Name>CashCenter.Objective.GarbageAndRepair</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.Objective.HotWater\CashCenter.Objective.HotWater.csproj">
       <Project>{129cc922-fb67-4156-9d8d-860fa9735cf4}</Project>

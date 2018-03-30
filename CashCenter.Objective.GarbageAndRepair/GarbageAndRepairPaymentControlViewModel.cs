@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
+using System.Collections.Generic;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.ViewCommon;
-using CashCenter.IvEnergySales.BusinessLogic;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace CashCenter.IvEnergySales.BusinessLogicControls
+namespace CashCenter.Objective.GarbageAndRepair
 {
     public class GarbageAndRepairPaymentControlViewModel : ViewModel
     {

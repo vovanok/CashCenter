@@ -5,7 +5,7 @@ using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.ViewCommon;
 
-namespace CashCenter.IvEnergySales.BusinessLogic
+namespace CashCenter.Objective.GarbageAndRepair
 {
     public abstract class GarbageAndRepairPaymentContext
     {

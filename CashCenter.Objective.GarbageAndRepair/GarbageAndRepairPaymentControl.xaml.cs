@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace CashCenter.IvEnergySales.BusinessLogicControls
+namespace CashCenter.Objective.GarbageAndRepair
 {
     /// <summary>
     /// Interaction logic for GarbageCollectionPaymentControl.xaml
