@@ -24,9 +24,9 @@ namespace CashCenter.Objective.GarbageAndRepair
 
         private Observed<GarbageAndRepairPaymentContext> currentContext { get; } = new Observed<GarbageAndRepairPaymentContext>();
 
-        public Observed<string> BarcodeString { get; } = new Observed<string>();
-        public Observed<decimal> OverridedCost { get; } = new Observed<decimal>();
-        public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
+        public ViewProperty<string> BarcodeString { get; }
+        public ViewProperty<decimal> OverridedCost { get; }
+        public ViewProperty<decimal> TotalCost { get; }
 
         public string PaymentName => currentContext.Value?.PaymentName ?? string.Empty;
         public int CustomerNumber => currentContext.Value?.Barcode?.CustomerNumber ?? 0;
@@ -36,8 +36,8 @@ namespace CashCenter.Objective.GarbageAndRepair
         public int FilialCode => currentContext.Value?.FilialCode ?? 0;
         public float CommissionPercent => currentContext.Value?.CommissionPercent ?? 0;
             
-        public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
-        public Observed<bool> IsBarcodeFocused { get; } = new Observed<bool>();
+        public ViewProperty<bool> IsPaymentEnable { get; }
+        public ViewProperty<bool> IsBarcodeFocused { get; }
 
         public Command PayCommand { get; }
         public Command ClearCommand { get; }
@@ -46,16 +46,13 @@ namespace CashCenter.Objective.GarbageAndRepair
         public GarbageAndRepairPaymentControlViewModel()
         {
             currentContext.OnChange += (newValue) => UpdateAllProperties();
-            BarcodeString.OnChange += (newValue) => DispatchPropertyChanged("BarcodeString");
-            OverridedCost.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("OverridedCost");
-                TotalCost.Value = currentContext.Value?.GetCostWithComission(newValue) ?? 0;
-            };
 
-            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
-            IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
-            IsBarcodeFocused.OnChange += (newValue) => DispatchPropertyChanged("IsBarcodeFocused");
+            BarcodeString = new ViewProperty<string>("BarcodeString", this);
+            OverridedCost = new ViewProperty<decimal>("OverridedCost", this);
+            OverridedCost.OnChange += (newValue) => TotalCost.Value = currentContext.Value?.GetCostWithComission(newValue) ?? 0;
+            TotalCost = new ViewProperty<decimal>("TotalCost", this);
+            IsPaymentEnable = new ViewProperty<bool>("IsPaymentEnable", this);
+            IsBarcodeFocused = new ViewProperty<bool>("IsBarcodeFocused", this);
 
             PayCommand = new Command(PayHandler);
             ClearCommand = new Command(ClearHandler);

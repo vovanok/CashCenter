@@ -7,10 +7,9 @@ using CashCenter.Common;
 using CashCenter.ViewCommon;
 using CashCenter.Dal;
 using CashCenter.Dal.DataManipulationInterfaces;
-using CashCenter.IvEnergySales.Check;
 using CashCenter.ZeusDal;
 
-namespace CashCenter.IvEnergySales
+namespace CashCenter.Objective.Articles
 {
     public partial class ArticlesControl : UserControl
     {
