@@ -7,36 +7,35 @@ using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.ViewCommon;
-using CashCenter.IvEnergySales.BusinessLogic;
 
-namespace CashCenter.IvEnergySales
+namespace CashCenter.Objective.Energy
 {
     public class CustomerEnergyPaymentControlViewModel : ViewModel
     {
         private EnergyCustomerSalesContext context = new EnergyCustomerSalesContext();
 
-        public Observed<Department> SelectedDepartment { get; } = new Observed<Department>();
-        public Observed<uint> CustomerNumber { get; } = new Observed<uint>();
-        public Observed<string> CustomerName { get; } = new Observed<string>();
-        public Observed<string> CustomerAddress { get; } = new Observed<string>();
-        public Observed<bool?> CustomerIsClosed { get; } = new Observed<bool?>();
-        public Observed<string> CustomerEmail { get; } = new Observed<string>();
-        public Observed<uint> PreviousDayValue { get; } = new Observed<uint>();
-        public Observed<uint> PreviousNightValue { get; } = new Observed<uint>();
-        public Observed<uint> CurrentDayValue { get; } = new Observed<uint>();
-        public Observed<uint> CurrentNightValue { get; } = new Observed<uint>();
-        public Observed<int> DeltaDayValue { get; } = new Observed<int>();
-        public Observed<int> DeltaNightValue { get; } = new Observed<int>();
-        public Observed<PaymentReason> SelectedPaymentReason { get; } = new Observed<PaymentReason>();
-        public Observed<decimal> Cost { get; } = new Observed<decimal>();
-        public Observed<string> Description { get; } = new Observed<string>();
+        public ViewProperty<Department> SelectedDepartment { get; }
+        public ViewProperty<uint> CustomerNumber { get; }
+        public ViewProperty<string> CustomerName { get; }
+        public ViewProperty<string> CustomerAddress { get; }
+        public ViewProperty<bool?> CustomerIsClosed { get; }
+        public ViewProperty<string> CustomerEmail { get; }
+        public ViewProperty<uint> PreviousDayValue { get; }
+        public ViewProperty<uint> PreviousNightValue { get; }
+        public ViewProperty<uint> CurrentDayValue { get; }
+        public ViewProperty<uint> CurrentNightValue { get; }
+        public ViewProperty<int> DeltaDayValue { get; }
+        public ViewProperty<int> DeltaNightValue { get; }
+        public ViewProperty<PaymentReason> SelectedPaymentReason { get; }
+        public ViewProperty<decimal> Cost { get; }
+        public ViewProperty<string> Description { get; }
 
-        public Observed<bool> IsCustomerNumberFocused { get; } = new Observed<bool>();
-        public Observed<bool> IsEmailFocused { get; } = new Observed<bool>();
-        public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
-        public Observed<bool> IsNormative { get; } = new Observed<bool>();
-        public Observed<bool> IsDayValueActive { get; } = new Observed<bool>();
-        public Observed<bool> IsNightValueActive { get; } = new Observed<bool>();
+        public ViewProperty<bool> IsCustomerNumberFocused { get; }
+        public ViewProperty<bool> IsEmailFocused { get; }
+        public ViewProperty<bool> IsPaymentEnable { get; }
+        public ViewProperty<bool> IsNormative { get; }
+        public ViewProperty<bool> IsDayValueActive { get; }
+        public ViewProperty<bool> IsNightValueActive { get; }
 
         public List<PaymentReason> PaymentReasons { get; } = DalController.Instance.PaymentReasons.ToList();
 
@@ -46,46 +45,39 @@ namespace CashCenter.IvEnergySales
 
         public CustomerEnergyPaymentControlViewModel()
         {
+            SelectedDepartment = new ViewProperty<Department>("SelectedDepartment", this);
             SelectedDepartment.OnChange += (newValue) =>
             {
-                DispatchPropertyChanged("SelectedDepartment");
-                
                 // Force customer number focus
                 IsCustomerNumberFocused.Value = false;
                 IsCustomerNumberFocused.Value = true;
             };
             
-            CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
-            CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
-            CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");
-            CustomerIsClosed.OnChange += (newValue) => DispatchPropertyChanged("CustomerIsClosed");
-            CustomerEmail.OnChange += (newValue) => DispatchPropertyChanged("CustomerEmail");
-            PreviousDayValue.OnChange += (newValue) => DispatchPropertyChanged("PreviousDayValue"); ;
-            PreviousNightValue.OnChange += (newValue) => DispatchPropertyChanged("PreviousNightValue");
-            DeltaDayValue.OnChange += (newValue) => DispatchPropertyChanged("DeltaDayValue");
-            DeltaNightValue.OnChange += (newValue) => DispatchPropertyChanged("DeltaNightValue");
-            SelectedPaymentReason.OnChange += (newValue) => DispatchPropertyChanged("SelectedPaymentReason");
-            Cost.OnChange += (newValue) => DispatchPropertyChanged("Cost");
-            Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
+            CustomerNumber = new ViewProperty<uint>("CustomerNumber", this);
+            CustomerName = new ViewProperty<string>("CustomerName", this);
+            CustomerAddress = new ViewProperty<string>("CustomerAddress", this);
+            CustomerIsClosed = new ViewProperty<bool?>("CustomerIsClosed", this);
+            CustomerEmail = new ViewProperty<string>("CustomerEmail", this);
+            PreviousDayValue = new ViewProperty<uint>("PreviousDayValue", this);
+            PreviousNightValue = new ViewProperty<uint>("PreviousNightValue", this);
+            DeltaDayValue = new ViewProperty<int>("DeltaDayValue", this);
+            DeltaNightValue = new ViewProperty<int>("DeltaNightValue", this);
+            SelectedPaymentReason = new ViewProperty<PaymentReason>("SelectedPaymentReason", this);
+            Cost = new ViewProperty<decimal>("Cost", this);
+            Description = new ViewProperty<string>("Description", this);
 
-            CurrentDayValue.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("CurrentDayValue");
-                UpdateDayDeltaValue();
-            };
+            CurrentDayValue = new ViewProperty<uint>("CurrentDayValue", this);
+            CurrentDayValue.OnChange += (newValue) => UpdateDayDeltaValue();
 
-            CurrentNightValue.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("CurrentNightValue");
-                UpdateNightDeltaValue();
-            };
+            CurrentNightValue = new ViewProperty<uint>("CurrentNightValue", this);
+            CurrentNightValue.OnChange += (newValue) => UpdateNightDeltaValue();
 
-            IsCustomerNumberFocused.OnChange += (newValue) => DispatchPropertyChanged("IsCustomerNumberFocused");
-            IsEmailFocused.OnChange += (newValue) => DispatchPropertyChanged("IsEmailFocused");
-            IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
-            IsNormative.OnChange += (newValue) => DispatchPropertyChanged("IsNormative");
-            IsDayValueActive.OnChange += (newValue) => DispatchPropertyChanged("IsDayValueActive");
-            IsNightValueActive.OnChange += (newValue) => DispatchPropertyChanged("IsNightValueActive");
+            IsCustomerNumberFocused = new ViewProperty<bool>("IsCustomerNumberFocused", this);
+            IsEmailFocused = new ViewProperty<bool>("IsEmailFocused", this);
+            IsPaymentEnable = new ViewProperty<bool>("IsPaymentEnable", this);
+            IsNormative = new ViewProperty<bool>("IsNormative", this);
+            IsDayValueActive = new ViewProperty<bool>("IsDayValueActive", this);
+            IsNightValueActive = new ViewProperty<bool>("IsNightValueActive", this);
 
             FindCustomerCommand = new Command(FindCustomerHandler);
             PayCommand = new Command(PayHandler);

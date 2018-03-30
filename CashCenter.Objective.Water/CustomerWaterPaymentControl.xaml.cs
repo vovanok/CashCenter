@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace CashCenter.IvEnergySales
+namespace CashCenter.Objective.Water
 {
     public partial class CustomerWaterPaymentControl : UserControl
     {

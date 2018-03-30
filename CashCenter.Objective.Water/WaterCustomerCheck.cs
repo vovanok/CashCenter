@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CashCenter.Common;
 
-namespace CashCenter.IvEnergySales.Check
+namespace CashCenter.Objective.Water
 {
     public class WaterCustomerCheck : CashCenter.Check.Check
     {

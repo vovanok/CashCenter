@@ -127,27 +127,16 @@
     <Compile Include="BusinessLogicControls\ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControlViewModel.cs" />
     <Compile Include="BusinessLogicControls\GarbageAndRepairPaymentControl.xaml.cs">
       <DependentUpon>GarbageAndRepairPaymentControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="BusinessLogicControls\GarbageAndRepairPaymentControlViewModel.cs" />
-    <Compile Include="BusinessLogic\EnergyCustomerSalesContext.cs" />
     <Compile Include="BusinessLogic\GarbageAndRepairPaymentContext.cs" />
     <Compile Include="BusinessLogic\GarbagePaymentContext.cs" />
     <Compile Include="BusinessLogic\RepairPaymentContext.cs" />
-    <Compile Include="BusinessLogic\WaterCustomerSalesContext.cs" />
     <Compile Include="Check\ArticleSaleCheck.cs" />
     <Compile Include="Check\GarbageCheck.cs" />
     <Compile Include="Check\RepairCheck.cs" />
-    <Compile Include="Check\WaterCustomerCheck.cs" />
-    <Compile Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml.cs">
-      <DependentUpon>CustomerEnergyPaymentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BusinessLogicControls\CustomerWaterPaymentControl.xaml.cs">
-      <DependentUpon>CustomerWaterPaymentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BusinessLogicControls\CustomerWaterPaymentControlViewModel.cs" />
     <Compile Include="DataMigrationControls\CustomerPaymentsExportViewModel.cs" />
     <Compile Include="DataMigrationControls\ExportTargetItem.cs" />
     <Compile Include="DataMigrationControls\CustomerDbfImportControl.xaml.cs">
@@ -162,23 +151,12 @@
     <Compile Include="Service\DataMigrationDialog.xaml.cs">
       <DependentUpon>DataMigrationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CommonControls\DepartmentSelectorControl.xaml.cs">
-      <DependentUpon>DepartmentSelectorControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\DataMigrationViewModel.cs" />
     <Compile Include="Service\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\SettingsDialogViewModel.cs" />
     <Page Include="BusinessLogicControls\ArticlesControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BusinessLogicControls\CustomerEnergyPaymentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BusinessLogicControls\CustomerWaterPaymentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,10 +176,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CommonControls\DepartmentSelectorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -210,7 +184,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Check\EnergyCustomerCheck.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -267,9 +240,17 @@
       <Project>{58c88a18-f291-4997-a9c8-dc5fa1e04c34}</Project>
       <Name>CashCenter.Objective.DocumentsReceipt</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Objective.Energy\CashCenter.Objective.Energy.csproj">
+      <Project>{d3a32992-efa2-49ca-9ad2-6021172bc80e}</Project>
+      <Name>CashCenter.Objective.Energy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CashCenter.Objective.HotWater\CashCenter.Objective.HotWater.csproj">
       <Project>{129cc922-fb67-4156-9d8d-860fa9735cf4}</Project>
       <Name>CashCenter.Objective.HotWater</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CashCenter.Objective.Water\CashCenter.Objective.Water.csproj">
+      <Project>{e233356b-f5ee-4485-a821-f3a483b29d00}</Project>
+      <Name>CashCenter.Objective.Water</Name>
     </ProjectReference>
     <ProjectReference Include="..\CashCenter.ViewCommon\CashCenter.ViewCommon.csproj">
       <Project>{3a1b9fd8-935d-4c92-bb07-c435c54f7b27}</Project>

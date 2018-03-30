@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Windows;
 using CashCenter.Dal;
-using CashCenter.IvEnergySales.BusinessLogic;
-using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.ViewCommon;
+using CashCenter.Check;
 
-namespace CashCenter.IvEnergySales
+namespace CashCenter.Objective.Water
 {
     public class CustomerWaterPaymentControlViewModel : ViewModel
     {
         private WaterCustomerSalesContext context = new WaterCustomerSalesContext();
 
-        public Observed<bool> IsCustomerNumberFocused { get; } = new Observed<bool>();
-        public Observed<bool> IsEmailFocused { get; } = new Observed<bool>();
-        public Observed<uint> CustomerNumber { get; } = new Observed<uint>();
-        public Observed<string> CustomerName { get; } = new Observed<string>();
-        public Observed<string> CustomerAddress { get; } = new Observed<string>();
-        public Observed<string> CustomerEmail { get; } = new Observed<string>();
+        public ViewProperty<bool> IsCustomerNumberFocused { get; }
+        public ViewProperty<bool> IsEmailFocused { get; }
+        public ViewProperty<uint> CustomerNumber { get; }
+        public ViewProperty<string> CustomerName { get; }
+        public ViewProperty<string> CustomerAddress { get; }
+        public ViewProperty<string> CustomerEmail { get; }
 
-        public Observed<string> Counter1Number { get; } = new Observed<string>();
-        public Observed<string> Counter2Number { get; } = new Observed<string>();
-        public Observed<string> Counter3Number { get; } = new Observed<string>();
-        public Observed<string> Counter4Number { get; } = new Observed<string>();
+        public ViewProperty<string> Counter1Number { get; }
+        public ViewProperty<string> Counter2Number { get; }
+        public ViewProperty<string> Counter3Number { get; }
+        public ViewProperty<string> Counter4Number { get; }
 
-        public Observed<double> Counter1Value { get; } = new Observed<double>();
-        public Observed<double> Counter2Value { get; } = new Observed<double>();
-        public Observed<double> Counter3Value { get; } = new Observed<double>();
-        public Observed<double> Counter4Value { get; } = new Observed<double>();
+        public ViewProperty<double> Counter1Value { get; }
+        public ViewProperty<double> Counter2Value { get; }
+        public ViewProperty<double> Counter3Value { get; }
+        public ViewProperty<double> Counter4Value { get; }
 
-        public Observed<decimal> Penalty { get; } = new Observed<decimal>();
-        public Observed<decimal> Cost { get; } = new Observed<decimal>();
-        public Observed<decimal> TotalCost { get; } = new Observed<decimal>();
-        public Observed<string> Description { get; } = new Observed<string>();
-        public Observed<bool> IsPaymentEnable { get; } = new Observed<bool>();
+        public ViewProperty<decimal> Penalty { get; }
+        public ViewProperty<decimal> Cost { get; }
+        public ViewProperty<decimal> TotalCost { get; }
+        public ViewProperty<string> Description { get; }
+        public ViewProperty<bool> IsPaymentEnable { get; }
 
         public float СommissionPercent
         {
@@ -47,38 +46,32 @@ namespace CashCenter.IvEnergySales
 
         public CustomerWaterPaymentControlViewModel()
         {
-            IsCustomerNumberFocused.OnChange += (newValue) => DispatchPropertyChanged("IsCustomerNumberFocused");
-            IsEmailFocused.OnChange += (newValue) => DispatchPropertyChanged("IsEmailFocused");
-            CustomerNumber.OnChange += (newValue) => DispatchPropertyChanged("CustomerNumber");
-            CustomerName.OnChange += (newValue) => DispatchPropertyChanged("CustomerName");
-            CustomerAddress.OnChange += (newValue) => DispatchPropertyChanged("CustomerAddress");
-            CustomerEmail.OnChange += (newValue) => DispatchPropertyChanged("CustomerEmail");
+            IsCustomerNumberFocused = new ViewProperty<bool>("IsCustomerNumberFocused", this);
+            IsEmailFocused = new ViewProperty<bool>("IsEmailFocused", this);
+            CustomerNumber = new ViewProperty<uint>("CustomerNumber", this);
+            CustomerName = new ViewProperty<string>("CustomerName", this);
+            CustomerAddress = new ViewProperty<string>("CustomerAddress", this);
+            CustomerEmail = new ViewProperty<string>("CustomerEmail", this);
 
-            Counter1Number.OnChange += (newValue) => DispatchPropertyChanged("Counter1Number");
-            Counter2Number.OnChange += (newValue) => DispatchPropertyChanged("Counter2Number");
-            Counter3Number.OnChange += (newValue) => DispatchPropertyChanged("Counter3Number");
-            Counter4Number.OnChange += (newValue) => DispatchPropertyChanged("Counter4Number");
+            Counter1Number = new ViewProperty<string>("Counter1Number", this);
+            Counter2Number = new ViewProperty<string>("Counter2Number", this);
+            Counter3Number = new ViewProperty<string>("Counter3Number", this);
+            Counter4Number = new ViewProperty<string>("Counter4Number", this);
 
-            Counter1Value.OnChange += (newValue) => DispatchPropertyChanged("Counter1Value");
-            Counter2Value.OnChange += (newValue) => DispatchPropertyChanged("Counter2Value");
-            Counter3Value.OnChange += (newValue) => DispatchPropertyChanged("Counter3Value");
-            Counter4Value.OnChange += (newValue) => DispatchPropertyChanged("Counter4Value");
+            Counter1Value = new ViewProperty<double>("Counter1Value", this);
+            Counter2Value = new ViewProperty<double>("Counter2Value", this);
+            Counter3Value = new ViewProperty<double>("Counter3Value", this);
+            Counter4Value = new ViewProperty<double>("Counter4Value", this);
 
-            Penalty.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("Penalty");
-                UpdateTotalCost();
-            };
+            Penalty = new ViewProperty<decimal>("Penalty", this);
+            Penalty.OnChange += (newValue) => UpdateTotalCost();
 
-            Cost.OnChange += (newValue) =>
-            {
-                DispatchPropertyChanged("Cost");
-                UpdateTotalCost();
-            };
+            Cost = new ViewProperty<decimal>("Cost", this);
+            Cost.OnChange += (newValue) => UpdateTotalCost();
 
-            TotalCost.OnChange += (newValue) => DispatchPropertyChanged("TotalCost");
-            Description.OnChange += (newValue) => DispatchPropertyChanged("Description");
-            IsPaymentEnable.OnChange += (newValue) => DispatchPropertyChanged("IsPaymentEnable");
+            TotalCost = new ViewProperty<decimal>("TotalCost", this);
+            Description = new ViewProperty<string>("Description", this);
+            IsPaymentEnable = new ViewProperty<bool>("IsPaymentEnable", this);
 
             GlobalEvents.OnWaterComissionPercentChanged += () =>
             {

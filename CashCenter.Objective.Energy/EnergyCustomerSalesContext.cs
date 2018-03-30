@@ -5,10 +5,9 @@ using CashCenter.Dal;
 using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
-using CashCenter.IvEnergySales.Check;
 using CashCenter.ViewCommon;
 
-namespace CashCenter.IvEnergySales.BusinessLogic
+namespace CashCenter.Objective.Energy
 {
     public class EnergyCustomerSalesContext
     {

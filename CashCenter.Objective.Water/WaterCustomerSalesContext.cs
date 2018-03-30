@@ -6,9 +6,8 @@ using CashCenter.Check;
 using CashCenter.Common;
 using CashCenter.Common.Exceptions;
 using CashCenter.ViewCommon;
-using CashCenter.IvEnergySales.Check;
 
-namespace CashCenter.IvEnergySales.BusinessLogic
+namespace CashCenter.Objective.Water
 {
     public class WaterCustomerSalesContext
     {

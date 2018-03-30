@@ -6,9 +6,8 @@ using System.Windows.Media;
 using System.ComponentModel;
 using CashCenter.Dal;
 using CashCenter.Common;
-using CashCenter.ViewCommon;
 
-namespace CashCenter.IvEnergySales
+namespace CashCenter.ViewCommon.Controls
 {
     public partial class DepartmentSelectorControl : UserControl
     {

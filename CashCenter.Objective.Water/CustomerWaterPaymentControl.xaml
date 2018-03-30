@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="CashCenter.IvEnergySales.CustomerWaterPaymentControl"
+﻿<UserControl x:Class="CashCenter.Objective.Water.CustomerWaterPaymentControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales"
+             xmlns:local="clr-namespace:CashCenter.Objective.Water"
              xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
              xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon;assembly=CashCenter.ViewCommon"
              mc:Ignorable="d" 
@@ -25,7 +25,7 @@
         <converters:FractionalNumberConverter x:Key="FractionalNumberConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
-        <ivenergysales:CustomerWaterPaymentControlViewModel />
+        <local:CustomerWaterPaymentControlViewModel />
     </UserControl.DataContext>
     <StackPanel>
         <GroupBox Header="Лицевой счет" Height="150">

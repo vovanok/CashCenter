@@ -1,11 +1,12 @@
-﻿<UserControl x:Class="CashCenter.IvEnergySales.CustomerEnergyPaymentControl"
+﻿<UserControl x:Class="CashCenter.Objective.Energy.CustomerEnergyPaymentControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ivenergysales="clr-namespace:CashCenter.IvEnergySales"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewCommon="clr-namespace:CashCenter.ViewCommon;assembly=CashCenter.ViewCommon"
+             xmlns:viewCommonControls="clr-namespace:CashCenter.ViewCommon.Controls;assembly=CashCenter.ViewCommon"
              xmlns:converters="clr-namespace:CashCenter.ViewCommon.Converters;assembly=CashCenter.ViewCommon"
+             xmlns:local="clr-namespace:CashCenter.Objective.Energy"
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="Label" x:Key="PropertyLabel">
@@ -26,7 +27,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
-        <ivenergysales:CustomerEnergyPaymentControlViewModel />
+        <local:CustomerEnergyPaymentControlViewModel />
     </UserControl.DataContext>
     <StackPanel>
         <GroupBox Header="Лицевой счет" Height="237">
@@ -46,7 +47,7 @@
                 </Grid.RowDefinitions>
 
                 <Label Content="Отделение" Style="{StaticResource PropertyLabel}"/>
-                <ivenergysales:DepartmentSelectorControl SelectedDepartment="{Binding SelectedDepartment.Value, Mode=TwoWay}" Grid.Column="1"/>
+                <viewCommonControls:DepartmentSelectorControl SelectedDepartment="{Binding SelectedDepartment.Value, Mode=TwoWay}" Grid.Column="1"/>
 
                 <Label Content="Номер лицевого счета" Grid.Row="1" Style="{StaticResource PropertyLabel}"/>
                 <Grid Grid.Column="1" Grid.Row="1">
