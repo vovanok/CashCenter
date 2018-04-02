@@ -75,8 +75,6 @@
     <Compile Include="Articles\ArticleSalesWordExporter.cs" />
     <Compile Include="Articles\ArticlesCountsDbfImporter.cs" />
     <Compile Include="Articles\ArticlesDbfImporter.cs" />
-    <Compile Include="Dbf\Dbf.cs" />
-    <Compile Include="Dbf\DbfAttributes.cs" />
     <Compile Include="EnergyCustomers\EnergyPaymentsGisHusExporter.cs" />
     <Compile Include="GarbageAndRepair\GarbageCollectionPaymentsDbfExporter.cs" />
     <Compile Include="GarbageAndRepair\RepairPaymentsDbfExporter.cs" />

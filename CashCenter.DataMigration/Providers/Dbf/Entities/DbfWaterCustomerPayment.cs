@@ -1,59 +1,25 @@
 ﻿using System;
-using CashCenter.DataMigration.Dbf;
 
 namespace CashCenter.DataMigration.Providers.Dbf.Entities
 {
     public class DbfWaterCustomerPayment
     {
-        [DateDbfColumn("DATE", "dd.MM.yyyy")]
         public DateTime CreationDate { get; private set; }
-
-        [CharacterDbfColumn("SCHET", 12)]
         public int CustomerNumber { get; private set; }
-
-        [NumericDbfColumn("SUMZACH")]
         public decimal Cost { get; private set; }
-
-        [CharacterDbfColumn("PER_OPL", 6)]
         public string PeriodCode { get; private set; }
-
-        [NumericDbfColumn("PENI")]
         public decimal Penalty { get; private set; }
-
-        [CharacterDbfColumn("N_SCHET1", 13)]
         public string CounterNumber1 { get; private set; }
-
-        [NumericDbfColumn("SUM_SH1")]
         public decimal CounterCost1 { get; private set; }
-
-        [NumericDbfColumn("ZN1")]
         public double CounterValue1 { get; private set; }
-
-        [CharacterDbfColumn("N_SCHET2")]
         public string CounterNumber2 { get; private set; }
-
-        [NumericDbfColumn("SUM_SH2")]
         public decimal CounterCost2 { get; private set; }
-
-        [NumericDbfColumn("ZN2")]
         public double CounterValue2 { get; private set; }
-
-        [CharacterDbfColumn("N_SCHET3")]
         public string CounterNumber3 { get; private set; }
-
-        [NumericDbfColumn("SUM_SH3")]
         public decimal CounterCost3 { get; private set; }
-
-        [NumericDbfColumn("ZN3")]
         public double CounterValue3 { get; private set; }
-
-        [CharacterDbfColumn("N_SCHET4")]
         public string CounterNumber4 { get; private set; }
-
-        [NumericDbfColumn("SUM_SH4")]
         public decimal CounterCost4 { get; private set; }
-
-        [NumericDbfColumn("ZN4")]
         public double CounterValue4 { get; private set; }
 
         public DbfWaterCustomerPayment()
