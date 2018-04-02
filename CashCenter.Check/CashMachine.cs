@@ -124,13 +124,6 @@ namespace CashCenter.Check
 			if (Driver == null)
 				return;
 
-            if (DateTime.Now > Config.DeathDate)
-            {
-                Driver.StringForPrinting = "ОШИБКА";
-                Driver.PrintString();
-                return;
-            }
-
             Driver.StringForPrinting = encoder.EncodeString(line);
 			Driver.PrintString();
 

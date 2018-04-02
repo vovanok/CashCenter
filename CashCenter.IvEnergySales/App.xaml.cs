@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Threading;
 using CashCenter.Common;
 using CashCenter.ViewCommon;
@@ -14,9 +13,6 @@ namespace CashCenter.IvEnergySales
 
             DispatcherUnhandledException += App_DispatcherUnhandledException;
             Exit += App_Exit;
-
-            if (DateTime.Now > Config.DeathDate)
-                throw new Exception();
         }
 
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

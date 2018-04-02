@@ -19,11 +19,11 @@ namespace CashCenter.IvEnergySales
         public Command Settings { get; }
         public Command DataMigration { get; }
 
-        public bool IsWaterPaymentVisible { get { return Config.IsShowWaterPayments && !(DateTime.Now > Config.DeathDate); } }
-        public bool IsArticlesVisible { get { return Config.IsShowArticles && !(DateTime.Now > Config.DeathDate); } }
-        public bool IsGarbageCollectionVisible { get { return Config.IsShowGarbageCollection && !(DateTime.Now > Config.DeathDate); } }
-        public bool IsHotWaterVisible { get { return Config.IsShowHotWater && !(DateTime.Now > Config.DeathDate); } }
-        public bool IsDocumentReceiptVisible { get { return Config.IsShowDocumentReceipt && !(DateTime.Now > Config.DeathDate); } }
+        public bool IsWaterPaymentVisible => Config.IsShowWaterPayments;
+        public bool IsArticlesVisible => Config.IsShowArticles;
+        public bool IsGarbageCollectionVisible => Config.IsShowGarbageCollection;
+        public bool IsHotWaterVisible => Config.IsShowHotWater;
+        public bool IsDocumentReceiptVisible => Config.IsShowDocumentReceipt;
 
         public MainWindowViewModel()
         {
