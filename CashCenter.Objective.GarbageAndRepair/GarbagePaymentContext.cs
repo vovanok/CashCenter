@@ -24,7 +24,7 @@ namespace CashCenter.Objective.GarbageAndRepair
                 CommissionValue = Utils.GetCommission(cost, Settings.GarbageCollectionCommissionPercent)
             };
 
-            DalController.Instance.AddGarbageCollectionPayment(payment);
+            RepositoriesFactory.Get<GarbageCollectionPayment>().Add(payment);
         }
 
         public override CashCenter.Check.Check GetCheck(int customerNumber, decimal costWithoutCommission, decimal commissionValue, decimal cost)

@@ -13,7 +13,7 @@ namespace CashCenter.DataMigration.WaterCustomers
     {
         protected override List<WaterCustomerPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            return DalController.Instance.WaterCustomerPayments.Where(waterCustomerPayment =>
+            return RepositoriesFactory.Get<WaterCustomerPayment>().Filter(waterCustomerPayment =>
                 beginDatetime <= waterCustomerPayment.CreateDate && waterCustomerPayment.CreateDate <= endDatetime).ToList();
         }
 

@@ -19,17 +19,17 @@ namespace CashCenter.DataMigration.AllPayments
             return new List<AllPaymentsContainer>
             {
                 new AllPaymentsContainer(
-                    DalController.Instance.EnergyCustomerPayments.Where(customerPayment =>
+                    RepositoriesFactory.Get<EnergyCustomerPayment>().Filter(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
-                    DalController.Instance.WaterCustomerPayments.Where(customerPayment =>
+                    RepositoriesFactory.Get<WaterCustomerPayment>().Filter(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
-                    DalController.Instance.ArticleSales.Where(customerPayment =>
+                    RepositoriesFactory.Get<ArticleSale>().Filter(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
-                    DalController.Instance.GarbageCollectionPayments.Where(customerPayment =>
+                    RepositoriesFactory.Get<GarbageCollectionPayment>().Filter(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
-                    DalController.Instance.RepairPayments.Where(customerPayment =>
+                    RepositoriesFactory.Get<RepairPayment>().Filter(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList(),
-                    db.HotWaterPayments.Where(customerPayment =>
+                    RepositoriesFactory.Get<HotWaterPayment>().Filter(customerPayment =>
                         beginDatetime <= customerPayment.CreateDate && customerPayment.CreateDate <= endDatetime).ToList())
             };
         }

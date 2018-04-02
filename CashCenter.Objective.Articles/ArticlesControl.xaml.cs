@@ -54,7 +54,7 @@ namespace CashCenter.Objective.Articles
         {
             if (Settings.ArticlesManipulatorType == ManipulatorType.Local)
             {
-                articleManipulator = DalController.Instance;
+                articleManipulator = new EfArticlesManipulator();
             }
             else if (Settings.ArticlesManipulatorType == ManipulatorType.Zeus)
             {

@@ -41,7 +41,7 @@ namespace CashCenter.ViewCommon.Controls
 
             try
             {
-                Region = DalController.Instance.Regions.FirstOrDefault(region => region.Id == Config.CurrentRegionId);
+                Region = RepositoriesFactory.Get<Region>().Get(region => region.Id == Config.CurrentRegionId);
                 if (Region != null)
                 {
                     lblRegionName.Content = Region.Name ?? string.Empty;

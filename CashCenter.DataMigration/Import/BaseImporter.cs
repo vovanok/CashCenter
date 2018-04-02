@@ -36,7 +36,6 @@ namespace CashCenter.DataMigration.Import
             var addedCount = itemsForCreation.Count;
 
             CreateNewItems(itemsForCreation);
-            DalController.Instance.Save();
 
             return new ImportResult(addedCount, updatedCount, deletedCount);
         }

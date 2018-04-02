@@ -83,8 +83,8 @@ namespace CashCenter.IvEnergySales.Service
             EnergyReceiverBankBik.Value = Settings.EnergyReceiverBankBik;
             EnergyReceiverAccount.Value = Settings.EnergyReceiverAccount;
 
-            Deparments = DalController.Instance.Departments
-                .Where(department => department.RegionId == Config.CurrentRegionId).ToList();
+            Deparments = RepositoriesFactory.Get<Department>().Filter(
+                department => department.RegionId == Config.CurrentRegionId).ToList();
 
             SaveCommand = new Command(SaveHandler);
             CloseCommand = new Command(CloseHandler);
@@ -230,7 +230,6 @@ namespace CashCenter.IvEnergySales.Service
             GlobalEvents.DispatchWaterComissionPercentChanged();
             GlobalEvents.DispatchHotWaterComissionPercentChanged();
 
-            DalController.Instance.Save();
             GlobalEvents.DispatchDepartmentsChanged();
 
             var window = parameters as Window;
@@ -258,7 +257,7 @@ namespace CashCenter.IvEnergySales.Service
         
         private void CloseHandler(object data)
         {
-            DalController.Instance.DetachDepartmentsChanges();
+            RepositoriesFactory.Get<Department>().RollbackItemsChanges();
 
             var window = data as Window;
             if (window != null)

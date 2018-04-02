@@ -10,13 +10,13 @@ namespace CashCenter.DataMigration.WaterCustomers
     {
         protected override void CreateNewItems(IEnumerable<WaterCustomer> waterCustomers)
         {
-            DalController.Instance.AddWaterCustomersRange(waterCustomers);
+            RepositoriesFactory.Get<WaterCustomer>().AddRange(waterCustomers);
         }
 
         protected override int DeleteAllTargetItems()
         {
             int count = 0;
-            foreach(var waterCustomer in DalController.Instance.WaterCustomers)
+            foreach(var waterCustomer in RepositoriesFactory.Get<WaterCustomer>().GetAll())
             {
                 waterCustomer.IsActive = false;
                 count++;
@@ -51,7 +51,7 @@ namespace CashCenter.DataMigration.WaterCustomers
 
         protected override bool TryUpdateExistingItem(DbfWaterCustomer dbfWaterCustomer)
         {
-            var existingWaterCustomer = DalController.Instance.WaterCustomers.FirstOrDefault(waterCustomer =>
+            var existingWaterCustomer = RepositoriesFactory.Get<WaterCustomer>().Get(waterCustomer =>
                 waterCustomer.Number == dbfWaterCustomer.Number);
 
             if (existingWaterCustomer == null)

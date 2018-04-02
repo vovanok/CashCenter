@@ -37,7 +37,7 @@ namespace CashCenter.Objective.Energy
         public ViewProperty<bool> IsDayValueActive { get; }
         public ViewProperty<bool> IsNightValueActive { get; }
 
-        public List<PaymentReason> PaymentReasons { get; } = DalController.Instance.PaymentReasons.ToList();
+        public List<PaymentReason> PaymentReasons { get; } = RepositoriesFactory.Get<PaymentReason>().GetAll().ToList();
 
         public Command FindCustomerCommand { get; }
         public Command PayCommand { get; }

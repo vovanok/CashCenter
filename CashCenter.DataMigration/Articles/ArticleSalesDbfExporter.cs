@@ -13,7 +13,7 @@ namespace CashCenter.DataMigration.Articles
     {
         protected override List<ArticleSale> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            return DalController.Instance.ArticleSales.Where(articleSale =>
+            return RepositoriesFactory.Get<ArticleSale>().Filter(articleSale =>
                 beginDatetime <= articleSale.CreateDate && articleSale.CreateDate <= endDatetime).ToList();
         }
 

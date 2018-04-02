@@ -13,7 +13,7 @@ namespace CashCenter.DataMigration.GarbageAndRepair
     {
         protected override List<GarbageCollectionPayment> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            return DalController.Instance.GarbageCollectionPayments.Where(garbagePayment =>
+            return RepositoriesFactory.Get<GarbageCollectionPayment>().Filter(garbagePayment =>
                 beginDatetime <= garbagePayment.CreateDate && garbagePayment.CreateDate <= endDatetime).ToList();
         }
 

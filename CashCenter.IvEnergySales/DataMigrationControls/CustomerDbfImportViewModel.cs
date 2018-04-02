@@ -25,7 +25,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
                 new ImportTargetItem("Потребители горячей воды из TXT", new HotWaterCustomerTxtImporter(), false, false, false)
             };
 
-        public List<ArticlePriceType> ArticlePriceTypes { get; } = DalController.Instance.ArticlePriceTypes.ToList();
+        public List<ArticlePriceType> ArticlePriceTypes { get; } = RepositoriesFactory.Get<ArticlePriceType>().GetAll().ToList();
 
         public Observed<ImportTargetItem> SelectedImportTarget { get; } = new Observed<ImportTargetItem>();
         public Observed<string> DbfFilename { get; } = new Observed<string>();
@@ -46,7 +46,7 @@ namespace CashCenter.IvEnergySales.DataMigrationControls
             ImportCommand = new Command(DoImport);
 
             SelectedImportTarget.Value = ImportTargets.FirstOrDefault();
-            SelectedArticlePriceType.Value = DalController.Instance.ArticlePriceTypes.FirstOrDefault();
+            SelectedArticlePriceType.Value = RepositoriesFactory.Get<ArticlePriceType>().Get(item => true);
         }
 
         private void DoImport(object parameters)

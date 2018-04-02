@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using CashCenter.Common;
 using CashCenter.Dal;
+using CashCenter.Common;
 using CashCenter.DataMigration.Providers.Dbf;
 using CashCenter.DataMigration.Providers.Dbf.Entities;
 
@@ -13,7 +13,7 @@ namespace CashCenter.DataMigration.Articles
     {
         protected override List<ArticleSale> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            return DalController.Instance.ArticleSales.Where(articleSale =>
+            return RepositoriesFactory.Get<ArticleSale>().Filter(articleSale =>
                 beginDatetime <= articleSale.CreateDate && articleSale.CreateDate <= endDatetime).ToList();
         }
 

@@ -48,6 +48,7 @@
     <Compile Include="ArticlesControl.xaml.cs">
       <DependentUpon>ArticlesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EfArticlesManipulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

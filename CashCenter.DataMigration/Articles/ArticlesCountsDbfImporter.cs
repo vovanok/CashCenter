@@ -36,7 +36,7 @@ namespace CashCenter.DataMigration.Articles
 
         protected override bool TryUpdateExistingItem(DbfArticleQuantity dbfArticleQuantity)
         {
-            var existingArticle = DalController.Instance.Articles.FirstOrDefault(article =>
+            var existingArticle = RepositoriesFactory.Get<Article>().Get(article =>
                 article.Code == dbfArticleQuantity.ArticleCode);
 
             if (existingArticle == null)

@@ -27,7 +27,7 @@ namespace CashCenter.Objective.Energy
             var operationName = $"Поиск плательщика за электроэнергию {number}, отделение \"{department.Code} {department.Name}\"";
             Log.Info($"Запуск -> {operationName}");
 
-            var potencialCustomers = DalController.Instance.EnergyCustomers.Where(customer => customer.Number == number && customer.IsActive);
+            var potencialCustomers = RepositoriesFactory.Get<EnergyCustomer>().Filter(customer => customer.Number == number && customer.IsActive);
 
             Customer.Value = potencialCustomers.FirstOrDefault(customer => customer.Department.Id == department.Id)
                 ?? potencialCustomers.FirstOrDefault(customer => customer.Department.Code == department.Code);
@@ -77,7 +77,7 @@ namespace CashCenter.Objective.Energy
             {
                 Log.Info($"Изменение email плательщика за электроэнергию с {Customer.Value.Email} на {email}");
                 Customer.Value.Email = email;
-                DalController.Instance.Save();
+                RepositoriesFactory.Get<EnergyCustomer>().Update(Customer.Value);
             }
 
             var operationName = $"Платеж за электроэнергию: email={email}, dayValue={dayValue}; nightValue={nightValue}; cost={cost}; paymentReason={paymentReason.Name}; description={description}, isWithoutCheck={isWithoutCheck}";
@@ -97,7 +97,7 @@ namespace CashCenter.Objective.Energy
                     FiscalNumber = 0 // TODO: Fill fiscal
                 };
 
-                DalController.Instance.AddEnergyCustomerPayment(payment);
+                RepositoriesFactory.Get<EnergyCustomerPayment>().Add(payment);
 
                 Log.Info($"Успешно завершено -> {operationName}");
             }

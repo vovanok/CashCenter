@@ -14,16 +14,16 @@ namespace CashCenter.DataMigration.WaterAndEnergyCustomers
     {
         protected override List<CommonPaymentsDataSource> GetSourceItems(DateTime beginDatetime, DateTime endDatetime)
         {
-            var waterCustomersPayments = DalController.Instance.WaterCustomerPayments.Where(waterCustomerPayment =>
+            var waterCustomersPayments = RepositoriesFactory.Get<WaterCustomerPayment>().Filter(waterCustomerPayment =>
                 beginDatetime <= waterCustomerPayment.CreateDate && waterCustomerPayment.CreateDate <= endDatetime).ToList();
 
-            var energyCustomersPayments = DalController.Instance.EnergyCustomerPayments.Where(energyCustomerPayment =>
+            var energyCustomersPayments = RepositoriesFactory.Get<EnergyCustomerPayment>().Filter(energyCustomerPayment =>
                 beginDatetime <= energyCustomerPayment.CreateDate && energyCustomerPayment.CreateDate <= endDatetime).ToList();
 
-            var garbagePayments = DalController.Instance.GarbageCollectionPayments.Where(garbagePayment =>
+            var garbagePayments = RepositoriesFactory.Get<GarbageCollectionPayment>().Filter(garbagePayment =>
                 beginDatetime <= garbagePayment.CreateDate && garbagePayment.CreateDate <= endDatetime).ToList();
 
-            var repairPayments = DalController.Instance.RepairPayments.Where(repairPayment =>
+            var repairPayments = RepositoriesFactory.Get<RepairPayment>().Filter(repairPayment =>
                 beginDatetime <= repairPayment.CreateDate && repairPayment.CreateDate <= endDatetime).ToList();
 
             var db = new CashCenterContext();

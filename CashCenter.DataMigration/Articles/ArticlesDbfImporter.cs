@@ -12,12 +12,12 @@ namespace CashCenter.DataMigration.Articles
 
         protected override void CreateNewItems(IEnumerable<Article> articles)
         {
-            DalController.Instance.AddArticleRange(articles);
+            RepositoriesFactory.Get<Article>().AddRange(articles);
         }
 
         protected override int DeleteAllTargetItems()
         {
-            var articlesForDelete = DalController.Instance.Articles.Where(article => article.IsActive).ToList();
+            var articlesForDelete = RepositoriesFactory.Get<Article>().Filter(article => article.IsActive).ToList();
             foreach (var article in articlesForDelete)
             {
                 article.IsActive = false;
@@ -60,9 +60,7 @@ namespace CashCenter.DataMigration.Articles
 
         protected override bool TryUpdateExistingItem(DbfArticle dbfArticle)
         {
-            var existingArticle = DalController.Instance.Articles.FirstOrDefault(article =>
-                article.Code == dbfArticle.Code);
-
+            var existingArticle = RepositoriesFactory.Get<Article>().Get(article => article.Code == dbfArticle.Code);
             if (existingArticle == null)
                 return false;
 

@@ -24,7 +24,7 @@ namespace CashCenter.Objective.Water
             var operationName = $"Поиск плательщика за воду {number}";
             Log.Info($"Запуск -> {operationName}");
 
-            Customer.Value = DalController.Instance.WaterCustomers.FirstOrDefault(waterCustomer => waterCustomer.Number == number);
+            Customer.Value = RepositoriesFactory.Get<WaterCustomer>().Get(waterCustomer => waterCustomer.Number == number);
 
             if (Customer.Value == null)
                 Log.Info($"Не найдено -> {operationName}");
@@ -77,7 +77,7 @@ namespace CashCenter.Objective.Water
             {
                 Log.Info($"Изменение email плательщика за воду с {Customer.Value.Email} на {email}");
                 Customer.Value.Email = email;
-                DalController.Instance.Save();
+                RepositoriesFactory.Get<WaterCustomer>().Update(Customer.Value);
             }
 
             var operationName = $"Платеж за воду: email={email}, counter1Value={counter1Value}, counter2Value={counter2Value}, counter3Value={counter3Value}, counter4Value={counter4Value}, penalty={penalty}, cost={cost}, description={description}, isWithoutCheck={isWithoutCheck}";
@@ -105,7 +105,7 @@ namespace CashCenter.Objective.Water
                     CommissionValue = commissionValue
                 };
 
-                DalController.Instance.AddWaterCustomerPayment(payment);
+                RepositoriesFactory.Get<WaterCustomerPayment>().Add(payment);
 
                 Log.Info($"Успешно завершено -> {operationName}");
             }

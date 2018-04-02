@@ -116,6 +116,15 @@
     <Compile Include="HotWaterPayment.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RepositoriesFactory.cs" />
+    <Compile Include="Repositories\ArticlePriceRepository.cs" />
+    <Compile Include="Repositories\ArticlePriceTypeRepository.cs" />
+    <Compile Include="Repositories\ArticleRepository.cs" />
+    <Compile Include="Repositories\ArticleSaleRepository.cs" />
+    <Compile Include="Repositories\DepartmentRepository.cs" />
+    <Compile Include="Repositories\EnergyCustomerPaymentRepository.cs" />
+    <Compile Include="Repositories\EnergyCustomerRepository.cs" />
+    <Compile Include="Repositories\GarbageCollectionPaymentRepository.cs" />
     <Compile Include="PaymentReason.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
@@ -126,6 +135,13 @@
     <Compile Include="RepairPayment.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\HotWaterCustomerRepository.cs" />
+    <Compile Include="Repositories\HotWaterPaymentRepository.cs" />
+    <Compile Include="Repositories\PaymentReasonRepository.cs" />
+    <Compile Include="Repositories\BaseEfRepository.cs" />
+    <Compile Include="Repositories\RegionRepository.cs" />
+    <Compile Include="Repositories\RepairPaymentRepository.cs" />
+    <Compile Include="Repositories\WaterCustomerRepository.cs" />
     <Compile Include="WaterCustomer.cs">
       <DependentUpon>CashCenterModel.tt</DependentUpon>
     </Compile>
@@ -174,6 +190,7 @@
       <Name>CashCenter.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
