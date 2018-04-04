@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ChecksSet>
+  <Checks>
+    <Check id="EnergyCustomer" paySection="1">
+      <Lines>
+        <Line content="КАССОВЫЙ ЧЕК" align="Center"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="ПОЛУЧАТЕЛЬ ПЛАТЕЖА:" align="Left"/>
+        <Line content="ООО Рога и копыта" align="Left"/>
+        <Line content="ИНН 123456789" align="Left"/>
+        <Line content="КПП 123456789" align="Left"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Код отделения: {departmentCode}" align="Left"/>
+        <Line content="Лицевой счет: {customerNumber}" align="Left"/>
+        <Line content="ФИО: {customerName}" align="Left"/>
+        <Line content="Основание: {paymentReason}" align="Left"/>
+        <Line content="Кассир: {cashierName}" align="Left"/>
+        <Line content="ПРИХОД" align="Left"/>
+        <Line content="НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА" align="Left"/>
+        <Line content="ЭЛЕКТРОЭНЕРГИЯ" align="Left"/>
+      </Lines>
+    </Check>
+    <Check id="WaterCustomer" paySection="2">
+      <Lines>
+        <Line content="КАССОВЫЙ ЧЕК" align="Center"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="ПОЛУЧАТЕЛЬ ПЛАТЕЖА:" align="Left"/>
+        <Line content="ООО рога и копыта" align="Left"/>
+        <Line content="ИНН 123456789" align="Left"/>
+        <Line content="КПП 123456789" align="Left"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Лицевой счет: {customerNumber}" align="Left"/>
+        <Line content="ФИО: {customerName}" align="Left"/>
+        <Line content="Кассир: {cashierName}" align="Left"/>
+        <Line content="ПРИХОД" align="Left"/>
+        <Line content="НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА" align="Left"/>
+        <Line content="Горячая вода|{costWithoutComission}" align="LeftAndRight"/>
+        <Line content="Комиссия|{comissionValue}" align="LeftAndRight"/>
+      </Lines>
+    </Check>
+    <Check id="ArticleSale" paySection="3">
+      <Lines>
+        <Line content="КАССОВЫЙ ЧЕК" align="Center"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="ПОЛУЧАТЕЛЬ ПЛАТЕЖА:" align="Left"/>
+        <Line content="ООО Рога и копыта" align="Left"/>
+        <Line content="ИНН 123456789" align="Left"/>
+        <Line content="КПП 123456789" align="Left"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Кассир: {cashierName}" align="Left"/>
+        <Line content="ПРИХОД" align="Left"/>
+        <Line content="НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА" align="Left"/>
+        <Line content="{articleName}" align="Left"/>
+      </Lines>
+    </Check>
+    <Check id="Garbage" paySection="4">
+      <Lines>
+        <Line content="КАССОВЫЙ ЧЕК" align="Center"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="ПОЛУЧАТЕЛЬ ПЛАТЕЖА:" align="Left"/>
+        <Line content="ООО Рога и копыта" align="Left"/>
+        <Line content="ИНН 123456789" align="Left"/>
+        <Line content="КПП 123456789" align="Left"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Лицевой счет: {customerNumber}" align="Left"/>
+        <Line content="Кассир: {cashierName}" align="Left"/>
+        <Line content="ПРИХОД" align="Left"/>
+        <Line content="НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА" align="Left"/>
+        <Line content="Вывоз ТКО|{costWithoutComission}" align="LeftAndRight"/>
+        <Line content="Комиссия|{comissionValue}" align="LeftAndRight"/>
+      </Lines>
+    </Check>
+    <Check id="Repair" paySection="5">
+      <Lines>
+        <Line content="КАССОВЫЙ ЧЕК" align="Center"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="ПОЛУЧАТЕЛЬ ПЛАТЕЖА:" align="Left"/>
+        <Line content="ООО Рога и копыта" align="Left"/>
+        <Line content="ИНН 123456789" align="Left"/>
+        <Line content="КПП 123456789" align="Left"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Лицевой счет: {customerNumber}" align="Left"/>
+        <Line content="Кассир: {cashierName}" align="Left"/>
+        <Line content="ПРИХОД" align="Left"/>
+        <Line content="НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА" align="Left"/>
+        <Line content="Кап. ремонт|{costWithoutComission}" align="LeftAndRight"/>
+        <Line content="Комиссия|{comissionValue}" align="LeftAndRight"/>
+      </Lines>
+    </Check>
+    <Check id="HotWater" paySection="2">
+      <Lines>
+        <Line content="КАССОВЫЙ ЧЕК" align="Center"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="ПОЛУЧАТЕЛЬ ПЛАТЕЖА:" align="Left"/>
+        <Line content="ООО рога и копыта" align="Left"/>
+        <Line content="ИНН 123456789" align="Left"/>
+        <Line content="КПП 123456789" align="Left"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Адрес и телефон, адрес и телефон, адрес и телефон, адрес и телефон" align="Left"/>
+        <Line content="*" align="Repeated"/>
+        <Line content="Лицевой счет: {customerNumber}" align="Left"/>
+        <Line content="ФИО: {customerName}" align="Left"/>
+        <Line content="Кассир: {cashierName}" align="Left"/>
+        <Line content="ПРИХОД" align="Left"/>
+        <Line content="НАЛИЧНЫЕ ДЕНЕЖНЫЕ СРЕДСТВА" align="Left"/>
+        <Line content="Горячая вода|{total}" align="LeftAndRight"/>
+      </Lines>
+    </Check>
+  </Checks>
+</ChecksSet>
