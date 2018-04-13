@@ -1,0 +1,87 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CashCenter.IvEnergySales"
+        xmlns:hotwater="clr-namespace:CashCenter.Objective.HotWater;assembly=CashCenter.Objective.HotWater"
+        xmlns:documentsReceipt="clr-namespace:CashCenter.Objective.DocumentsReceipt;assembly=CashCenter.Objective.DocumentsReceipt"
+        xmlns:energy="clr-namespace:CashCenter.Objective.Energy;assembly=CashCenter.Objective.Energy"
+        xmlns:water="clr-namespace:CashCenter.Objective.Water;assembly=CashCenter.Objective.Water"
+        xmlns:articles="clr-namespace:CashCenter.Objective.Articles;assembly=CashCenter.Objective.Articles"
+        xmlns:garbageandrepair="clr-namespace:CashCenter.Objective.GarbageAndRepair;assembly=CashCenter.Objective.GarbageAndRepair"
+        x:Name="Main" x:Class="CashCenter.IvEnergySales.MainWindow"
+        mc:Ignorable="d"
+        Title="{Binding Path=Version, StringFormat=CashCenter ({0})}"
+        SizeToContent="Height" Width="560" MinWidth="560" MaxWidth="500" Icon="Content/icon.ico"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+    <StackPanel>
+        <Menu>
+            <MenuItem Header="ККМ" VerticalContentAlignment="Center">
+                <MenuItem Header="Настройки" Command="{Binding CashMachineSettings}"/>
+                <Separator/>
+                <MenuItem Header="Аннулировать чек" Command="{Binding CashMachineCancelCheck}"/>
+                <MenuItem Header="Адм. отмена чека" Command="{Binding CashMachineSysAdminCancelCheck}"/>
+                <MenuItem Header="Закрыть сессию" Command="{Binding CashMachineCloseSession}"/>
+            </MenuItem>
+            <MenuItem Header="Настройки" Command="{Binding Settings}"/>
+            <MenuItem Header="Импорт/экспорт" Command="{Binding DataMigration}"/>
+        </Menu>
+        <TabControl TabStripPlacement="Left">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel>
+                        <Image Width="40" Source="Content/energy.ico" Margin="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <energy:CustomerEnergyPaymentControl x:Name="customerControl"/>
+            </TabItem>
+            <TabItem Visibility="{Binding IsWaterPaymentVisible, Converter={StaticResource BoolToVisibility}}">
+                <TabItem.Header>
+                    <StackPanel>
+                        <Image Width="40" Source="Content/water.ico" Margin="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <water:CustomerWaterPaymentControl />
+            </TabItem>
+            <TabItem Visibility="{Binding IsArticlesVisible, Converter={StaticResource BoolToVisibility}}">
+                <TabItem.Header>
+                    <StackPanel>
+                        <Image Width="40" Source="Content/articles.ico" Margin="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <articles:ArticlesControl x:Name="articlesControl" Margin="5,5,5,5"/>
+            </TabItem>
+            <TabItem Visibility="{Binding IsGarbageCollectionVisible, Converter={StaticResource BoolToVisibility}}">
+                <TabItem.Header>
+                    <StackPanel>
+                        <Image Width="40" Source="Content/garbage_and_repair.png" Margin="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <garbageandrepair:GarbageAndRepairPaymentControl x:Name="garbageCollectionControl" Margin="5,5,5,5"/>
+            </TabItem>
+            <TabItem Visibility="{Binding IsHotWaterVisible, Converter={StaticResource BoolToVisibility}}">
+                <TabItem.Header>
+                    <StackPanel>
+                        <Image Width="40" Source="Content/hotwater.png" Margin="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <hotwater:HotWaterControl x:Name="hotWaterControl" Margin="5,5,5,5"/>
+            </TabItem>
+            <TabItem Visibility="{Binding IsDocumentReceiptVisible, Converter={StaticResource BoolToVisibility}}">
+                <TabItem.Header>
+                    <StackPanel>
+                        <Image Width="40" Source="Content/document_receipt.png" Margin="10"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <documentsReceipt:DocumentReceiptControl Margin="5,5,5,5"/>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
+</Window>
